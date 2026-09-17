@@ -1,0 +1,8282 @@
+[
+  {
+    "id": "mc0001",
+    "name": "McDonald's Chieti",
+    "lat": 42.344338,
+    "lon": 14.135164,
+    "region": "Abruzzo",
+    "city": "Chieti",
+    "address": "Viale Abruzzo, Chieti",
+    "opened": true
+  },
+  {
+    "id": "mc0002",
+    "name": "McDonald's Francavilla al Mare",
+    "lat": 42.428894,
+    "lon": 14.271761,
+    "region": "Abruzzo",
+    "city": "Chieti",
+    "address": "ss16 Adriatica, Chieti",
+    "opened": true
+  },
+  {
+    "id": "mc0003",
+    "name": "McDonald's Lanciano Via Tinari",
+    "lat": 42.219757,
+    "lon": 14.392837,
+    "region": "Abruzzo",
+    "city": "Chieti",
+    "address": "Via Tinari, Chieti",
+    "opened": true
+  },
+  {
+    "id": "mc0004",
+    "name": "McDonald's S.Giovanni Teatino",
+    "lat": 42.415848,
+    "lon": 14.167749,
+    "region": "Abruzzo",
+    "city": "Chieti",
+    "address": "Via Po, Chieti",
+    "opened": true
+  },
+  {
+    "id": "mc0005",
+    "name": "McDonald's Vasto Histoniense",
+    "lat": 42.117291,
+    "lon": 14.701191,
+    "region": "Abruzzo",
+    "city": "Chieti",
+    "address": "via Circonvallazione Histoniense, Chieti",
+    "opened": true
+  },
+  {
+    "id": "mc0006",
+    "name": "McDonald's Avezzano",
+    "lat": 42.041792,
+    "lon": 13.411557,
+    "region": "Abruzzo",
+    "city": "L'Aquila",
+    "address": "Via Tiburtina 100, L'Aquila",
+    "opened": true
+  },
+  {
+    "id": "mc0007",
+    "name": "McDonald's Castel di Sangro",
+    "lat": 41.772602,
+    "lon": 14.101888,
+    "region": "Abruzzo",
+    "city": "L'Aquila",
+    "address": "SS17, L'Aquila",
+    "opened": true
+  },
+  {
+    "id": "mc0008",
+    "name": "McDonald's L Aquila",
+    "lat": 42.359049,
+    "lon": 13.380925,
+    "region": "Abruzzo",
+    "city": "L'Aquila",
+    "address": "Viale Corrado IV 54, L'Aquila",
+    "opened": true
+  },
+  {
+    "id": "mc0009",
+    "name": "McDonald's LAquila Centro",
+    "lat": 42.347129,
+    "lon": 13.398073,
+    "region": "Abruzzo",
+    "city": "L'Aquila",
+    "address": "Corso Federico II, L'Aquila",
+    "opened": true
+  },
+  {
+    "id": "mc0010",
+    "name": "McDonald's Montesilvano",
+    "lat": 42.518532,
+    "lon": 14.147836,
+    "region": "Abruzzo",
+    "city": "Pescara",
+    "address": "Via Nazionale Adriatica Nord 7, Pescara",
+    "opened": true
+  },
+  {
+    "id": "mc0011",
+    "name": "McDonald's Pescara Colli",
+    "lat": 42.466402,
+    "lon": 14.185132,
+    "region": "Abruzzo",
+    "city": "Pescara",
+    "address": "Strada Vecchia della Madonna, Pescara",
+    "opened": true
+  },
+  {
+    "id": "mc0012",
+    "name": "McDonald's Pescara Marconi",
+    "lat": 42.452149,
+    "lon": 14.227805,
+    "region": "Abruzzo",
+    "city": "Pescara",
+    "address": "viale Marconi, 375, Pescara",
+    "opened": true
+  },
+  {
+    "id": "mc0013",
+    "name": "McDonald's Pescara Via della Riviera",
+    "lat": 42.474237,
+    "lon": 14.210646,
+    "region": "Abruzzo",
+    "city": "Pescara",
+    "address": "Via della Riviera, Pescara",
+    "opened": true
+  },
+  {
+    "id": "mc0014",
+    "name": "McDonald's Colonnella",
+    "lat": 42.835905,
+    "lon": 13.893481,
+    "region": "Abruzzo",
+    "city": "Teramo",
+    "address": "Uscita Val Vibrata A14, Teramo",
+    "opened": true
+  },
+  {
+    "id": "mc0015",
+    "name": "McDonald's Giulianova",
+    "lat": 42.731148,
+    "lon": 13.958042,
+    "region": "Abruzzo",
+    "city": "Teramo",
+    "address": "SS80, Teramo",
+    "opened": true
+  },
+  {
+    "id": "mc0016",
+    "name": "McDonald's Roseto degli Abruzzi",
+    "lat": 42.658961,
+    "lon": 14.028104,
+    "region": "Abruzzo",
+    "city": "Teramo",
+    "address": "SS16, Teramo",
+    "opened": true
+  },
+  {
+    "id": "mc0017",
+    "name": "McDonald's Silvi",
+    "lat": 42.54282,
+    "lon": 14.122479,
+    "region": "Abruzzo",
+    "city": "Teramo",
+    "address": "SS16, Teramo",
+    "opened": true
+  },
+  {
+    "id": "mc0018",
+    "name": "McDonald's Teramo",
+    "lat": 42.659699,
+    "lon": 13.709027,
+    "region": "Abruzzo",
+    "city": "Teramo",
+    "address": "Circonvallazione Ragusa, Teramo",
+    "opened": true
+  },
+  {
+    "id": "mc0019",
+    "name": "McDonald's Policoro Drive",
+    "lat": 40.177917,
+    "lon": 16.658452,
+    "region": "Basilicata",
+    "city": "Matera",
+    "address": "Via Nazionale snc, Matera",
+    "opened": true
+  },
+  {
+    "id": "mc0020",
+    "name": "McDonald's Potenza",
+    "lat": 40.627042,
+    "lon": 15.799081,
+    "region": "Basilicata",
+    "city": "Potenza",
+    "address": "Viale del Basento, Potenza",
+    "opened": true
+  },
+  {
+    "id": "mc0021",
+    "name": "McDonald's Potenza via Pretoria",
+    "lat": 40.638292,
+    "lon": 15.803002,
+    "region": "Basilicata",
+    "city": "Potenza",
+    "address": "via Pretoria 134, Potenza",
+    "opened": true
+  },
+  {
+    "id": "mc0022",
+    "name": "McDonald's Catanzaro Le Aquile",
+    "lat": 38.884807,
+    "lon": 16.598776,
+    "region": "Calabria",
+    "city": "Catanzaro",
+    "address": "via Lucrezia della Valle, Catanzaro",
+    "opened": true
+  },
+  {
+    "id": "mc0023",
+    "name": "McDonald's Catanzaro Le Fontane",
+    "lat": 38.842559,
+    "lon": 16.647459,
+    "region": "Calabria",
+    "city": "Catanzaro",
+    "address": "VIale Emilia, Catanzaro",
+    "opened": true
+  },
+  {
+    "id": "mc0024",
+    "name": "McDonald's Lamezia I 2 Mari",
+    "lat": 38.899842,
+    "lon": 16.35057,
+    "region": "Calabria",
+    "city": "Catanzaro",
+    "address": "Località Comuni Condomini, Catanzaro",
+    "opened": true
+  },
+  {
+    "id": "mc0025",
+    "name": "McDonald's Lamezia Terme Drive",
+    "lat": 38.933767,
+    "lon": 16.331413,
+    "region": "Calabria",
+    "city": "Catanzaro",
+    "address": "via del Progresso, Catanzaro",
+    "opened": true
+  },
+  {
+    "id": "mc0026",
+    "name": "McDonald's Montepaone",
+    "lat": 38.717297,
+    "lon": 16.532092,
+    "region": "Calabria",
+    "city": "Catanzaro",
+    "address": "Via Nausica, Catanzaro",
+    "opened": true
+  },
+  {
+    "id": "mc0027",
+    "name": "McDonald's Corigliano Rossano SS 106",
+    "lat": 39.67229,
+    "lon": 16.508376,
+    "region": "Calabria",
+    "city": "Cosenza",
+    "address": "S.S. 16 Radd. Jonica, Cosenza",
+    "opened": true
+  },
+  {
+    "id": "mc0028",
+    "name": "McDonald's Cosenza Bilotti Museo",
+    "lat": 39.302892,
+    "lon": 16.252303,
+    "region": "Calabria",
+    "city": "Cosenza",
+    "address": "Piazza Carlo F. Bilotti 17, Cosenza",
+    "opened": true
+  },
+  {
+    "id": "mc0029",
+    "name": "McDonald's Rende",
+    "lat": 39.328501,
+    "lon": 16.241055,
+    "region": "Calabria",
+    "city": "Cosenza",
+    "address": "Via Kennedy, Cosenza",
+    "opened": true
+  },
+  {
+    "id": "mc0030",
+    "name": "McDonald's Rende Marconi",
+    "lat": 39.353359,
+    "lon": 16.234483,
+    "region": "Calabria",
+    "city": "Cosenza",
+    "address": "Via Guglielmo Marconi, Cosenza",
+    "opened": true
+  },
+  {
+    "id": "mc0031",
+    "name": "McDonald's Zumpano CS",
+    "lat": 39.310822,
+    "lon": 16.26394,
+    "region": "Calabria",
+    "city": "Cosenza",
+    "address": "via Marino, Cosenza",
+    "opened": true
+  },
+  {
+    "id": "mc0032",
+    "name": "McDonald's CIRO MARINA",
+    "lat": 39.369224,
+    "lon": 17.114106,
+    "region": "Calabria",
+    "city": "Crotone",
+    "address": "SS 106, Crotone",
+    "opened": true
+  },
+  {
+    "id": "mc0033",
+    "name": "McDonald's Crotone Drive",
+    "lat": 39.074518,
+    "lon": 17.109898,
+    "region": "Calabria",
+    "city": "Crotone",
+    "address": "Via Gioacchino Da Fiore, Crotone",
+    "opened": true
+  },
+  {
+    "id": "mc0034",
+    "name": "McDonald's Crotone Passovecchio",
+    "lat": 39.114083,
+    "lon": 17.091066,
+    "region": "Calabria",
+    "city": "Crotone",
+    "address": "SS106, 6, Crotone",
+    "opened": true
+  },
+  {
+    "id": "mc0035",
+    "name": "McDonald's Gioia Tauro",
+    "lat": 38.407599,
+    "lon": 15.917657,
+    "region": "Calabria",
+    "city": "Reggio Calabria",
+    "address": "Strada Statale 111, Reggio Calabria",
+    "opened": true
+  },
+  {
+    "id": "mc0036",
+    "name": "McDonald's Reggio Calabria",
+    "lat": 38.103196,
+    "lon": 15.637723,
+    "region": "Calabria",
+    "city": "Reggio Calabria",
+    "address": "Corso Garibaldi 460, Reggio Calabria",
+    "opened": true
+  },
+  {
+    "id": "mc0037",
+    "name": "McDonald's Reggio Calabria Tangenziale",
+    "lat": 38.067337,
+    "lon": 15.662624,
+    "region": "Calabria",
+    "city": "Reggio Calabria",
+    "address": "SS 106 km 1, Reggio Calabria",
+    "opened": true
+  },
+  {
+    "id": "mc0038",
+    "name": "McDonald's Siderno",
+    "lat": 38.287565,
+    "lon": 16.314762,
+    "region": "Calabria",
+    "city": "Reggio Calabria",
+    "address": "VIa Carlo Russo 1, Reggio Calabria",
+    "opened": true
+  },
+  {
+    "id": "mc0039",
+    "name": "McDonald's Vibo Valentia",
+    "lat": 38.673278,
+    "lon": 16.087288,
+    "region": "Calabria",
+    "city": "Vibo Valentia",
+    "address": "viale Affaccio snc, Vibo Valentia",
+    "opened": true
+  },
+  {
+    "id": "mc0040",
+    "name": "McDonald's Avellino Autostazione",
+    "lat": 40.916165,
+    "lon": 14.779894,
+    "region": "Campania",
+    "city": "Avellino",
+    "address": "Via Francesco Fariello snc, Avellino",
+    "opened": true
+  },
+  {
+    "id": "mc0041",
+    "name": "McDonald's Mercogliano",
+    "lat": 40.911464,
+    "lon": 14.748509,
+    "region": "Campania",
+    "city": "Avellino",
+    "address": "Via Santangelo, Avellino",
+    "opened": true
+  },
+  {
+    "id": "mc0042",
+    "name": "McDonald's Benevento Stadio",
+    "lat": 41.116744,
+    "lon": 14.777608,
+    "region": "Campania",
+    "city": "Benevento",
+    "address": "Via Saverio Casselli, Benevento",
+    "opened": true
+  },
+  {
+    "id": "mc0043",
+    "name": "McDonald's Benevento via Nenni 2",
+    "lat": 41.126699,
+    "lon": 14.797016,
+    "region": "Campania",
+    "city": "Benevento",
+    "address": "Via Pietro Nenni, Benevento",
+    "opened": true
+  },
+  {
+    "id": "mc0044",
+    "name": "McDonald's Montesarchio",
+    "lat": 41.054634,
+    "lon": 14.621154,
+    "region": "Campania",
+    "city": "Benevento",
+    "address": "Via Annunziata Vecchia, Benevento",
+    "opened": true
+  },
+  {
+    "id": "mc0045",
+    "name": "McDonald's Caianello",
+    "lat": 41.306324,
+    "lon": 14.096662,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "SP85, Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0046",
+    "name": "McDonald's Capodrise",
+    "lat": 41.043369,
+    "lon": 14.319112,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "Via Retella, Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0047",
+    "name": "McDonald's Capua",
+    "lat": 41.116786,
+    "lon": 14.201196,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "Via Fuori Porta Roma, Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0048",
+    "name": "McDonald's Carinaro",
+    "lat": 40.981265,
+    "lon": 14.224244,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "Via San Salvatore, Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0049",
+    "name": "McDonald's Caserta via S.Augusto",
+    "lat": 41.077207,
+    "lon": 14.350261,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "Via S.Augusto, Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0050",
+    "name": "McDonald's Frignano",
+    "lat": 41.000146,
+    "lon": 14.18724,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "Via Massimo Troisi (Incrocio con Corso Italia), Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0051",
+    "name": "McDonald's Maddaloni Drive",
+    "lat": 41.024833,
+    "lon": 14.372808,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "via delle Forche Caudine, Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0052",
+    "name": "McDonald's Marcianise",
+    "lat": 41.003754,
+    "lon": 14.328952,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "centro commerciale campania, Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0053",
+    "name": "McDonald's Marcianise Uscita A1",
+    "lat": 41.018667,
+    "lon": 14.326686,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "Vico Via Provinciale 87, Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0054",
+    "name": "McDonald's San Prisco",
+    "lat": 41.081005,
+    "lon": 14.271816,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "Strada Statale Appia, 60, Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0055",
+    "name": "McDonald's SantArpino",
+    "lat": 40.960783,
+    "lon": 14.263427,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "Via atellana- SP2/Via del Rosario, Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0056",
+    "name": "McDonald's Teverola",
+    "lat": 41.015366,
+    "lon": 14.224899,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "Centro Commerciale Vulcano Buono, Boscofangone, Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0057",
+    "name": "McDonald's Trentola Ducenta - Aversa",
+    "lat": 40.968084,
+    "lon": 14.173298,
+    "region": "Campania",
+    "city": "Caserta",
+    "address": "Centro commerciale Jambo1, Caserta",
+    "opened": true
+  },
+  {
+    "id": "mc0058",
+    "name": "McDonald's Afragola",
+    "lat": 40.932192,
+    "lon": 14.354298,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Santa Maria La Nova, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0059",
+    "name": "McDonald's Brusciano",
+    "lat": 40.929708,
+    "lon": 14.422715,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "via Fonseca variante 7 bis, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0060",
+    "name": "McDonald's Cardito",
+    "lat": 40.932551,
+    "lon": 14.295855,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Enrico Fermi, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0061",
+    "name": "McDonald's Casavatore",
+    "lat": 40.89928,
+    "lon": 14.283466,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Roberto Bracco 5/7, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0062",
+    "name": "McDonald's Casoria",
+    "lat": 40.898165,
+    "lon": 14.31047,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "via San Salvatore, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0063",
+    "name": "McDonald's Casoria Via Nazionale delle Puglie",
+    "lat": 40.894534,
+    "lon": 14.326654,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Nazionale delle Puglie /Via Ventotene, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0064",
+    "name": "McDonald's Casoria Via Sannitica",
+    "lat": 40.91971,
+    "lon": 14.292206,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Sannitica, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0065",
+    "name": "McDonald's Giugliano",
+    "lat": 40.933953,
+    "lon": 14.148024,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Santa Maria a Cubito, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0066",
+    "name": "McDonald's Licola",
+    "lat": 40.889929,
+    "lon": 14.083623,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via S. Nullo 105, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0067",
+    "name": "McDonald's Melito di Napoli",
+    "lat": 40.933264,
+    "lon": 14.222893,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Appia, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0068",
+    "name": "McDonald's Napoli Aeroporto",
+    "lat": 40.87812,
+    "lon": 14.282191,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Viale Fulco Ruffo di Calabria, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0069",
+    "name": "McDonald's Napoli Argine",
+    "lat": 40.850036,
+    "lon": 14.311374,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "via Argine, 380, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0070",
+    "name": "McDonald's Napoli Doganella",
+    "lat": 40.872856,
+    "lon": 14.279627,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Tangenziale, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0071",
+    "name": "McDonald's Napoli Galleria Umberto",
+    "lat": 40.838394,
+    "lon": 14.248688,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Galleria Umberto I° n° 72.73.74.75, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0072",
+    "name": "McDonald's Napoli Miano",
+    "lat": 40.887603,
+    "lon": 14.255439,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Piazza Madonna dellArco - c/o CC La Birreria, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0073",
+    "name": "McDonald's Napoli P.zza Garibaldi",
+    "lat": 40.852975,
+    "lon": 14.268567,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Piazza Garibaldi, 39, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0074",
+    "name": "McDonald's Napoli Stadio Fuorigrotta",
+    "lat": 40.826798,
+    "lon": 14.19529,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Gonzaga 15, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0075",
+    "name": "McDonald's Napoli Stazione Centrale",
+    "lat": 40.853276,
+    "lon": 14.271945,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Stazione centrale Napoli, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0076",
+    "name": "McDonald's Napoli Via Medina",
+    "lat": 40.840341,
+    "lon": 14.25202,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Medina/ang. Piazza Municipio, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0077",
+    "name": "McDonald's Napoli Vomero",
+    "lat": 40.843323,
+    "lon": 14.229285,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "via Merliani. 38, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0078",
+    "name": "McDonald's Nola",
+    "lat": 40.949474,
+    "lon": 14.487217,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "C.C. Il vulcano buono - Via Boscofangone snc, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0079",
+    "name": "McDonald's Nola SS7bis",
+    "lat": 40.937599,
+    "lon": 14.533551,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "SS 7 bis n 338, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0080",
+    "name": "McDonald's Pomigliano dArco",
+    "lat": 40.90242,
+    "lon": 14.357843,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Nazionale delle Puglie snc, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0081",
+    "name": "McDonald's Pompei",
+    "lat": 40.749293,
+    "lon": 14.49869,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Roma, 33, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0082",
+    "name": "McDonald's Pompei Mall",
+    "lat": 40.740597,
+    "lon": 14.502863,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "via campo daviazione snc, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0083",
+    "name": "McDonald's Pompei Maximall",
+    "lat": 40.747452,
+    "lon": 14.470897,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Plinio, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0084",
+    "name": "McDonald's Quarto Mall",
+    "lat": 40.87933,
+    "lon": 14.113431,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Masullo - c/o CC Quarto Nuovo, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0085",
+    "name": "McDonald's S. Anastasia",
+    "lat": 40.884928,
+    "lon": 14.396673,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Via Pomigliano, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0086",
+    "name": "McDonald's Torre Annunziata Retail Park",
+    "lat": 40.753342,
+    "lon": 14.471292,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "via Comunale Traversa Andolfi snc, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0087",
+    "name": "McDonald's Villaricca",
+    "lat": 40.91658,
+    "lon": 14.20308,
+    "region": "Campania",
+    "city": "Napoli",
+    "address": "Corso Europa 16, Napoli",
+    "opened": true
+  },
+  {
+    "id": "mc0088",
+    "name": "McDonald's Battipaglia",
+    "lat": 40.603474,
+    "lon": 14.973844,
+    "region": "Campania",
+    "city": "Salerno",
+    "address": "Strada Statale 18 Tirrena Inferiore, Salerno",
+    "opened": true
+  },
+  {
+    "id": "mc0089",
+    "name": "McDonald's Eboli",
+    "lat": 40.559572,
+    "lon": 14.990459,
+    "region": "Campania",
+    "city": "Salerno",
+    "address": "Strada Statale 18, Salerno",
+    "opened": true
+  },
+  {
+    "id": "mc0090",
+    "name": "McDonald's Fisciano Retail Park",
+    "lat": 40.757785,
+    "lon": 14.789747,
+    "region": "Campania",
+    "city": "Salerno",
+    "address": "Via Adamo Fortunato snc, Salerno",
+    "opened": true
+  },
+  {
+    "id": "mc0091",
+    "name": "McDonald's Nocera Superiore Camerelle",
+    "lat": 40.72975,
+    "lon": 14.689217,
+    "region": "Campania",
+    "city": "Salerno",
+    "address": "Via Nazionale - Località Camerelle, Salerno",
+    "opened": true
+  },
+  {
+    "id": "mc0092",
+    "name": "McDonald's Pagani - Via De Gasperi",
+    "lat": 40.748035,
+    "lon": 14.600319,
+    "region": "Campania",
+    "city": "Salerno",
+    "address": "via De Gasperi, Salerno",
+    "opened": true
+  },
+  {
+    "id": "mc0093",
+    "name": "McDonald's Pontecagnano Mall",
+    "lat": 40.635624,
+    "lon": 14.90729,
+    "region": "Campania",
+    "city": "Salerno",
+    "address": "via Antonio Pacinotti, Salerno",
+    "opened": true
+  },
+  {
+    "id": "mc0094",
+    "name": "McDonald's Sala Consilina",
+    "lat": 40.36769,
+    "lon": 15.613831,
+    "region": "Campania",
+    "city": "Salerno",
+    "address": "Via Fontanelle Snc, Salerno",
+    "opened": true
+  },
+  {
+    "id": "mc0095",
+    "name": "McDonald's Salerno Mercatello",
+    "lat": 40.659312,
+    "lon": 14.799801,
+    "region": "Campania",
+    "city": "Salerno",
+    "address": "Via Trento, Salerno",
+    "opened": true
+  },
+  {
+    "id": "mc0096",
+    "name": "McDonald's Salerno Retail Park",
+    "lat": 40.648306,
+    "lon": 14.861001,
+    "region": "Campania",
+    "city": "Salerno",
+    "address": "SS18 -Località Fuorni, Salerno",
+    "opened": true
+  },
+  {
+    "id": "mc0097",
+    "name": "McDonald's Salerno Stazione",
+    "lat": 40.675315,
+    "lon": 14.772295,
+    "region": "Campania",
+    "city": "Salerno",
+    "address": "Piazza Vittorio Veneto 1, Salerno",
+    "opened": true
+  },
+  {
+    "id": "mc0098",
+    "name": "McDonald's Salerno Via Roma",
+    "lat": 40.678714,
+    "lon": 14.756751,
+    "region": "Campania",
+    "city": "Salerno",
+    "address": "via Roma, Salerno",
+    "opened": true
+  },
+  {
+    "id": "mc0099",
+    "name": "McDonald's Sapri -Vibonati",
+    "lat": 40.070341,
+    "lon": 15.615174,
+    "region": "Campania",
+    "city": "Salerno",
+    "address": "S.S. 18 Tirrena Inferiore, Salerno",
+    "opened": true
+  },
+  {
+    "id": "mc0100",
+    "name": "McDonald's Bologna CAAB",
+    "lat": 44.515819,
+    "lon": 11.395665,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Via Tito Carnacini, 6, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0101",
+    "name": "McDonald's Bologna Indipendenza 1",
+    "lat": 44.494961,
+    "lon": 11.342559,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Via Indipendenza, 2, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0102",
+    "name": "McDonald's Bologna S. Lazzaro",
+    "lat": 44.473344,
+    "lon": 11.400386,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Via Dozza 33, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0103",
+    "name": "McDonald's Bologna Stalingrado",
+    "lat": 44.519279,
+    "lon": 11.361891,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Via Stalingrado, 71, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0104",
+    "name": "McDonald's Bologna Togliatti Drive",
+    "lat": 44.508386,
+    "lon": 11.280326,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Viale Togliatti 11, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0105",
+    "name": "McDonald's Bologna via Larga",
+    "lat": 44.496471,
+    "lon": 11.393165,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Via Larga. 17, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0106",
+    "name": "McDonald's Bologna VIII Agosto",
+    "lat": 44.499796,
+    "lon": 11.344521,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Piazza dell8 Agosto. 31, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0107",
+    "name": "McDonald's Casalecchio De Curtis",
+    "lat": 44.487143,
+    "lon": 11.245523,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Via Antonio de Curtis, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0108",
+    "name": "McDonald's Casalecchio Di Reno 1",
+    "lat": 44.468353,
+    "lon": 11.270031,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Via Porrettana 502, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0109",
+    "name": "McDonald's Casalecchio Mall",
+    "lat": 44.488226,
+    "lon": 11.248105,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Via Marilyn Monroe. 2, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0110",
+    "name": "McDonald's Castel Maggiore",
+    "lat": 44.568631,
+    "lon": 11.359858,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "via Galliera, 24, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0111",
+    "name": "McDonald's Castel San Pietro Terme",
+    "lat": 44.403718,
+    "lon": 11.584991,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Via Emilia Ponente. 210, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0112",
+    "name": "McDonald's Imola Selice Drive",
+    "lat": 44.374173,
+    "lon": 11.7336,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Via Provinciale Selice. 43A, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0113",
+    "name": "McDonald's La Pioppa Est",
+    "lat": 44.519658,
+    "lon": 11.21426,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "La Pioppa Est (Agip-Eni), Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0114",
+    "name": "McDonald's La Pioppa Ovest",
+    "lat": 44.51874,
+    "lon": 11.21591,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "La Pioppa Ovest Srl, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0115",
+    "name": "McDonald's San Giovanni in Persiceto",
+    "lat": 44.627368,
+    "lon": 11.195474,
+    "region": "Emilia-Romagna",
+    "city": "Bologna",
+    "address": "Via Elsa Morante 5, Bologna",
+    "opened": true
+  },
+  {
+    "id": "mc0116",
+    "name": "McDonald's Argenta",
+    "lat": 44.60348,
+    "lon": 11.842396,
+    "region": "Emilia-Romagna",
+    "city": "Ferrara",
+    "address": "Via Celletta. 104, Ferrara",
+    "opened": true
+  },
+  {
+    "id": "mc0117",
+    "name": "McDonald's Cento",
+    "lat": 44.749099,
+    "lon": 11.30243,
+    "region": "Emilia-Romagna",
+    "city": "Ferrara",
+    "address": "via Matteo Loves, 1, Ferrara",
+    "opened": true
+  },
+  {
+    "id": "mc0118",
+    "name": "McDonald's Ferrara Drive",
+    "lat": 44.846039,
+    "lon": 11.59796,
+    "region": "Emilia-Romagna",
+    "city": "Ferrara",
+    "address": "Via Modena, 17, Ferrara",
+    "opened": true
+  },
+  {
+    "id": "mc0119",
+    "name": "McDonald's Ferrara Sud",
+    "lat": 44.815197,
+    "lon": 11.598268,
+    "region": "Emilia-Romagna",
+    "city": "Ferrara",
+    "address": "via Bologna, 306, Ferrara",
+    "opened": true
+  },
+  {
+    "id": "mc0120",
+    "name": "McDonald's Ferrara Trento E Trieste",
+    "lat": 44.835235,
+    "lon": 11.619472,
+    "region": "Emilia-Romagna",
+    "city": "Ferrara",
+    "address": "Piazza Trento E Trieste 6, Ferrara",
+    "opened": true
+  },
+  {
+    "id": "mc0121",
+    "name": "McDonald's Lidi Comacchiesi",
+    "lat": 44.690475,
+    "lon": 12.2228,
+    "region": "Emilia-Romagna",
+    "city": "Ferrara",
+    "address": "strada statale romea 309, Ferrara",
+    "opened": true
+  },
+  {
+    "id": "mc0122",
+    "name": "McDonald's Cesena Cattaneo",
+    "lat": 44.145533,
+    "lon": 12.21766,
+    "region": "Emilia-Romagna",
+    "city": "Forlì-Cesena",
+    "address": "Via Emilia Ponente. 864, Forlì-Cesena",
+    "opened": true
+  },
+  {
+    "id": "mc0123",
+    "name": "McDonald's Cesena Cervese",
+    "lat": 44.169143,
+    "lon": 12.28243,
+    "region": "Emilia-Romagna",
+    "city": "Forlì-Cesena",
+    "address": "via Cervese 3622, Forlì-Cesena",
+    "opened": true
+  },
+  {
+    "id": "mc0124",
+    "name": "McDonald's Forlì",
+    "lat": 44.229222,
+    "lon": 12.023101,
+    "region": "Emilia-Romagna",
+    "city": "Forlì-Cesena",
+    "address": "Viale Bologna, Forlì-Cesena",
+    "opened": true
+  },
+  {
+    "id": "mc0125",
+    "name": "McDonald's Forlì Mall",
+    "lat": 44.243459,
+    "lon": 12.081181,
+    "region": "Emilia-Romagna",
+    "city": "Forlì-Cesena",
+    "address": "Piazzale della Cooperazione, 4, Forlì-Cesena",
+    "opened": true
+  },
+  {
+    "id": "mc0126",
+    "name": "McDonald's Forlì Via Altobelli",
+    "lat": 44.24828,
+    "lon": 12.088884,
+    "region": "Emilia-Romagna",
+    "city": "Forlì-Cesena",
+    "address": "Via Argentina Altobelli 12/14, Forlì-Cesena",
+    "opened": true
+  },
+  {
+    "id": "mc0127",
+    "name": "McDonald's Forlimpopoli Cineflash Drive",
+    "lat": 44.194171,
+    "lon": 12.105031,
+    "region": "Emilia-Romagna",
+    "city": "Forlì-Cesena",
+    "address": "Via Emilia per Forlì. 1498, Forlì-Cesena",
+    "opened": true
+  },
+  {
+    "id": "mc0128",
+    "name": "McDonald's Savignano Sul Rubicone",
+    "lat": 44.156808,
+    "lon": 12.432692,
+    "region": "Emilia-Romagna",
+    "city": "Forlì-Cesena",
+    "address": "Via Giovanni Da Verrazzano, 4, Forlì-Cesena",
+    "opened": true
+  },
+  {
+    "id": "mc0129",
+    "name": "McDonald's Carpi",
+    "lat": 44.776092,
+    "lon": 10.86187,
+    "region": "Emilia-Romagna",
+    "city": "Modena",
+    "address": "Tangenziale Bruno Losi, Modena",
+    "opened": true
+  },
+  {
+    "id": "mc0130",
+    "name": "McDonald's Casinalbo",
+    "lat": 44.598468,
+    "lon": 10.862301,
+    "region": "Emilia-Romagna",
+    "city": "Modena",
+    "address": "Via Giardini Nord. 531, Modena",
+    "opened": true
+  },
+  {
+    "id": "mc0131",
+    "name": "McDonald's Castelfranco Emilia",
+    "lat": 44.603429,
+    "lon": 11.027184,
+    "region": "Emilia-Romagna",
+    "city": "Modena",
+    "address": "Via I Carracci. 3, Modena",
+    "opened": true
+  },
+  {
+    "id": "mc0132",
+    "name": "McDonald's Mirandola",
+    "lat": 44.890943,
+    "lon": 11.050827,
+    "region": "Emilia-Romagna",
+    "city": "Modena",
+    "address": "Via Agnini, Modena",
+    "opened": true
+  },
+  {
+    "id": "mc0133",
+    "name": "McDonald's Modena Bruciata",
+    "lat": 44.647969,
+    "lon": 10.853159,
+    "region": "Emilia-Romagna",
+    "city": "Modena",
+    "address": "Via Emilia Ovest 1480, Modena",
+    "opened": true
+  },
+  {
+    "id": "mc0134",
+    "name": "McDonald's Modena Emilia Est",
+    "lat": 44.638498,
+    "lon": 10.944886,
+    "region": "Emilia-Romagna",
+    "city": "Modena",
+    "address": "Via Curiel, 25, Modena",
+    "opened": true
+  },
+  {
+    "id": "mc0135",
+    "name": "McDonald's Modena Ovest",
+    "lat": 44.654604,
+    "lon": 10.906326,
+    "region": "Emilia-Romagna",
+    "city": "Modena",
+    "address": "Via Emilia Ovest 407, Modena",
+    "opened": true
+  },
+  {
+    "id": "mc0136",
+    "name": "McDonald's Modena Stazione",
+    "lat": 44.654329,
+    "lon": 10.93084,
+    "region": "Emilia-Romagna",
+    "city": "Modena",
+    "address": "Piazzale Dante. 19, Modena",
+    "opened": true
+  },
+  {
+    "id": "mc0137",
+    "name": "McDonald's Pavullo nel Frignano",
+    "lat": 44.323993,
+    "lon": 10.838785,
+    "region": "Emilia-Romagna",
+    "city": "Modena",
+    "address": "Via Gianluigi Plati, Modena",
+    "opened": true
+  },
+  {
+    "id": "mc0138",
+    "name": "McDonald's Sassuolo",
+    "lat": 44.556879,
+    "lon": 10.798498,
+    "region": "Emilia-Romagna",
+    "city": "Modena",
+    "address": "Via Radici In Piano, 421, Modena",
+    "opened": true
+  },
+  {
+    "id": "mc0139",
+    "name": "McDonald's Vignola",
+    "lat": 44.499313,
+    "lon": 11.019894,
+    "region": "Emilia-Romagna",
+    "city": "Modena",
+    "address": "VIa per Spilamberto 1662, Modena",
+    "opened": true
+  },
+  {
+    "id": "mc0140",
+    "name": "McDonald's Fidenza",
+    "lat": 44.881736,
+    "lon": 10.090138,
+    "region": "Emilia-Romagna",
+    "city": "Parma",
+    "address": "via San Michele Campagna, 26, Parma",
+    "opened": true
+  },
+  {
+    "id": "mc0141",
+    "name": "McDonald's Parma",
+    "lat": 44.809361,
+    "lon": 10.290376,
+    "region": "Emilia-Romagna",
+    "city": "Parma",
+    "address": "Via Emilia Ovest 101, Parma",
+    "opened": true
+  },
+  {
+    "id": "mc0142",
+    "name": "McDonald's Parma Est",
+    "lat": 44.7848,
+    "lon": 10.381451,
+    "region": "Emilia-Romagna",
+    "city": "Parma",
+    "address": "via Emilio Lepido 70, Parma",
+    "opened": true
+  },
+  {
+    "id": "mc0143",
+    "name": "McDonald's Parma San Leonardo",
+    "lat": 44.820502,
+    "lon": 10.334589,
+    "region": "Emilia-Romagna",
+    "city": "Parma",
+    "address": "Via San Leonardo 53, Parma",
+    "opened": true
+  },
+  {
+    "id": "mc0144",
+    "name": "McDonald's Salsomaggiore Terme",
+    "lat": 44.817348,
+    "lon": 9.993951,
+    "region": "Emilia-Romagna",
+    "city": "Parma",
+    "address": "Via Vittorio Rossi, Parma",
+    "opened": true
+  },
+  {
+    "id": "mc0145",
+    "name": "McDonald's San Martino Ovest",
+    "lat": 44.826279,
+    "lon": 10.378024,
+    "region": "Emilia-Romagna",
+    "city": "Parma",
+    "address": "c/o ADS San Martino Ovest A1 km 114, Parma",
+    "opened": true
+  },
+  {
+    "id": "mc0146",
+    "name": "McDonald's Sorbolo",
+    "lat": 44.840191,
+    "lon": 10.436714,
+    "region": "Emilia-Romagna",
+    "city": "Parma",
+    "address": "Largo Alberazza 2, Parma",
+    "opened": true
+  },
+  {
+    "id": "mc0147",
+    "name": "McDonald's Castel San Giovanni Drive",
+    "lat": 45.056371,
+    "lon": 9.447373,
+    "region": "Emilia-Romagna",
+    "city": "Piacenza",
+    "address": "SS 10 Padana Inferiore, Piacenza",
+    "opened": true
+  },
+  {
+    "id": "mc0148",
+    "name": "McDonald's Fiorenzuola",
+    "lat": 44.93709,
+    "lon": 9.89805,
+    "region": "Emilia-Romagna",
+    "city": "Piacenza",
+    "address": "Via Emilia Ponente 35, Piacenza",
+    "opened": true
+  },
+  {
+    "id": "mc0149",
+    "name": "McDonald's Piacenza Emilia",
+    "lat": 45.054597,
+    "lon": 9.65613,
+    "region": "Emilia-Romagna",
+    "city": "Piacenza",
+    "address": "Via Emilia Pavese, Piacenza",
+    "opened": true
+  },
+  {
+    "id": "mc0150",
+    "name": "McDonald's Piacenza Parmense",
+    "lat": 45.032344,
+    "lon": 9.733771,
+    "region": "Emilia-Romagna",
+    "city": "Piacenza",
+    "address": "via Stradiotti, Piacenza",
+    "opened": true
+  },
+  {
+    "id": "mc0151",
+    "name": "McDonald's Piacenza Stazione",
+    "lat": 45.051312,
+    "lon": 9.706158,
+    "region": "Emilia-Romagna",
+    "city": "Piacenza",
+    "address": "Piazzale Marconi, Piacenza",
+    "opened": true
+  },
+  {
+    "id": "mc0152",
+    "name": "McDonald's Faenza",
+    "lat": 44.304735,
+    "lon": 11.89583,
+    "region": "Emilia-Romagna",
+    "city": "Ravenna",
+    "address": "via Vietri sul Mare, 4, Ravenna",
+    "opened": true
+  },
+  {
+    "id": "mc0153",
+    "name": "McDonald's Lugo",
+    "lat": 44.428319,
+    "lon": 11.911175,
+    "region": "Emilia-Romagna",
+    "city": "Ravenna",
+    "address": "via Piratello, 64, Ravenna",
+    "opened": true
+  },
+  {
+    "id": "mc0154",
+    "name": "McDonald's Pinarella",
+    "lat": 44.221663,
+    "lon": 12.37292,
+    "region": "Emilia-Romagna",
+    "city": "Ravenna",
+    "address": "Via Romea Sud 189, Ravenna",
+    "opened": true
+  },
+  {
+    "id": "mc0155",
+    "name": "McDonald's Ravenna Drive",
+    "lat": 44.332998,
+    "lon": 12.269176,
+    "region": "Emilia-Romagna",
+    "city": "Ravenna",
+    "address": "Strada Provinciale 101, 41, Ravenna",
+    "opened": true
+  },
+  {
+    "id": "mc0156",
+    "name": "McDonald's Ravenna Ipercoop",
+    "lat": 44.396154,
+    "lon": 12.180623,
+    "region": "Emilia-Romagna",
+    "city": "Ravenna",
+    "address": "Via Classicana 408, Ravenna",
+    "opened": true
+  },
+  {
+    "id": "mc0157",
+    "name": "McDonald's Ravenna Mirabilandia",
+    "lat": 44.335785,
+    "lon": 12.263053,
+    "region": "Emilia-Romagna",
+    "city": "Ravenna",
+    "address": "Strada Statale 16 Adriatica Km 162 - Località Mirabilandia\nStrada Provinciale 101, Ravenna",
+    "opened": true
+  },
+  {
+    "id": "mc0158",
+    "name": "McDonald's Ravenna Stazione",
+    "lat": 44.418868,
+    "lon": 12.208211,
+    "region": "Emilia-Romagna",
+    "city": "Ravenna",
+    "address": "Piazza Luigi Carlo Farini. 14, Ravenna",
+    "opened": true
+  },
+  {
+    "id": "mc0159",
+    "name": "McDonald's Ravenna via Trieste",
+    "lat": 44.426032,
+    "lon": 12.230295,
+    "region": "Emilia-Romagna",
+    "city": "Ravenna",
+    "address": "via Travaglini 28, Ravenna",
+    "opened": true
+  },
+  {
+    "id": "mc0160",
+    "name": "McDonald's Correggio Viale Vecchia Ferrovia",
+    "lat": 44.76313,
+    "lon": 10.79235,
+    "region": "Emilia-Romagna",
+    "city": "Reggio Emilia",
+    "address": "Viale Vecchia Ferrovia 28, Reggio Emilia",
+    "opened": true
+  },
+  {
+    "id": "mc0161",
+    "name": "McDonald's Montecchio Fratelli Cervi",
+    "lat": 44.697055,
+    "lon": 10.470081,
+    "region": "Emilia-Romagna",
+    "city": "Reggio Emilia",
+    "address": "Via Fratelli Cervi, Reggio Emilia",
+    "opened": true
+  },
+  {
+    "id": "mc0162",
+    "name": "McDonald's Reggio Emilia Baragalla",
+    "lat": 44.666493,
+    "lon": 10.597709,
+    "region": "Emilia-Romagna",
+    "city": "Reggio Emilia",
+    "address": "Via David Ricardo 7/A, Reggio Emilia",
+    "opened": true
+  },
+  {
+    "id": "mc0163",
+    "name": "McDonald's Reggio Emilia Tien An Men",
+    "lat": 44.711235,
+    "lon": 10.617259,
+    "region": "Emilia-Romagna",
+    "city": "Reggio Emilia",
+    "address": "Via Nicolò Copernico, 30, Reggio Emilia",
+    "opened": true
+  },
+  {
+    "id": "mc0164",
+    "name": "McDonald's Reggio Emilia Via Emilia Ospizio",
+    "lat": 44.69287,
+    "lon": 10.646546,
+    "region": "Emilia-Romagna",
+    "city": "Reggio Emilia",
+    "address": "Via Emilia all’Ospizio 45, Reggio Emilia",
+    "opened": true
+  },
+  {
+    "id": "mc0165",
+    "name": "McDonald's Cattolica",
+    "lat": 43.952988,
+    "lon": 12.730811,
+    "region": "Emilia-Romagna",
+    "city": "Rimini",
+    "address": "SS 16 km 221, Rimini",
+    "opened": true
+  },
+  {
+    "id": "mc0166",
+    "name": "McDonald's Riccione Flaminia",
+    "lat": 44.005506,
+    "lon": 12.633323,
+    "region": "Emilia-Romagna",
+    "city": "Rimini",
+    "address": "Via Flaminia. 51-53, Rimini",
+    "opened": true
+  },
+  {
+    "id": "mc0167",
+    "name": "McDonald's Rimini Flaminia",
+    "lat": 44.038805,
+    "lon": 12.593896,
+    "region": "Emilia-Romagna",
+    "city": "Rimini",
+    "address": "via Flaminia 275, Rimini",
+    "opened": true
+  },
+  {
+    "id": "mc0168",
+    "name": "McDonald's Rimini Le Befane",
+    "lat": 44.040616,
+    "lon": 12.586778,
+    "region": "Emilia-Romagna",
+    "city": "Rimini",
+    "address": "Via Caduti di Nassiriya, 20, Rimini",
+    "opened": true
+  },
+  {
+    "id": "mc0169",
+    "name": "McDonald's Rimini Popilia",
+    "lat": 44.08962,
+    "lon": 12.514177,
+    "region": "Emilia-Romagna",
+    "city": "Rimini",
+    "address": "Via Popilia, 237, Rimini",
+    "opened": true
+  },
+  {
+    "id": "mc0170",
+    "name": "McDonald's Monfalcone",
+    "lat": 45.817151,
+    "lon": 13.514289,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Gorizia",
+    "address": "via Pocar 1, Gorizia",
+    "opened": true
+  },
+  {
+    "id": "mc0171",
+    "name": "McDonald's Villesse Mall",
+    "lat": 45.86437,
+    "lon": 13.429606,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Gorizia",
+    "address": "Località Maranuz, Gorizia",
+    "opened": true
+  },
+  {
+    "id": "mc0172",
+    "name": "McDonald's Fiume Veneto",
+    "lat": 45.944718,
+    "lon": 12.721784,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Pordenone",
+    "address": "Via nazionale, 127, Pordenone",
+    "opened": true
+  },
+  {
+    "id": "mc0173",
+    "name": "McDonald's Pordenone",
+    "lat": 45.973199,
+    "lon": 12.663329,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Pordenone",
+    "address": "Viale Venezia, 119, Pordenone",
+    "opened": true
+  },
+  {
+    "id": "mc0174",
+    "name": "McDonald's Trieste Flavia",
+    "lat": 45.61717,
+    "lon": 13.818926,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Trieste",
+    "address": "Trieste via Flavia, Trieste",
+    "opened": true
+  },
+  {
+    "id": "mc0175",
+    "name": "McDonald's Trieste Goldoni",
+    "lat": 45.64931,
+    "lon": 13.77686,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Trieste",
+    "address": "Piazza Carlo Goldoni, 1, Trieste",
+    "opened": true
+  },
+  {
+    "id": "mc0176",
+    "name": "McDonald's Bagnaria Arsa",
+    "lat": 45.889439,
+    "lon": 13.312849,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Udine",
+    "address": "Via E. Mattei. 14, Udine",
+    "opened": true
+  },
+  {
+    "id": "mc0177",
+    "name": "McDonald's Gemona del Friuli",
+    "lat": 46.265519,
+    "lon": 13.108499,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Udine",
+    "address": "via Taboga 66, Udine",
+    "opened": true
+  },
+  {
+    "id": "mc0178",
+    "name": "McDonald's Gonars Nord Ads",
+    "lat": 45.883706,
+    "lon": 13.259968,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Udine",
+    "address": "Autostrada A4 Torino - Trieste. km 487, Udine",
+    "opened": true
+  },
+  {
+    "id": "mc0179",
+    "name": "McDonald's Latisana",
+    "lat": 45.772686,
+    "lon": 13.022644,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Udine",
+    "address": "Via tisanella, Udine",
+    "opened": true
+  },
+  {
+    "id": "mc0180",
+    "name": "McDonald's Tavagnacco",
+    "lat": 46.122235,
+    "lon": 13.226763,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Udine",
+    "address": "Centro Commerciale Friuli, Udine",
+    "opened": true
+  },
+  {
+    "id": "mc0181",
+    "name": "McDonald's Udine Città Fiera",
+    "lat": 46.084784,
+    "lon": 13.182158,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Udine",
+    "address": "Via Cotonificio 22, Udine",
+    "opened": true
+  },
+  {
+    "id": "mc0182",
+    "name": "McDonald's Udine Faula Mall",
+    "lat": 46.065874,
+    "lon": 13.21698,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Udine",
+    "address": "Piazzale Rita Levi Montalcini n. 1/1, Udine",
+    "opened": true
+  },
+  {
+    "id": "mc0183",
+    "name": "McDonald's Udine Palmanova",
+    "lat": 46.045584,
+    "lon": 13.249892,
+    "region": "Friuli-Venezia Giulia",
+    "city": "Udine",
+    "address": "viale Palmanova. 195, Udine",
+    "opened": true
+  },
+  {
+    "id": "mc0184",
+    "name": "McDonald's Cassino",
+    "lat": 41.489163,
+    "lon": 13.844637,
+    "region": "Lazio",
+    "city": "Frosinone",
+    "address": "Via San Bartolomeo, 1, Frosinone",
+    "opened": true
+  },
+  {
+    "id": "mc0185",
+    "name": "McDonald's Frosinone CC Le Sorgenti",
+    "lat": 41.6211,
+    "lon": 13.28507,
+    "region": "Lazio",
+    "city": "Frosinone",
+    "address": "Via Armando Vona. 20, Frosinone",
+    "opened": true
+  },
+  {
+    "id": "mc0186",
+    "name": "McDonald's Frosinone Lepini",
+    "lat": 41.614548,
+    "lon": 13.306797,
+    "region": "Lazio",
+    "city": "Frosinone",
+    "address": "VIa Monte Lepini, Frosinone",
+    "opened": true
+  },
+  {
+    "id": "mc0187",
+    "name": "McDonald's Frosinone Via Tommaso Landolfi",
+    "lat": 41.642167,
+    "lon": 13.330538,
+    "region": "Lazio",
+    "city": "Frosinone",
+    "address": "Via Tommaso Landolfi, Frosinone",
+    "opened": true
+  },
+  {
+    "id": "mc0188",
+    "name": "McDonald's Piedimonte San Germano",
+    "lat": 41.494994,
+    "lon": 13.758001,
+    "region": "Lazio",
+    "city": "Frosinone",
+    "address": "Viale Tiziano, Frosinone",
+    "opened": true
+  },
+  {
+    "id": "mc0189",
+    "name": "McDonald's Sora",
+    "lat": 41.710041,
+    "lon": 13.599153,
+    "region": "Lazio",
+    "city": "Frosinone",
+    "address": "Viale San Domenico, Frosinone",
+    "opened": true
+  },
+  {
+    "id": "mc0190",
+    "name": "McDonald's Aprilia Mascagni Drive",
+    "lat": 41.580964,
+    "lon": 12.653343,
+    "region": "Lazio",
+    "city": "Latina",
+    "address": "Via Mascagni.115, Latina",
+    "opened": true
+  },
+  {
+    "id": "mc0191",
+    "name": "McDonald's Aprilia Vallelata",
+    "lat": 41.593303,
+    "lon": 12.627874,
+    "region": "Lazio",
+    "city": "Latina",
+    "address": "centro commerciale aprilia 2, Latina",
+    "opened": true
+  },
+  {
+    "id": "mc0192",
+    "name": "McDonald's Cisterna di Latina Via Nettuno",
+    "lat": 41.584112,
+    "lon": 12.826948,
+    "region": "Lazio",
+    "city": "Latina",
+    "address": "Via Nettuno 39, Latina",
+    "opened": true
+  },
+  {
+    "id": "mc0193",
+    "name": "McDonald's Fondi",
+    "lat": 41.35663,
+    "lon": 13.406255,
+    "region": "Lazio",
+    "city": "Latina",
+    "address": "Via Appia, Latina",
+    "opened": true
+  },
+  {
+    "id": "mc0194",
+    "name": "McDonald's Formia",
+    "lat": 41.257114,
+    "lon": 13.609543,
+    "region": "Lazio",
+    "city": "Latina",
+    "address": "Via Vitruvio 48, Latina",
+    "opened": true
+  },
+  {
+    "id": "mc0195",
+    "name": "McDonald's Formia via Domitiana",
+    "lat": 41.267616,
+    "lon": 13.670521,
+    "region": "Lazio",
+    "city": "Latina",
+    "address": "Via Mamurrano c/O centro comm. Itaca, Latina",
+    "opened": true
+  },
+  {
+    "id": "mc0196",
+    "name": "McDonald's Latina Fiori",
+    "lat": 41.465593,
+    "lon": 12.890937,
+    "region": "Lazio",
+    "city": "Latina",
+    "address": "Viale Pierliugi Nervi, Latina",
+    "opened": true
+  },
+  {
+    "id": "mc0197",
+    "name": "McDonald's Latina Isonzo",
+    "lat": 41.451667,
+    "lon": 12.90627,
+    "region": "Lazio",
+    "city": "Latina",
+    "address": "via Isonzo 152, Latina",
+    "opened": true
+  },
+  {
+    "id": "mc0198",
+    "name": "McDonald's Latina Romagnoli",
+    "lat": 41.471323,
+    "lon": 12.89442,
+    "region": "Lazio",
+    "city": "Latina",
+    "address": "Via C. Romagnoli, 11, Latina",
+    "opened": true
+  },
+  {
+    "id": "mc0199",
+    "name": "McDonald's Latina via del Lido",
+    "lat": 41.44788,
+    "lon": 12.890119,
+    "region": "Lazio",
+    "city": "Latina",
+    "address": "Via del Lido 131, Latina",
+    "opened": true
+  },
+  {
+    "id": "mc0200",
+    "name": "McDonald's Terracina Drive",
+    "lat": 41.284652,
+    "lon": 13.190222,
+    "region": "Lazio",
+    "city": "Latina",
+    "address": "Strada Regionale 148, km105,300, Latina",
+    "opened": true
+  },
+  {
+    "id": "mc0201",
+    "name": "McDonald's Fara Sabina",
+    "lat": 42.152213,
+    "lon": 12.655807,
+    "region": "Lazio",
+    "city": "Rieti",
+    "address": "Via Salaria, Rieti",
+    "opened": true
+  },
+  {
+    "id": "mc0202",
+    "name": "McDonald's Rieti",
+    "lat": 42.401948,
+    "lon": 12.853209,
+    "region": "Lazio",
+    "city": "Rieti",
+    "address": "Via Cesare Verani,12, Rieti",
+    "opened": true
+  },
+  {
+    "id": "mc0203",
+    "name": "McDonald's Rieti A. M. Ricci",
+    "lat": 42.425102,
+    "lon": 12.8594,
+    "region": "Lazio",
+    "city": "Rieti",
+    "address": "Via Angelo Maria Ricci, Rieti",
+    "opened": true
+  },
+  {
+    "id": "mc0204",
+    "name": "McDonald's Anagnina Drive",
+    "lat": 41.839143,
+    "lon": 12.589293,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Anagnina 19, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0205",
+    "name": "McDonald's Anzio",
+    "lat": 41.489859,
+    "lon": 12.624811,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Nettunense, strada statale 207, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0206",
+    "name": "McDonald's Ardea",
+    "lat": 41.573424,
+    "lon": 12.53032,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Viale Tor San Lorenzo angolo via della Moletta, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0207",
+    "name": "McDonald's Bracciano",
+    "lat": 42.08789,
+    "lon": 12.183426,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via Braccianese Claudia, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0208",
+    "name": "McDonald's Castel Romano",
+    "lat": 41.714897,
+    "lon": 12.443414,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via del Ponte di Piscina Cupa, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0209",
+    "name": "McDonald's Ciampino",
+    "lat": 41.819236,
+    "lon": 12.585183,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Viale Kennedy, 90, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0210",
+    "name": "McDonald's Ciampino Aeroporto",
+    "lat": 41.799379,
+    "lon": 12.589973,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Appia Nuova. 1651. 00040 Ciampino RM, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0211",
+    "name": "McDonald's Civitavecchia",
+    "lat": 42.090642,
+    "lon": 11.792166,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Largo Plebiscito, 1, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0212",
+    "name": "McDonald's Fiano Romano",
+    "lat": 42.140359,
+    "lon": 12.595387,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Fontanella del Solco, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0213",
+    "name": "McDonald's Fiumicino Retail Park",
+    "lat": 41.808366,
+    "lon": 12.301408,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Geminiano montanari, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0214",
+    "name": "McDonald's Fiumicino Torrimpietra",
+    "lat": 41.917408,
+    "lon": 12.198877,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via della Torre di Pagliaccetto, 25, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0215",
+    "name": "McDonald's Fiumicino via del Faro",
+    "lat": 41.766714,
+    "lon": 12.23513,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via del Faro, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0216",
+    "name": "McDonald's Frascati Drive",
+    "lat": 41.813054,
+    "lon": 12.654367,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Tuscolana. 52, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0217",
+    "name": "McDonald's Guidonia",
+    "lat": 41.970844,
+    "lon": 12.713748,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via delle Genziane, 1, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0218",
+    "name": "McDonald's Ladispoli",
+    "lat": 41.967186,
+    "lon": 12.083554,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Settevene Palo, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0219",
+    "name": "McDonald's Lariano",
+    "lat": 41.736726,
+    "lon": 12.84733,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Napoli 166, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0220",
+    "name": "McDonald's Monterotondo",
+    "lat": 42.049599,
+    "lon": 12.625994,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via Lampedusa 2, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0221",
+    "name": "McDonald's Nettuno",
+    "lat": 41.464442,
+    "lon": 12.662624,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Piazza Kennedy, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0222",
+    "name": "McDonald's Ostia Toscanelli",
+    "lat": 41.730165,
+    "lon": 12.275624,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Lungomare Toscanelli 126, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0223",
+    "name": "McDonald's Pomezia Castelli Romani",
+    "lat": 41.682149,
+    "lon": 12.507378,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via Castelli Romani, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0224",
+    "name": "McDonald's Pomezia Via Roma",
+    "lat": 41.677072,
+    "lon": 12.498414,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Pontina angolo via del Mare, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0225",
+    "name": "McDonald's Roma Anagnina",
+    "lat": 41.838193,
+    "lon": 12.593922,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Torre di Mezzavia 51, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0226",
+    "name": "McDonald's Roma Annibaliano",
+    "lat": 41.924779,
+    "lon": 12.516345,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Piazza Annibaliano 8, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0227",
+    "name": "McDonald's Roma Appia",
+    "lat": 41.767738,
+    "lon": 12.616057,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via Appia Nuova. km 19.750 - Località Frattocchie, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0228",
+    "name": "McDonald's Roma Ardeatina",
+    "lat": 41.793795,
+    "lon": 12.517775,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "c/o AdS Ardeatina Esterna - G.R.A. Km. 49+400, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0229",
+    "name": "McDonald's Roma Aurelia",
+    "lat": 41.886933,
+    "lon": 12.401208,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Aurelia Km 8,400, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0230",
+    "name": "McDonald's Roma Borgo Pio",
+    "lat": 41.903832,
+    "lon": 12.458502,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Borgo Pio, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0231",
+    "name": "McDonald's Roma C.so Francia",
+    "lat": 41.940152,
+    "lon": 12.471373,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Corso Francia 80, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0232",
+    "name": "McDonald's Roma Capena",
+    "lat": 42.115412,
+    "lon": 12.587352,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via tiberina, 34, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0233",
+    "name": "McDonald's Roma Casal Bertone",
+    "lat": 41.89925,
+    "lon": 12.532769,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Alberto Pollio. 50, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0234",
+    "name": "McDonald's Roma Casal del Marmo",
+    "lat": 41.949957,
+    "lon": 12.396096,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via Casal del Marmo 331, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0235",
+    "name": "McDonald's Roma Casalotti",
+    "lat": 41.91518,
+    "lon": 12.381279,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via di Boccea, 561, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0236",
+    "name": "McDonald's Roma De La Salle",
+    "lat": 41.898856,
+    "lon": 12.427074,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Piazza Giovanni Battista De La Salle 9, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0237",
+    "name": "McDonald's Roma Dragona",
+    "lat": 41.77551,
+    "lon": 12.337025,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Charles Lenormant, 235, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0238",
+    "name": "McDonald's Roma EUR",
+    "lat": 41.816899,
+    "lon": 12.458241,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Viale dell’oceano pacifico 83, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0239",
+    "name": "McDonald's Roma Fontana di Trevi",
+    "lat": 41.900281,
+    "lon": 12.482191,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via Delle Muratte 31, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0240",
+    "name": "McDonald's Roma Giolitti",
+    "lat": 41.900063,
+    "lon": 12.500918,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Giolitti, 65, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0241",
+    "name": "McDonald's Roma Giulio Cesare",
+    "lat": 41.908833,
+    "lon": 12.456602,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "viale Giulio Cesare, 201, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0242",
+    "name": "McDonald's Roma Happio",
+    "lat": 41.874539,
+    "lon": 12.522554,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Cesare Baronio, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0243",
+    "name": "McDonald's Roma Laurentina Mall",
+    "lat": 41.808183,
+    "lon": 12.485773,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via Laurentina snc, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0244",
+    "name": "McDonald's Roma Lunghezza",
+    "lat": 41.915445,
+    "lon": 12.66124,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Collatina, 858, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0245",
+    "name": "McDonald's Roma Magliana",
+    "lat": 41.820387,
+    "lon": 12.405053,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "c/o AdS Magliana Nord - Aut. Rm/Fiumicino Km 5.657, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0246",
+    "name": "McDonald's Roma Magliana Ang. Via Cutigliano",
+    "lat": 41.84945,
+    "lon": 12.45882,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via della Magliana 205, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0247",
+    "name": "McDonald's Roma Mirti",
+    "lat": 41.880882,
+    "lon": 12.567159,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "piazza dei Mirti, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0248",
+    "name": "McDonald's Roma Nomentana",
+    "lat": 41.957333,
+    "lon": 12.578665,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via Nomentana, 1141, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0249",
+    "name": "McDonald's Roma P.zza delle Cinque Lune",
+    "lat": 41.90041,
+    "lon": 12.473956,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Piazza delle Cinque Lune, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0250",
+    "name": "McDonald's Roma P.zza Di Spagna",
+    "lat": 41.904849,
+    "lon": 12.483459,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Piazza Di Spagna, 46, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0251",
+    "name": "McDonald's Roma Palaia",
+    "lat": 41.852535,
+    "lon": 12.440563,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Castellina Marittima 14, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0252",
+    "name": "McDonald's Roma Parchi Colombo",
+    "lat": 41.751433,
+    "lon": 12.367288,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Colombo 1897, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0253",
+    "name": "McDonald's Roma Piazzale Flaminio",
+    "lat": 41.912043,
+    "lon": 12.475622,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Piazzale Flaminio. 15, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0254",
+    "name": "McDonald's Roma Pio XI",
+    "lat": 41.895292,
+    "lon": 12.438468,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Piazza Pio XI 88, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0255",
+    "name": "McDonald's Roma Porta di Roma",
+    "lat": 41.971545,
+    "lon": 12.539873,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via delle Vigne Nuove, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0256",
+    "name": "McDonald's Roma Prati Fiscali",
+    "lat": 41.945709,
+    "lon": 12.521757,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Prati Fiscali 70, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0257",
+    "name": "McDonald's Roma Primavalle",
+    "lat": 41.913754,
+    "lon": 12.414969,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Piazza Clemente XI, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0258",
+    "name": "McDonald's Roma Re Di Roma",
+    "lat": 41.883199,
+    "lon": 12.512093,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Appia Nuova 114, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0259",
+    "name": "McDonald's Roma Regina Margherita",
+    "lat": 41.913655,
+    "lon": 12.506009,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Piazza Regina Margherita 15, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0260",
+    "name": "McDonald's Roma San Paolo",
+    "lat": 41.857194,
+    "lon": 12.47773,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Ostiense 273, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0261",
+    "name": "McDonald's Roma Spinaceto",
+    "lat": 41.794379,
+    "lon": 12.451434,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Carmelo Maestrini, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0262",
+    "name": "McDonald's Roma Stazione Tiburtina FSI",
+    "lat": 41.911381,
+    "lon": 12.531107,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "stazione Tiburtina, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0263",
+    "name": "McDonald's Roma Stradivari",
+    "lat": 41.874374,
+    "lon": 12.468375,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via degli Stradivari 35, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0264",
+    "name": "McDonald's Roma Sturzo",
+    "lat": 41.834665,
+    "lon": 12.467819,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Piazza Don Luigi Sturzo, 21, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0265",
+    "name": "McDonald's Roma Termini Forum",
+    "lat": 41.90144,
+    "lon": 12.501486,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Marsala 25, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0266",
+    "name": "McDonald's Roma Termini Marsala",
+    "lat": 41.90169,
+    "lon": 12.50288,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Marsala, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0267",
+    "name": "McDonald's Roma Testaccio",
+    "lat": 41.877092,
+    "lon": 12.474561,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Galvani. 71-83, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0268",
+    "name": "McDonald's Roma Tiburtina Cavallari",
+    "lat": 41.932341,
+    "lon": 12.595309,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Del Casale Cavallari 8, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0269",
+    "name": "McDonald's Roma Tiburtina De Paolis",
+    "lat": 41.908813,
+    "lon": 12.540768,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Tiburtina 515, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0270",
+    "name": "McDonald's Roma Tor Bella Monaca",
+    "lat": 41.877544,
+    "lon": 12.626808,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via di Tor Bella Monaca 353, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0271",
+    "name": "McDonald's Roma Tor Vergata Mall",
+    "lat": 41.840083,
+    "lon": 12.62165,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "viale Luigi Schiavonetti 426, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0272",
+    "name": "McDonald's Roma Torpignattara",
+    "lat": 41.880102,
+    "lon": 12.541961,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Casilina 384, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0273",
+    "name": "McDonald's Roma Torrenova",
+    "lat": 41.863659,
+    "lon": 12.634288,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Casilina, 1585, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0274",
+    "name": "McDonald's Roma Tre Fontane Drive",
+    "lat": 41.838072,
+    "lon": 12.477263,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via delle Tre Fontane ang. viale dellArtigianato, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0275",
+    "name": "McDonald's Roma Trionfale",
+    "lat": 41.937172,
+    "lon": 12.430948,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Trionfale 8000, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0276",
+    "name": "McDonald's Roma Tuscolana",
+    "lat": 41.858987,
+    "lon": 12.558907,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Tuscolana, 829, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0277",
+    "name": "McDonald's Roma Valle Aurelia",
+    "lat": 41.901717,
+    "lon": 12.438515,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via di Valle Aurelia ang. via degli Ubaldi, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0278",
+    "name": "McDonald's Roma Via Cassia",
+    "lat": 42.039501,
+    "lon": 12.376364,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Cassia km 20+750, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0279",
+    "name": "McDonald's Roma Via Del Tritone",
+    "lat": 41.9026,
+    "lon": 12.484189,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via del Tritone. 57-58, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0280",
+    "name": "McDonald's Roma Via di Vigna Murata",
+    "lat": 41.827092,
+    "lon": 12.509394,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "via di Vigna Murata. 302, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0281",
+    "name": "McDonald's Roma via Nazionale angolo via Torino",
+    "lat": 41.902064,
+    "lon": 12.495124,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Nazionale angolo Via Torino, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0282",
+    "name": "McDonald's Roma Via Tor Tre Teste",
+    "lat": 41.869619,
+    "lon": 12.587485,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via di Tor Tre Teste, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0283",
+    "name": "McDonald's Romanina",
+    "lat": 41.848102,
+    "lon": 12.599354,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Bernardino Alimena 20, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0284",
+    "name": "McDonald's San Cesareo",
+    "lat": 41.82349,
+    "lon": 12.803151,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Casilina, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0285",
+    "name": "McDonald's Tivoli",
+    "lat": 41.9568,
+    "lon": 12.769826,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Val Gardena 4 (6-8), Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0286",
+    "name": "McDonald's Tivoli Terme",
+    "lat": 41.952137,
+    "lon": 12.7273,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via Tiburtina presso Terme Acque Albule, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0287",
+    "name": "McDonald's Valmontone Fashion District",
+    "lat": 41.763129,
+    "lon": 12.955423,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "Via della Pace ang Fashion District, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0288",
+    "name": "McDonald's Velletri",
+    "lat": 41.686056,
+    "lon": 12.783143,
+    "region": "Lazio",
+    "city": "Roma",
+    "address": "viale dei Volsci, 101, Roma",
+    "opened": true
+  },
+  {
+    "id": "mc0289",
+    "name": "McDonald's Orte Drive",
+    "lat": 42.453248,
+    "lon": 12.408099,
+    "region": "Lazio",
+    "city": "Viterbo",
+    "address": "via Lazio. 9, Viterbo",
+    "opened": true
+  },
+  {
+    "id": "mc0290",
+    "name": "McDonald's Viterbo Garbini",
+    "lat": 42.433735,
+    "lon": 12.099616,
+    "region": "Lazio",
+    "city": "Viterbo",
+    "address": "Via Igino Garbini, Viterbo",
+    "opened": true
+  },
+  {
+    "id": "mc0291",
+    "name": "McDonald's Viterbo San Paolo",
+    "lat": 42.41419,
+    "lon": 12.097446,
+    "region": "Lazio",
+    "city": "Viterbo",
+    "address": "via San Paolo, 3, Viterbo",
+    "opened": true
+  },
+  {
+    "id": "mc0292",
+    "name": "McDonald's Genova Brignole",
+    "lat": 44.40489,
+    "lon": 8.944276,
+    "region": "Liguria",
+    "city": "Genova",
+    "address": "Via Venti Settembre 1, Genova",
+    "opened": true
+  },
+  {
+    "id": "mc0293",
+    "name": "McDonald's Genova Fiumara",
+    "lat": 44.413583,
+    "lon": 8.87998,
+    "region": "Liguria",
+    "city": "Genova",
+    "address": "via Paolo Mantovani 17, Genova",
+    "opened": true
+  },
+  {
+    "id": "mc0294",
+    "name": "McDonald's Genova mall",
+    "lat": 44.395614,
+    "lon": 8.941019,
+    "region": "Liguria",
+    "city": "Genova",
+    "address": "c/o Distretto Tematico Mall. p.le Kennedy, Genova",
+    "opened": true
+  },
+  {
+    "id": "mc0295",
+    "name": "McDonald's Genova Piazza Principe Stazione",
+    "lat": 44.416857,
+    "lon": 8.921612,
+    "region": "Liguria",
+    "city": "Genova",
+    "address": "Piazza Acquaverde, Genova",
+    "opened": true
+  },
+  {
+    "id": "mc0296",
+    "name": "McDonald's Genova Porto Antico Acquario",
+    "lat": 44.411271,
+    "lon": 8.928562,
+    "region": "Liguria",
+    "city": "Genova",
+    "address": "Via di Sottoripa, 127, Genova",
+    "opened": true
+  },
+  {
+    "id": "mc0297",
+    "name": "McDonald's Genova Traghetti",
+    "lat": 44.410375,
+    "lon": 8.90882,
+    "region": "Liguria",
+    "city": "Genova",
+    "address": "Via Calata della Chiappella, Genova",
+    "opened": true
+  },
+  {
+    "id": "mc0298",
+    "name": "McDonald's Genova XX Settembre",
+    "lat": 44.406745,
+    "lon": 8.936689,
+    "region": "Liguria",
+    "city": "Genova",
+    "address": "Via Venti Settembre 205, Genova",
+    "opened": true
+  },
+  {
+    "id": "mc0299",
+    "name": "McDonald's Imperia Drive",
+    "lat": 43.885516,
+    "lon": 8.029869,
+    "region": "Liguria",
+    "city": "Imperia",
+    "address": "Lungomare Vespucci, Imperia",
+    "opened": true
+  },
+  {
+    "id": "mc0300",
+    "name": "McDonald's San Remo",
+    "lat": 43.818664,
+    "lon": 7.777837,
+    "region": "Liguria",
+    "city": "Imperia",
+    "address": "Piazza Colombo, 17, Imperia",
+    "opened": true
+  },
+  {
+    "id": "mc0301",
+    "name": "McDonald's Ventimiglia",
+    "lat": 43.788577,
+    "lon": 7.621366,
+    "region": "Liguria",
+    "city": "Imperia",
+    "address": "Corso Genova, Imperia",
+    "opened": true
+  },
+  {
+    "id": "mc0302",
+    "name": "McDonald's La Spezia San Bartolomeo",
+    "lat": 44.112005,
+    "lon": 9.847645,
+    "region": "Liguria",
+    "city": "La Spezia",
+    "address": "Viale San Bartolomeo ang. Via della Pianta, La Spezia",
+    "opened": true
+  },
+  {
+    "id": "mc0303",
+    "name": "McDonald's La Spezia Stazione",
+    "lat": 44.11132,
+    "lon": 9.813372,
+    "region": "Liguria",
+    "city": "La Spezia",
+    "address": "Piazzale Medaglie dOro, La Spezia",
+    "opened": true
+  },
+  {
+    "id": "mc0304",
+    "name": "McDonald's La Spezia Terrazze",
+    "lat": 44.118837,
+    "lon": 9.832756,
+    "region": "Liguria",
+    "city": "La Spezia",
+    "address": "via Fontevivo, La Spezia",
+    "opened": true
+  },
+  {
+    "id": "mc0305",
+    "name": "McDonald's Sarzana",
+    "lat": 44.104973,
+    "lon": 9.963764,
+    "region": "Liguria",
+    "city": "La Spezia",
+    "address": "Variante Aurelia, 49, La Spezia",
+    "opened": true
+  },
+  {
+    "id": "mc0306",
+    "name": "McDonald's Albenga",
+    "lat": 44.05242,
+    "lon": 8.207065,
+    "region": "Liguria",
+    "city": "Savona",
+    "address": "Regione Cavallo. 2, Savona",
+    "opened": true
+  },
+  {
+    "id": "mc0307",
+    "name": "McDonald's Savona",
+    "lat": 44.299402,
+    "lon": 8.463506,
+    "region": "Liguria",
+    "city": "Savona",
+    "address": "via Stalingrado, 94, Savona",
+    "opened": true
+  },
+  {
+    "id": "mc0308",
+    "name": "McDonald's Almè",
+    "lat": 45.737499,
+    "lon": 9.622875,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Viale Locatelli. 51, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0309",
+    "name": "McDonald's Ambivere",
+    "lat": 45.719498,
+    "lon": 9.55487,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "SP 342 (ex SS 342 Briantea), Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0310",
+    "name": "McDonald's Antegnate",
+    "lat": 45.480899,
+    "lon": 9.780977,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "via del Commercio, 3, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0311",
+    "name": "McDonald's Bergamo P.za Marconi",
+    "lat": 45.691211,
+    "lon": 9.674266,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Piazzale Marconi 1, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0312",
+    "name": "McDonald's Bergamo Via S. Giovanni Bosco",
+    "lat": 45.682012,
+    "lon": 9.679332,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Via San Giovanni Bosco. 72, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0313",
+    "name": "McDonald's Bergamo Via Verne",
+    "lat": 45.688679,
+    "lon": 9.705501,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "via Giulio Verne. 4, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0314",
+    "name": "McDonald's Brembate Drive",
+    "lat": 45.607373,
+    "lon": 9.54159,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "via Vittorio Veneto, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0315",
+    "name": "McDonald's Caravaggio",
+    "lat": 45.490591,
+    "lon": 9.649992,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Viale Europa Unita ang. Via Panizzardo, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0316",
+    "name": "McDonald's Carvico",
+    "lat": 45.695701,
+    "lon": 9.481129,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "via Carlo Gerolamo Conti. 69, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0317",
+    "name": "McDonald's Covo",
+    "lat": 45.51264,
+    "lon": 9.768593,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Strada Statale 498, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0318",
+    "name": "McDonald's Curno Mall Drive",
+    "lat": 45.682888,
+    "lon": 9.610264,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Via Enrico Fermi 1, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0319",
+    "name": "McDonald's Curno via Bergamo",
+    "lat": 45.692197,
+    "lon": 9.62484,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "SS 342 Briantea, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0320",
+    "name": "McDonald's Dalmine",
+    "lat": 45.653291,
+    "lon": 9.622232,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Via Vailetta, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0321",
+    "name": "McDonald's Ghisalba",
+    "lat": 45.58949,
+    "lon": 9.759492,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Via Provinciale 49 /49 A, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0322",
+    "name": "McDonald's Grumello del Monte via Lega Lombarda",
+    "lat": 45.632467,
+    "lon": 9.861345,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Viale Lega Lombarda, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0323",
+    "name": "McDonald's Nembro",
+    "lat": 45.736869,
+    "lon": 9.747625,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Via Monsignor Aldo Nicoli 13, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0324",
+    "name": "McDonald's Orio al Serio Aeroporto",
+    "lat": 45.666198,
+    "lon": 9.697196,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Via aeroporto 13, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0325",
+    "name": "McDonald's Orio Center",
+    "lat": 45.664863,
+    "lon": 9.695415,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Strada Statale 342, 173, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0326",
+    "name": "McDonald's Orio Mall",
+    "lat": 45.661692,
+    "lon": 9.696014,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Via Portico. 71 c/o C.C. Orio Center, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0327",
+    "name": "McDonald's Seriate Alle Valli",
+    "lat": 45.679541,
+    "lon": 9.746797,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "via Brusaporto, 41, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0328",
+    "name": "McDonald's Stezzano",
+    "lat": 45.648411,
+    "lon": 9.630078,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "via Guzzanica 62, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0329",
+    "name": "McDonald's Trescore Balneario",
+    "lat": 45.688548,
+    "lon": 9.820234,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Via Giacomo Matteotti. 118, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0330",
+    "name": "McDonald's Treviglio",
+    "lat": 45.529277,
+    "lon": 9.598436,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Viale Manzoni, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0331",
+    "name": "McDonald's Verdello SP122",
+    "lat": 45.590066,
+    "lon": 9.621013,
+    "region": "Lombardia",
+    "city": "Bergamo",
+    "address": "Via Friuli 2, Bergamo",
+    "opened": true
+  },
+  {
+    "id": "mc0332",
+    "name": "McDonald's Brescia Campogrande",
+    "lat": 45.521255,
+    "lon": 10.186122,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Via Tadini, 7, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0333",
+    "name": "McDonald's Brescia Continente",
+    "lat": 45.515256,
+    "lon": 10.296288,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Viale Sant'Eufemia, 220, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0334",
+    "name": "McDonald's Brescia IV Novembre",
+    "lat": 45.537713,
+    "lon": 10.219197,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Via IV Novembre. 5, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0335",
+    "name": "McDonald's Castegnato",
+    "lat": 45.552542,
+    "lon": 10.115636,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Via Rita Levi Montalcini snc, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0336",
+    "name": "McDonald's Concesio Triumplina",
+    "lat": 45.594488,
+    "lon": 10.225717,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Via Nikolajewka, 2, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0337",
+    "name": "McDonald's Darfo Boario Terme",
+    "lat": 45.871722,
+    "lon": 10.154597,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "C.C. Adamello - Via Cassiano Serventi 2, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0338",
+    "name": "McDonald's Desenzano Sul Garda",
+    "lat": 45.457156,
+    "lon": 10.522432,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Località La Perla 1, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0339",
+    "name": "McDonald's Edolo",
+    "lat": 46.171813,
+    "lon": 10.341967,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Via Marconi (S.S 42) Ang. Via Comasco, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0340",
+    "name": "McDonald's Erbusco",
+    "lat": 45.579544,
+    "lon": 10.001029,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Via Rovato 44, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0341",
+    "name": "McDonald's Ghedi",
+    "lat": 45.393384,
+    "lon": 10.268632,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Strada Costa 1/W c/o Base Retail Park, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0342",
+    "name": "McDonald's Lonato",
+    "lat": 45.430079,
+    "lon": 10.513654,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Lonato BS, 36 25017 Via Mantova BS, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0343",
+    "name": "McDonald's Orzinuovi",
+    "lat": 45.414299,
+    "lon": 9.942062,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Via Adua, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0344",
+    "name": "McDonald's Puegnago",
+    "lat": 45.56526,
+    "lon": 10.532145,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "VIa Nazionale, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0345",
+    "name": "McDonald's Rodengo Saiano Outlet",
+    "lat": 45.576574,
+    "lon": 10.118972,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Via del Borgo. 44 c/o Franciacorta Outlet Village, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0346",
+    "name": "McDonald's Roncadelle Mall",
+    "lat": 45.533298,
+    "lon": 10.162825,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "via Einaudi snc, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0347",
+    "name": "McDonald's Rovato Via XXV Aprile",
+    "lat": 45.561336,
+    "lon": 9.995418,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "Via XXV Aprile 201, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0348",
+    "name": "McDonald's Verolanuova",
+    "lat": 45.365981,
+    "lon": 10.048392,
+    "region": "Lombardia",
+    "city": "Brescia",
+    "address": "via delle Robinie. 2. - c/o C.C. Le Robinie, Brescia",
+    "opened": true
+  },
+  {
+    "id": "mc0349",
+    "name": "McDonald's Appiano Gentile",
+    "lat": 45.736707,
+    "lon": 8.98796,
+    "region": "Lombardia",
+    "city": "Como",
+    "address": "Via Salvo dAcquisto. 14, Como",
+    "opened": true
+  },
+  {
+    "id": "mc0350",
+    "name": "McDonald's Arosio",
+    "lat": 45.719893,
+    "lon": 9.214908,
+    "region": "Lombardia",
+    "city": "Como",
+    "address": "SP 41 Strada Valassina, Como",
+    "opened": true
+  },
+  {
+    "id": "mc0351",
+    "name": "McDonald's Cantù Via Milano",
+    "lat": 45.723596,
+    "lon": 9.1458,
+    "region": "Lombardia",
+    "city": "Como",
+    "address": "Via Milano. 96, Como",
+    "opened": true
+  },
+  {
+    "id": "mc0352",
+    "name": "McDonald's Como",
+    "lat": 45.812538,
+    "lon": 9.081973,
+    "region": "Lombardia",
+    "city": "Como",
+    "address": "Via Plinio, 2, Como",
+    "opened": true
+  },
+  {
+    "id": "mc0353",
+    "name": "McDonald's Erba",
+    "lat": 45.804245,
+    "lon": 9.221377,
+    "region": "Lombardia",
+    "city": "Como",
+    "address": "Viale Prealpi, Como",
+    "opened": true
+  },
+  {
+    "id": "mc0354",
+    "name": "McDonald's Grandate",
+    "lat": 45.769069,
+    "lon": 9.06057,
+    "region": "Lombardia",
+    "city": "Como",
+    "address": "SS dei Giovi 35. n. 65, Como",
+    "opened": true
+  },
+  {
+    "id": "mc0355",
+    "name": "McDonald's Lipomo",
+    "lat": 45.797197,
+    "lon": 9.117944,
+    "region": "Lombardia",
+    "city": "Como",
+    "address": "Strada Provinciale per Lecco, 267, Como",
+    "opened": true
+  },
+  {
+    "id": "mc0356",
+    "name": "McDonald's Montano Lucino",
+    "lat": 45.786844,
+    "lon": 9.046195,
+    "region": "Lombardia",
+    "city": "Como",
+    "address": "Via Ratti 2, Como",
+    "opened": true
+  },
+  {
+    "id": "mc0357",
+    "name": "McDonald's Tavernola",
+    "lat": 45.83733,
+    "lon": 9.063225,
+    "region": "Lombardia",
+    "city": "Como",
+    "address": "Via Asiago 2, Como",
+    "opened": true
+  },
+  {
+    "id": "mc0358",
+    "name": "McDonald's Bagnolo Cremasco",
+    "lat": 45.365597,
+    "lon": 9.629011,
+    "region": "Lombardia",
+    "city": "Cremona",
+    "address": "Km. 31.300 Via Paullese, Cremona",
+    "opened": true
+  },
+  {
+    "id": "mc0359",
+    "name": "McDonald's Crema via Milano",
+    "lat": 45.35854,
+    "lon": 9.670647,
+    "region": "Lombardia",
+    "city": "Cremona",
+    "address": "Via Milano ang. Via Europa, Cremona",
+    "opened": true
+  },
+  {
+    "id": "mc0360",
+    "name": "McDonald's Cremona Drive",
+    "lat": 45.14633,
+    "lon": 10.077592,
+    "region": "Lombardia",
+    "city": "Cremona",
+    "address": "Via Gazzoletto, 4, Cremona",
+    "opened": true
+  },
+  {
+    "id": "mc0361",
+    "name": "McDonald's Cremona Mall",
+    "lat": 45.150186,
+    "lon": 9.9979,
+    "region": "Lombardia",
+    "city": "Cremona",
+    "address": "Via Castelleone,108, Cremona",
+    "opened": true
+  },
+  {
+    "id": "mc0362",
+    "name": "McDonald's Calolziocorte",
+    "lat": 45.782979,
+    "lon": 9.441668,
+    "region": "Lombardia",
+    "city": "Lecco",
+    "address": "C.so Europa snc, Lecco",
+    "opened": true
+  },
+  {
+    "id": "mc0363",
+    "name": "McDonald's Colico",
+    "lat": 46.14427,
+    "lon": 9.40781,
+    "region": "Lombardia",
+    "city": "Lecco",
+    "address": "Via Nazionale Nord. 61, Lecco",
+    "opened": true
+  },
+  {
+    "id": "mc0364",
+    "name": "McDonald's Garlate",
+    "lat": 45.809806,
+    "lon": 9.400971,
+    "region": "Lombardia",
+    "city": "Lecco",
+    "address": "Via Statale, 884, Lecco",
+    "opened": true
+  },
+  {
+    "id": "mc0365",
+    "name": "McDonald's Lecco Sauro",
+    "lat": 45.853873,
+    "lon": 9.388856,
+    "region": "Lombardia",
+    "city": "Lecco",
+    "address": "Via Nazario Sauro n. 2, Lecco",
+    "opened": true
+  },
+  {
+    "id": "mc0366",
+    "name": "McDonald's Oggiono",
+    "lat": 45.78471,
+    "lon": 9.341741,
+    "region": "Lombardia",
+    "city": "Lecco",
+    "address": "Via J. F. Kennedy. 21, Lecco",
+    "opened": true
+  },
+  {
+    "id": "mc0367",
+    "name": "McDonald's Osnago",
+    "lat": 45.68213,
+    "lon": 9.398589,
+    "region": "Lombardia",
+    "city": "Lecco",
+    "address": "Via Statale 20/A, Lecco",
+    "opened": true
+  },
+  {
+    "id": "mc0368",
+    "name": "McDonald's Casalpusterlengo",
+    "lat": 45.174008,
+    "lon": 9.656127,
+    "region": "Lombardia",
+    "city": "Lodi",
+    "address": "viale Partigiani ang. via Salvo DAcquisto, Lodi",
+    "opened": true
+  },
+  {
+    "id": "mc0369",
+    "name": "McDonald's Lodi Tangenziale Est",
+    "lat": 45.300858,
+    "lon": 9.522904,
+    "region": "Lombardia",
+    "city": "Lodi",
+    "address": "McDonald's c/o AdS Lodi Sud Nuova Tang. Est km 1,290, Lodi",
+    "opened": true
+  },
+  {
+    "id": "mc0370",
+    "name": "McDonald's Pieve Fissiraga",
+    "lat": 45.276935,
+    "lon": 9.457347,
+    "region": "Lombardia",
+    "city": "Lodi",
+    "address": "Via Isola Rota, Lodi",
+    "opened": true
+  },
+  {
+    "id": "mc0371",
+    "name": "McDonald's Asola",
+    "lat": 45.217195,
+    "lon": 10.419392,
+    "region": "Lombardia",
+    "city": "Mantova",
+    "address": "Via Parma. 26, Mantova",
+    "opened": true
+  },
+  {
+    "id": "mc0372",
+    "name": "McDonald's Bagnolo San Vito",
+    "lat": 45.089975,
+    "lon": 10.857484,
+    "region": "Lombardia",
+    "city": "Mantova",
+    "address": "Via Marco Biagi. 2, Mantova",
+    "opened": true
+  },
+  {
+    "id": "mc0373",
+    "name": "McDonald's Castiglione delle Stiviere",
+    "lat": 45.390496,
+    "lon": 10.47924,
+    "region": "Lombardia",
+    "city": "Mantova",
+    "address": "Viale Cavour, 29, Mantova",
+    "opened": true
+  },
+  {
+    "id": "mc0374",
+    "name": "McDonald's Curtatone",
+    "lat": 45.15372,
+    "lon": 10.727741,
+    "region": "Lombardia",
+    "city": "Mantova",
+    "address": "Via Giovanni Campia SN, Mantova, Mantova",
+    "opened": true
+  },
+  {
+    "id": "mc0375",
+    "name": "McDonald's Goito",
+    "lat": 45.262337,
+    "lon": 10.660708,
+    "region": "Lombardia",
+    "city": "Mantova",
+    "address": "Via S. Camillo De Lellis, Mantova",
+    "opened": true
+  },
+  {
+    "id": "mc0376",
+    "name": "McDonald's Mantova Legnago",
+    "lat": 45.164392,
+    "lon": 10.826691,
+    "region": "Lombardia",
+    "city": "Mantova",
+    "address": "SS 10 - via Legnago, Mantova",
+    "opened": true
+  },
+  {
+    "id": "mc0377",
+    "name": "McDonald's Abbiategrasso Dante",
+    "lat": 45.383373,
+    "lon": 8.916634,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "via Dante 101, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0378",
+    "name": "McDonald's Arese Mall",
+    "lat": 45.563994,
+    "lon": 9.054773,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Giuseppe Luraghi. 11, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0379",
+    "name": "McDonald's Assago",
+    "lat": 45.405878,
+    "lon": 9.151,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Viale della Fonte Lunga, 1, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0380",
+    "name": "McDonald's Baranzate",
+    "lat": 45.525347,
+    "lon": 9.113002,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Milano. 252, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0381",
+    "name": "McDonald's Bellinzago",
+    "lat": 45.545654,
+    "lon": 9.454736,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Strada Padana Superiore, 154, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0382",
+    "name": "McDonald's Binasco",
+    "lat": 45.336006,
+    "lon": 9.108141,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via del Mulino Nuovo, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0383",
+    "name": "McDonald's Buccinasco",
+    "lat": 45.421864,
+    "lon": 9.114025,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "via della Resistenza. 9, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0384",
+    "name": "McDonald's Busto Garolfo",
+    "lat": 45.547411,
+    "lon": 8.869886,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Arconate. 114, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0385",
+    "name": "McDonald's Carugate",
+    "lat": 45.54628,
+    "lon": 9.329998,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Strada Provinciale 208, km 2, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0386",
+    "name": "McDonald's Cassano",
+    "lat": 45.529207,
+    "lon": 9.507835,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Strada Statale 11 Padana Superiore, 154, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0387",
+    "name": "McDonald's Castano Primo",
+    "lat": 45.543746,
+    "lon": 8.763149,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Della Resistenza ang. Via Per Turbigo, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0388",
+    "name": "McDonald's Cerro Maggiore Drive",
+    "lat": 45.609823,
+    "lon": 8.932326,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "SS 527 ex bustese, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0389",
+    "name": "McDonald's Cinisello Mall",
+    "lat": 45.561486,
+    "lon": 9.229064,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via De Amicis n. 2 - c/o C. Comm.le LA FONTANA, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0390",
+    "name": "McDonald's Cinisello Nord AdS",
+    "lat": 45.570877,
+    "lon": 9.198522,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "AdS Cinsello Nord. A52 km 11, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0391",
+    "name": "McDonald's Cinisello Testi1",
+    "lat": 45.541168,
+    "lon": 9.221213,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Viale Fulvio Testi, 132, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0392",
+    "name": "McDonald's Cinisello Valtellina",
+    "lat": 45.555718,
+    "lon": 9.252026,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "via Valtellina. 36, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0393",
+    "name": "McDonald's Cologno Monzese",
+    "lat": 45.539857,
+    "lon": 9.287109,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Mozart ang. Via Imbersago, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0394",
+    "name": "McDonald's Corsico",
+    "lat": 45.429812,
+    "lon": 9.079232,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "c/o AdS Corsico V.le DellIndustria-SS Nuova Vigev, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0395",
+    "name": "McDonald's Cusago",
+    "lat": 45.440686,
+    "lon": 9.043857,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "viale Europa 55, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0396",
+    "name": "McDonald's Garbagnate",
+    "lat": 45.575983,
+    "lon": 9.066595,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "via Peloritana, 58, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0397",
+    "name": "McDonald's Gessate",
+    "lat": 45.54286,
+    "lon": 9.43885,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Sp Padana Superiore Snc, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0398",
+    "name": "McDonald's Gorgonzola",
+    "lat": 45.538489,
+    "lon": 9.393206,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "SP13. km 9.5, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0399",
+    "name": "McDonald's Lainate",
+    "lat": 45.56296,
+    "lon": 9.029228,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Pirelli 1, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0400",
+    "name": "McDonald's Legnano",
+    "lat": 45.596795,
+    "lon": 8.937919,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "viale Cadorna, 48, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0401",
+    "name": "McDonald's Locate Triulzi Outlet",
+    "lat": 45.36067,
+    "lon": 9.216082,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "via Rosa Luxemburg, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0402",
+    "name": "McDonald's Magenta",
+    "lat": 45.466611,
+    "lon": 8.864889,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Boffalora, 79, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0403",
+    "name": "McDonald's Milano Antonini",
+    "lat": 45.43705,
+    "lon": 9.191937,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Antonini, 28, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0404",
+    "name": "McDonald's Milano Bicocca Village",
+    "lat": 45.521987,
+    "lon": 9.215529,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Chiese. 4, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0405",
+    "name": "McDonald's Milano Bonola",
+    "lat": 45.496033,
+    "lon": 9.114598,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Quarenghi 23, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0406",
+    "name": "McDonald's Milano Buonarroti",
+    "lat": 45.46744,
+    "lon": 9.15554,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Buonarroti, 6, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0407",
+    "name": "McDonald's Milano Centrale 2",
+    "lat": 45.484058,
+    "lon": 9.204831,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "P.zza Duca D’Aosta 12, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0408",
+    "name": "McDonald's Milano Certosa",
+    "lat": 45.496092,
+    "lon": 9.139218,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Viale Certosa, 134, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0409",
+    "name": "McDonald's Milano Corso Lodi",
+    "lat": 45.444255,
+    "lon": 9.215957,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Corso Lodi, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0410",
+    "name": "McDonald's Milano De Gasperi",
+    "lat": 45.488862,
+    "lon": 9.141431,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Viale de Gasperi, 2, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0411",
+    "name": "McDonald's Milano Duomo",
+    "lat": 45.464372,
+    "lon": 9.188341,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Piazza del Duomo, 17, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0412",
+    "name": "McDonald's Milano Farini",
+    "lat": 45.494949,
+    "lon": 9.184943,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Farini 79, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0413",
+    "name": "McDonald's Milano Galleria Fontana",
+    "lat": 45.46561,
+    "lon": 9.191485,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Galleria Ciro Fontana, 3, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0414",
+    "name": "McDonald's Milano Linate",
+    "lat": 45.461746,
+    "lon": 9.279341,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Viale Enrico Forlanini, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0415",
+    "name": "McDonald's Milano Lorenteggio Drive",
+    "lat": 45.445947,
+    "lon": 9.122701,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "via Lorenteggio, 246, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0416",
+    "name": "McDonald's Milano Lotto",
+    "lat": 45.478993,
+    "lon": 9.142202,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Piazzale Lotto, 5, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0417",
+    "name": "McDonald's Milano Merlata Bloom",
+    "lat": 45.513246,
+    "lon": 9.099875,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Gottlieb Wilhelm Daimler. 61, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0418",
+    "name": "McDonald's Milano Oberdan",
+    "lat": 45.475434,
+    "lon": 9.204465,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "via Tadino, 2, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0419",
+    "name": "McDonald's Milano P.le Loreto",
+    "lat": 45.485712,
+    "lon": 9.216043,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Corso Buenos Aires, 79, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0420",
+    "name": "McDonald's Milano P.za Argentina",
+    "lat": 45.483717,
+    "lon": 9.214571,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Monteverdi 15, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0421",
+    "name": "McDonald's Milano Paullese",
+    "lat": 45.433346,
+    "lon": 9.262957,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Strada Nuova Paullese, 9, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0422",
+    "name": "McDonald's Milano Rubicone lato Bruzzano",
+    "lat": 45.529879,
+    "lon": 9.164341,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Viale Rubicone, 30, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0423",
+    "name": "McDonald's Milano Rubicone lato Comasina",
+    "lat": 45.530193,
+    "lon": 9.163052,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Viale Rubicone, 29, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0424",
+    "name": "McDonald's Milano Sabotino",
+    "lat": 45.451401,
+    "lon": 9.202924,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Viale Sabotino 38, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0425",
+    "name": "McDonald's Milano Sarpi",
+    "lat": 45.481246,
+    "lon": 9.173413,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Lomazzo, 6, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0426",
+    "name": "McDonald's Milano Stazione Centrale Interno",
+    "lat": 45.485496,
+    "lon": 9.203839,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "piazza Duca dAosta c/o Stazione Centrale FF SS, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0427",
+    "name": "McDonald's Milano Stazione Porta Garibaldi",
+    "lat": 45.484586,
+    "lon": 9.187921,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Piazza Sigmund Freud. 1, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0428",
+    "name": "McDonald's Milano via Dante",
+    "lat": 45.467544,
+    "lon": 9.183329,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "via Dante. 16, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0429",
+    "name": "McDonald's Milano via Forze Armate",
+    "lat": 45.460226,
+    "lon": 9.109706,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via delle Forze Armate. 241, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0430",
+    "name": "McDonald's Milano Via Novara",
+    "lat": 45.471209,
+    "lon": 9.120608,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Novara 83, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0431",
+    "name": "McDonald's Milano via Rogoredo",
+    "lat": 45.426145,
+    "lon": 9.250253,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Rogoredo. 110, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0432",
+    "name": "McDonald's Milano via Torino",
+    "lat": 45.460627,
+    "lon": 9.181837,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Torino 68 - angolo Via San Sisto, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0433",
+    "name": "McDonald's Milano XXII Marzo",
+    "lat": 45.46244,
+    "lon": 9.21021,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Calvi, 38, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0434",
+    "name": "McDonald's Milano XXIV Maggio",
+    "lat": 45.453116,
+    "lon": 9.18047,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Piazza Sant'Eustorgio 2, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0435",
+    "name": "McDonald's Novate Milanese",
+    "lat": 45.519664,
+    "lon": 9.148652,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Amoretti, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0436",
+    "name": "McDonald's Paderno Dugnano CC Brianza",
+    "lat": 45.573611,
+    "lon": 9.17995,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Centro Commerciale Brianza, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0437",
+    "name": "McDonald's Pantigliate",
+    "lat": 45.428859,
+    "lon": 9.367329,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Vecchia Paullese, 13, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0438",
+    "name": "McDonald's Paullo",
+    "lat": 45.42369,
+    "lon": 9.404866,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Margherita Hack. 2/4, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0439",
+    "name": "McDonald's Pioltello",
+    "lat": 45.503329,
+    "lon": 9.339544,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Madre Teresa di Calcutta, Pioltello, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0440",
+    "name": "McDonald's Rho area di servizio A4",
+    "lat": 45.509222,
+    "lon": 9.038891,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "A4 TO-TS km 119. 250, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0441",
+    "name": "McDonald's Rho Drive",
+    "lat": 45.541513,
+    "lon": 9.017533,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "SS 33 via Sempione Km 16 +500, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0442",
+    "name": "McDonald's Rozzano",
+    "lat": 45.390776,
+    "lon": 9.175546,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Curiel, 25, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0443",
+    "name": "McDonald's San Giuliano Milanese CC Le Cupole",
+    "lat": 45.378933,
+    "lon": 9.306258,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "via Della Pace, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0444",
+    "name": "McDonald's San Vittore Olona",
+    "lat": 45.576931,
+    "lon": 8.951889,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "SS 33 del Sempione. 288, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0445",
+    "name": "McDonald's Sedriano",
+    "lat": 45.482988,
+    "lon": 8.969603,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Giuseppe Garibaldi, 24, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0446",
+    "name": "McDonald's Segrate Cassanese",
+    "lat": 45.486216,
+    "lon": 9.263764,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Piaggio, 3 ang. Via Lambretta, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0447",
+    "name": "McDonald's Segrate Rivoltana Novegro",
+    "lat": 45.474173,
+    "lon": 9.284836,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Rivoltana, 64, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0448",
+    "name": "McDonald's Sesto San Giovanni - Sarca",
+    "lat": 45.529902,
+    "lon": 9.217947,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Viale Sarca, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0449",
+    "name": "McDonald's Sesto San Giovanni Drive",
+    "lat": 45.526825,
+    "lon": 9.25536,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via dei Partigiani. 145, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0450",
+    "name": "McDonald's Solaro",
+    "lat": 45.617464,
+    "lon": 9.057805,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Varese 220, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0451",
+    "name": "McDonald's Trezzo S/A - Cavour",
+    "lat": 45.60324,
+    "lon": 9.511026,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "via Cavour, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0452",
+    "name": "McDonald's Truccazzano",
+    "lat": 45.480348,
+    "lon": 9.441807,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Monte Bianco, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0453",
+    "name": "McDonald's Vimodrone",
+    "lat": 45.511257,
+    "lon": 9.28058,
+    "region": "Lombardia",
+    "city": "Milano",
+    "address": "Via Pio La Torre. 14, Milano",
+    "opened": true
+  },
+  {
+    "id": "mc0454",
+    "name": "McDonald's Arcore Drive",
+    "lat": 45.636643,
+    "lon": 9.339293,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Via Gilera 192, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0455",
+    "name": "McDonald's Biassono",
+    "lat": 45.626455,
+    "lon": 9.274903,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Via Cesana e Villa. 70, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0456",
+    "name": "McDonald's Busnago",
+    "lat": 45.620562,
+    "lon": 9.473751,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Via Italia 197, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0457",
+    "name": "McDonald's Caponago Drive",
+    "lat": 45.567771,
+    "lon": 9.36574,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "viale Monza Snc, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0458",
+    "name": "McDonald's Carate Brianza Carso",
+    "lat": 45.673652,
+    "lon": 9.242655,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Via S. Michele al Carso 28, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0459",
+    "name": "McDonald's Concorezzo",
+    "lat": 45.590085,
+    "lon": 9.329424,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Viale Monza. 14, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0460",
+    "name": "McDonald's Desio",
+    "lat": 45.600873,
+    "lon": 9.200336,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Via delle Rose 6, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0461",
+    "name": "McDonald's Lentate sul Seveso",
+    "lat": 45.690597,
+    "lon": 9.10469,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Via Nazionale dei Giovi 249, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0462",
+    "name": "McDonald's Limbiate",
+    "lat": 45.607573,
+    "lon": 9.130347,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Via Monza, 55, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0463",
+    "name": "McDonald's Lissone",
+    "lat": 45.601971,
+    "lon": 9.248825,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "via Zanella ang. via Trieste, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0464",
+    "name": "McDonald's Monza V.le Lombardia",
+    "lat": 45.572012,
+    "lon": 9.24744,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Viale Lombardia 175, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0465",
+    "name": "McDonald's Monza Via Milano",
+    "lat": 45.579306,
+    "lon": 9.272747,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Corso Milano 19, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0466",
+    "name": "McDonald's Varedo",
+    "lat": 45.595948,
+    "lon": 9.173927,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Via Circonvallazione, 164, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0467",
+    "name": "McDonald's Verano Brianza",
+    "lat": 45.676176,
+    "lon": 9.210393,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Viale Comasina, 130, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0468",
+    "name": "McDonald's Vimercate",
+    "lat": 45.600431,
+    "lon": 9.358962,
+    "region": "Lombardia",
+    "city": "Monza e Brianza",
+    "address": "Via Torri Bianche 16, Monza e Brianza",
+    "opened": true
+  },
+  {
+    "id": "mc0469",
+    "name": "McDonald's Chignolo Po",
+    "lat": 45.162662,
+    "lon": 9.503596,
+    "region": "Lombardia",
+    "city": "Pavia",
+    "address": "Sp 234 Via Statale Mantovana Snc, Pavia",
+    "opened": true
+  },
+  {
+    "id": "mc0470",
+    "name": "McDonald's Garlasco",
+    "lat": 45.190284,
+    "lon": 8.923219,
+    "region": "Lombardia",
+    "city": "Pavia",
+    "address": "Via Leonardo da Vinci 55, Pavia",
+    "opened": true
+  },
+  {
+    "id": "mc0471",
+    "name": "McDonald's Landriano",
+    "lat": 45.307227,
+    "lon": 9.26874,
+    "region": "Lombardia",
+    "city": "Pavia",
+    "address": "Via Carlo Azeglio Ciampi. 2, Pavia",
+    "opened": true
+  },
+  {
+    "id": "mc0472",
+    "name": "McDonald's Montebello",
+    "lat": 44.998479,
+    "lon": 9.070468,
+    "region": "Lombardia",
+    "city": "Pavia",
+    "address": "Via Per Lungavilla, Pavia",
+    "opened": true
+  },
+  {
+    "id": "mc0473",
+    "name": "McDonald's Mortara",
+    "lat": 45.249527,
+    "lon": 8.754236,
+    "region": "Lombardia",
+    "city": "Pavia",
+    "address": "Via Vecellio - SS 494, Pavia",
+    "opened": true
+  },
+  {
+    "id": "mc0474",
+    "name": "McDonald's Pavia Brambilla",
+    "lat": 45.199009,
+    "lon": 9.150581,
+    "region": "Lombardia",
+    "city": "Pavia",
+    "address": "viale Brambilla,34, Pavia",
+    "opened": true
+  },
+  {
+    "id": "mc0475",
+    "name": "McDonald's San Martino Siccomario",
+    "lat": 45.152699,
+    "lon": 9.124198,
+    "region": "Lombardia",
+    "city": "Pavia",
+    "address": "Strada Provinciale 181, Pavia",
+    "opened": true
+  },
+  {
+    "id": "mc0476",
+    "name": "McDonald's Stradella",
+    "lat": 45.078497,
+    "lon": 9.284264,
+    "region": "Lombardia",
+    "city": "Pavia",
+    "address": "Via Nazionale, 65, Pavia",
+    "opened": true
+  },
+  {
+    "id": "mc0477",
+    "name": "McDonald's Vigevano",
+    "lat": 45.329587,
+    "lon": 8.879406,
+    "region": "Lombardia",
+    "city": "Pavia",
+    "address": "Corso Milano, 146, Pavia",
+    "opened": true
+  },
+  {
+    "id": "mc0478",
+    "name": "McDonald's Voghera",
+    "lat": 44.986025,
+    "lon": 9.000125,
+    "region": "Lombardia",
+    "city": "Pavia",
+    "address": "Via Martiri della Libertà, Pavia",
+    "opened": true
+  },
+  {
+    "id": "mc0479",
+    "name": "McDonald's Castione Andevenno",
+    "lat": 46.162299,
+    "lon": 9.806083,
+    "region": "Lombardia",
+    "city": "Sondrio",
+    "address": "Via Nazionale 29, Sondrio",
+    "opened": true
+  },
+  {
+    "id": "mc0480",
+    "name": "McDonald's Villa Di Tirano",
+    "lat": 46.212413,
+    "lon": 10.149249,
+    "region": "Lombardia",
+    "city": "Sondrio",
+    "address": "Via Nazionale. 145/a, Sondrio",
+    "opened": true
+  },
+  {
+    "id": "mc0481",
+    "name": "McDonald's Buguggiate",
+    "lat": 45.778917,
+    "lon": 8.80808,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Via Valle Peschiera. 2, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0482",
+    "name": "McDonald's Busto Arsizio",
+    "lat": 45.612522,
+    "lon": 8.854953,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Via Galileo Galilei 1, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0483",
+    "name": "McDonald's Castellanza Viale Borri",
+    "lat": 45.603726,
+    "lon": 8.880705,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Viale Borri 21A, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0484",
+    "name": "McDonald's Gallarate via Milano",
+    "lat": 45.649085,
+    "lon": 8.809178,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Viale Milano. 58, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0485",
+    "name": "McDonald's Gavirate",
+    "lat": 45.843582,
+    "lon": 8.706613,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Via Gerli, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0486",
+    "name": "McDonald's Gerenzano",
+    "lat": 45.632807,
+    "lon": 9.016362,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Via Cervinia. 2, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0487",
+    "name": "McDonald's Induno Olona",
+    "lat": 45.839656,
+    "lon": 8.841181,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Via Jamoretti angolo via Bidino, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0488",
+    "name": "McDonald's Luino",
+    "lat": 45.994702,
+    "lon": 8.73297,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Viale Dante Alighieri 59, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0489",
+    "name": "McDonald's Malnate",
+    "lat": 45.790389,
+    "lon": 8.889561,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Via John Fitzgerald Kennedy, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0490",
+    "name": "McDonald's Milano Malpensa",
+    "lat": 45.627349,
+    "lon": 8.713201,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Aeroporto di Milano-Malpensa, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0491",
+    "name": "McDonald's Milano Malpensa T2",
+    "lat": 45.648145,
+    "lon": 8.721445,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Terminal 2 Aeroporto Malpensa, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0492",
+    "name": "McDonald's Olgiate Olona",
+    "lat": 45.634822,
+    "lon": 8.859122,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Via Busto Fagnano, 44, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0493",
+    "name": "McDonald's Solbiate Arno",
+    "lat": 45.71923,
+    "lon": 8.809975,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Via del Lavoro, 45, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0494",
+    "name": "McDonald's Somma Lombardo",
+    "lat": 45.679885,
+    "lon": 8.721634,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Via Milano, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0495",
+    "name": "McDonald's Tradate",
+    "lat": 45.697509,
+    "lon": 8.912456,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Via della Fornace Cortellezzi, 1, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0496",
+    "name": "McDonald's Varese 1",
+    "lat": 45.817963,
+    "lon": 8.832206,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "Via Emilio Morosini. 21/25, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0497",
+    "name": "McDonald's Varese Stadio",
+    "lat": 45.834314,
+    "lon": 8.8021,
+    "region": "Lombardia",
+    "city": "Varese",
+    "address": "via Bolchini 28, Varese",
+    "opened": true
+  },
+  {
+    "id": "mc0498",
+    "name": "McDonald's Ancona Baraccola",
+    "lat": 43.558267,
+    "lon": 13.510699,
+    "region": "Marche",
+    "city": "Ancona",
+    "address": "Via Albertini, Ancona",
+    "opened": true
+  },
+  {
+    "id": "mc0499",
+    "name": "McDonald's Ancona Torrette",
+    "lat": 43.607488,
+    "lon": 13.455345,
+    "region": "Marche",
+    "city": "Ancona",
+    "address": "Via Tenna angolo Via Conca, Ancona",
+    "opened": true
+  },
+  {
+    "id": "mc0500",
+    "name": "McDonald's Fabriano Via Dante",
+    "lat": 43.348924,
+    "lon": 12.92693,
+    "region": "Marche",
+    "city": "Ancona",
+    "address": "via Dante Alighieri 223, Ancona",
+    "opened": true
+  },
+  {
+    "id": "mc0501",
+    "name": "McDonald's Falconara",
+    "lat": 43.621519,
+    "lon": 13.383349,
+    "region": "Marche",
+    "city": "Ancona",
+    "address": "via Marconi, Ancona",
+    "opened": true
+  },
+  {
+    "id": "mc0502",
+    "name": "McDonald's Jesi",
+    "lat": 43.522996,
+    "lon": 13.252008,
+    "region": "Marche",
+    "city": "Ancona",
+    "address": "Via Gorgolungo, 6, Ancona",
+    "opened": true
+  },
+  {
+    "id": "mc0503",
+    "name": "McDonald's Loreto",
+    "lat": 43.434734,
+    "lon": 13.652858,
+    "region": "Marche",
+    "city": "Ancona",
+    "address": "via Paolo Borsellino 2, Ancona",
+    "opened": true
+  },
+  {
+    "id": "mc0504",
+    "name": "McDonald's Osimo",
+    "lat": 43.503519,
+    "lon": 13.532839,
+    "region": "Marche",
+    "city": "Ancona",
+    "address": "via dellIndustria. 2, Ancona",
+    "opened": true
+  },
+  {
+    "id": "mc0505",
+    "name": "McDonald's Senigallia",
+    "lat": 43.707628,
+    "lon": 13.213034,
+    "region": "Marche",
+    "city": "Ancona",
+    "address": "Via Giordano Bruno, 49, Ancona",
+    "opened": true
+  },
+  {
+    "id": "mc0506",
+    "name": "McDonald's Ascoli Piceno Drive",
+    "lat": 42.844835,
+    "lon": 13.621027,
+    "region": "Marche",
+    "city": "Ascoli Piceno",
+    "address": "Via del Commercio, Ascoli Piceno",
+    "opened": true
+  },
+  {
+    "id": "mc0507",
+    "name": "McDonald's San Benedetto Del Tronto",
+    "lat": 42.941217,
+    "lon": 13.880202,
+    "region": "Marche",
+    "city": "Ascoli Piceno",
+    "address": "Via Liberazione, 14, Ascoli Piceno",
+    "opened": true
+  },
+  {
+    "id": "mc0508",
+    "name": "McDonald's Campiglione di Fermo",
+    "lat": 43.176538,
+    "lon": 13.673783,
+    "region": "Marche",
+    "city": "Fermo",
+    "address": "Via Giacomo Filippo Maria Prosperi, Fermo",
+    "opened": true
+  },
+  {
+    "id": "mc0509",
+    "name": "McDonald's Chienti Est",
+    "lat": 43.285914,
+    "lon": 13.723596,
+    "region": "Marche",
+    "city": "Fermo",
+    "address": "Chienti Est (Total-Erg), Fermo",
+    "opened": true
+  },
+  {
+    "id": "mc0510",
+    "name": "McDonald's Chienti Ovest",
+    "lat": 43.285557,
+    "lon": 13.722326,
+    "region": "Marche",
+    "city": "Fermo",
+    "address": "c/o ADS Chienti Ovest A14 km 263, Fermo",
+    "opened": true
+  },
+  {
+    "id": "mc0511",
+    "name": "McDonald's Porto San Giorgio Drive",
+    "lat": 43.164946,
+    "lon": 13.800781,
+    "region": "Marche",
+    "city": "Fermo",
+    "address": "Via Fratelli Rosselli, 264, Fermo",
+    "opened": true
+  },
+  {
+    "id": "mc0512",
+    "name": "McDonald's Civitanova Marche",
+    "lat": 43.300679,
+    "lon": 13.706592,
+    "region": "Marche",
+    "city": "Macerata",
+    "address": "Via Silvio Pellico, Macerata",
+    "opened": true
+  },
+  {
+    "id": "mc0513",
+    "name": "McDonald's Corridonia",
+    "lat": 43.270227,
+    "lon": 13.484319,
+    "region": "Marche",
+    "city": "Macerata",
+    "address": "VIa Enrico Mattei, 189, Macerata",
+    "opened": true
+  },
+  {
+    "id": "mc0514",
+    "name": "McDonald's Montecassiano",
+    "lat": 43.339363,
+    "lon": 13.435963,
+    "region": "Marche",
+    "city": "Macerata",
+    "address": "SP77 snc, Macerata",
+    "opened": true
+  },
+  {
+    "id": "mc0515",
+    "name": "McDonald's Tolentino Via Pertini",
+    "lat": 43.215995,
+    "lon": 13.309241,
+    "region": "Marche",
+    "city": "Macerata",
+    "address": "Via Sandro Pertini. 23, Macerata",
+    "opened": true
+  },
+  {
+    "id": "mc0516",
+    "name": "McDonald's Fano",
+    "lat": 43.834014,
+    "lon": 13.039132,
+    "region": "Marche",
+    "city": "Pesaro",
+    "address": "​viale Piceno.56, Pesaro",
+    "opened": true
+  },
+  {
+    "id": "mc0517",
+    "name": "McDonald's Fano Einaudi Mall",
+    "lat": 43.801098,
+    "lon": 13.012214,
+    "region": "Marche",
+    "city": "Pesaro",
+    "address": "Via Luigi Einaudi 30, Pesaro",
+    "opened": true
+  },
+  {
+    "id": "mc0518",
+    "name": "McDonald's Pesaro Gagarin Drive",
+    "lat": 43.906393,
+    "lon": 12.871737,
+    "region": "Marche",
+    "city": "Pesaro",
+    "address": "Via Grande Torino. 6, Pesaro",
+    "opened": true
+  },
+  {
+    "id": "mc0519",
+    "name": "McDonald's Campobasso Drive",
+    "lat": 41.576288,
+    "lon": 14.674754,
+    "region": "Molise",
+    "city": "Campobasso",
+    "address": "via Colle delle Api, Campobasso",
+    "opened": true
+  },
+  {
+    "id": "mc0520",
+    "name": "McDonald's Isernia",
+    "lat": 41.59766,
+    "lon": 14.250573,
+    "region": "Molise",
+    "city": "Isernia",
+    "address": "Viale dei Pentri 345, Isernia",
+    "opened": true
+  },
+  {
+    "id": "mc0521",
+    "name": "McDonald's Venafro",
+    "lat": 41.465531,
+    "lon": 14.056008,
+    "region": "Molise",
+    "city": "Isernia",
+    "address": "SS85, Isernia",
+    "opened": true
+  },
+  {
+    "id": "mc0522",
+    "name": "McDonald's Acqui Terme",
+    "lat": 44.669128,
+    "lon": 8.47082,
+    "region": "Piemonte",
+    "city": "Alessandria",
+    "address": "Via Romita.78, Alessandria",
+    "opened": true
+  },
+  {
+    "id": "mc0523",
+    "name": "McDonald's Alessandria",
+    "lat": 44.909625,
+    "lon": 8.631088,
+    "region": "Piemonte",
+    "city": "Alessandria",
+    "address": "Via Marengo 159, Alessandria",
+    "opened": true
+  },
+  {
+    "id": "mc0524",
+    "name": "McDonald's Alessandria Giordano Bruno",
+    "lat": 44.920289,
+    "lon": 8.593689,
+    "region": "Piemonte",
+    "city": "Alessandria",
+    "address": "via Giordano Bruno 216, Alessandria, Alessandria",
+    "opened": true
+  },
+  {
+    "id": "mc0525",
+    "name": "McDonald's Alessandria Stazione",
+    "lat": 44.908615,
+    "lon": 8.607989,
+    "region": "Piemonte",
+    "city": "Alessandria",
+    "address": "Piazzale Eugenio Curiel 8, Alessandria",
+    "opened": true
+  },
+  {
+    "id": "mc0526",
+    "name": "McDonald's Belforte Monferrato",
+    "lat": 44.627296,
+    "lon": 8.655298,
+    "region": "Piemonte",
+    "city": "Alessandria",
+    "address": "Regione Fornace 8/B/1, Alessandria",
+    "opened": true
+  },
+  {
+    "id": "mc0527",
+    "name": "McDonald's Casale Monferrato",
+    "lat": 45.134295,
+    "lon": 8.443686,
+    "region": "Piemonte",
+    "city": "Alessandria",
+    "address": "Via Beato Mons. Luigi Novarese snc, Alessandria",
+    "opened": true
+  },
+  {
+    "id": "mc0528",
+    "name": "McDonald's Castelnuovo Scrivia",
+    "lat": 44.933445,
+    "lon": 8.853254,
+    "region": "Piemonte",
+    "city": "Alessandria",
+    "address": "Castelnuovo Scrivia Est (Tamoil), Alessandria",
+    "opened": true
+  },
+  {
+    "id": "mc0529",
+    "name": "McDonald's Castelnuovo Scrivia Ovest",
+    "lat": 44.934066,
+    "lon": 8.852046,
+    "region": "Piemonte",
+    "city": "Alessandria",
+    "address": "area di servizio Castelnuovo Scrivia Ovest, Alessandria",
+    "opened": true
+  },
+  {
+    "id": "mc0530",
+    "name": "McDonald's Serravalle (NON OUTLET)",
+    "lat": 44.732316,
+    "lon": 8.841331,
+    "region": "Piemonte",
+    "city": "Alessandria",
+    "address": "Via Novi, 20, Alessandria",
+    "opened": true
+  },
+  {
+    "id": "mc0531",
+    "name": "McDonald's Serravalle Scrivia Outlet Mall",
+    "lat": 44.73579,
+    "lon": 8.838704,
+    "region": "Piemonte",
+    "city": "Alessandria",
+    "address": "Via Della Moda 1, Alessandria",
+    "opened": true
+  },
+  {
+    "id": "mc0532",
+    "name": "McDonald's Tortona",
+    "lat": 44.90776,
+    "lon": 8.881871,
+    "region": "Piemonte",
+    "city": "Alessandria",
+    "address": "Oasi Centro Commerciale, Alessandria",
+    "opened": true
+  },
+  {
+    "id": "mc0533",
+    "name": "McDonald's Valenza",
+    "lat": 45.003214,
+    "lon": 8.638873,
+    "region": "Piemonte",
+    "city": "Alessandria",
+    "address": "via Circonvallazione Ovest. 89, Alessandria",
+    "opened": true
+  },
+  {
+    "id": "mc0534",
+    "name": "McDonald's Asti Consorzio",
+    "lat": 44.905728,
+    "lon": 8.230819,
+    "region": "Piemonte",
+    "city": "Asti",
+    "address": "Corso Alessandria, 330, Asti",
+    "opened": true
+  },
+  {
+    "id": "mc0535",
+    "name": "McDonald's Asti Ovest",
+    "lat": 44.904384,
+    "lon": 8.179268,
+    "region": "Piemonte",
+    "city": "Asti",
+    "address": "Corso Torino. 380, Asti",
+    "opened": true
+  },
+  {
+    "id": "mc0536",
+    "name": "McDonald's Biella",
+    "lat": 45.552358,
+    "lon": 8.071659,
+    "region": "Piemonte",
+    "city": "Biella",
+    "address": "Corso San Maurizio, Biella",
+    "opened": true
+  },
+  {
+    "id": "mc0537",
+    "name": "McDonald's Quaregna Cerreto",
+    "lat": 45.564648,
+    "lon": 8.16022,
+    "region": "Piemonte",
+    "city": "Biella",
+    "address": "SP300 - Via Q. Sella. 14, Biella",
+    "opened": true
+  },
+  {
+    "id": "mc0538",
+    "name": "McDonald's Cuneo Auchan",
+    "lat": 44.39226,
+    "lon": 7.582201,
+    "region": "Piemonte",
+    "city": "Cuneo",
+    "address": "via Margarita, 8, Cuneo",
+    "opened": true
+  },
+  {
+    "id": "mc0539",
+    "name": "McDonald's Cuneo Via Pertini",
+    "lat": 44.373026,
+    "lon": 7.527938,
+    "region": "Piemonte",
+    "city": "Cuneo",
+    "address": "Via Sandro Pertini, Cuneo",
+    "opened": true
+  },
+  {
+    "id": "mc0540",
+    "name": "McDonald's Fossano Drive",
+    "lat": 44.557258,
+    "lon": 7.712091,
+    "region": "Piemonte",
+    "city": "Cuneo",
+    "address": "Via Torino 35, Cuneo",
+    "opened": true
+  },
+  {
+    "id": "mc0541",
+    "name": "McDonald's Mondovì",
+    "lat": 44.419995,
+    "lon": 7.849033,
+    "region": "Piemonte",
+    "city": "Cuneo",
+    "address": "Corso Mondovicino 29, Cuneo",
+    "opened": true
+  },
+  {
+    "id": "mc0542",
+    "name": "McDonald's Santa Vittoria dAlba",
+    "lat": 44.694885,
+    "lon": 7.945649,
+    "region": "Piemonte",
+    "city": "Cuneo",
+    "address": "Strada Statale 231 Alba - Bra, Cuneo",
+    "opened": true
+  },
+  {
+    "id": "mc0543",
+    "name": "McDonald's Savigliano",
+    "lat": 44.647742,
+    "lon": 7.674683,
+    "region": "Piemonte",
+    "city": "Cuneo",
+    "address": "Via Alba. 36, Cuneo",
+    "opened": true
+  },
+  {
+    "id": "mc0544",
+    "name": "McDonald's Borgomanero Drive",
+    "lat": 45.72017,
+    "lon": 8.488589,
+    "region": "Piemonte",
+    "city": "Novara",
+    "address": "Via Santa Cristinetta 149, Novara",
+    "opened": true
+  },
+  {
+    "id": "mc0545",
+    "name": "McDonald's Castelletto Ticino",
+    "lat": 45.719117,
+    "lon": 8.599745,
+    "region": "Piemonte",
+    "city": "Novara",
+    "address": "Strada Statale 33 del Sempione, 134, Novara",
+    "opened": true
+  },
+  {
+    "id": "mc0546",
+    "name": "McDonald's Novara San Martino",
+    "lat": 45.446683,
+    "lon": 8.601163,
+    "region": "Piemonte",
+    "city": "Novara",
+    "address": "Via BiandrateVia Biandrate, Novara",
+    "opened": true
+  },
+  {
+    "id": "mc0547",
+    "name": "McDonald's Novara Sporting",
+    "lat": 45.451662,
+    "lon": 8.650417,
+    "region": "Piemonte",
+    "city": "Novara",
+    "address": "Piazzale Giuseppe Fortina, 1, Novara",
+    "opened": true
+  },
+  {
+    "id": "mc0548",
+    "name": "McDonald's Novara Vittoria",
+    "lat": 45.466362,
+    "lon": 8.630635,
+    "region": "Piemonte",
+    "city": "Novara",
+    "address": "Via Mario Pavesi 15, Novara",
+    "opened": true
+  },
+  {
+    "id": "mc0549",
+    "name": "McDonald's Oleggio Via Carmine",
+    "lat": 45.599672,
+    "lon": 8.645931,
+    "region": "Piemonte",
+    "city": "Novara",
+    "address": "via Carmine (ss32). snc, Novara",
+    "opened": true
+  },
+  {
+    "id": "mc0550",
+    "name": "McDonald's Romagnano Sesia",
+    "lat": 45.621759,
+    "lon": 8.400503,
+    "region": "Piemonte",
+    "city": "Novara",
+    "address": "Via Novara, 243, Novara",
+    "opened": true
+  },
+  {
+    "id": "mc0551",
+    "name": "McDonald's Trecate",
+    "lat": 45.438143,
+    "lon": 8.72506,
+    "region": "Piemonte",
+    "city": "Novara",
+    "address": "Via Bettole. 40, Novara",
+    "opened": true
+  },
+  {
+    "id": "mc0552",
+    "name": "McDonald's Alpignano Via Venaria",
+    "lat": 45.102681,
+    "lon": 7.536074,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Venaria. 18, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0553",
+    "name": "McDonald's Avigliana",
+    "lat": 45.086515,
+    "lon": 7.407987,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Giovanni e Francesca Falcone. 87, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0554",
+    "name": "McDonald's Beinasco",
+    "lat": 45.022291,
+    "lon": 7.593317,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Torino, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0555",
+    "name": "McDonald's Borgaro Torinese Via Stati Uniti",
+    "lat": 45.14461,
+    "lon": 7.654987,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Stati Uniti 1, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0556",
+    "name": "McDonald's Carmagnola",
+    "lat": 44.845656,
+    "lon": 7.73268,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "via Sommariva, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0557",
+    "name": "McDonald's Cavour",
+    "lat": 44.793704,
+    "lon": 7.374652,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Pinerolo 73, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0558",
+    "name": "McDonald's Chieri",
+    "lat": 45.002455,
+    "lon": 7.843163,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Padana Inferiore 43, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0559",
+    "name": "McDonald's Chivasso",
+    "lat": 45.201047,
+    "lon": 7.890645,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "SS 26 - via Favorita, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0560",
+    "name": "McDonald's Collegno Corso Francia",
+    "lat": 45.07257,
+    "lon": 7.568261,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Corso Francia 262, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0561",
+    "name": "McDonald's Grugliasco",
+    "lat": 45.055638,
+    "lon": 7.613031,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Crea 10, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0562",
+    "name": "McDonald's Leinì",
+    "lat": 45.165236,
+    "lon": 7.711994,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Torino 165, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0563",
+    "name": "McDonald's Moncalieri",
+    "lat": 44.976716,
+    "lon": 7.70675,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Fortunato Postiglione, 1, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0564",
+    "name": "McDonald's Moncalieri C.so Trieste",
+    "lat": 45.01468,
+    "lon": 7.668259,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Corso Trieste 95, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0565",
+    "name": "McDonald's Nichelino",
+    "lat": 44.984856,
+    "lon": 7.621396,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Centro commerciale mondo Juve, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0566",
+    "name": "McDonald's Orbassano",
+    "lat": 45.00262,
+    "lon": 7.55204,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Circonvallazione Esterna. 10, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0567",
+    "name": "McDonald's Pavone Canavese",
+    "lat": 45.444614,
+    "lon": 7.853235,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "c/o C.C. Il Pavone - Via Circonvallazione 95/6, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0568",
+    "name": "McDonald's Pinerolo Drive",
+    "lat": 44.888824,
+    "lon": 7.354998,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Corso Torino, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0569",
+    "name": "McDonald's Rivarolo Canavese",
+    "lat": 45.323922,
+    "lon": 7.727684,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Corso Torino ang. Via Matteotti, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0570",
+    "name": "McDonald's Rivoli",
+    "lat": 45.065994,
+    "lon": 7.537926,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Corso Primo Levi, 23, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0571",
+    "name": "McDonald's San Maurizio Canavese",
+    "lat": 45.193905,
+    "lon": 7.626955,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Torino. 102, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0572",
+    "name": "McDonald's Settimo Torinese",
+    "lat": 45.132816,
+    "lon": 7.758294,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Torino. 49, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0573",
+    "name": "McDonald's Torino Caselle Aeroporto",
+    "lat": 45.191719,
+    "lon": 7.643475,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "c/o Aeroporto Torino Caselle, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0574",
+    "name": "McDonald's Torino Castello",
+    "lat": 45.069992,
+    "lon": 7.685824,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Piazza Castello 59, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0575",
+    "name": "McDonald's Torino Corso Potenza",
+    "lat": 45.089816,
+    "lon": 7.653858,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Corso Potenza 22 angolo via Calabria, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0576",
+    "name": "McDonald's Torino Cossa",
+    "lat": 45.094182,
+    "lon": 7.633104,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Cossa, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0577",
+    "name": "McDonald's Torino Giulio Cesare",
+    "lat": 45.11719,
+    "lon": 7.709548,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Corso Giulio Cesare, 397, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0578",
+    "name": "McDonald's Torino Lingotto Mall",
+    "lat": 45.031937,
+    "lon": 7.664899,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Nizza 230, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0579",
+    "name": "McDonald's Torino Monginevro (Norauto)",
+    "lat": 45.064504,
+    "lon": 7.630074,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Monginevro, 162, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0580",
+    "name": "McDonald's Torino Porta Susa Stazione",
+    "lat": 45.073063,
+    "lon": 7.666928,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Corso Bolzano, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0581",
+    "name": "McDonald's Torino Santa Rita",
+    "lat": 45.047025,
+    "lon": 7.645959,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Piazza Santa Rita da Cascia 8, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0582",
+    "name": "McDonald's Torino SantOttavio",
+    "lat": 45.066954,
+    "lon": 7.693384,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via SantOttavio. 8, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0583",
+    "name": "McDonald's Torino Stazione Porta Nuova",
+    "lat": 45.061438,
+    "lon": 7.678142,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Corso Vittorio Emanuele 53, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0584",
+    "name": "McDonald's Torino via Livorno",
+    "lat": 45.086973,
+    "lon": 7.670163,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Livorno, 48, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0585",
+    "name": "McDonald's Torino Via Pio VII",
+    "lat": 45.019039,
+    "lon": 7.64898,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Via Pio VII 151, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0586",
+    "name": "McDonald's Venaria",
+    "lat": 45.112558,
+    "lon": 7.644446,
+    "region": "Piemonte",
+    "city": "Torino",
+    "address": "Corso Garibaldi, Torino",
+    "opened": true
+  },
+  {
+    "id": "mc0587",
+    "name": "McDonald's Domodossola",
+    "lat": 46.129229,
+    "lon": 8.293648,
+    "region": "Piemonte",
+    "city": "Verbano-Cusio-Ossola",
+    "address": "Via Sempione, 71, Verbano-Cusio-Ossola",
+    "opened": true
+  },
+  {
+    "id": "mc0588",
+    "name": "McDonald's Gravellona Toce",
+    "lat": 45.932109,
+    "lon": 8.438356,
+    "region": "Piemonte",
+    "city": "Verbano-Cusio-Ossola",
+    "address": "via Marconi, Verbano-Cusio-Ossola",
+    "opened": true
+  },
+  {
+    "id": "mc0589",
+    "name": "McDonald's Gravellona Toce Corso Roma",
+    "lat": 45.924629,
+    "lon": 8.430455,
+    "region": "Piemonte",
+    "city": "Verbano-Cusio-Ossola",
+    "address": "Corso Roma. 114, Verbano-Cusio-Ossola",
+    "opened": true
+  },
+  {
+    "id": "mc0590",
+    "name": "McDonald's Verbania Corso Europa",
+    "lat": 45.927789,
+    "lon": 8.560555,
+    "region": "Piemonte",
+    "city": "Verbano-Cusio-Ossola",
+    "address": "Corso Europa, Verbano-Cusio-Ossola",
+    "opened": true
+  },
+  {
+    "id": "mc0591",
+    "name": "McDonald's Borgosesia",
+    "lat": 45.7304,
+    "lon": 8.26296,
+    "region": "Piemonte",
+    "city": "Vercelli",
+    "address": "viale varallo, Vercelli",
+    "opened": true
+  },
+  {
+    "id": "mc0592",
+    "name": "McDonald's Crescentino",
+    "lat": 45.189746,
+    "lon": 8.109758,
+    "region": "Piemonte",
+    "city": "Vercelli",
+    "address": "Via Viotti 3, Vercelli",
+    "opened": true
+  },
+  {
+    "id": "mc0593",
+    "name": "McDonald's Santhià",
+    "lat": 45.37565,
+    "lon": 8.151897,
+    "region": "Piemonte",
+    "city": "Vercelli",
+    "address": "Corso Aosta 40, Vercelli",
+    "opened": true
+  },
+  {
+    "id": "mc0594",
+    "name": "McDonald's Vercelli",
+    "lat": 45.322995,
+    "lon": 8.394495,
+    "region": "Piemonte",
+    "city": "Vercelli",
+    "address": "Via Bertinetti 8, Vercelli",
+    "opened": true
+  },
+  {
+    "id": "mc0595",
+    "name": "McDonald's Bari Aeroporto",
+    "lat": 41.134296,
+    "lon": 16.763701,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "Viale Enzo Ferrari, Bari",
+    "opened": true
+  },
+  {
+    "id": "mc0596",
+    "name": "McDonald's Bari Casamassima",
+    "lat": 40.965738,
+    "lon": 16.925748,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "Via Noicattaro, 2, Bari",
+    "opened": true
+  },
+  {
+    "id": "mc0597",
+    "name": "McDonald's Bari Corso Vittorio Emanuele",
+    "lat": 41.126058,
+    "lon": 16.871817,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "Corso Vittorio Emanuele, Bari",
+    "opened": true
+  },
+  {
+    "id": "mc0598",
+    "name": "McDonald's Bari Mungivacca",
+    "lat": 41.088928,
+    "lon": 16.895948,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "via Caduti del Lavoro 2 Loc. Mungivacca, Bari",
+    "opened": true
+  },
+  {
+    "id": "mc0599",
+    "name": "McDonald's Bari Poggiofranco",
+    "lat": 41.090017,
+    "lon": 16.862844,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "Uscita 11 Tangenziale di Bari, Bari",
+    "opened": true
+  },
+  {
+    "id": "mc0600",
+    "name": "McDonald's Bari Santa Caterina",
+    "lat": 41.09919,
+    "lon": 16.829598,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "via Caterina, 17, Bari",
+    "opened": true
+  },
+  {
+    "id": "mc0601",
+    "name": "McDonald's Bari Sparano",
+    "lat": 41.11914,
+    "lon": 16.87002,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "Via Sparano 155, Bari",
+    "opened": true
+  },
+  {
+    "id": "mc0602",
+    "name": "McDonald's Bari Tangenziale",
+    "lat": 41.124575,
+    "lon": 16.822174,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "viale Europa, 3, Bari",
+    "opened": true
+  },
+  {
+    "id": "mc0603",
+    "name": "McDonald's Bari Via Napoli",
+    "lat": 41.131998,
+    "lon": 16.823674,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "Via Napoli snc, Bari",
+    "opened": true
+  },
+  {
+    "id": "mc0604",
+    "name": "McDonald's BariBlu",
+    "lat": 41.082995,
+    "lon": 16.94624,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "CC BariBlu - Triggiano, Bari",
+    "opened": true
+  },
+  {
+    "id": "mc0605",
+    "name": "McDonald's Molfetta",
+    "lat": 41.205314,
+    "lon": 16.5564,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "Via Adriano Olivetti, Bari",
+    "opened": true
+  },
+  {
+    "id": "mc0606",
+    "name": "McDonald's Monopoli Aldo Moro",
+    "lat": 40.958558,
+    "lon": 17.282321,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "Via Aldo Moro, Bari",
+    "opened": true
+  },
+  {
+    "id": "mc0607",
+    "name": "McDonald's Andria Via Trani",
+    "lat": 41.24059,
+    "lon": 16.315595,
+    "region": "Puglia",
+    "city": "Barletta-Andria-Trani",
+    "address": "SP1 km 8.600, Barletta-Andria-Trani",
+    "opened": true
+  },
+  {
+    "id": "mc0608",
+    "name": "McDonald's Barletta",
+    "lat": 41.320304,
+    "lon": 16.257141,
+    "region": "Puglia",
+    "city": "Barletta-Andria-Trani",
+    "address": "via Foggia, 42, Barletta-Andria-Trani",
+    "opened": true
+  },
+  {
+    "id": "mc0609",
+    "name": "McDonald's Barletta via Trani",
+    "lat": 41.317999,
+    "lon": 16.29151,
+    "region": "Puglia",
+    "city": "Barletta-Andria-Trani",
+    "address": "Via Trani 8-8/A, Barletta-Andria-Trani",
+    "opened": true
+  },
+  {
+    "id": "mc0610",
+    "name": "McDonald's Bisceglie",
+    "lat": 41.244519,
+    "lon": 16.490189,
+    "region": "Puglia",
+    "city": "Barletta-Andria-Trani",
+    "address": "Via Bovio 312, Barletta-Andria-Trani",
+    "opened": true
+  },
+  {
+    "id": "mc0611",
+    "name": "McDonald's Trani",
+    "lat": 41.272668,
+    "lon": 16.404168,
+    "region": "Puglia",
+    "city": "Barletta-Andria-Trani",
+    "address": "Via Gran Bretagna.19, Barletta-Andria-Trani",
+    "opened": true
+  },
+  {
+    "id": "mc0612",
+    "name": "McDonald's Brindisi",
+    "lat": 40.623167,
+    "lon": 17.916001,
+    "region": "Puglia",
+    "city": "Brindisi",
+    "address": "Viale Caduti di via Fani, Brindisi",
+    "opened": true
+  },
+  {
+    "id": "mc0613",
+    "name": "McDonald's Fasano",
+    "lat": 40.842643,
+    "lon": 17.358026,
+    "region": "Puglia",
+    "city": "Brindisi",
+    "address": "Via Roma. 327, Brindisi",
+    "opened": true
+  },
+  {
+    "id": "mc0614",
+    "name": "McDonald's Mesagne",
+    "lat": 40.580094,
+    "lon": 17.838436,
+    "region": "Puglia",
+    "city": "Brindisi",
+    "address": "Centro commerciale Appia Antica, Brindisi",
+    "opened": true
+  },
+  {
+    "id": "mc0615",
+    "name": "McDonald's Cerignola Via Nizza",
+    "lat": 41.266524,
+    "lon": 15.906667,
+    "region": "Puglia",
+    "city": "Foggia",
+    "address": "Via Nizza, Foggia",
+    "opened": true
+  },
+  {
+    "id": "mc0616",
+    "name": "McDonald's Foggia Mall",
+    "lat": 41.41549,
+    "lon": 15.652884,
+    "region": "Puglia",
+    "city": "Foggia",
+    "address": "Centro Commerciale GrandaPulia, Foggia",
+    "opened": true
+  },
+  {
+    "id": "mc0617",
+    "name": "McDonald's Foggia Mezzogiorno",
+    "lat": 41.448704,
+    "lon": 15.56962,
+    "region": "Puglia",
+    "city": "Foggia",
+    "address": "Corso del Mezzogiorno, Foggia",
+    "opened": true
+  },
+  {
+    "id": "mc0618",
+    "name": "McDonald's Foggia Mongolfiera",
+    "lat": 41.44468,
+    "lon": 15.543935,
+    "region": "Puglia",
+    "city": "Foggia",
+    "address": "Viale Degli Aviatori, Foggia",
+    "opened": true
+  },
+  {
+    "id": "mc0619",
+    "name": "McDonald's Lucera",
+    "lat": 41.501991,
+    "lon": 15.351653,
+    "region": "Puglia",
+    "city": "Foggia",
+    "address": "via Porta Foggia, Foggia",
+    "opened": true
+  },
+  {
+    "id": "mc0620",
+    "name": "McDonald's GALATINA",
+    "lat": 40.181162,
+    "lon": 18.168503,
+    "region": "Puglia",
+    "city": "Lecce",
+    "address": "VIA LECCE, Lecce",
+    "opened": true
+  },
+  {
+    "id": "mc0621",
+    "name": "McDonald's Lecce Surbo",
+    "lat": 40.375585,
+    "lon": 18.147265,
+    "region": "Puglia",
+    "city": "Lecce",
+    "address": "via Rosanna Benzi, Lecce",
+    "opened": true
+  },
+  {
+    "id": "mc0622",
+    "name": "McDonald's Lecce Trinchese",
+    "lat": 40.35372,
+    "lon": 18.176898,
+    "region": "Puglia",
+    "city": "Lecce",
+    "address": "Via Salvatore Trinchese, Lecce",
+    "opened": true
+  },
+  {
+    "id": "mc0623",
+    "name": "McDonald's Lecce Via Taranto",
+    "lat": 40.360904,
+    "lon": 18.155736,
+    "region": "Puglia",
+    "city": "Lecce",
+    "address": "VIA TARANTO, Lecce",
+    "opened": true
+  },
+  {
+    "id": "mc0624",
+    "name": "McDonald's Martina Franca",
+    "lat": 40.696709,
+    "lon": 17.339238,
+    "region": "Puglia",
+    "city": "Taranto",
+    "address": "Via Madonna Piccola 60, Taranto",
+    "opened": true
+  },
+  {
+    "id": "mc0625",
+    "name": "McDonald's Massafra Appia",
+    "lat": 40.583641,
+    "lon": 17.11103,
+    "region": "Puglia",
+    "city": "Taranto",
+    "address": "SS 7 Appia, Taranto",
+    "opened": true
+  },
+  {
+    "id": "mc0626",
+    "name": "McDonald's Taranto Consiglio Drive",
+    "lat": 40.459288,
+    "lon": 17.288546,
+    "region": "Puglia",
+    "city": "Taranto",
+    "address": "via consiglio, Taranto",
+    "opened": true
+  },
+  {
+    "id": "mc0627",
+    "name": "McDonald's Taranto Porte dello Jonio",
+    "lat": 40.461256,
+    "lon": 17.299525,
+    "region": "Puglia",
+    "city": "Taranto",
+    "address": "Via Consiglio 115, Taranto",
+    "opened": true
+  },
+  {
+    "id": "mc0628",
+    "name": "McDonald's Taranto v.le del Turismo",
+    "lat": 40.520502,
+    "lon": 17.280909,
+    "region": "Puglia",
+    "city": "Taranto",
+    "address": "Viale del Turismo, Taranto",
+    "opened": true
+  },
+  {
+    "id": "mc0629",
+    "name": "McDonald's Taranto Via Picardi",
+    "lat": 40.454385,
+    "lon": 17.258569,
+    "region": "Puglia",
+    "city": "Taranto",
+    "address": "Via Nicola Picardi 2, Taranto",
+    "opened": true
+  },
+  {
+    "id": "mc0630",
+    "name": "McDonald's Cagliari Aeroporto",
+    "lat": 39.253487,
+    "lon": 9.061043,
+    "region": "Sardegna",
+    "city": "Cagliari",
+    "address": "Via dei Trasvolatori, Cagliari",
+    "opened": true
+  },
+  {
+    "id": "mc0631",
+    "name": "McDonald's Cagliari Bacaredda",
+    "lat": 39.227839,
+    "lon": 9.120201,
+    "region": "Sardegna",
+    "city": "Cagliari",
+    "address": "Via Bacaredda 97, Cagliari",
+    "opened": true
+  },
+  {
+    "id": "mc0632",
+    "name": "McDonald's Cagliari Peretti",
+    "lat": 39.250556,
+    "lon": 9.112611,
+    "region": "Sardegna",
+    "city": "Cagliari",
+    "address": "via Peretti, Cagliari",
+    "opened": true
+  },
+  {
+    "id": "mc0633",
+    "name": "McDonald's Cagliari S. Simone",
+    "lat": 39.231347,
+    "lon": 9.092278,
+    "region": "Sardegna",
+    "city": "Cagliari",
+    "address": "Via Simone, 60, Cagliari",
+    "opened": true
+  },
+  {
+    "id": "mc0634",
+    "name": "McDonald's Cagliari Via Giovanni Maria Dettori",
+    "lat": 39.216675,
+    "lon": 9.113488,
+    "region": "Sardegna",
+    "city": "Cagliari",
+    "address": "cagliari via giovanni maria dettori, Cagliari",
+    "opened": true
+  },
+  {
+    "id": "mc0635",
+    "name": "McDonald's Quartu SantElena Poetto",
+    "lat": 39.229188,
+    "lon": 9.216539,
+    "region": "Sardegna",
+    "city": "Cagliari",
+    "address": "Viale Lungomare del Golfo, Cagliari",
+    "opened": true
+  },
+  {
+    "id": "mc0636",
+    "name": "McDonald's Quartucciu",
+    "lat": 39.244929,
+    "lon": 9.16463,
+    "region": "Sardegna",
+    "city": "Cagliari",
+    "address": "Via Delle Serre, Cagliari",
+    "opened": true
+  },
+  {
+    "id": "mc0637",
+    "name": "McDonald's Sestu",
+    "lat": 39.291172,
+    "lon": 9.067591,
+    "region": "Sardegna",
+    "city": "Cagliari",
+    "address": "Ex SS 131, Cagliari",
+    "opened": true
+  },
+  {
+    "id": "mc0638",
+    "name": "McDonald's Settimo San Pietro",
+    "lat": 39.275975,
+    "lon": 9.180994,
+    "region": "Sardegna",
+    "city": "Cagliari",
+    "address": "Strada Provinciale 15, Cagliari",
+    "opened": true
+  },
+  {
+    "id": "mc0639",
+    "name": "McDonald's Nuoro",
+    "lat": 40.322281,
+    "lon": 9.305981,
+    "region": "Sardegna",
+    "city": "Nuoro",
+    "address": "Via Don Giovanni Bosco, Nuoro, Nuoro",
+    "opened": true
+  },
+  {
+    "id": "mc0640",
+    "name": "McDonald's Olbia",
+    "lat": 40.909367,
+    "lon": 9.522651,
+    "region": "Sardegna",
+    "city": "Olbia-Tempio",
+    "address": "Via Cesare Pavese, Olbia-Tempio",
+    "opened": true
+  },
+  {
+    "id": "mc0641",
+    "name": "McDonald's Olbia Aldo Moro",
+    "lat": 40.955122,
+    "lon": 9.495622,
+    "region": "Sardegna",
+    "city": "Olbia-Tempio",
+    "address": "via Nicosia 18, Olbia-Tempio",
+    "opened": true
+  },
+  {
+    "id": "mc0642",
+    "name": "McDonald's Olbia Indonesia",
+    "lat": 40.930795,
+    "lon": 9.510237,
+    "region": "Sardegna",
+    "city": "Olbia-Tempio",
+    "address": "via Indonesia snc, Olbia-Tempio",
+    "opened": true
+  },
+  {
+    "id": "mc0643",
+    "name": "McDonald's Oristano",
+    "lat": 39.91237,
+    "lon": 8.588012,
+    "region": "Sardegna",
+    "city": "Oristano",
+    "address": "Via Cagliari 45, Oristano",
+    "opened": true
+  },
+  {
+    "id": "mc0644",
+    "name": "McDonald's Oristano Via Dublino",
+    "lat": 39.890291,
+    "lon": 8.598487,
+    "region": "Sardegna",
+    "city": "Oristano",
+    "address": "Via Dublino, Oristano",
+    "opened": true
+  },
+  {
+    "id": "mc0645",
+    "name": "McDonald's Porto Torres",
+    "lat": 40.829288,
+    "lon": 8.398892,
+    "region": "Sardegna",
+    "city": "Sassari",
+    "address": "Via dellIndustria, Sassari",
+    "opened": true
+  },
+  {
+    "id": "mc0646",
+    "name": "McDonald's Sassari",
+    "lat": 40.737885,
+    "lon": 8.535044,
+    "region": "Sardegna",
+    "city": "Sassari",
+    "address": "C.C. rinascente Viale Porto Torres, Sassari",
+    "opened": true
+  },
+  {
+    "id": "mc0647",
+    "name": "McDonald's Sassari via Predda Niedda",
+    "lat": 40.72822,
+    "lon": 8.549735,
+    "region": "Sardegna",
+    "city": "Sassari",
+    "address": "Via Predda Niedda, Sassari",
+    "opened": true
+  },
+  {
+    "id": "mc0648",
+    "name": "McDonald's Carbonia Drive",
+    "lat": 39.169015,
+    "lon": 8.51147,
+    "region": "Sardegna",
+    "city": "Sud Sardegna",
+    "address": "via della Stazione, Sud Sardegna",
+    "opened": true
+  },
+  {
+    "id": "mc0649",
+    "name": "McDonald's Agrigento",
+    "lat": 37.27075,
+    "lon": 13.622934,
+    "region": "Sicilia",
+    "city": "Agrigento",
+    "address": "Contrada Degli Angeli - S.S. 115 - Villaggio Mose, Agrigento",
+    "opened": true
+  },
+  {
+    "id": "mc0650",
+    "name": "McDonald's Caltanissetta",
+    "lat": 37.491372,
+    "lon": 14.040877,
+    "region": "Sicilia",
+    "city": "Caltanissetta",
+    "address": "Via Leone XIII 101, Caltanissetta",
+    "opened": true
+  },
+  {
+    "id": "mc0651",
+    "name": "McDonald's Gela",
+    "lat": 37.080764,
+    "lon": 14.217231,
+    "region": "Sicilia",
+    "city": "Caltanissetta",
+    "address": "Via Venezia, Caltanissetta",
+    "opened": true
+  },
+  {
+    "id": "mc0652",
+    "name": "McDonald's Acireale Drive",
+    "lat": 37.621493,
+    "lon": 15.141527,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "Via Cristoforo Colombo e Via Cefalu, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0653",
+    "name": "McDonald's Belpasso CT",
+    "lat": 37.542111,
+    "lon": 14.954178,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "Località Piano Tavola, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0654",
+    "name": "McDonald's Caltagirone Europa",
+    "lat": 37.217616,
+    "lon": 14.522097,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "Viale Europa, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0655",
+    "name": "McDonald's Catania",
+    "lat": 37.507119,
+    "lon": 15.086731,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "Piazza Stesicoro 57, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0656",
+    "name": "McDonald's Catania Aeroporto",
+    "lat": 37.470662,
+    "lon": 15.065796,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "Aeroporto di Catania Fontanarossa, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0657",
+    "name": "McDonald's Catania Alcalà",
+    "lat": 37.500566,
+    "lon": 15.088567,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "Via Ionica 2, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0658",
+    "name": "McDonald's Catania Gravina",
+    "lat": 37.535184,
+    "lon": 15.075178,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "via di Passo Gravina, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0659",
+    "name": "McDonald's Catania LArena Mall",
+    "lat": 37.479114,
+    "lon": 15.075611,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "Via San Giuseppe Alla Rena. 67, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0660",
+    "name": "McDonald's Catania Mall",
+    "lat": 37.47192,
+    "lon": 15.050408,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "via Gelso Bianco, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0661",
+    "name": "McDonald's Catania S. Giovanni",
+    "lat": 37.583857,
+    "lon": 15.103319,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "Viale Cristoforo Colombo, 13, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0662",
+    "name": "McDonald's Catania Tenutella",
+    "lat": 37.484194,
+    "lon": 15.008771,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "Via Zinirco, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0663",
+    "name": "McDonald's Catania Ulisse",
+    "lat": 37.531242,
+    "lon": 15.10792,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "viale Ulisse 11, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0664",
+    "name": "McDonald's Giarre",
+    "lat": 37.704412,
+    "lon": 15.171096,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "Strada Provinciale 4i, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0665",
+    "name": "McDonald's Misterbianco SS121",
+    "lat": 37.511536,
+    "lon": 15.021294,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "Via Comunità Economica Europea 37, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0666",
+    "name": "McDonald's San Giovanni Galilei",
+    "lat": 37.569125,
+    "lon": 15.098443,
+    "region": "Sicilia",
+    "city": "Catania",
+    "address": "Via Galileo Galilei. 20, Catania",
+    "opened": true
+  },
+  {
+    "id": "mc0667",
+    "name": "McDonald's Enna",
+    "lat": 37.552968,
+    "lon": 14.298712,
+    "region": "Sicilia",
+    "city": "Enna",
+    "address": "Via Libero Grassi n° 16F-16M, Enna",
+    "opened": true
+  },
+  {
+    "id": "mc0668",
+    "name": "McDonald's Barcellona Pozzo Di Gotto",
+    "lat": 38.151242,
+    "lon": 15.190759,
+    "region": "Sicilia",
+    "city": "Messina",
+    "address": "via Filicudi snc, Messina",
+    "opened": true
+  },
+  {
+    "id": "mc0669",
+    "name": "McDonald's Messina Cairoli",
+    "lat": 38.185193,
+    "lon": 15.556532,
+    "region": "Sicilia",
+    "city": "Messina",
+    "address": "Via Bruno, 42, Messina",
+    "opened": true
+  },
+  {
+    "id": "mc0670",
+    "name": "McDonald's Messina DAlcontres",
+    "lat": 38.258109,
+    "lon": 15.60279,
+    "region": "Sicilia",
+    "city": "Messina",
+    "address": "Viale Ferdinando Stagno dAlcontres 23/23A, Messina",
+    "opened": true
+  },
+  {
+    "id": "mc0671",
+    "name": "McDonald's Messina Drive",
+    "lat": 38.15344,
+    "lon": 15.531076,
+    "region": "Sicilia",
+    "city": "Messina",
+    "address": "Strada Statale 114 Contesse, Messina",
+    "opened": true
+  },
+  {
+    "id": "mc0672",
+    "name": "McDonald's Messina Maregrosso",
+    "lat": 38.171956,
+    "lon": 15.551032,
+    "region": "Sicilia",
+    "city": "Messina",
+    "address": "Via Maregrosso 26, Messina",
+    "opened": true
+  },
+  {
+    "id": "mc0673",
+    "name": "McDonald's Milazzo",
+    "lat": 38.187205,
+    "lon": 15.268301,
+    "region": "Sicilia",
+    "city": "Messina",
+    "address": "Via Firenze snc, Messina",
+    "opened": true
+  },
+  {
+    "id": "mc0674",
+    "name": "McDonald's Bagheria Santa Marina",
+    "lat": 38.085182,
+    "lon": 13.515382,
+    "region": "Sicilia",
+    "city": "Palermo",
+    "address": "Via Santa Marina 49, Palermo",
+    "opened": true
+  },
+  {
+    "id": "mc0675",
+    "name": "McDonald's Carini",
+    "lat": 38.17212,
+    "lon": 13.215969,
+    "region": "Sicilia",
+    "city": "Palermo",
+    "address": "via Luigi Sturzo, Palermo",
+    "opened": true
+  },
+  {
+    "id": "mc0676",
+    "name": "McDonald's Palermo Amari",
+    "lat": 38.124811,
+    "lon": 13.356843,
+    "region": "Sicilia",
+    "city": "Palermo",
+    "address": "Via Emerico Amari 160, Palermo",
+    "opened": true
+  },
+  {
+    "id": "mc0677",
+    "name": "McDonald's Palermo Borgonuovo",
+    "lat": 38.133719,
+    "lon": 13.301773,
+    "region": "Sicilia",
+    "city": "Palermo",
+    "address": "Via Assoro, 25b, Palermo",
+    "opened": true
+  },
+  {
+    "id": "mc0678",
+    "name": "McDonald's Palermo Calatafimi",
+    "lat": 38.10201,
+    "lon": 13.32922,
+    "region": "Sicilia",
+    "city": "Palermo",
+    "address": "Viale Regione Siciliana sud est, Palermo",
+    "opened": true
+  },
+  {
+    "id": "mc0679",
+    "name": "McDonald's Palermo Drive",
+    "lat": 38.128067,
+    "lon": 13.32884,
+    "region": "Sicilia",
+    "city": "Palermo",
+    "address": "Viale Regione Siciliana, Palermo",
+    "opened": true
+  },
+  {
+    "id": "mc0680",
+    "name": "McDonald's Palermo La Malfa",
+    "lat": 38.162558,
+    "lon": 13.313536,
+    "region": "Sicilia",
+    "city": "Palermo",
+    "address": "Via Ugo la Malfa, 115, Palermo",
+    "opened": true
+  },
+  {
+    "id": "mc0681",
+    "name": "McDonald's Palermo Nicoletti",
+    "lat": 38.189934,
+    "lon": 13.294029,
+    "region": "Sicilia",
+    "city": "Palermo",
+    "address": "Via Rosario Nicoletti, Palermo",
+    "opened": true
+  },
+  {
+    "id": "mc0682",
+    "name": "McDonald's Palermo Notarbartolo",
+    "lat": 38.132206,
+    "lon": 13.342104,
+    "region": "Sicilia",
+    "city": "Palermo",
+    "address": "piazza Boiardo, Palermo",
+    "opened": true
+  },
+  {
+    "id": "mc0683",
+    "name": "McDonald's Palermo Pecoraino",
+    "lat": 38.089981,
+    "lon": 13.410792,
+    "region": "Sicilia",
+    "city": "Palermo",
+    "address": "via Pecoraino c/o CC Forum, Palermo",
+    "opened": true
+  },
+  {
+    "id": "mc0684",
+    "name": "McDonald's Palermo Stazione",
+    "lat": 38.109991,
+    "lon": 13.367175,
+    "region": "Sicilia",
+    "city": "Palermo",
+    "address": "Piazza Giulio Cesare, Palermo",
+    "opened": true
+  },
+  {
+    "id": "mc0685",
+    "name": "McDonald's Marina di Ragusa Porto",
+    "lat": 36.781881,
+    "lon": 14.54955,
+    "region": "Sicilia",
+    "city": "Ragusa",
+    "address": "Lungomare Mediterraneo. Via Livorno, Ragusa",
+    "opened": true
+  },
+  {
+    "id": "mc0686",
+    "name": "McDonald's Modica Cava Gucciardo",
+    "lat": 36.832834,
+    "lon": 14.768443,
+    "region": "Sicilia",
+    "city": "Ragusa",
+    "address": "Via Cava Gucciardo Pirato snc, Ragusa",
+    "opened": true
+  },
+  {
+    "id": "mc0687",
+    "name": "McDonald's Pozzallo Australia",
+    "lat": 36.725247,
+    "lon": 14.833479,
+    "region": "Sicilia",
+    "city": "Ragusa",
+    "address": "viale Australia 54, Ragusa",
+    "opened": true
+  },
+  {
+    "id": "mc0688",
+    "name": "McDonald's Ragusa drive",
+    "lat": 36.92994,
+    "lon": 14.693555,
+    "region": "Sicilia",
+    "city": "Ragusa",
+    "address": "Viale delle Americhe 135, Ragusa",
+    "opened": true
+  },
+  {
+    "id": "mc0689",
+    "name": "McDonald's Ragusa La Pira",
+    "lat": 36.918787,
+    "lon": 14.710207,
+    "region": "Sicilia",
+    "city": "Ragusa",
+    "address": "via Giorgio La Pira snc, Ragusa",
+    "opened": true
+  },
+  {
+    "id": "mc0690",
+    "name": "McDonald's Vittoria",
+    "lat": 36.960936,
+    "lon": 14.515762,
+    "region": "Sicilia",
+    "city": "Ragusa",
+    "address": "S.S.115, Ragusa",
+    "opened": true
+  },
+  {
+    "id": "mc0691",
+    "name": "McDonald's Augusta Aldo Moro",
+    "lat": 37.24868,
+    "lon": 15.227706,
+    "region": "Sicilia",
+    "city": "Siracusa",
+    "address": "via Aldo Moro. snc, Siracusa",
+    "opened": true
+  },
+  {
+    "id": "mc0692",
+    "name": "McDonald's Avola Giardino",
+    "lat": 36.901262,
+    "lon": 15.117091,
+    "region": "Sicilia",
+    "city": "Siracusa",
+    "address": "SS 115, Siracusa",
+    "opened": true
+  },
+  {
+    "id": "mc0693",
+    "name": "McDonald's Siracusa Drive",
+    "lat": 37.067498,
+    "lon": 15.272444,
+    "region": "Sicilia",
+    "city": "Siracusa",
+    "address": "Via Columba 43, Siracusa",
+    "opened": true
+  },
+  {
+    "id": "mc0694",
+    "name": "McDonald's Siracusa Mall",
+    "lat": 37.067937,
+    "lon": 15.262914,
+    "region": "Sicilia",
+    "city": "Siracusa",
+    "address": "Via Necropoli del Fusco., Siracusa",
+    "opened": true
+  },
+  {
+    "id": "mc0695",
+    "name": "McDonald's Siracusa Melilli C.C. Belvedere Auchan",
+    "lat": 37.110705,
+    "lon": 15.228479,
+    "region": "Sicilia",
+    "city": "Siracusa",
+    "address": "Via Edoardo Garrone, Siracusa",
+    "opened": true
+  },
+  {
+    "id": "mc0696",
+    "name": "McDonald's Siracusa Via Professore Lino Romano",
+    "lat": 37.089413,
+    "lon": 15.260515,
+    "region": "Sicilia",
+    "city": "Siracusa",
+    "address": "Via Professore Lino Romano, Siracusa",
+    "opened": true
+  },
+  {
+    "id": "mc0697",
+    "name": "McDonald's Castelvetrano",
+    "lat": 37.66228,
+    "lon": 12.811111,
+    "region": "Sicilia",
+    "city": "Trapani",
+    "address": "Via Dei Caduti Di Nassiriya, Trapani",
+    "opened": true
+  },
+  {
+    "id": "mc0698",
+    "name": "McDonald's Mazara del Vallo Salemi",
+    "lat": 37.660238,
+    "lon": 12.606568,
+    "region": "Sicilia",
+    "city": "Trapani",
+    "address": "Via Salemi. snc, Trapani",
+    "opened": true
+  },
+  {
+    "id": "mc0699",
+    "name": "McDonald's Trapani",
+    "lat": 38.010263,
+    "lon": 12.565721,
+    "region": "Sicilia",
+    "city": "Trapani",
+    "address": "A29 direzione Trapani, Trapani",
+    "opened": true
+  },
+  {
+    "id": "mc0700",
+    "name": "McDonald's Arezzo",
+    "lat": 43.470616,
+    "lon": 11.865348,
+    "region": "Toscana",
+    "city": "Arezzo",
+    "address": "Via Fiorentina, Arezzo",
+    "opened": true
+  },
+  {
+    "id": "mc0701",
+    "name": "McDonald's Arezzo Stazione",
+    "lat": 43.461255,
+    "lon": 11.875642,
+    "region": "Toscana",
+    "city": "Arezzo",
+    "address": "Piazzale della Repubblica, Arezzo",
+    "opened": true
+  },
+  {
+    "id": "mc0702",
+    "name": "McDonald's Foiano",
+    "lat": 43.226052,
+    "lon": 11.798559,
+    "region": "Toscana",
+    "city": "Arezzo",
+    "address": "Località Le Farniole, Arezzo",
+    "opened": true
+  },
+  {
+    "id": "mc0703",
+    "name": "McDonald's Sansepolcro",
+    "lat": 43.560946,
+    "lon": 12.114884,
+    "region": "Toscana",
+    "city": "Arezzo",
+    "address": "Via Senese Aretina, Arezzo",
+    "opened": true
+  },
+  {
+    "id": "mc0704",
+    "name": "McDonald's Terranuova Bracciolini",
+    "lat": 43.543674,
+    "lon": 11.571667,
+    "region": "Toscana",
+    "city": "Arezzo",
+    "address": "Strada Provinciale Lungo Arno s.n.c., Arezzo",
+    "opened": true
+  },
+  {
+    "id": "mc0705",
+    "name": "McDonald's Arno Ovest",
+    "lat": 43.650506,
+    "lon": 11.464264,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "IP A1 km321,500, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0706",
+    "name": "McDonald's Campi Bisenzio",
+    "lat": 43.848287,
+    "lon": 11.143705,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "Via Quirico 165, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0707",
+    "name": "McDonald's Empoli Via Livornese",
+    "lat": 43.713208,
+    "lon": 10.918908,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "Via Livornese, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0708",
+    "name": "McDonald's Firenze Agnelli",
+    "lat": 43.746615,
+    "lon": 11.286788,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "Via Agnelli, 11, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0709",
+    "name": "McDonald's Firenze Baracca Agip Drive",
+    "lat": 43.791777,
+    "lon": 11.218613,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "Viale Baracca, 114, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0710",
+    "name": "McDonald's Firenze Campi",
+    "lat": 43.817609,
+    "lon": 11.122,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "Via Barberinese 157, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0711",
+    "name": "McDonald's Firenze Cavour",
+    "lat": 43.776735,
+    "lon": 11.257164,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "Via Cavour 61, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0712",
+    "name": "McDonald's Firenze Esterno Stazione",
+    "lat": 43.776384,
+    "lon": 11.249694,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "Piazza Stazione 25, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0713",
+    "name": "McDonald's Firenze Interno Stazione",
+    "lat": 43.77706,
+    "lon": 11.248482,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "Piazza Stazione 1, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0714",
+    "name": "McDonald's Firenze Nenni",
+    "lat": 43.765867,
+    "lon": 11.20636,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "Viale Nenni 16, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0715",
+    "name": "McDonald's Firenze Osmannoro",
+    "lat": 43.803085,
+    "lon": 11.184387,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "VIa Lucchese 42, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0716",
+    "name": "McDonald's Firenze Senese",
+    "lat": 43.749464,
+    "lon": 11.234451,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "Via Senese, 172, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0717",
+    "name": "McDonald's Mugello",
+    "lat": 43.980355,
+    "lon": 11.2187,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "Via del Lago, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0718",
+    "name": "McDonald's Poggibonsi",
+    "lat": 43.477336,
+    "lon": 11.129463,
+    "region": "Toscana",
+    "city": "Firenze",
+    "address": "Via Lame di Sotto 10/b, Firenze",
+    "opened": true
+  },
+  {
+    "id": "mc0719",
+    "name": "McDonald's Grosseto",
+    "lat": 42.773625,
+    "lon": 11.120949,
+    "region": "Toscana",
+    "city": "Grosseto",
+    "address": "Via Senese 162, Grosseto",
+    "opened": true
+  },
+  {
+    "id": "mc0720",
+    "name": "McDonald's Cecina",
+    "lat": 43.313797,
+    "lon": 10.52604,
+    "region": "Toscana",
+    "city": "Livorno",
+    "address": "Via Carrà 2, Livorno",
+    "opened": true
+  },
+  {
+    "id": "mc0721",
+    "name": "McDonald's Collesalvetti",
+    "lat": 43.589081,
+    "lon": 10.346206,
+    "region": "Toscana",
+    "city": "Livorno",
+    "address": "Via Aurelia Km 320+748, Livorno",
+    "opened": true
+  },
+  {
+    "id": "mc0722",
+    "name": "McDonald's Livorno Levante",
+    "lat": 43.532752,
+    "lon": 10.3283,
+    "region": "Toscana",
+    "city": "Livorno",
+    "address": "via di Levante ang. via Lidia Poet, Livorno",
+    "opened": true
+  },
+  {
+    "id": "mc0723",
+    "name": "McDonald's Livorno Porta a Mare",
+    "lat": 43.544139,
+    "lon": 10.301972,
+    "region": "Toscana",
+    "city": "Livorno",
+    "address": "Via Edda Fagni. snc, Livorno",
+    "opened": true
+  },
+  {
+    "id": "mc0724",
+    "name": "McDonald's Piombino",
+    "lat": 42.934243,
+    "lon": 10.527439,
+    "region": "Toscana",
+    "city": "Livorno",
+    "address": "V.le Unità DItalia, Livorno",
+    "opened": true
+  },
+  {
+    "id": "mc0725",
+    "name": "McDonald's Camaiore Lido",
+    "lat": 43.90688,
+    "lon": 10.226212,
+    "region": "Toscana",
+    "city": "Lucca",
+    "address": "Via Aurelia, km361+700, Lucca",
+    "opened": true
+  },
+  {
+    "id": "mc0726",
+    "name": "McDonald's Lucca Capannori",
+    "lat": 43.865604,
+    "lon": 10.579455,
+    "region": "Toscana",
+    "city": "Lucca",
+    "address": "viale Europa, 56, Lucca",
+    "opened": true
+  },
+  {
+    "id": "mc0727",
+    "name": "McDonald's Lucca Europa",
+    "lat": 43.831045,
+    "lon": 10.494766,
+    "region": "Toscana",
+    "city": "Lucca",
+    "address": "Viale Europa 895, Lucca",
+    "opened": true
+  },
+  {
+    "id": "mc0728",
+    "name": "McDonald's Versilia Est AdS",
+    "lat": 43.92875,
+    "lon": 10.224502,
+    "region": "Toscana",
+    "city": "Lucca",
+    "address": "A12 - Area di servizio, Lucca",
+    "opened": true
+  },
+  {
+    "id": "mc0729",
+    "name": "McDonald's Viareggio Drive",
+    "lat": 43.866286,
+    "lon": 10.258758,
+    "region": "Toscana",
+    "city": "Lucca",
+    "address": "via Pisana s.n.c., Lucca",
+    "opened": true
+  },
+  {
+    "id": "mc0730",
+    "name": "McDonald's Aulla",
+    "lat": 44.216971,
+    "lon": 9.966712,
+    "region": "Toscana",
+    "city": "Massa-Carrara",
+    "address": "Viale Lunigiana. snc, Massa-Carrara",
+    "opened": true
+  },
+  {
+    "id": "mc0731",
+    "name": "McDonald's Carrara",
+    "lat": 44.052319,
+    "lon": 10.07051,
+    "region": "Toscana",
+    "city": "Massa-Carrara",
+    "address": "VIA AURELIA. snc, Massa-Carrara",
+    "opened": true
+  },
+  {
+    "id": "mc0732",
+    "name": "McDonald's Massa",
+    "lat": 44.040464,
+    "lon": 10.125948,
+    "region": "Toscana",
+    "city": "Massa-Carrara",
+    "address": "Via Aurelia Ovest, 92, Massa-Carrara",
+    "opened": true
+  },
+  {
+    "id": "mc0733",
+    "name": "McDonald's Calcinaia Fornacette",
+    "lat": 43.668312,
+    "lon": 10.59642,
+    "region": "Toscana",
+    "city": "Pisa",
+    "address": "Via Mazzei 2, Pisa",
+    "opened": true
+  },
+  {
+    "id": "mc0734",
+    "name": "McDonald's Navacchio",
+    "lat": 43.680197,
+    "lon": 10.478234,
+    "region": "Toscana",
+    "city": "Pisa",
+    "address": "Via Oristano. Angolo Via Nuoro Zona “I BORGHI”, Pisa",
+    "opened": true
+  },
+  {
+    "id": "mc0735",
+    "name": "McDonald's Pisa Aeroporto",
+    "lat": 43.699034,
+    "lon": 10.39997,
+    "region": "Toscana",
+    "city": "Pisa",
+    "address": "Piazzale DAscanio. 1. 56121 Pisa PI, Pisa",
+    "opened": true
+  },
+  {
+    "id": "mc0736",
+    "name": "McDonald's Pisa Darsena",
+    "lat": 43.695244,
+    "lon": 10.382535,
+    "region": "Toscana",
+    "city": "Pisa",
+    "address": "McDonald's McDrive E McCafè Pisa PI, Pisa",
+    "opened": true
+  },
+  {
+    "id": "mc0737",
+    "name": "McDonald's Pisa Miracoli",
+    "lat": 43.723062,
+    "lon": 10.39271,
+    "region": "Toscana",
+    "city": "Pisa",
+    "address": "Piazza Manin, Pisa",
+    "opened": true
+  },
+  {
+    "id": "mc0738",
+    "name": "McDonald's Pisa Stazione",
+    "lat": 43.70859,
+    "lon": 10.397907,
+    "region": "Toscana",
+    "city": "Pisa",
+    "address": "Piazza della Stazione 12, Pisa",
+    "opened": true
+  },
+  {
+    "id": "mc0739",
+    "name": "McDonald's S.Giuliano Terme",
+    "lat": 43.744784,
+    "lon": 10.369876,
+    "region": "Toscana",
+    "city": "Pisa",
+    "address": "Via Aurelia Nordloc. Madonna dellAcqua, Pisa",
+    "opened": true
+  },
+  {
+    "id": "mc0740",
+    "name": "McDonald's Valdera AdS",
+    "lat": 43.642148,
+    "lon": 10.617199,
+    "region": "Toscana",
+    "city": "Pisa",
+    "address": "Pontedera. SGC Firenze - Pisa - Livorno, Pisa",
+    "opened": true
+  },
+  {
+    "id": "mc0741",
+    "name": "McDonald's Montecatini Camporcioni",
+    "lat": 43.861043,
+    "lon": 10.767964,
+    "region": "Toscana",
+    "city": "Pistoia",
+    "address": "via Camporcioni, Pistoia",
+    "opened": true
+  },
+  {
+    "id": "mc0742",
+    "name": "McDonald's Pistoia ACI",
+    "lat": 43.921606,
+    "lon": 10.919963,
+    "region": "Toscana",
+    "city": "Pistoia",
+    "address": "Via Guicciardini 2, Pistoia",
+    "opened": true
+  },
+  {
+    "id": "mc0743",
+    "name": "McDonald's Montemurlo",
+    "lat": 43.912634,
+    "lon": 11.060835,
+    "region": "Toscana",
+    "city": "Prato",
+    "address": "Via Di Vittorio 2, Prato",
+    "opened": true
+  },
+  {
+    "id": "mc0744",
+    "name": "McDonald's Prato",
+    "lat": 43.858606,
+    "lon": 11.10954,
+    "region": "Toscana",
+    "city": "Prato",
+    "address": "Tangenziale Leonardo da Vinci, Prato",
+    "opened": true
+  },
+  {
+    "id": "mc0745",
+    "name": "McDonald's Siena Drive",
+    "lat": 43.342323,
+    "lon": 11.306487,
+    "region": "Toscana",
+    "city": "Siena",
+    "address": "Via Fiorentina 122, Siena",
+    "opened": true
+  },
+  {
+    "id": "mc0746",
+    "name": "McDonald's Siena Via Toselli",
+    "lat": 43.32222,
+    "lon": 11.34948,
+    "region": "Toscana",
+    "city": "Siena",
+    "address": "Via Toselli, Siena",
+    "opened": true
+  },
+  {
+    "id": "mc0747",
+    "name": "McDonald's Bolzano Buozzi",
+    "lat": 46.469337,
+    "lon": 11.322375,
+    "region": "Trentino-Alto Adige",
+    "city": "Bolzano",
+    "address": "Via Bruno Buozzi, 30, Bolzano",
+    "opened": true
+  },
+  {
+    "id": "mc0748",
+    "name": "McDonald's Bolzano Mall",
+    "lat": 46.486568,
+    "lon": 11.336366,
+    "region": "Trentino-Alto Adige",
+    "city": "Bolzano",
+    "address": "via G. Galilei c/o CC Twenty, Bolzano",
+    "opened": true
+  },
+  {
+    "id": "mc0749",
+    "name": "McDonald's Bolzano Piazza Parrocchia",
+    "lat": 46.497978,
+    "lon": 11.353967,
+    "region": "Trentino-Alto Adige",
+    "city": "Bolzano",
+    "address": "Piazza Parrocchia 4, Bolzano",
+    "opened": true
+  },
+  {
+    "id": "mc0750",
+    "name": "McDonald's Merano",
+    "lat": 46.656235,
+    "lon": 11.169157,
+    "region": "Trentino-Alto Adige",
+    "city": "Bolzano",
+    "address": "via Roma, Merano, Bolzano",
+    "opened": true
+  },
+  {
+    "id": "mc0751",
+    "name": "McDonald's Merano Mall",
+    "lat": 46.679298,
+    "lon": 11.132971,
+    "region": "Trentino-Alto Adige",
+    "city": "Bolzano",
+    "address": "Via Weingartner. 31, Bolzano",
+    "opened": true
+  },
+  {
+    "id": "mc0752",
+    "name": "McDonald's Rovereto",
+    "lat": 45.861387,
+    "lon": 11.001768,
+    "region": "Trentino-Alto Adige",
+    "city": "Trento",
+    "address": "via alla Stazione, 2, Trento",
+    "opened": true
+  },
+  {
+    "id": "mc0753",
+    "name": "McDonald's Trento",
+    "lat": 46.033113,
+    "lon": 11.132269,
+    "region": "Trentino-Alto Adige",
+    "city": "Trento",
+    "address": "Via di Madonna Bianca, 5, Trento",
+    "opened": true
+  },
+  {
+    "id": "mc0754",
+    "name": "McDonald's Trento Nord",
+    "lat": 46.081657,
+    "lon": 11.122177,
+    "region": "Trentino-Alto Adige",
+    "city": "Trento",
+    "address": "via Brennero, Trento",
+    "opened": true
+  },
+  {
+    "id": "mc0755",
+    "name": "McDonald's Assisi",
+    "lat": 43.060528,
+    "lon": 12.583841,
+    "region": "Umbria",
+    "city": "Perugia",
+    "address": "Via Patrono dItalia ang. Via Carducci, Perugia",
+    "opened": true
+  },
+  {
+    "id": "mc0756",
+    "name": "McDonald's Bastia Umbra",
+    "lat": 43.062567,
+    "lon": 12.546842,
+    "region": "Umbria",
+    "city": "Perugia",
+    "address": "Via Eugenio Montale 1, Perugia",
+    "opened": true
+  },
+  {
+    "id": "mc0757",
+    "name": "McDonald's Città di Castello",
+    "lat": 43.469459,
+    "lon": 12.230004,
+    "region": "Umbria",
+    "city": "Perugia",
+    "address": "via Rodolfo Morandi, Perugia",
+    "opened": true
+  },
+  {
+    "id": "mc0758",
+    "name": "McDonald's Corciano",
+    "lat": 43.10198,
+    "lon": 12.300215,
+    "region": "Umbria",
+    "city": "Perugia",
+    "address": "Via A. Gramsci, Perugia",
+    "opened": true
+  },
+  {
+    "id": "mc0759",
+    "name": "McDonald's Foligno Drive",
+    "lat": 42.962661,
+    "lon": 12.684179,
+    "region": "Umbria",
+    "city": "Perugia",
+    "address": "Via Fiamenga Foligno, PG, Perugia",
+    "opened": true
+  },
+  {
+    "id": "mc0760",
+    "name": "McDonald's Foligno Via Roma",
+    "lat": 42.941257,
+    "lon": 12.71576,
+    "region": "Umbria",
+    "city": "Perugia",
+    "address": "Viale Roma 82C, Perugia",
+    "opened": true
+  },
+  {
+    "id": "mc0761",
+    "name": "McDonald's Perugia Collestrada",
+    "lat": 43.088319,
+    "lon": 12.470115,
+    "region": "Umbria",
+    "city": "Perugia",
+    "address": "Via Valtiera, 181, Perugia",
+    "opened": true
+  },
+  {
+    "id": "mc0762",
+    "name": "McDonald's Perugia Ponte San Giovanni",
+    "lat": 43.086939,
+    "lon": 12.448019,
+    "region": "Umbria",
+    "city": "Perugia",
+    "address": "via della valtiera, Perugia",
+    "opened": true
+  },
+  {
+    "id": "mc0763",
+    "name": "McDonald's Perugia San Sisto",
+    "lat": 43.079453,
+    "lon": 12.336237,
+    "region": "Umbria",
+    "city": "Perugia",
+    "address": "Via Dottori 105, Perugia",
+    "opened": true
+  },
+  {
+    "id": "mc0764",
+    "name": "McDonald's Perugia Stadio",
+    "lat": 43.106146,
+    "lon": 12.362664,
+    "region": "Umbria",
+    "city": "Perugia",
+    "address": "Via Trasimeno Ovest, Perugia, Perugia",
+    "opened": true
+  },
+  {
+    "id": "mc0765",
+    "name": "McDonald's Spoleto Via dei Filosofi",
+    "lat": 42.749666,
+    "lon": 12.728183,
+    "region": "Umbria",
+    "city": "Perugia",
+    "address": "Via dei Filosofi 127/B, Perugia",
+    "opened": true
+  },
+  {
+    "id": "mc0766",
+    "name": "McDonald's Orvieto",
+    "lat": 42.719371,
+    "lon": 12.142066,
+    "region": "Umbria",
+    "city": "Terni",
+    "address": "Via Angelo Costanzi 59C, Terni",
+    "opened": true
+  },
+  {
+    "id": "mc0767",
+    "name": "McDonald's Terni Drive",
+    "lat": 42.577357,
+    "lon": 12.624972,
+    "region": "Umbria",
+    "city": "Terni",
+    "address": "via del Centenario, 4, Terni",
+    "opened": true
+  },
+  {
+    "id": "mc0768",
+    "name": "McDonald's Terni Est",
+    "lat": 42.554941,
+    "lon": 12.659384,
+    "region": "Umbria",
+    "city": "Terni",
+    "address": "Via Alfredo Urbinati, Terni",
+    "opened": true
+  },
+  {
+    "id": "mc0769",
+    "name": "McDonald's Terni Viale dello Stadio",
+    "lat": 42.560398,
+    "lon": 12.634189,
+    "region": "Umbria",
+    "city": "Terni",
+    "address": "Viale dello Stadio, Terni",
+    "opened": true
+  },
+  {
+    "id": "mc0770",
+    "name": "McDonald's Aosta",
+    "lat": 45.739844,
+    "lon": 7.345728,
+    "region": "Valle d'Aosta",
+    "city": "Aosta",
+    "address": "Corso Ivrea 138, Aosta",
+    "opened": true
+  },
+  {
+    "id": "mc0771",
+    "name": "McDonald's Belluno",
+    "lat": 46.158163,
+    "lon": 12.235552,
+    "region": "Veneto",
+    "city": "Belluno",
+    "address": "via Tiziano Vecellio, Belluno, Belluno",
+    "opened": true
+  },
+  {
+    "id": "mc0772",
+    "name": "McDonald's Albignasego PD",
+    "lat": 45.377776,
+    "lon": 11.854937,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "Via Verga, 1, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0773",
+    "name": "McDonald's Cittadella Galilei",
+    "lat": 45.651234,
+    "lon": 11.774819,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "Via Brigata Granatieri di Sardegna 6, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0774",
+    "name": "McDonald's Este",
+    "lat": 45.223216,
+    "lon": 11.655414,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "via Gambina 26H, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0775",
+    "name": "McDonald's Monselice",
+    "lat": 45.230136,
+    "lon": 11.748118,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "Via Magellano. 2, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0776",
+    "name": "McDonald's Padova",
+    "lat": 45.416969,
+    "lon": 11.87937,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "Piazza Stazione Ferroviaria, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0777",
+    "name": "McDonald's Padova Guido Reni",
+    "lat": 45.437057,
+    "lon": 11.893332,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "Via Ponte Vigodarzere, 2, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0778",
+    "name": "McDonald's Padova Ovest",
+    "lat": 45.432557,
+    "lon": 11.863187,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "Corso Australia KM 0+678, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0779",
+    "name": "McDonald's Padova Sarpi",
+    "lat": 45.418937,
+    "lon": 11.867106,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "Via Paolo Sarpi. 78, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0780",
+    "name": "McDonald's Padova Stazione DL",
+    "lat": 45.417298,
+    "lon": 11.881022,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "piazzale della stazione, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0781",
+    "name": "McDonald's Padova Via Venezia",
+    "lat": 45.40996,
+    "lon": 11.906779,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "via Venezia, 92, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0782",
+    "name": "McDonald's Piove di Sacco",
+    "lat": 45.301279,
+    "lon": 12.027737,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "Via Borgo Padova. 1, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0783",
+    "name": "McDonald's Rubano",
+    "lat": 45.431309,
+    "lon": 11.778517,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "Via Pria Fosca, 2, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0784",
+    "name": "McDonald's San Giorgio delle Pertiche",
+    "lat": 45.540577,
+    "lon": 11.922753,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "Via Caselle. 2, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0785",
+    "name": "McDonald's Saonara",
+    "lat": 45.384675,
+    "lon": 11.965666,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "Via Mazzini, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0786",
+    "name": "McDonald's Trebaseleghe",
+    "lat": 45.579044,
+    "lon": 12.07104,
+    "region": "Veneto",
+    "city": "Padova",
+    "address": "Via Malcanton. 35/H, Padova",
+    "opened": true
+  },
+  {
+    "id": "mc0787",
+    "name": "McDonald's Badia Polesine",
+    "lat": 45.092943,
+    "lon": 11.515244,
+    "region": "Veneto",
+    "city": "Rovigo",
+    "address": "via dellindustria, Rovigo",
+    "opened": true
+  },
+  {
+    "id": "mc0788",
+    "name": "McDonald's Rovigo",
+    "lat": 45.033058,
+    "lon": 11.779496,
+    "region": "Veneto",
+    "city": "Rovigo",
+    "address": "Frazione Borsea, Rovigo",
+    "opened": true
+  },
+  {
+    "id": "mc0789",
+    "name": "McDonald's Cornuda",
+    "lat": 45.813756,
+    "lon": 12.01212,
+    "region": "Veneto",
+    "city": "Treviso",
+    "address": "via dellIndustria. 1, Treviso",
+    "opened": true
+  },
+  {
+    "id": "mc0790",
+    "name": "McDonald's San Vendemiano - Conegliano",
+    "lat": 45.890846,
+    "lon": 12.326367,
+    "region": "Veneto",
+    "city": "Treviso",
+    "address": "Viale Venezia, Treviso",
+    "opened": true
+  },
+  {
+    "id": "mc0791",
+    "name": "McDonald's Silea",
+    "lat": 45.650032,
+    "lon": 12.310495,
+    "region": "Veneto",
+    "city": "Treviso",
+    "address": "Via Giovanni Sartorelli. 2, Treviso",
+    "opened": true
+  },
+  {
+    "id": "mc0792",
+    "name": "McDonald's Treviso Repubblica",
+    "lat": 45.690533,
+    "lon": 12.248648,
+    "region": "Veneto",
+    "city": "Treviso",
+    "address": "Viale della Repubblica 273, Treviso",
+    "opened": true
+  },
+  {
+    "id": "mc0793",
+    "name": "McDonald's Volpago del Montello",
+    "lat": 45.758439,
+    "lon": 12.093474,
+    "region": "Veneto",
+    "city": "Treviso",
+    "address": "Via Feltrina Sud. 10, Treviso",
+    "opened": true
+  },
+  {
+    "id": "mc0794",
+    "name": "McDonald's Chioggia",
+    "lat": 45.18785,
+    "lon": 12.275483,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "Strada Statale Romea, 101, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0795",
+    "name": "McDonald's Fossalta di Portogruaro Ads Fratta Sud",
+    "lat": 45.803988,
+    "lon": 12.887324,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "Autostrada A4 Torino Trieste km 456, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0796",
+    "name": "McDonald's Jesolo",
+    "lat": 45.505682,
+    "lon": 12.634694,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "via Aldo Policek, 6, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0797",
+    "name": "McDonald's Marcon Drive",
+    "lat": 45.547181,
+    "lon": 12.305177,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "Via Mattei, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0798",
+    "name": "McDonald's Marghera Mall",
+    "lat": 45.458187,
+    "lon": 12.213006,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "Via Arduino, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0799",
+    "name": "McDonald's Mestre Corso del Popolo",
+    "lat": 45.483177,
+    "lon": 12.241482,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "Corso del Popolo, 223, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0800",
+    "name": "McDonald's Mestre Stazione",
+    "lat": 45.482293,
+    "lon": 12.232806,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "Piazzale Favretti, 38, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0801",
+    "name": "McDonald's Mestre Terraglio",
+    "lat": 45.518931,
+    "lon": 12.229147,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "Via Pionara 21, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0802",
+    "name": "McDonald's Mestre Tosatto Mall",
+    "lat": 45.509981,
+    "lon": 12.226824,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "Via Don Tosatto. 22 c/o C.C. Porte di Mestre, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0803",
+    "name": "McDonald's Portogruaro Retail Park",
+    "lat": 45.792707,
+    "lon": 12.82056,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "Via Prati Guori, 29, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0804",
+    "name": "McDonald's San Donà di Piave Drive",
+    "lat": 45.645332,
+    "lon": 12.59414,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "Via Del Molino 11, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0805",
+    "name": "McDonald's Spinea",
+    "lat": 45.488241,
+    "lon": 12.178724,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "via Palladio, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0806",
+    "name": "McDonald's Venezia Strada Nuova",
+    "lat": 45.441275,
+    "lon": 12.334278,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "Str. Nuova, 3947, Venezia",
+    "opened": true
+  },
+  {
+    "id": "mc0807",
+    "name": "McDonald's Affi Drive",
+    "lat": 45.551289,
+    "lon": 10.787804,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "Via San Pieretto, 27, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0808",
+    "name": "McDonald's Bussolengo",
+    "lat": 45.446296,
+    "lon": 10.863527,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "Strada Padana Superior. 16, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0809",
+    "name": "McDonald's Dossobuono",
+    "lat": 45.38957,
+    "lon": 10.903347,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "Via Borgo Bello. 29, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0810",
+    "name": "McDonald's Legnago",
+    "lat": 45.185365,
+    "lon": 11.256791,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "via Europa 37/38 ang. via DAntona, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0811",
+    "name": "McDonald's Lugagnano di Sona",
+    "lat": 45.439876,
+    "lon": 10.863817,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "Via Trentino 1, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0812",
+    "name": "McDonald's Peschiera del Garda Drive",
+    "lat": 45.438824,
+    "lon": 10.711863,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "Via Venezia. 88, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0813",
+    "name": "McDonald's San Bonifacio Drive",
+    "lat": 45.405546,
+    "lon": 11.247715,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "Via Crosaron. 14, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0814",
+    "name": "McDonald's San Giovanni Lupatoto Drive",
+    "lat": 45.392808,
+    "lon": 11.020028,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "via Cà Nova Zampieri, 28, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0815",
+    "name": "McDonald's San Martino Buon Albergo",
+    "lat": 45.421941,
+    "lon": 11.105782,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "Via Alcide De Gasperi. 5, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0816",
+    "name": "McDonald's Verona Adige Mall",
+    "lat": 45.406861,
+    "lon": 10.977149,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "Viale delle Nazioni.1, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0817",
+    "name": "McDonald's Verona Fiera",
+    "lat": 45.411496,
+    "lon": 10.978846,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "Viale del Lavoro, 25, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0818",
+    "name": "McDonald's Verona Milano",
+    "lat": 45.444081,
+    "lon": 10.967785,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "Corso Milano 62, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0819",
+    "name": "McDonald's Verona Porta Nuova",
+    "lat": 45.437269,
+    "lon": 10.990806,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "Corso Di Porta Nuova, 14, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0820",
+    "name": "McDonald's Verona Via Preare",
+    "lat": 45.466203,
+    "lon": 10.95921,
+    "region": "Veneto",
+    "city": "Verona",
+    "address": "Via Preare. 52, Verona",
+    "opened": true
+  },
+  {
+    "id": "mc0821",
+    "name": "McDonald's Arzignano",
+    "lat": 45.512632,
+    "lon": 11.345907,
+    "region": "Veneto",
+    "city": "Vicenza",
+    "address": "via dellindustria, Vicenza",
+    "opened": true
+  },
+  {
+    "id": "mc0822",
+    "name": "McDonald's Bassano",
+    "lat": 45.746094,
+    "lon": 11.751775,
+    "region": "Veneto",
+    "city": "Vicenza",
+    "address": "Via Capitel Vecchio, 74, Vicenza",
+    "opened": true
+  },
+  {
+    "id": "mc0823",
+    "name": "McDonald's Montecchio Drive",
+    "lat": 45.493659,
+    "lon": 11.429529,
+    "region": "Veneto",
+    "city": "Vicenza",
+    "address": "Viale Milano, 6, Vicenza",
+    "opened": true
+  },
+  {
+    "id": "mc0824",
+    "name": "McDonald's Schio Drive",
+    "lat": 45.719944,
+    "lon": 11.397997,
+    "region": "Veneto",
+    "city": "Vicenza",
+    "address": "Via Lazio 2, Vicenza",
+    "opened": true
+  },
+  {
+    "id": "mc0825",
+    "name": "McDonald's Thiene Drive",
+    "lat": 45.696616,
+    "lon": 11.48241,
+    "region": "Veneto",
+    "city": "Vicenza",
+    "address": "via Meucci. 3, Vicenza",
+    "opened": true
+  },
+  {
+    "id": "mc0826",
+    "name": "McDonald's Torri di Quartesolo",
+    "lat": 45.50933,
+    "lon": 11.625479,
+    "region": "Veneto",
+    "city": "Vicenza",
+    "address": "Via Pola 20, Vicenza",
+    "opened": true
+  },
+  {
+    "id": "mc0827",
+    "name": "McDonald's Vicenza Mall",
+    "lat": 45.528808,
+    "lon": 11.59592,
+    "region": "Veneto",
+    "city": "Vicenza",
+    "address": "Strada Padana verso Padova, Vicenza",
+    "opened": true
+  },
+  {
+    "id": "mc0828",
+    "name": "McDonald's Vicenza San Lazzaro",
+    "lat": 45.533563,
+    "lon": 11.506551,
+    "region": "Veneto",
+    "city": "Vicenza",
+    "address": "Strada Padana verso Verona, 81, Vicenza",
+    "opened": true
+  }
+]
