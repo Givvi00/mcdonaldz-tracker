@@ -5,6 +5,7 @@ import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
+import { StatusFilter } from '@/components/StatusFilter';
 import { openDirections } from '@/utils/navigation';
 import type { McDonald } from '@shared/types';
 
@@ -48,6 +49,7 @@ export function MapView() {
   const userMarker = useRef<L.Marker | null>(null);
   const { mcdonalds, visits, isVisited, toggleVisit, mapFocusId, clearMapFocus, userPosition } = useMcdonaldStore();
   const [query, setQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<boolean | null>(null);
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
 
   const results = useMemo<McDonald[]>(() => {
@@ -94,6 +96,7 @@ export function MapView() {
 
     mcdonalds.forEach((mc) => {
       const visited = isVisited(mc.id);
+      if (statusFilter !== null && visited !== statusFilter) return;
       const icon = L.divIcon({
         html: `
           <div style="
@@ -173,7 +176,7 @@ export function MapView() {
       markers.current.set(mc.id, marker);
       clusterGroup.current!.addLayer(marker);
     });
-  }, [mcdonalds, visits, isVisited, toggleVisit]);
+  }, [mcdonalds, visits, isVisited, toggleVisit, statusFilter]);
 
   // User position marker (outside the cluster group so it is always visible)
   useEffect(() => {
@@ -222,6 +225,9 @@ export function MapView() {
     const marker = markers.current.get(mc.id);
     if (marker && clusterGroup.current) {
       clusterGroup.current.zoomToShowLayer(marker, () => marker.openPopup());
+    } else {
+      // Hidden by the status filter: show everything again so the marker exists
+      setStatusFilter(null);
     }
   };
 
@@ -230,12 +236,17 @@ export function MapView() {
     if (!mapFocusId || !map.current) return;
     const mc = mcdonalds.find(m => m.id === mapFocusId);
     const marker = markers.current.get(mapFocusId);
+    if (mc && !marker && statusFilter !== null) {
+      // Hidden by the status filter: reset it and retry once the markers are rebuilt
+      setStatusFilter(null);
+      return;
+    }
     if (mc && marker && clusterGroup.current) {
       map.current.flyTo([mc.lat, mc.lon], 15, { duration: 0.75 });
       clusterGroup.current.zoomToShowLayer(marker, () => marker.openPopup());
     }
     clearMapFocus();
-  }, [mapFocusId, mcdonalds, clearMapFocus]);
+  }, [mapFocusId, mcdonalds, clearMapFocus, statusFilter]);
 
   return (
     <div className="relative w-full" style={{ height: 'calc(100vh - 80px)' }}>
@@ -250,6 +261,7 @@ export function MapView() {
             className="w-full pl-10 pr-3 py-2.5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 shadow-md focus:outline-none focus:ring-2 focus:ring-mc-red font-medium"
           />
         </div>
+        <StatusFilter value={statusFilter} onChange={setStatusFilter} className="mt-2 shadow-md" />
         {results.length > 0 && (
           <div className="mt-1.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md overflow-hidden">
             {results.map(mc => (

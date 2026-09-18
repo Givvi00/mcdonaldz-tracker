@@ -2,16 +2,11 @@ import { useRef, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { McdonaldCard } from '@/components/McdonaldCard';
 import { RegionSheet } from '@/components/RegionSheet';
+import { StatusFilter } from '@/components/StatusFilter';
 import { SodaGlass } from '@/components/SodaGlass';
 import { distanceKm } from '@/utils/geo';
 
 type SortBy = 'distance' | 'name';
-
-const STATUS_OPTIONS: Array<{ value: boolean | null; label: string; dot: string; active: string }> = [
-  { value: null, label: 'Tutti', dot: 'bg-gray-400', active: 'bg-gray-800 dark:bg-gray-600 text-white' },
-  { value: true, label: 'Visitati', dot: 'bg-green-500', active: 'bg-green-600 text-white' },
-  { value: false, label: 'Da visitare', dot: 'bg-mc-red', active: 'bg-mc-red text-white' },
-];
 
 export function Home() {
   const {
@@ -171,23 +166,7 @@ export function Home() {
         </h2>
 
         {/* Stato: visitati / da visitare */}
-        <div className="flex gap-1 p-1 mb-3 rounded-2xl bg-gray-100 dark:bg-gray-800">
-          {STATUS_OPTIONS.map(({ value, label, dot, active }) => {
-            const selected = filterVisited === value;
-            return (
-              <button
-                key={label}
-                onClick={() => setFilterVisited(value)}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-sm font-semibold transition-all ${
-                  selected ? `${active} shadow-sm` : 'text-gray-500 dark:text-gray-400'
-                }`}
-              >
-                <span className={`w-2 h-2 rounded-full ${selected ? 'bg-white' : dot}`} />
-                {label}
-              </button>
-            );
-          })}
-        </div>
+        <StatusFilter value={filterVisited} onChange={setFilterVisited} className="mb-3" />
 
         {/* Regione + ordinamento */}
         <div className="flex items-center gap-2 mb-4">
