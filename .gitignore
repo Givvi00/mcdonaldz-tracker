@@ -5,3 +5,7 @@ dist
 .env
 .env.local
 .vite
+
+# Claude Code: personal, machine-specific files
+.claude/settings.local.json
+.claude/worktrees/
