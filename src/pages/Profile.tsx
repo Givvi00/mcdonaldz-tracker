@@ -42,10 +42,14 @@ export function Profile() {
   return (
     <div className="flex flex-col gap-6 pb-24 px-4 py-6">
       {/* User Info */}
-      <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-3xl p-6 text-center shadow-lg shadow-blue-900/20">
-        <div className="text-4xl mb-2">👤</div>
-        <p className="text-sm opacity-90 font-display font-semibold">Profilo Utente</p>
-        <p className="text-xs opacity-75 mt-2">ID: {user?.id.slice(0, 8)}...</p>
+      <div className="relative overflow-hidden bg-gradient-to-br from-mc-red to-mc-red-dark text-white rounded-3xl p-6 text-center shadow-lg shadow-red-900/20">
+        <div
+          className="absolute inset-0 opacity-[0.15] pointer-events-none"
+          style={{ backgroundImage: 'radial-gradient(circle, white 1.5px, transparent 1.5px)', backgroundSize: '18px 18px' }}
+        />
+        <div className="relative text-4xl mb-2 w-16 h-16 mx-auto flex items-center justify-center rounded-full bg-mc-yellow shadow-md">👤</div>
+        <p className="relative text-sm opacity-90 font-display font-semibold">Profilo Utente</p>
+        <p className="relative text-xs opacity-75 mt-2">ID: {user?.id.slice(0, 8)}...</p>
       </div>
 
       {/* Stats Summary */}
@@ -87,13 +91,13 @@ export function Profile() {
         <div className="space-y-2">
           <button
             onClick={handleExport}
-            className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98] shadow-sm"
+            className="w-full bg-mc-yellow hover:brightness-95 text-gray-800 font-bold py-3 rounded-xl transition-all active:scale-[0.98] shadow-sm"
           >
             📥 Esporta Dati (Backup)
           </button>
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98] shadow-sm"
+            className="w-full bg-white dark:bg-gray-900 border-2 border-mc-yellow text-gray-800 dark:text-gray-100 font-bold py-3 rounded-xl transition-all active:scale-[0.98] shadow-sm"
           >
             📤 Importa Dati
           </button>

@@ -39,15 +39,18 @@ function App() {
 
       {/* Wordmark header */}
       {selectedTab !== 'map' && (
-        <header className="flex items-center gap-2 px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-          <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-mc-red to-red-700 text-mc-yellow font-display font-bold text-lg shadow-sm ring-2 ring-white dark:ring-gray-900">
+        <header
+          className="flex items-center gap-2.5 px-4 pb-3 bg-gradient-to-b from-mc-red to-mc-red-dark text-white shadow-md shadow-red-900/20"
+          style={{ paddingTop: 'calc(0.75rem + var(--safe-top))' }}
+        >
+          <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-mc-yellow text-mc-red font-display font-bold text-lg shadow-sm ring-2 ring-white/30">
             M
           </span>
           <div>
-            <p className="font-display font-semibold text-gray-800 dark:text-gray-100 leading-tight">
-              McDonaldz<span className="text-mc-red">.</span>
+            <p className="font-display font-semibold text-lg leading-tight">
+              McDonaldz<span className="text-mc-yellow">.</span>
             </p>
-            <p className="text-[0.65rem] uppercase tracking-wider text-gray-400 dark:text-gray-500 -mt-0.5">Tracker</p>
+            <p className="text-[0.65rem] uppercase tracking-wider text-white/70 -mt-0.5">Tracker</p>
           </div>
         </header>
       )}
@@ -61,7 +64,10 @@ function App() {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex justify-around items-center h-20 transition-colors">
+      <div
+        className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex justify-around items-center transition-colors"
+        style={{ height: 'calc(5rem + var(--safe-bottom))', paddingBottom: 'var(--safe-bottom)' }}
+      >
         {NAV_ITEMS.map(({ tab, icon, label }) => {
           const active = selectedTab === tab;
           return (
@@ -72,7 +78,7 @@ function App() {
             >
               <span
                 className={`flex items-center justify-center w-10 h-7 rounded-full transition-all ${
-                  active ? 'bg-mc-red/10 dark:bg-mc-red/20' : ''
+                  active ? 'bg-mc-yellow/40 dark:bg-mc-yellow/20' : ''
                 }`}
               >
                 <span className="text-xl">{icon}</span>

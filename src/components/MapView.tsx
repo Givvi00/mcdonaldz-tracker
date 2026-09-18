@@ -141,8 +141,8 @@ export function MapView() {
             </button>
             <button id="directions-${mc.id}" style="
               padding: 6px 12px;
-              background: #2563eb;
-              color: white;
+              background: #FFC72C;
+              color: #2f2522;
               border: none;
               border-radius: 999px;
               cursor: pointer;
@@ -249,8 +249,8 @@ export function MapView() {
   }, [mapFocusId, mcdonalds, clearMapFocus, statusFilter]);
 
   return (
-    <div className="relative w-full" style={{ height: 'calc(100vh - 80px)' }}>
-      <div className="absolute top-3 left-3 right-3 z-[1000]">
+    <div className="relative w-full" style={{ height: 'calc(100vh - 5rem - var(--safe-bottom))' }}>
+      <div className="absolute left-3 right-3 z-[1000]" style={{ top: 'calc(0.75rem + var(--safe-top))' }}>
         <div className="relative">
           <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">🔎</span>
           <input

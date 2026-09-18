@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Space taken by the status bar / gesture bar. Capacitor injects --safe-area-inset-*; env() covers browsers and iOS. */
+  --safe-top: max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px));
+  --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px));
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }
@@ -28,12 +34,12 @@ input, textarea, button {
 
 .dark .leaflet-popup-content-wrapper,
 .dark .leaflet-popup-tip {
-  background: #1f2937;
-  color: #f3f4f6;
+  background: #231a18;
+  color: #f8efe3;
 }
 
 .dark .leaflet-container a.leaflet-popup-close-button {
-  color: #d1d5db;
+  color: #d8c9b7;
 }
 
 @keyframes soda-wave-spin {

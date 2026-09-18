@@ -16,7 +16,10 @@ export function AchievementToast() {
   const def = ACHIEVEMENTS[current];
 
   return (
-    <div className="fixed top-4 inset-x-4 z-[2000] flex justify-center pointer-events-none">
+    <div
+      className="fixed inset-x-4 z-[2000] flex justify-center pointer-events-none"
+      style={{ top: 'calc(1rem + var(--safe-top))' }}
+    >
       <button
         onClick={() => dismissUnlocked(current)}
         className="pointer-events-auto flex items-center gap-3 bg-gradient-to-br from-mc-yellow to-amber-500 text-gray-900 rounded-2xl pl-3 pr-4 py-3 shadow-xl shadow-black/30 border-2 border-white/60 animate-[toast-in_0.35s_ease-out]"

@@ -149,20 +149,24 @@ export function SodaGlass({ region, percentage }: Props) {
 
         <path d={CUP_PATH} fill="none" className="stroke-white/60 dark:stroke-white/40" strokeWidth={1.4} />
 
-        {/* Percentage overlay */}
+        {/* Percentage overlay: white on a dark pill so it reads on any liquid level, in light and dark mode */}
+        <rect
+          x={WIDTH / 2 - 19}
+          y={(CUP_TOP + CUP_BOTTOM) / 2 - 10}
+          width={38}
+          height={20}
+          rx={10}
+          fill="rgba(35,26,24,0.72)"
+        />
         <text
           x={WIDTH / 2}
-          y={(CUP_TOP + CUP_BOTTOM) / 2}
+          y={(CUP_TOP + CUP_BOTTOM) / 2 + 0.5}
           textAnchor="middle"
           dominantBaseline="central"
           className="font-display"
-          fontSize={15}
+          fontSize={13}
           fontWeight={700}
           fill="white"
-          stroke="rgba(0,0,0,0.55)"
-          strokeWidth={3}
-          paintOrder="stroke"
-          strokeLinejoin="round"
         >
           {fillPct}%
         </text>
