@@ -38,4 +38,4 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [ ] Check-in verificato dal GPS (visita solo entro ~200 m), come modalità opzionale
 - [ ] Aggiornamento dati: rilevare Mc chiusi/nuovi con `fetch-data` senza perdere le visite
 - [ ] iPhone: PWA (manifest + service worker + hosting HTTPS) oppure app nativa con build cloud e account Apple Developer
-- [ ] Repository remoto su GitHub come backup del codice
+- [x] Repository remoto su GitHub come backup del codice: https://github.com/Givvi00/mcdonaldz-tracker (privato). Dopo ogni sessione: `git push`
