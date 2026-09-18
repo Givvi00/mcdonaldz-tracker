@@ -18,6 +18,7 @@ interface AppStore {
   locationStatus: GeoStatus;
   newlyUnlocked: Achievement['type'][];
   mapFocusId: string | null;
+  updateAvailable: boolean;
 
   initApp: () => Promise<void>;
   toggleVisit: (mcdonaldId: string) => Promise<void>;
@@ -30,6 +31,7 @@ interface AppStore {
   setLocationStatus: (status: GeoStatus) => void;
   focusOnMap: (mcdonaldId: string) => void;
   clearMapFocus: () => void;
+  setUpdateAvailable: (available: boolean) => void;
   getFilteredMcdonalds: () => McDonald[];
   isVisited: (mcdonaldId: string) => boolean;
   getVisitedCount: () => number;
@@ -51,6 +53,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   locationStatus: 'idle',
   newlyUnlocked: [],
   mapFocusId: null,
+  updateAvailable: false,
 
   initApp: async () => {
     const user = await getOrCreateUser();
@@ -93,6 +96,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   setLocationStatus: (status) => set({ locationStatus: status }),
   focusOnMap: (mcdonaldId) => set({ mapFocusId: mcdonaldId, selectedTab: 'map' }),
   clearMapFocus: () => set({ mapFocusId: null }),
+  setUpdateAvailable: (available) => set({ updateAvailable: available }),
 
   getFilteredMcdonalds: () => {
     const { mcdonalds, searchQuery, filterRegion, filterVisited, visits } = get();

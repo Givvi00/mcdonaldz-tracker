@@ -1,4 +1,6 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { Capacitor } from '@capacitor/core';
+import { applyUpdate, checkForUpdate, type UpdateCheck } from '@/services/updates';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { exportData, importData } from '@/services/db';
 import { readBackupSummary, saveBackup } from '@/services/backup';
@@ -14,6 +16,14 @@ export function Profile() {
   const { user, getVisitedCount } = useMcdonaldStore();
   const { mode, setMode } = useTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [updateCheck, setUpdateCheck] = useState<UpdateCheck | 'checking' | null>(null);
+
+  const buildLabel = `${new Date(__BUILD_DATE__).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' })} · ${__BUILD_ID__}`;
+
+  const handleCheckUpdate = async () => {
+    setUpdateCheck('checking');
+    setUpdateCheck(await checkForUpdate());
+  };
 
   const handleExport = async () => {
     try {
@@ -113,8 +123,34 @@ export function Profile() {
 
       {/* About */}
       <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl text-center text-sm text-gray-600 dark:text-gray-400">
-        <p className="font-display font-semibold mb-1">McDonaldz Tracker v0.1.0</p>
-        <p className="text-xs opacity-75">Track your McDonald's visits in Italy 🍔🗺️</p>
+        <p className="font-display font-semibold mb-1">McDonaldz Tracker v{__APP_VERSION__}</p>
+        <p className="text-xs opacity-75">Build {buildLabel}</p>
+        <button
+          onClick={handleCheckUpdate}
+          disabled={updateCheck === 'checking'}
+          className="mt-3 px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 text-xs font-bold active:scale-[0.97] transition-transform disabled:opacity-60"
+        >
+          🔄 Controlla aggiornamenti
+        </button>
+        {updateCheck && (
+          <p className="text-xs mt-2 font-semibold" role="status">
+            {updateCheck === 'checking' && 'Controllo in corso…'}
+            {updateCheck === 'current' && '✓ Hai già l\'ultima versione'}
+            {updateCheck === 'available' && (
+              <>
+                Nuova versione disponibile.{' '}
+                <button onClick={applyUpdate} className="underline text-mc-red font-bold">
+                  Aggiorna ora
+                </button>
+              </>
+            )}
+            {updateCheck === 'unavailable' &&
+              (Capacitor.isNativePlatform()
+                ? 'L\'app Android si aggiorna installando il nuovo APK.'
+                : 'Impossibile controllare: sei offline?')}
+          </p>
+        )}
+        <p className="text-xs opacity-75 mt-3">Track your McDonald's visits in Italy 🍔🗺️</p>
       </div>
 
       {/* Clear Warning */}
@@ -126,7 +162,9 @@ export function Profile() {
             if (confirm('Sei sicuro? Tutti i dati verranno cancellati.')) {
               localStorage.clear();
               indexedDB.databases().then(dbs => {
-                dbs.forEach(db => indexedDB.deleteDatabase(db.name));
+                dbs.forEach(db => {
+                  if (db.name) indexedDB.deleteDatabase(db.name);
+                });
               });
               alert('Dati cancellati. Ricarica la pagina.');
               window.location.reload();

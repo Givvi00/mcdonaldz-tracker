@@ -13,12 +13,14 @@
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "types": ["vite/client"],
+    "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./web/src/*"],
+      "@/*": ["./src/*"],
       "@shared/*": ["./shared/*"]
     }
   },
-  "include": ["src", "shared"],
-  "references": [{ "path": "./tsconfig.app.json" }]
+  "include": ["src", "shared"]
 }

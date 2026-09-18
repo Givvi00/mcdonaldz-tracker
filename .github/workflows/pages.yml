@@ -24,6 +24,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Type check
+        run: npm run typecheck
       - name: Build (served from /<repo>/)
         run: npm run build
         env:

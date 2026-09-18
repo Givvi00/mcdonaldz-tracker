@@ -38,6 +38,9 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [ ] Check-in verificato dal GPS (visita solo entro ~200 m), come modalità opzionale
 - [ ] Aggiornamento dati: rilevare Mc chiusi/nuovi con `fetch-data` senza perdere le visite
 - [x] iPhone: PWA su GitHub Pages (manifest, icone, service worker offline, deploy automatico a ogni push su master): https://givvi00.github.io/mcdonaldz-tracker/ . Su iPhone: Safari → Condividi → "Aggiungi alla schermata Home". I dati dell'iPhone sono separati da quelli di Android: si trasferiscono con Esporta/Importa
+- [x] Aggiornamenti della web app: `version.json` a ogni build; banner "Nuova versione disponibile" (all'apertura, al ritorno in primo piano, alla riconnessione e ogni 30 min); Profilo con versione, data e codice build + "Controlla aggiornamenti"; cache del service worker per build, con pulizia delle vecchie
+- [x] Controllo dei tipi: `npm run typecheck` (prima `tsc -p tsconfig.app.json` non guardava nessun file di `src`); ora gira anche nella pubblicazione su Pages
+- [ ] Migrazioni del database locale: se cambia la struttura di IndexedDB (`db.ts`, versione 1) serve una migrazione esplicita nell'`upgrade`, altrimenti i dati esistenti non vengono letti. Consigliare un backup prima
 - [ ] iPhone, da verificare sul telefono: installazione, posizione, "Portami lì" (Apple Maps), Esporta/Importa, uso offline
 - [ ] iPhone nativo (facoltativo): build cloud + account Apple Developer, solo se servono le notifiche di prossimità in background
 - [x] Repository remoto su GitHub come backup del codice: https://github.com/Givvi00/mcdonaldz-tracker (privato). Dopo ogni sessione: `git push`

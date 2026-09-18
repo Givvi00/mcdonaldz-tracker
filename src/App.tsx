@@ -8,6 +8,8 @@ import { Stats } from '@/pages/Stats';
 import { Profile } from '@/pages/Profile';
 import { AchievementToast } from '@/components/AchievementToast';
 import { NearbyPrompt } from '@/components/NearbyPrompt';
+import { UpdateBanner } from '@/components/UpdateBanner';
+import { startUpdateChecks } from '@/services/updates';
 import './App.css';
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
   useEffect(() => {
     initApp();
   }, []);
+
+  useEffect(() => startUpdateChecks(), []);
 
   useEffect(() => {
     setLocationStatus(geoStatus);
@@ -36,6 +40,7 @@ function App() {
     <div className="h-screen bg-gray-50 dark:bg-gray-950 flex flex-col transition-colors">
       <AchievementToast />
       <NearbyPrompt />
+      <UpdateBanner />
 
       {/* Wordmark header */}
       {selectedTab !== 'map' && (
