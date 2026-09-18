@@ -14,13 +14,13 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [x] Backup/import: il Profilo già li aveva, ma il download via `<a download>` non funziona nella WebView Android. Ora su app nativa il file va nel menu di condivisione (plugin filesystem + share); l'import valida il file prima di scrivere
 - [x] Tematizzazione, primo giro: palette calda (grigi crema/marrone al posto dei blu-grigi), header rosso con logo giallo, pillola gialla sulla voce attiva, Profilo senza blu, popup con bottone giallo, splash rossa con 🍟, margini per barra di stato/gesture
 
-## Da verificare sul telefono
-- [ ] Margini schermo: header sotto la barra di stato e barra in basso sopra i gesti (usa `--safe-top` / `--safe-bottom`; non testato su dispositivo)
-- [ ] "Portami lì" su Android reale (ramo `geo:` di `utils/navigation.ts`)
-- [ ] Backup: "Esporta" deve aprire il menu di condivisione e "Importa" ripristinare (ramo nativo non testabile da browser)
+## Verificato sul telefono (18/09/2026)
+- [x] Header e margini schermo, splash e icona (rosso con 🍟), bicchieri e filtri, "Esporta Dati" (menu di condivisione), "Portami lì"
+
+## Ancora da verificare sul telefono
+- [ ] "Importa Dati": ripristino da un backup esportato (ramo nativo non testabile da browser)
 - [ ] Popup "Ti trovi qui?" con "Segna visita ✓" (provato comparsa entro 2 km e "Non ora"; non il salvataggio per non toccare i dati reali)
-- [ ] Icona e splash: aspetto reale, e se lo sfondo rosso dell'icona adattiva sta bene con la forma scelta dal launcher
-- [ ] Tema chiaro e scuro su Stats, achievement e toast (ho controllato Home, Profilo e Mappa)
+- [ ] Tema chiaro e scuro su Stats, achievement e toast (controllati Home, Profilo e Mappa)
 
 ## Tematizzazione: cosa resta
 - [ ] Rivedere Stats e achievement con la nuova palette
