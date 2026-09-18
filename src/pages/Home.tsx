@@ -1,7 +1,17 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { McdonaldCard } from '@/components/McdonaldCard';
-import { SodaRegion } from '@/components/SodaRegion';
+import { RegionSheet } from '@/components/RegionSheet';
+import { SodaGlass } from '@/components/SodaGlass';
+import { distanceKm } from '@/utils/geo';
+
+type SortBy = 'distance' | 'name';
+
+const STATUS_OPTIONS: Array<{ value: boolean | null; label: string; dot: string; active: string }> = [
+  { value: null, label: 'Tutti', dot: 'bg-gray-400', active: 'bg-gray-800 dark:bg-gray-600 text-white' },
+  { value: true, label: 'Visitati', dot: 'bg-green-500', active: 'bg-green-600 text-white' },
+  { value: false, label: 'Da visitare', dot: 'bg-mc-red', active: 'bg-mc-red text-white' },
+];
 
 export function Home() {
   const {
@@ -10,6 +20,9 @@ export function Home() {
     filterVisited,
     setFilterVisited,
     getFilteredMcdonalds,
+    isVisited,
+    getRegionStats,
+    userPosition,
     mcdonalds,
     getVisitedCount,
     getNearestMcdonalds,
@@ -22,8 +35,28 @@ export function Home() {
 
   const listRef = useRef<HTMLDivElement>(null);
 
-  const filtered = getFilteredMcdonalds();
-  const uniqueRegions = [...new Set(mcdonalds.map(m => m.region))].sort();
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<SortBy>('distance');
+  const canSortByDistance = userPosition !== null;
+  const sortByDistance = sortBy === 'distance' && canSortByDistance;
+
+  const matching = getFilteredMcdonalds();
+  const filtered = userPosition
+    ? matching
+        .map(mc => ({ ...mc, distanceKm: distanceKm(userPosition.lat, userPosition.lon, mc.lat, mc.lon) }))
+    : matching.map(mc => ({ ...mc, distanceKm: undefined as number | undefined }));
+  if (sortByDistance) {
+    filtered.sort((a, b) => (a.distanceKm ?? 0) - (b.distanceKm ?? 0));
+  } else if (sortBy === 'name') {
+    filtered.sort((a, b) => a.name.localeCompare(b.name, 'it'));
+  }
+  const regionStats = getRegionStats()
+    .slice()
+    .sort((a, b) => a.region.localeCompare(b.region, 'it'));
+  // With a region selected (and no visited/unvisited filter), list the visited ones first in their own group
+  const splitVisited = filterRegion !== null && filterVisited === null;
+  const visitedInRegion = splitVisited ? filtered.filter(mc => isVisited(mc.id)) : [];
+  const remaining = splitVisited ? filtered.filter(mc => !isVisited(mc.id)) : filtered;
   const visitedCount = getVisitedCount();
   const total = mcdonalds.length;
   const percentage = total > 0 ? Math.round((visitedCount / total) * 100) : 0;
@@ -118,7 +151,7 @@ export function Home() {
                 className="flex-shrink-0 w-28 flex flex-col items-center text-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-3 shadow-sm hover:border-mc-red dark:hover:border-mc-red active:scale-[0.97] transition-all"
               >
                 <div className="flex items-center justify-center" style={{ height: 105 }}>
-                  <SodaRegion region={r.region} percentage={r.percentage} />
+                  <SodaGlass region={r.region} percentage={r.percentage} />
                 </div>
                 <div className="mt-1.5">
                   <p className="font-semibold text-xs text-gray-800 dark:text-gray-100 truncate w-full">{r.region}</p>
@@ -137,61 +170,79 @@ export function Home() {
           Esplora tutti
         </h2>
 
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {filterVisited === null && (
-            <span className="px-3 py-1 rounded-full text-sm font-semibold whitespace-nowrap bg-gray-800 dark:bg-gray-700 text-white">
-              Tutti
-            </span>
-          )}
-          {filterVisited !== true && (
-            <button
-              onClick={() => setFilterVisited(true)}
-              className="px-3 py-1 rounded-full text-sm font-semibold whitespace-nowrap bg-green-100 dark:bg-green-950/50 text-green-800 dark:text-green-400 border border-green-300 dark:border-green-800"
-            >
-              ✓ Visitati
-            </button>
-          )}
-          {filterVisited !== false && (
-            <button
-              onClick={() => setFilterVisited(false)}
-              className="px-3 py-1 rounded-full text-sm font-semibold whitespace-nowrap bg-red-100 dark:bg-red-950/50 text-red-800 dark:text-red-400 border border-red-300 dark:border-red-800"
-            >
-              ✗ Da visitare
-            </button>
-          )}
-          {filterVisited !== null && (
-            <button
-              onClick={() => setFilterVisited(null)}
-              className="px-3 py-1 rounded-full text-sm font-semibold whitespace-nowrap bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
-            >
-              ✕ Reset
-            </button>
-          )}
+        {/* Stato: visitati / da visitare */}
+        <div className="flex gap-1 p-1 mb-3 rounded-2xl bg-gray-100 dark:bg-gray-800">
+          {STATUS_OPTIONS.map(({ value, label, dot, active }) => {
+            const selected = filterVisited === value;
+            return (
+              <button
+                key={label}
+                onClick={() => setFilterVisited(value)}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-sm font-semibold transition-all ${
+                  selected ? `${active} shadow-sm` : 'text-gray-500 dark:text-gray-400'
+                }`}
+              >
+                <span className={`w-2 h-2 rounded-full ${selected ? 'bg-white' : dot}`} />
+                {label}
+              </button>
+            );
+          })}
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-2">
+        {/* Regione + ordinamento */}
+        <div className="flex items-center gap-2 mb-4">
+          <button
+            onClick={() => setSheetOpen(true)}
+            className={`flex-1 min-w-0 flex items-center justify-between gap-2 px-3 py-2 rounded-xl border text-sm font-semibold transition-colors ${
+              filterRegion
+                ? 'bg-mc-red/10 dark:bg-mc-red/20 border-mc-red text-mc-red'
+                : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200'
+            }`}
+          >
+            <span className="truncate">📍 {filterRegion ?? 'Tutte le regioni'}</span>
+            <span className="text-xs opacity-70">▾</span>
+          </button>
           {filterRegion && (
             <button
               onClick={() => setFilterRegion(null)}
-              className="px-2 py-1 rounded text-xs font-semibold whitespace-nowrap bg-gray-800 dark:bg-gray-700 text-white"
+              aria-label="Rimuovi filtro regione"
+              className="w-9 h-9 flex-shrink-0 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-300 text-sm"
             >
-              ✕ {filterRegion}
+              ✕
             </button>
           )}
-          {uniqueRegions.map(region => (
+          <div className="flex flex-shrink-0 gap-0.5 p-0.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-xs font-semibold">
             <button
-              key={region}
-              onClick={() => setFilterRegion(filterRegion === region ? null : region)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-                filterRegion === region
-                  ? 'bg-mc-red text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+              onClick={() => setSortBy('distance')}
+              disabled={!canSortByDistance}
+              className={`px-2.5 py-1.5 rounded-lg transition-all disabled:opacity-40 ${
+                sortByDistance
+                  ? 'bg-white dark:bg-gray-900 shadow-sm text-gray-800 dark:text-gray-100'
+                  : 'text-gray-500 dark:text-gray-400'
               }`}
             >
-              {region}
+              Distanza
             </button>
-          ))}
+            <button
+              onClick={() => setSortBy('name')}
+              className={`px-2.5 py-1.5 rounded-lg transition-all ${
+                !sortByDistance
+                  ? 'bg-white dark:bg-gray-900 shadow-sm text-gray-800 dark:text-gray-100'
+                  : 'text-gray-500 dark:text-gray-400'
+              }`}
+            >
+              A–Z
+            </button>
+          </div>
         </div>
+
+        <RegionSheet
+          open={sheetOpen}
+          regions={regionStats}
+          selected={filterRegion}
+          onSelect={setFilterRegion}
+          onClose={() => setSheetOpen(false)}
+        />
 
         {filtered.length === 0 ? (
           <div className="text-center py-12 text-gray-500 dark:text-gray-400">
@@ -204,8 +255,23 @@ export function Home() {
             <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold px-1">
               {filtered.length} McDonald's
             </p>
-            {filtered.map(mc => (
-              <McdonaldCard key={mc.id} mc={mc} />
+            {visitedInRegion.length > 0 && (
+              <>
+                <p className="text-xs font-display font-semibold text-green-700 dark:text-green-400 px-1 pt-1">
+                  ✓ Già visitati in {filterRegion} · {visitedInRegion.length}
+                </p>
+                {visitedInRegion.map(mc => (
+                  <McdonaldCard key={mc.id} mc={mc} distanceKm={sortByDistance ? mc.distanceKm : undefined} />
+                ))}
+                {remaining.length > 0 && (
+                  <p className="text-xs font-display font-semibold text-gray-500 dark:text-gray-400 px-1 pt-3">
+                    Da visitare · {remaining.length}
+                  </p>
+                )}
+              </>
+            )}
+            {remaining.map(mc => (
+              <McdonaldCard key={mc.id} mc={mc} distanceKm={sortByDistance ? mc.distanceKm : undefined} />
             ))}
           </div>
         )}

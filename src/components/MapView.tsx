@@ -5,6 +5,7 @@ import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
+import { openDirections } from '@/utils/navigation';
 import type { McDonald } from '@shared/types';
 
 const OSM_TILES = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -44,7 +45,8 @@ export function MapView() {
   const map = useRef<L.Map | null>(null);
   const clusterGroup = useRef<L.MarkerClusterGroup | null>(null);
   const markers = useRef<Map<string, L.Marker>>(new Map());
-  const { mcdonalds, visits, isVisited, toggleVisit, mapFocusId, clearMapFocus } = useMcdonaldStore();
+  const userMarker = useRef<L.Marker | null>(null);
+  const { mcdonalds, visits, isVisited, toggleVisit, mapFocusId, clearMapFocus, userPosition } = useMcdonaldStore();
   const [query, setQuery] = useState('');
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
 
@@ -120,20 +122,34 @@ export function MapView() {
         <div style="font-size: 13px; min-width: 160px;">
           <strong style="font-family: 'Fredoka', sans-serif; font-size: 14px;">${mc.name}</strong><br/>
           <span style="color: #6b7280;">${mc.city}, ${mc.region}</span><br/>
-          <button id="toggle-${mc.id}" style="
-            margin-top: 8px;
-            padding: 6px 12px;
-            background: ${visited ? '#16a34a' : '#DA291C'};
-            color: white;
-            border: none;
-            border-radius: 999px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: 'Fredoka', sans-serif;
-            font-size: 12px;
-          ">
-            ${visited ? '✓ Visitato' : '🍟 Segna visita'}
-          </button>
+          <div style="display: flex; gap: 6px; margin-top: 8px;">
+            <button id="toggle-${mc.id}" style="
+              padding: 6px 12px;
+              background: ${visited ? '#16a34a' : '#DA291C'};
+              color: white;
+              border: none;
+              border-radius: 999px;
+              cursor: pointer;
+              font-weight: 600;
+              font-family: 'Fredoka', sans-serif;
+              font-size: 12px;
+            ">
+              ${visited ? '✓ Visitato' : '🍟 Segna visita'}
+            </button>
+            <button id="directions-${mc.id}" style="
+              padding: 6px 12px;
+              background: #2563eb;
+              color: white;
+              border: none;
+              border-radius: 999px;
+              cursor: pointer;
+              font-weight: 600;
+              font-family: 'Fredoka', sans-serif;
+              font-size: 12px;
+            ">
+              🧭 Portami lì
+            </button>
+          </div>
         </div>
       `);
 
@@ -145,12 +161,60 @@ export function MapView() {
             toggleVisit(mc.id);
           };
         }
+        const directionsBtn = document.getElementById(`directions-${mc.id}`);
+        if (directionsBtn) {
+          directionsBtn.onclick = (e) => {
+            e.preventDefault();
+            openDirections(mc);
+          };
+        }
       });
 
       markers.current.set(mc.id, marker);
       clusterGroup.current!.addLayer(marker);
     });
   }, [mcdonalds, visits, isVisited, toggleVisit]);
+
+  // User position marker (outside the cluster group so it is always visible)
+  useEffect(() => {
+    if (!map.current) return;
+
+    if (!userPosition) {
+      userMarker.current?.remove();
+      userMarker.current = null;
+      return;
+    }
+
+    const latlng: L.LatLngExpression = [userPosition.lat, userPosition.lon];
+    if (userMarker.current) {
+      userMarker.current.setLatLng(latlng);
+      return;
+    }
+
+    const icon = L.divIcon({
+      html: `
+        <div style="
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          background: #2563eb;
+          border: 3px solid white;
+          box-shadow: 0 0 0 6px rgba(37,99,235,0.25), 0 2px 6px rgba(0,0,0,0.4);
+        "></div>
+      `,
+      iconSize: [18, 18],
+      className: '',
+    });
+    userMarker.current = L.marker(latlng, { icon, zIndexOffset: 1000, keyboard: false })
+      .bindTooltip('Tu sei qui', { direction: 'top', offset: [0, -10] })
+      .addTo(map.current);
+  }, [userPosition]);
+
+  const centerOnUser = () => {
+    if (userPosition) {
+      map.current?.flyTo([userPosition.lat, userPosition.lon], 14, { duration: 0.75 });
+    }
+  };
 
   const selectResult = (mc: McDonald) => {
     setQuery('');
@@ -202,6 +266,15 @@ export function MapView() {
         )}
       </div>
       <div ref={mapContainer} className={`w-full h-full ${isDark ? 'map-dark' : ''}`} />
+      {userPosition && (
+        <button
+          onClick={centerOnUser}
+          aria-label="Centra sulla mia posizione"
+          className="absolute bottom-28 right-2.5 z-[1000] w-11 h-11 flex items-center justify-center rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-md text-xl active:scale-95 transition-transform"
+        >
+          🎯
+        </button>
+      )}
     </div>
   );
 }

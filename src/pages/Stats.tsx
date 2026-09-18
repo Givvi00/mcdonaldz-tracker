@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { getAchievements } from '@/services/db';
 import { ACHIEVEMENTS, getAchievementProgress } from '@/services/achievements';
-import { SodaRegion } from '@/components/SodaRegion';
+import { SodaGlass } from '@/components/SodaGlass';
 import type { Achievement } from '@shared/types';
 
 export function Stats() {
@@ -59,7 +59,7 @@ export function Stats() {
                 className="flex flex-col items-center text-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-2 shadow-sm"
               >
                 <div className="flex items-center justify-center" style={{ height: 105 }}>
-                  <SodaRegion region={stat.region} percentage={stat.percentage} />
+                  <SodaGlass region={stat.region} percentage={stat.percentage} />
                 </div>
                 <p className="font-semibold text-[0.65rem] text-gray-800 dark:text-gray-100 truncate w-full mt-1">
                   {stat.region}

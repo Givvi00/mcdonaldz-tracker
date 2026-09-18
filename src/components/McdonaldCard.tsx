@@ -10,36 +10,46 @@ interface Props {
 }
 
 export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
-  const { isVisited, toggleVisit } = useMcdonaldStore();
+  const { isVisited, toggleVisit, focusOnMap } = useMcdonaldStore();
   const visited = isVisited(mc.id);
 
   if (variant === 'compact') {
     return (
-      <button
-        onClick={() => toggleVisit(mc.id)}
-        className={`flex-shrink-0 w-40 text-left p-3 rounded-2xl border transition-all shadow-sm active:scale-[0.97] ${
+      <div
+        className={`flex-shrink-0 w-40 flex flex-col text-left rounded-2xl border transition-all shadow-sm ${
           visited
             ? 'bg-green-50 dark:bg-green-950/40 border-green-300 dark:border-green-800'
-            : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:border-mc-red dark:hover:border-mc-red hover:-translate-y-0.5'
+            : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:border-mc-red dark:hover:border-mc-red'
         }`}
       >
-        <div className="flex items-center justify-between mb-2">
-          <span
-            className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black text-white shadow-sm ring-2 ring-white dark:ring-gray-900 ${
-              visited ? 'bg-gradient-to-br from-green-400 to-green-600' : 'bg-gradient-to-br from-mc-red to-red-700'
-            }`}
-          >
-            {visited ? '✓' : 'M'}
-          </span>
-          {distanceKm !== undefined && (
-            <span className="text-[0.65rem] font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
-              {formatDistance(distanceKm)}
+        <button
+          onClick={() => toggleVisit(mc.id)}
+          className="text-left p-3 pb-2 active:scale-[0.97] transition-transform"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span
+              className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black text-white shadow-sm ring-2 ring-white dark:ring-gray-900 ${
+                visited ? 'bg-gradient-to-br from-green-400 to-green-600' : 'bg-gradient-to-br from-mc-red to-red-700'
+              }`}
+            >
+              {visited ? '✓' : 'M'}
             </span>
-          )}
-        </div>
-        <p className="font-bold text-sm text-gray-800 dark:text-gray-100 truncate">{shortMcName(mc.name)}</p>
-        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{mc.city}</p>
-      </button>
+            {distanceKm !== undefined && (
+              <span className="text-[0.65rem] font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
+                {formatDistance(distanceKm)}
+              </span>
+            )}
+          </div>
+          <p className="font-bold text-sm text-gray-800 dark:text-gray-100 truncate">{shortMcName(mc.name)}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{mc.city}</p>
+        </button>
+        <button
+          onClick={() => focusOnMap(mc.id)}
+          className="mt-auto mx-3 mb-3 flex items-center justify-center gap-1 text-xs font-semibold text-mc-red bg-mc-red/10 dark:bg-mc-red/20 py-1.5 rounded-full active:scale-[0.96] transition-transform"
+        >
+          🗺️ Sulla mappa
+        </button>
+      </div>
     );
   }
 
