@@ -9,6 +9,11 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [x] Filtri Home: controllo Tutti / Visitati / Da visitare, selettore regione a pannello con conteggi, ordina per Distanza / A–Z
 - [x] "Portami lì" nel popup della mappa (Android: geo: → app mappe predefinita; web: Google Maps)
 
+- [x] Icona Android: emoji 🍟 su rosso McDonald's (adaptive icon + icone classiche)
+
+## Da fare
+- [ ] Migliorare la tematizzazione: oggi è ancora troppo poco. Da definire: palette del brand (rosso/giallo) applicata in modo coerente, tema chiaro e scuro curati, colori per stato (visitato / da visitare), header, tab bar, card, mappa, splash screen e icona in linea con il resto
+
 ## Da verificare
 - [ ] "Portami lì" su Android reale (ramo `geo:` di `utils/navigation.ts`, non testabile da browser)
 - [ ] Popup "Ti trovi qui?" con "Segna visita ✓" (provato: comparsa entro 2 km e "Non ora"; non provato il salvataggio per non toccare i dati reali)

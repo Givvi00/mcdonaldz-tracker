@@ -59,6 +59,35 @@ input, textarea, button {
   }
 }
 
+@keyframes soda-wave-slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-1 * var(--wave-w)));
+  }
+}
+
+@keyframes soda-bubble-fizz {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(var(--sway), calc(-0.5 * var(--rise)));
+  }
+  88% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate(0, calc(-1 * var(--rise)));
+    opacity: 0;
+  }
+}
+
 @keyframes toast-in {
   from {
     transform: translateY(-24px);
