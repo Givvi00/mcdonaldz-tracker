@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { exportData, importData } from '@/services/db';
+import { readBackupSummary, saveBackup } from '@/services/backup';
 import { useTheme, type ThemeMode } from '@/hooks/useTheme';
 
 const THEME_OPTIONS: Array<{ value: ThemeMode; label: string; icon: string }> = [
@@ -15,27 +16,26 @@ export function Profile() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleExport = async () => {
-    const data = await exportData();
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `mcdonaldz-backup-${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    try {
+      await saveBackup(await exportData());
+    } catch (error) {
+      alert(`Impossibile salvare il backup: ${(error as Error).message}`);
+    }
   };
 
   const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    e.target.value = '';
     if (!file) return;
 
-    const text = await file.text();
     try {
+      const text = await file.text();
+      const { visits } = readBackupSummary(text);
       await importData(text);
-      alert('Dati importati con successo! Ricarica la pagina.');
+      alert(`Backup importato: ${visits} visite.`);
       window.location.reload();
     } catch (error) {
-      alert('Errore nell\'importazione dei dati');
+      alert(`Errore nell'importazione: ${(error as Error).message}`);
     }
   };
 
