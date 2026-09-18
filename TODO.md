@@ -37,5 +37,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [ ] Notifica quando passi vicino a un Mc non visitato (Capacitor local notifications + posizione in background). Il popup di oggi compare solo all'apertura dell'app e una volta sola: è il passo più coerente col principio guida
 - [ ] Check-in verificato dal GPS (visita solo entro ~200 m), come modalità opzionale
 - [ ] Aggiornamento dati: rilevare Mc chiusi/nuovi con `fetch-data` senza perdere le visite
-- [ ] iPhone: PWA (manifest + service worker + hosting HTTPS) oppure app nativa con build cloud e account Apple Developer
+- [x] iPhone: PWA su GitHub Pages (manifest, icone, service worker offline, deploy automatico a ogni push su master): https://givvi00.github.io/mcdonaldz-tracker/ . Su iPhone: Safari → Condividi → "Aggiungi alla schermata Home". I dati dell'iPhone sono separati da quelli di Android: si trasferiscono con Esporta/Importa
+- [ ] iPhone, da verificare sul telefono: installazione, posizione, "Portami lì" (Apple Maps), Esporta/Importa, uso offline
+- [ ] iPhone nativo (facoltativo): build cloud + account Apple Developer, solo se servono le notifiche di prossimità in background
 - [x] Repository remoto su GitHub come backup del codice: https://github.com/Givvi00/mcdonaldz-tracker (privato). Dopo ogni sessione: `git push`

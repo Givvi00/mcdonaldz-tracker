@@ -6,14 +6,24 @@ interface Destination {
   lon: number;
 }
 
+function isApple(): boolean {
+  if (Capacitor.getPlatform() === 'ios') return true;
+  const ua = navigator.userAgent;
+  // iPadOS reports itself as a Mac, so also check for a touch screen
+  return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+}
+
 /**
  * Link that opens turn-by-turn directions to a McDonald's.
- * On Android (Capacitor) the geo: scheme lets the system pick the default maps app;
- * on the web it falls back to Google Maps directions.
+ * Android app: the geo: scheme lets the system pick the default maps app.
+ * iPhone/iPad: Apple Maps. Everything else: Google Maps.
  */
 export function directionsUrl({ name, lat, lon }: Destination): string {
   if (Capacitor.getPlatform() === 'android') {
     return `geo:${lat},${lon}?q=${lat},${lon}(${encodeURIComponent(name)})`;
+  }
+  if (isApple()) {
+    return `https://maps.apple.com/?daddr=${lat},${lon}&q=${encodeURIComponent(name)}&dirflg=d`;
   }
   return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
 }
