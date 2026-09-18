@@ -16,9 +16,9 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 
 ## Verificato sul telefono (18/09/2026)
 - [x] Header e margini schermo, splash e icona (rosso con 🍟), bicchieri e filtri, "Esporta Dati" (menu di condivisione), "Portami lì"
+- [x] "Importa Dati": ripristino da un backup esportato
 
 ## Ancora da verificare sul telefono
-- [ ] "Importa Dati": ripristino da un backup esportato (ramo nativo non testabile da browser)
 - [ ] Popup "Ti trovi qui?" con "Segna visita ✓" (provato comparsa entro 2 km e "Non ora"; non il salvataggio per non toccare i dati reali)
 - [ ] Tema chiaro e scuro su Stats, achievement e toast (controllati Home, Profilo e Mappa)
 
