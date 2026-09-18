@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
-import { distanceKm } from '@/utils/geo';
+import { distanceKm, formatDistance } from '@/utils/geo';
 import { shortMcName } from '@/utils/format';
 import type { McDonald } from '@shared/types';
 
@@ -27,7 +27,8 @@ function markDismissed(id: string) {
 
 export function NearbyPrompt() {
   const { mcdonalds, userPosition, locationStatus, isVisited, toggleVisit } = useMcdonaldStore();
-  const [candidate, setCandidate] = useState<McDonald | null>(null);
+  const [nearby, setNearby] = useState<{ mc: McDonald; km: number } | null>(null);
+  const candidate = nearby?.mc ?? null;
   const checkedRef = useRef(false);
 
   useEffect(() => {
@@ -42,13 +43,13 @@ export function NearbyPrompt() {
       .sort((a, b) => a.d - b.d)[0];
 
     if (nearest && nearest.d <= NEARBY_RADIUS_KM) {
-      setCandidate(nearest.mc);
+      setNearby({ mc: nearest.mc, km: nearest.d });
     }
   }, [locationStatus, userPosition, mcdonalds, isVisited]);
 
   const dismiss = () => {
     if (candidate) markDismissed(candidate.id);
-    setCandidate(null);
+    setNearby(null);
   };
 
   const confirm = () => {
@@ -56,10 +57,10 @@ export function NearbyPrompt() {
       toggleVisit(candidate.id);
       markDismissed(candidate.id);
     }
-    setCandidate(null);
+    setNearby(null);
   };
 
-  if (!candidate) return null;
+  if (!nearby || !candidate) return null;
 
   return (
     <div
@@ -77,7 +78,7 @@ export function NearbyPrompt() {
           <div className="min-w-0">
             <p className="font-display font-bold text-gray-800 dark:text-gray-100">Ti trovi qui?</p>
             <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-              {shortMcName(candidate.name)} è a due passi
+              {shortMcName(candidate.name)} è a {formatDistance(nearby.km)} da te
             </p>
           </div>
         </div>
