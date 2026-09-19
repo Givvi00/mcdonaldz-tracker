@@ -16,12 +16,18 @@ const BIG = {
   launchAt: 0.55, // seconds: the fries leave the box
   friesPerBurst: 14,
   starsPerBurst: 12,
-  time: 6800,
+  time: 8600,
+  boxMs: 3800,
 };
 const BURSTS = [
   { left: 50, top: 40, at: 1.3 },
   { left: 24, top: 30, at: 2.1 },
   { left: 76, top: 34, at: 2.8 },
+  { left: 36, top: 22, at: 3.4 },
+  { left: 64, top: 26, at: 3.9 },
+  { left: 14, top: 44, at: 4.4 },
+  { left: 86, top: 46, at: 4.9 },
+  { left: 50, top: 28, at: 5.5 },
 ];
 const BOX_SIZE = 120;
 const BOX_BOTTOM_VH = 12;
@@ -128,7 +134,7 @@ export function FoodRain() {
             width: BOX_SIZE,
             height: BOX_SIZE,
             marginLeft: -BOX_SIZE / 2,
-            animation: `food-box ${BIG.time * 0.55}ms ease-out both`,
+            animation: `food-box ${BIG.boxMs}ms ease-out both`,
           }}
         >
           <FoodIcon name="fries" size={BOX_SIZE} />

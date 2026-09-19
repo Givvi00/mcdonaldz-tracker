@@ -89,9 +89,11 @@ input, textarea, button {
   }
   80% {
     transform: translateY(0);
+    opacity: 1;
   }
   100% {
-    transform: translateY(150%);
+    transform: translateY(60%);
+    opacity: 0;
   }
 }
 
@@ -123,8 +125,11 @@ input, textarea, button {
     transform: translate3d(var(--dx), var(--dy), 0) scale(1);
     opacity: 1;
   }
+  65% {
+    opacity: 0.9;
+  }
   100% {
-    transform: translate3d(calc(var(--dx) * 1.08), calc(var(--dy) + 70px), 0) scale(0.9);
+    transform: translate3d(calc(var(--dx) * 1.08), calc(var(--dy) + 90px), 0) scale(0.9);
     opacity: 0;
   }
 }
