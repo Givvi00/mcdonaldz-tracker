@@ -33,7 +33,7 @@ export function Stats() {
           <p className="text-6xl font-display font-bold mt-2">{visitedCount}</p>
           <p className="text-sm opacity-90 mt-1">di {totalMcdonalds} in Italia</p>
           <p className="text-2xl font-display font-bold mt-3">
-            {Math.round((visitedCount / totalMcdonalds) * 100)}%
+            {totalMcdonalds > 0 ? Math.round((visitedCount / totalMcdonalds) * 100) : 0}%
           </p>
         </div>
       </div>
