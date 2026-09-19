@@ -10,7 +10,8 @@ import { Receipt } from '@/components/Receipt';
 import type { Achievement } from '@shared/types';
 
 export function Stats() {
-  const { user, visits, getVisitedCount, getCountedTotal, getRegionStats, mcdonalds } = useMcdonaldStore();
+  const { user, visits, getVisitedCount, getCountedTotal, getRegionStats, mcdonalds, focusedAchievement, clearFocusedAchievement } =
+    useMcdonaldStore();
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [showAllRegions, setShowAllRegions] = useState(false);
 
@@ -19,6 +20,19 @@ export function Stats() {
       getAchievements(user.id).then(setAchievements);
     }
   }, [user, visits]);
+
+  // Arrived from an achievement toast: scroll to that achievement and highlight it for a few seconds
+  useEffect(() => {
+    if (!focusedAchievement) return;
+    const scroll = setTimeout(() => {
+      document.getElementById(`ach-${focusedAchievement}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 400);
+    const clear = setTimeout(clearFocusedAchievement, 5000);
+    return () => {
+      clearTimeout(scroll);
+      clearTimeout(clear);
+    };
+  }, [focusedAchievement, clearFocusedAchievement]);
 
   const visitedCount = getVisitedCount();
   const regionStats = getRegionStats();
@@ -96,7 +110,10 @@ export function Stats() {
             return (
               <div
                 key={ach.id}
+                id={`ach-${ach.id}`}
                 className={`p-4 rounded-2xl text-center border-2 transition-all active:scale-[0.97] ${
+                  focusedAchievement === ach.id ? 'ring-4 ring-mc-red ring-offset-2 dark:ring-offset-gray-950 animate-pulse' : ''
+                } ${
                   unlocked
                     ? 'bg-yellow-100 dark:bg-yellow-950/40 border-yellow-400 dark:border-yellow-700'
                     : 'bg-gray-100 dark:bg-gray-900 border-gray-300 dark:border-gray-700'

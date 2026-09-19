@@ -21,6 +21,8 @@ interface AppStore {
   userPosition: Coords | null;
   locationStatus: GeoStatus;
   newlyUnlocked: Achievement['type'][];
+  /** Achievement to show in Stats after tapping its toast */
+  focusedAchievement: Achievement['type'] | null;
   mapFocusId: string | null;
   updateAvailable: boolean;
   /** A shower of food is playing: set by a new visit; `big` for a level up or an achievement */
@@ -29,6 +31,8 @@ interface AppStore {
   initApp: () => Promise<void>;
   toggleVisit: (mcdonaldId: string) => Promise<void>;
   dismissUnlocked: (type: Achievement['type']) => void;
+  openAchievement: (type: Achievement['type']) => void;
+  clearFocusedAchievement: () => void;
   clearCelebration: () => void;
   setSelectedTab: (tab: 'home' | 'map' | 'stats' | 'profile') => void;
   setSearchQuery: (query: string) => void;
@@ -64,6 +68,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   userPosition: null,
   locationStatus: 'idle',
   newlyUnlocked: [],
+  focusedAchievement: null,
   mapFocusId: null,
   updateAvailable: false,
   celebration: null,
@@ -105,6 +110,15 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   clearCelebration: () => set({ celebration: null }),
 
   dismissUnlocked: (type) => set(state => ({ newlyUnlocked: state.newlyUnlocked.filter(t => t !== type) })),
+
+  openAchievement: (type) =>
+    set(state => ({
+      newlyUnlocked: state.newlyUnlocked.filter(t => t !== type),
+      selectedTab: 'stats',
+      focusedAchievement: type,
+    })),
+
+  clearFocusedAchievement: () => set({ focusedAchievement: null }),
 
   setSelectedTab: (tab) => set({ selectedTab: tab }),
   setSearchQuery: (query) => set({ searchQuery: query }),

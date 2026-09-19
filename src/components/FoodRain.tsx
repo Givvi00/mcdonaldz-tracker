@@ -10,6 +10,10 @@ const between = (min: number, max: number) => min + Math.random() * (max - min);
 
 // A visit: a light shower. A level up or an achievement: a box of fries rises from the bottom, fries shoot out of it
 // and burst into food, streamers and sparkles, while a thicker, longer shower falls.
+// The box of fries with the burst and sparkles is switched off for now (too busy): only the shower falls.
+// Set FESTOON to true to bring it back.
+const FESTOON = false;
+
 const SMALL = { rain: 14, time: 3600 };
 const BIG = {
   rain: 70,
@@ -21,6 +25,7 @@ const BIG = {
   launchAt: 0.55, // seconds: the fries leave the box
   burstAt: 1.3, // seconds: they burst at the top
   time: 10500,
+  rainTime: 9500, // shower only: the last piece starts at 5.2 s and falls for up to 3.8 s
 };
 const BOX_SIZE = 120;
 const BOX_BOTTOM_VH = 12;
@@ -55,7 +60,7 @@ export function FoodRain() {
       drift: Math.round(between(-60, 60)),
       spin: Math.round(between(-360, 360)),
     }));
-    if (!big) return { rain, sticks: [], burst: [], sparkles: [], ambient: [] };
+    if (!big || !FESTOON) return { rain, sticks: [], burst: [], sparkles: [], ambient: [] };
 
     // Fries leaving the box, fanning out upwards
     const sticks = Array.from({ length: BIG.sticks }, (_, i) => {
@@ -117,7 +122,7 @@ export function FoodRain() {
 
   useEffect(() => {
     if (!celebration) return;
-    const timer = setTimeout(clearCelebration, celebration.big ? BIG.time : SMALL.time);
+    const timer = setTimeout(clearCelebration, celebration.big ? (FESTOON ? BIG.time : BIG.rainTime) : SMALL.time);
     return () => clearTimeout(timer);
   }, [celebration, clearCelebration]);
 
@@ -126,7 +131,7 @@ export function FoodRain() {
 
   return (
     <div className="food-rain fixed inset-0 z-[2500] overflow-hidden pointer-events-none" aria-hidden="true">
-      {celebration.big && (
+      {celebration.big && FESTOON && (
         <div
           className="absolute"
           style={{
