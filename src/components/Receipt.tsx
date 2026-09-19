@@ -1,3 +1,4 @@
+import { FoodIcon } from '@/components/FoodIcon';
 import { levelInfo } from '@/utils/foodTheme';
 
 interface Row {
@@ -32,7 +33,7 @@ export function Receipt({ rows, visited, total }: Props) {
           <p className="text-center text-[0.7rem] text-gray-500">Ordine n. {visited} · {today}</p>
           <div className="my-3 border-t-2 border-dashed border-gray-300" />
           {lines.length === 0 ? (
-            <p className="py-2 text-center text-gray-500">Nessun articolo. Ordina il primo! 🍟</p>
+            <p className="py-2 text-center text-gray-500">Nessun articolo. Ordina il primo! <FoodIcon name="fries" size={16} /></p>
           ) : (
             <ul className="space-y-1">
               {lines.map(r => (
@@ -59,7 +60,7 @@ export function Receipt({ rows, visited, total }: Props) {
               {level.icon} {level.name}
             </span>
           </p>
-          <p className="mt-4 text-center text-[0.7rem] text-gray-500">Grazie e a presto! 🍟</p>
+          <p className="mt-4 text-center text-[0.7rem] text-gray-500">Grazie e a presto! <FoodIcon name="fries" size={14} /></p>
         </div>
         {/* Torn edge */}
         <div

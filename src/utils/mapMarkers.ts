@@ -1,5 +1,5 @@
 import type { McDonald } from '@shared/types';
-import { markerEmoji, restaurantKind } from '@/utils/foodTheme';
+import { foodIconSvg, markerIcon, restaurantKind } from '@/utils/foodTheme';
 
 const escapeHtml = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -24,9 +24,9 @@ export function markerBackground(mc: McDonald, visited: boolean): string {
     : 'linear-gradient(135deg, #DA291C, #a8180d)';
 }
 
-/** What the marker shows: a tick once visited, otherwise a food emoji that stays the same for this restaurant */
+/** What the marker shows: a tick once visited, otherwise a food icon that stays the same for this restaurant */
 export function markerSymbol(mc: McDonald, visited: boolean): string {
-  return visited ? '✓' : markerEmoji(mc.id);
+  return visited ? '✓' : foodIconSvg(markerIcon(mc.id), 20);
 }
 
 /** Content of the map popup. A closed restaurant shows a "Chiuso" badge and no directions button. */
@@ -49,7 +49,7 @@ export function popupHtml(mc: McDonald, visited: boolean): string {
           ${closedBadge}
           <div style="display: flex; gap: 6px; margin-top: 8px;">
             <button id="toggle-${mc.id}" style="${pillButton(visited ? '#16a34a' : '#DA291C', 'white')}">
-              ${visited ? '✓ Visitato' : '🍟 Segna visita'}
+              ${visited ? '✓ Visitato' : `${foodIconSvg('fries', 15)} Segna visita`}
             </button>
             ${directions}
           </div>

@@ -1,7 +1,27 @@
 import type { McDonald } from '@shared/types';
 
-/** Food used for the decorations: burger, fries, drink, soft serve (McFlurry), chicken (nuggets), pie */
-export const FOOD_EMOJI = ['🍔', '🍟', '🥤', '🍦', '🍗', '🥧'] as const;
+/** The hand-drawn food icons (drawings in components/foodSprite.ts): used for the pattern, the food shower and the map markers */
+export const FOOD_ICONS = [
+  'burger',
+  'bigmac',
+  'chicken',
+  'toast',
+  'filet',
+  'wrap',
+  'fries',
+  'nuggets',
+  'wings',
+  'basket',
+  'cup',
+  'mcflurry',
+  'happy',
+] as const;
+export type FoodIconName = (typeof FOOD_ICONS)[number];
+
+/** Markup of one icon, for places that build HTML by hand (the map). Needs the sprite in the page (FoodIconSprite). */
+export function foodIconSvg(name: FoodIconName, size: number): string {
+  return `<svg class="food-ico" width="${size}" height="${size}" viewBox="0 0 48 48" aria-hidden="true"><use href="#food-${name}"/></svg>`;
+}
 
 // ---- Levels: ranks earned with the number of restaurants visited ----
 
@@ -63,11 +83,11 @@ export function restaurantKind(mc: Pick<McDonald, 'name' | 'address'>): Restaura
   return KIND_RULES.find(rule => rule.test.test(text))?.kind ?? null;
 }
 
-// ---- Map marker: a stable food emoji for each restaurant ----
+// ---- Map marker: a stable food icon for each restaurant ----
 
-/** Same restaurant, same emoji, every time (a simple hash of the id) */
-export function markerEmoji(id: string): string {
+/** Same restaurant, same icon, every time (a simple hash of the id) */
+export function markerIcon(id: string): FoodIconName {
   let hash = 0;
   for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) >>> 0;
-  return FOOD_EMOJI[hash % FOOD_EMOJI.length];
+  return FOOD_ICONS[hash % FOOD_ICONS.length];
 }

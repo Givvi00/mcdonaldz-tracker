@@ -8,7 +8,7 @@ export function AchievementToast() {
 
   useEffect(() => {
     if (!current) return;
-    const timer = setTimeout(() => dismissUnlocked(current), 3800);
+    const timer = setTimeout(() => dismissUnlocked(current), 5500);
     return () => clearTimeout(timer);
   }, [current, dismissUnlocked]);
 
@@ -17,7 +17,7 @@ export function AchievementToast() {
 
   return (
     <div
-      className="fixed inset-x-4 z-[2000] flex justify-center pointer-events-none"
+      className="fixed inset-x-4 z-[3000] flex justify-center pointer-events-none"
       style={{ top: 'calc(1rem + var(--safe-top))' }}
     >
       <button

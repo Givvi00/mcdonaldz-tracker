@@ -12,6 +12,7 @@ import type { Achievement } from '@shared/types';
 export function Stats() {
   const { user, visits, getVisitedCount, getCountedTotal, getRegionStats, mcdonalds } = useMcdonaldStore();
   const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [showAllRegions, setShowAllRegions] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -21,6 +22,10 @@ export function Stats() {
 
   const visitedCount = getVisitedCount();
   const regionStats = getRegionStats();
+  const sortedRegions = [...regionStats].sort((a, b) => b.percentage - a.percentage || b.visited - a.visited);
+  // Only the regions you started, unless you ask for all of them: the rest is a long list of empty glasses
+  const startedRegions = sortedRegions.filter(r => r.visited > 0);
+  const shownRegions = showAllRegions ? sortedRegions : startedRegions;
   const totalMcdonalds = getCountedTotal();
   const percentage = totalMcdonalds > 0 ? Math.round((visitedCount / totalMcdonalds) * 100) : 0;
   const progress = getAchievementProgress(mcdonalds, visits);
@@ -40,6 +45,8 @@ export function Stats() {
         </div>
       </div>
 
+      <Receipt rows={regionStats} visited={visitedCount} total={totalMcdonalds} />
+
       {/* Region Stats */}
       <div>
         <h3 className="font-display font-semibold text-lg mb-4 text-gray-800 dark:text-gray-100 flex items-center gap-2">
@@ -47,9 +54,7 @@ export function Stats() {
           Statistiche per Regione
         </h3>
         <div className="grid grid-cols-3 gap-3">
-          {regionStats
-            .sort((a, b) => b.percentage - a.percentage || b.visited - a.visited)
-            .map(stat => (
+          {shownRegions.map(stat => (
               <div
                 key={stat.region}
                 className="flex flex-col items-center text-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-2 shadow-sm"
@@ -66,9 +71,16 @@ export function Stats() {
               </div>
             ))}
         </div>
+        {startedRegions.length === 0 && !showAllRegions && (
+          <p className="text-sm text-center text-gray-500 dark:text-gray-400 py-4">Nessuna regione iniziata: il primo McDonald's ne sblocca una.</p>
+        )}
+        <button
+          onClick={() => setShowAllRegions(v => !v)}
+          className="mt-3 w-full rounded-xl border-2 border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 py-2.5 text-sm font-semibold text-gray-600 dark:text-gray-300 active:scale-[0.98] transition-transform"
+        >
+          {showAllRegions ? 'Mostra solo le regioni iniziate' : `Mostra tutte le regioni (${sortedRegions.length})`}
+        </button>
       </div>
-
-      <Receipt rows={regionStats} visited={visitedCount} total={totalMcdonalds} />
 
       {/* Achievements */}
       <div>

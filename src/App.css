@@ -8,6 +8,20 @@
   --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px));
 }
 
+/* Outline of the hand-drawn food icons (see components/foodSprite.ts). --sw is the outline thickness. */
+:root {
+  --sw: 2;
+}
+
+.food-ico {
+  display: inline-block; /* Tailwind makes svg a block, which would push the icon onto its own line inside text */
+  stroke: #3b2a22;
+  stroke-width: var(--sw);
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vertical-align: -0.2em;
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }
@@ -62,18 +76,67 @@ input, textarea, button {
   }
 }
 
-/* Fries rising from the bottom before they burst */
-@keyframes food-pop {
+/* The box of fries rises, waits while the fries shoot out of it, then goes away */
+@keyframes food-box {
   0% {
-    transform: translateY(70vh) scale(0.6) rotate(-12deg);
+    transform: translateY(140%);
+  }
+  9% {
+    transform: translateY(-6%);
+  }
+  14% {
+    transform: translateY(0);
+  }
+  80% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(150%);
+  }
+}
+
+/* A fry leaving the box: straight up (dy in vh), spinning, gone at the top where the burst starts */
+@keyframes food-launch {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(0.8);
     opacity: 1;
   }
-  75% {
-    transform: translateY(0) scale(1.1) rotate(6deg);
+  85% {
     opacity: 1;
   }
   100% {
-    transform: translateY(-3vh) scale(1.6) rotate(0deg);
+    transform: translate3d(var(--dx), var(--dy), 0) rotate(var(--spin)) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Sparkles: pop in, turn and shrink away */
+@keyframes food-twinkle {
+  0%,
+  100% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(1) rotate(60deg);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(0.55) rotate(100deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes food-sparkle-out {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--dx), var(--dy), 0) scale(1) rotate(180deg);
     opacity: 0;
   }
 }

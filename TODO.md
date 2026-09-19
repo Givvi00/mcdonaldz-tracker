@@ -37,12 +37,12 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [ ] Achievement a tema (icone col cibo, nomi in italiano): in standby, da rivedere insieme
 
 ## Feedback sul tema (19/09/2026) — da fare, in attesa di parlarne
-- [ ] Griglia di emoji: farla scorrere un po' più veloce (ora una tessera ogni 50 s, in `src/components/FoodPattern.tsx`)
+- [x] Griglia delle card: icone disegnate, colonne sfalsate anche in verticale, inclinata di 10° e più veloce (una tessera ogni 28 s), senza icone tagliate (`FoodPattern.tsx`). Da verificare sul telefono
 - [ ] Livelli: nomi e soglie sono provvisori, da rivedere insieme (oggi: Assaggiatore, Cliente abituale, Divoratore di panini, Esperto del Drive, Maestro dei Mc, Leggenda dei Mc, Re del Drive, a 0/5/15/30/60/120/250 visite; in `src/utils/foodTheme.ts`)
-- [ ] Festone di achievement/livello: le patatine devono partire proprio dalla scatolina, verso l'alto, ed esplodere; durare qualche secondo in più; aggiungere brillantini/scintillii (in `src/components/FoodRain.tsx`)
-- [ ] Toast dell'achievement in alto: sembra sparito. Nei test in Chrome senza interfaccia compariva ma coperto dalla pioggia (la pioggia ha z-index 2500, il toast 2000): da verificare sul serio
-- [ ] Stats: farla un po' più pulita; valutare lo scontrino prima della griglia delle regioni
-- [ ] Icone: disegni SVG al posto delle emoji standard, in anteprima in `Desktop/mcdz-anteprima/anteprima-icone.html` (spessore del contorno 2 come prima, con cursore per provare; dolcetto tolto perché non esiste). Set: panino, Big Mac, patatine, bibita, nuggets, McFlurry, panino con il pollo, McToast, Filet-O-Fish (rifatto da foto), McWrap, Tasty Basket (alette e nuggets, senza patatine), Happy Meal (M gialla come manico, faccina al centro), tre alette con un osso ciascuno; sottiletta più grande su panino e Big Mac, formaggio e maionese ben visibili sul Filet-O-Fish, M dell'Happy Meal più stretta. McCafé, cornetto e salsa scartati. Griglia della card con sfalsamento anche verticale e icone senza tagli (il layout è nello script della pagina di anteprima, da riportare in `FoodPattern.tsx`). Da approvare, poi sostituire nella griglia, nella pioggia e sui marker
+- [x] Festone di achievement/livello: la scatola di patatine sale dal basso, le patatine schizzano in alto e scoppiano in icone, nastri e brillantini; dura circa 10 s (`FoodRain.tsx`). Da verificare sul telefono
+- [x] Toast dell'achievement: ora sta sopra la pioggia (z-index 3000) e dura 5,5 s. Da verificare sul telefono
+- [x] Stats: scontrino prima delle regioni, e delle regioni si vedono solo quelle iniziate, con il pulsante "Mostra tutte le regioni". Da verificare sul telefono
+- [x] Icone disegnate (13: panino, Big Mac, panino con il pollo, McToast, Filet-O-Fish, McWrap, patatine, nuggets, alette, Tasty Basket, bibita, McFlurry, Happy Meal) al posto delle emoji di cibo: griglia, pioggia, marker della mappa, popup, barra di progresso, vassoio vuoto, scontrino. I disegni stanno in `src/components/foodSprite.ts`, generato dalla pagina di anteprima. Restano emoji i livelli, le icone per tipo di locale e i badge degli achievement
 - Fatto e in attesa di conferma: punti tolti da Stats e Profilo (erano uguali alle visite), vassoio tolto da Stats (resta lo stato vuoto in Home)
 
 ## Idee medie (da valutare)

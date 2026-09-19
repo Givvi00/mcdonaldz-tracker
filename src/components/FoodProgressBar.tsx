@@ -1,3 +1,5 @@
+import { FoodIcon } from '@/components/FoodIcon';
+
 /** Progress bar filled with golden stripes, with a portion of fries riding at the head of the bar. */
 export function FoodProgressBar({ percentage }: { percentage: number }) {
   const pct = Math.min(100, Math.max(0, percentage));
@@ -18,10 +20,10 @@ export function FoodProgressBar({ percentage }: { percentage: number }) {
       />
       <span
         aria-hidden="true"
-        className="absolute top-1/2 text-lg leading-none drop-shadow transition-all"
+        className="absolute top-1/2 leading-none drop-shadow transition-all"
         style={{ left: `clamp(0.7rem, ${pct}%, calc(100% - 0.7rem))`, transform: 'translate(-50%, -50%) rotate(12deg)' }}
       >
-        🍟
+        <FoodIcon name="fries" size={24} />
       </span>
     </div>
   );
