@@ -3,6 +3,7 @@ import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { McdonaldCard } from '@/components/McdonaldCard';
 import { RegionSheet } from '@/components/RegionSheet';
 import { StatusFilter } from '@/components/StatusFilter';
+import { InstallPrompt } from '@/components/InstallPrompt';
 import { SodaGlass } from '@/components/SodaGlass';
 import { distanceKm } from '@/utils/geo';
 
@@ -97,6 +98,8 @@ export function Home() {
           </div>
         </div>
       </button>
+
+      <InstallPrompt />
 
       {/* Vicino a te */}
       <section className="px-4">

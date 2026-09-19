@@ -1,4 +1,5 @@
 import { Capacitor } from '@capacitor/core';
+import { isAppleTouchDevice } from '@/utils/platform';
 
 interface Destination {
   name: string;
@@ -7,10 +8,7 @@ interface Destination {
 }
 
 function isApple(): boolean {
-  if (Capacitor.getPlatform() === 'ios') return true;
-  const ua = navigator.userAgent;
-  // iPadOS reports itself as a Mac, so also check for a touch screen
-  return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  return Capacitor.getPlatform() === 'ios' || isAppleTouchDevice(navigator.userAgent, navigator.maxTouchPoints);
 }
 
 /**

@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { applyUpdate, checkForUpdate, type UpdateCheck } from '@/services/updates';
+import { refreshCatalog, type CatalogRefresh } from '@/services/catalogRefresh';
+import { InstallSection } from '@/components/InstallPrompt';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { exportData, importData } from '@/services/db';
 import { readBackupSummary, saveBackup } from '@/services/backup';
@@ -13,16 +15,23 @@ const THEME_OPTIONS: Array<{ value: ThemeMode; label: string; icon: string }> = 
 ];
 
 export function Profile() {
-  const { user, getVisitedCount } = useMcdonaldStore();
+  const { user, getVisitedCount, mcdonalds, catalogInfo } = useMcdonaldStore();
   const { mode, setMode } = useTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [updateCheck, setUpdateCheck] = useState<UpdateCheck | 'checking' | null>(null);
+  const [catalogCheck, setCatalogCheck] = useState<CatalogRefresh | null>(null);
+
+  const openCount = mcdonalds.filter(mc => mc.opened).length;
+  const catalogDate = new Date(catalogInfo.generatedAt).toLocaleDateString('it-IT', { dateStyle: 'short' });
 
   const buildLabel = `${new Date(__BUILD_DATE__).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' })} · ${__BUILD_ID__}`;
 
   const handleCheckUpdate = async () => {
     setUpdateCheck('checking');
-    setUpdateCheck(await checkForUpdate());
+    setCatalogCheck(null);
+    const [app, data] = await Promise.all([checkForUpdate(), refreshCatalog()]);
+    setUpdateCheck(app);
+    setCatalogCheck(data);
   };
 
   const handleExport = async () => {
@@ -95,6 +104,8 @@ export function Profile() {
         </div>
       </div>
 
+      <InstallSection />
+
       {/* Data Management */}
       <div>
         <h3 className="font-display font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">Gestisci Dati</h3>
@@ -125,6 +136,9 @@ export function Profile() {
       <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl text-center text-sm text-gray-600 dark:text-gray-400">
         <p className="font-display font-semibold mb-1">McDonaldz Tracker v{__APP_VERSION__}</p>
         <p className="text-xs opacity-75">Build {buildLabel}</p>
+        <p className="text-xs opacity-75 mt-1">
+          Elenco: {openCount} aperti su {mcdonalds.length} · {catalogInfo.source === 'downloaded' ? 'aggiornato il' : 'incluso nell\'app,'} {catalogDate}
+        </p>
         <button
           onClick={handleCheckUpdate}
           disabled={updateCheck === 'checking'}
@@ -149,6 +163,12 @@ export function Profile() {
                 ? 'L\'app Android si aggiorna installando il nuovo APK.'
                 : 'Impossibile controllare: sei offline?')}
           </p>
+        )}
+        {catalogCheck === 'updated' && (
+          <p className="text-xs mt-1 font-semibold" role="status">✓ Elenco ristoranti aggiornato</p>
+        )}
+        {catalogCheck === 'rejected' && (
+          <p className="text-xs mt-1 font-semibold" role="status">Nuovo elenco non applicato: non ha superato i controlli di sicurezza</p>
         )}
         <p className="text-xs opacity-75 mt-3">Track your McDonald's visits in Italy 🍔🗺️</p>
       </div>

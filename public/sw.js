@@ -1,7 +1,7 @@
 // Offline support for the installed web app.
 // - Pages: network first, fall back to the cached copy when offline.
 // - Same-origin files (hashed JS/CSS, icons): serve from cache and refresh in the background.
-// - version.json is never cached: the app uses it to detect a newer published build.
+// - version.json and data/ are never cached here: the app uses them to detect newer builds and newer restaurant lists.
 // Map tiles and Google Fonts are cross-origin and are left to the browser.
 //
 // The build id arrives as ?v=<id> on the script URL (see main.tsx). A new build therefore installs a new worker,
@@ -27,6 +27,8 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
   if (url.pathname.endsWith('/version.json')) return;
+  // The restaurant list is refreshed and cached by the app itself; the worker must never serve a stale copy
+  if (url.pathname.includes('/data/')) return;
 
   if (request.mode === 'navigate') {
     event.respondWith(

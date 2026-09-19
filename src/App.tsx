@@ -10,6 +10,7 @@ import { AchievementToast } from '@/components/AchievementToast';
 import { NearbyPrompt } from '@/components/NearbyPrompt';
 import { UpdateBanner } from '@/components/UpdateBanner';
 import { startUpdateChecks } from '@/services/updates';
+import { startCatalogRefresh } from '@/services/catalogRefresh';
 import './App.css';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
   }, []);
 
   useEffect(() => startUpdateChecks(), []);
+  useEffect(() => startCatalogRefresh(), []);
 
   useEffect(() => {
     setLocationStatus(geoStatus);

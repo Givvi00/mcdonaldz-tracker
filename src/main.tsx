@@ -2,7 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Capacitor } from '@capacitor/core'
 import App from './App'
+import { initInstallCapture } from '@/services/install'
 import './App.css'
+
+// Before rendering: the browser can offer installation very early, and only once
+initInstallCapture()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

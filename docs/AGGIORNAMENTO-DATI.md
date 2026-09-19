@@ -29,8 +29,18 @@ nuova raccolta a quello esistente con `npm run fetch-data`.
    ferma con codice 2 e non scrive niente: quasi certamente la raccolta è incompleta. Solo se sai che è giusto, aggiungi `--force`.
 4. **Scrittura:** stesso comando senza `--dry-run`.
 5. **Controlli:** `npm run test:data` e `npm run typecheck`.
-6. **Pubblicazione:** commit e `git push`. Il sito si aggiorna da solo e chi ha l'app installata vede il banner
-   "Nuova versione disponibile". **L'APK Android contiene una copia dei dati:** per averli aggiornati va ricompilato e reinstallato.
+6. **Pubblicazione:** commit e `git push`. Il sito si ripubblica da solo, e con lui il file `data/mcdonalds.json`.
+
+## Come arrivano i dati ai telefoni (automatico, nessuna azione dell'utente)
+
+Ogni pubblicazione espone `data/mcdonalds.json` (versione = impronta del contenuto). L'app installata, sia web sia APK:
+
+- lo controlla all'apertura, quando torna in primo piano, quando torna la rete e ogni 6 ore (se non è cambiato costa una risposta "304" di pochi byte);
+- lo **valida** prima di usarlo: struttura corretta, coordinate in Italia, nessun ID già noto che manca, non più di 300 ristoranti nuovi né più del 15% di chiusure in un colpo solo. Se non passa, viene scartato e resta l'elenco in uso (il motivo è nel log del browser);
+- se è valido lo applica subito sullo schermo e ne tiene una copia sul dispositivo, usata al lancio successivo anche senza rete;
+- una copia salvata più vecchia dell'elenco incluso in una nuova versione dell'app non viene mai usata al posto di quello.
+
+Il file `data/mcdonalds.json` esiste solo nel sito pubblicato (lo genera la build); l'elenco incluso nell'app è `shared/data/mcdonalds.json`.
 
 ## Da non fare
 

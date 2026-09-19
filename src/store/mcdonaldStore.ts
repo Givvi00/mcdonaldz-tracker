@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { McDonald, Visit, User, Achievement } from '@shared/types';
-import mcdonaldsData from '@shared/data/mcdonalds.json';
+import { pickInitialCatalog, type CatalogInfo } from '@/services/catalogBoot';
 import { getOrCreateUser, getVisits, addVisit, removeVisit } from '@/services/db';
 import { checkAndUnlockAchievements } from '@/services/achievements';
 import { distanceKm } from '@/utils/geo';
@@ -9,6 +9,8 @@ import type { Coords, GeoStatus } from '@/hooks/useGeolocation';
 
 interface AppStore {
   mcdonalds: McDonald[];
+  /** Which restaurant list is in use: the one bundled in the app or a newer one downloaded from the site */
+  catalogInfo: CatalogInfo;
   visits: Visit[];
   user: User | null;
   selectedTab: 'home' | 'map' | 'stats' | 'profile';
@@ -33,6 +35,7 @@ interface AppStore {
   focusOnMap: (mcdonaldId: string) => void;
   clearMapFocus: () => void;
   setUpdateAvailable: (available: boolean) => void;
+  setCatalog: (restaurants: McDonald[], info: CatalogInfo) => void;
   getFilteredMcdonalds: () => McDonald[];
   isVisited: (mcdonaldId: string) => boolean;
   getVisitedCount: () => number;
@@ -44,8 +47,11 @@ interface AppStore {
   getTopRegions: (limit?: number) => Array<{ region: string; total: number; visited: number; percentage: number }>;
 }
 
+const initialCatalog = pickInitialCatalog();
+
 export const useMcdonaldStore = create<AppStore>((set, get) => ({
-  mcdonalds: mcdonaldsData,
+  mcdonalds: initialCatalog.restaurants,
+  catalogInfo: initialCatalog.info,
   visits: [],
   user: null,
   selectedTab: 'home',
@@ -100,6 +106,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   focusOnMap: (mcdonaldId) => set({ mapFocusId: mcdonaldId, selectedTab: 'map' }),
   clearMapFocus: () => set({ mapFocusId: null }),
   setUpdateAvailable: (available) => set({ updateAvailable: available }),
+  setCatalog: (restaurants, info) => set({ mcdonalds: restaurants, catalogInfo: info }),
 
   getFilteredMcdonalds: () => {
     const { mcdonalds, searchQuery, filterRegion, filterVisited, visits } = get();
