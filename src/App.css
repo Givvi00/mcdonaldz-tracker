@@ -108,14 +108,14 @@ input, textarea, button {
 /* A fry flying from the box to where it bursts (--bl in vw, --bt in vh), pointing along its path */
 @keyframes food-rocket {
   0% {
-    transform: translate3d(0, 0, 0) rotate(var(--rot)) scaleY(0.7);
+    transform: translate3d(0, 0, 0) rotate(var(--rot0));
     opacity: 1;
   }
   90% {
     opacity: 1;
   }
   100% {
-    transform: translate3d(calc((var(--bl) - 50) * 1vw), calc(var(--bt) * 1vh - 88vh + 100px), 0) rotate(var(--rot)) scaleY(1);
+    transform: translate3d(calc((var(--bl) - 50) * 1vw - var(--ox)), calc(var(--bt) * 1vh - 88vh + 120px - var(--yt)), 0) rotate(var(--rot));
     opacity: 0;
   }
 }

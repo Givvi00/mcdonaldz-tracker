@@ -32,11 +32,22 @@ const BURSTS = [
   { left: 90, top: 54 },
   { left: 50, top: 46 },
 ];
+const LEVEL_AT = 2.6; // seconds: the level popup appears
 const BOX_SIZE = 120;
 const BOX_BOTTOM_VH = 12;
 const FRIES_IN_BOX = BURSTS.length;
 const launchAt = (i: number) => BIG.firstLaunch + i * BIG.launchEvery;
 const burstAt = (i: number) => launchAt(i) + BIG.flight;
+
+/** Position of fry i inside the box, in box units (48) and the px it maps to at BOX_SIZE */
+const fryGeom = (i: number) => {
+  const t = i / (FRIES_IN_BOX - 1);
+  const k = BOX_SIZE / 48;
+  const x = 8 + t * 29;
+  const h = i % 2 ? 24 : 21;
+  const y = i % 2 ? 5 : 8;
+  return { x, y, h, rot: Math.round(-15 + t * 30), offX: (x + 2.3 - 24) * k, top: y * k, height: h * k };
+};
 
 /** The box of fries drawn here (not from the sprite) so each fry can leave it on its own. */
 function FriesBox({ size }: { size: number }) {
@@ -44,17 +55,16 @@ function FriesBox({ size }: { size: number }) {
     <svg className="food-ico" width={size} height={size} viewBox="0 0 48 48" aria-hidden="true">
       <g fill="#FFC72C">
         {Array.from({ length: FRIES_IN_BOX }, (_, i) => {
-          const t = i / (FRIES_IN_BOX - 1);
-          const x = 8 + t * 29;
+          const { x, y, h, rot } = fryGeom(i);
           return (
             <rect
               key={i}
               x={x}
-              y={i % 2 ? 5 : 8}
+              y={y}
               width="4.6"
-              height={i % 2 ? 24 : 21}
+              height={h}
               rx="1.6"
-              transform={`rotate(${Math.round(-15 + t * 30)} ${x + 2.3} 20)`}
+              transform={`rotate(${rot} ${x + 2.3} 20)`}
               style={{ animation: `food-fry-out 0.01s linear ${launchAt(i)}s both` }}
             />
           );
@@ -104,8 +114,9 @@ export function FoodRain() {
     // One fry per burst leaves the box, pointing at where it will burst (rough phone proportions)
     const rockets = BURSTS.map((b, i) => {
       const dx = (b.left - 50) * 4.3;
-      const dy = b.top * 9 - 792 + 100;
-      return { key: i, left: b.left, top: b.top, rot: Math.round((Math.atan2(dx, -dy) * 180) / Math.PI), delay: launchAt(i) };
+      const dy = b.top * 9 - 792 + 60;
+      const g = fryGeom(i);
+      return { key: i, left: b.left, top: b.top, rot: Math.round((Math.atan2(dx, -dy) * 180) / Math.PI), rot0: g.rot, offX: g.offX, top0: g.top, height: g.height, delay: launchAt(i) };
     });
 
     // Each burst throws little fries outwards (pointing away from the centre) and little stars
@@ -154,9 +165,37 @@ export function FoodRain() {
   if (!celebration || !show) return null;
   const id = celebration.id;
   const level = celebration.level ? LEVELS[celebration.level - 1] : null;
+  const visited = useMcdonaldStore.getState().getVisitedCount();
 
   return (
     <div className="food-rain fixed inset-0 z-[2500] overflow-hidden pointer-events-none" aria-hidden="true">
+      {/* Under the box, so a fry comes out from behind its front */}
+      {show.rockets.map(p => (
+        <span
+          key={`${id}-s${p.key}`}
+          className="absolute"
+          style={
+            {
+              left: `calc(50% + ${p.offX}px)`,
+              top: `calc(${100 - BOX_BOTTOM_VH}vh - ${BOX_SIZE}px + ${p.top0}px)`,
+              marginLeft: -5.75,
+              width: 11.5,
+              height: p.height,
+              borderRadius: 4,
+              background: '#FFC72C',
+              border: '2px solid #3B2A22',
+              animation: `food-rocket ${BIG.flight}s cubic-bezier(0.2, 0.7, 0.35, 1) ${p.delay}s both`,
+              '--bl': p.left,
+              '--bt': p.top,
+              '--rot': `${p.rot}deg`,
+              '--rot0': `${p.rot0}deg`,
+              '--ox': `${p.offX}px`,
+              '--yt': `${p.top0}px`,
+            } as React.CSSProperties
+          }
+        />
+      ))}
+
       {celebration.big && (
         <div
           className="absolute"
@@ -172,29 +211,6 @@ export function FoodRain() {
           <FriesBox size={BOX_SIZE} />
         </div>
       )}
-
-      {show.rockets.map(p => (
-        <span
-          key={`${id}-s${p.key}`}
-          className="absolute"
-          style={
-            {
-              left: '50%',
-              top: `calc(${100 - BOX_BOTTOM_VH}vh - 100px)`,
-              marginLeft: -5,
-              width: 10,
-              height: 34,
-              borderRadius: 4,
-              background: '#FFC72C',
-              border: '2px solid #3B2A22',
-              animation: `food-rocket ${BIG.flight}s cubic-bezier(0.2, 0.7, 0.35, 1) ${p.delay}s both`,
-              '--bl': p.left,
-              '--bt': p.top,
-              '--rot': `${p.rot}deg`,
-            } as React.CSSProperties
-          }
-        />
-      ))}
 
       {show.fries.map(p => (
         <span
@@ -248,17 +264,30 @@ export function FoodRain() {
         </span>
       ))}
 
-      {level && (
+      {level && celebration.level && (
         <div
-          className="absolute rounded-3xl border-2 border-[#3B2A22] bg-mc-yellow px-6 py-3 text-center text-[#3B2A22] shadow-xl"
+          className="absolute w-[19rem] max-w-[86vw] overflow-hidden rounded-[2rem] border-[3px] border-[#3B2A22] bg-gradient-to-b from-[#FFD75E] to-mc-yellow text-center text-[#3B2A22] shadow-2xl"
           style={{
             left: '50%',
-            top: '50%',
-            animation: `level-pop ${BIG.time - 3000}ms ease-out 3000ms both`,
+            top: '48%',
+            animation: `level-pop ${BIG.time - LEVEL_AT * 1000}ms ease-out ${LEVEL_AT}s both`,
           }}
         >
-          <p className="font-display text-2xl font-bold leading-tight">Sei al livello {celebration.level}!</p>
-          <p className="text-sm font-semibold">{level.name}</p>
+          <div className="bg-mc-red px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-white">
+            Nuovo livello
+          </div>
+          <div className="px-5 pb-4 pt-3">
+            <div className="mx-auto -mt-0.5 flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#3B2A22] bg-mc-red font-display text-4xl font-bold text-white shadow-md ring-4 ring-white/70">
+              {celebration.level}
+            </div>
+            <p className="mt-2 font-display text-2xl font-bold leading-tight">Livello {celebration.level} raggiunto!</p>
+            <p className="mt-2 inline-block rounded-full bg-[#3B2A22] px-3 py-0.5 text-sm font-semibold text-mc-yellow">
+              {level.name}
+            </p>
+            <p className="mt-2 text-sm font-semibold">
+              Hai visitato {visited} {visited === 1 ? 'ristorante' : 'ristoranti'}
+            </p>
+          </div>
         </div>
       )}
 
