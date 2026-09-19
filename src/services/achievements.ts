@@ -1,5 +1,6 @@
 import type { McDonald, Visit, Achievement } from '@shared/types';
 import { getAchievements, addAchievement } from './db';
+import { countedMcdonalds } from '@/utils/catalog';
 
 export interface AchievementDef {
   id: string;
@@ -73,8 +74,10 @@ export function getAchievementProgress(
   const visitedIds = new Set(visits.map(v => v.mcdonaldId));
   const visitedByRegion: Record<string, number> = {};
   const totalByRegion: Record<string, number> = {};
+  // Open restaurants plus closed ones you visited: a closure never undoes a regional completion
+  const counted = countedMcdonalds(mcdonalds, visits);
 
-  for (const mc of mcdonalds) {
+  for (const mc of counted) {
     totalByRegion[mc.region] = (totalByRegion[mc.region] || 0) + 1;
     if (visitedIds.has(mc.id)) {
       visitedByRegion[mc.region] = (visitedByRegion[mc.region] || 0) + 1;
@@ -94,7 +97,7 @@ export function getAchievementProgress(
     }
   }
 
-  const totalRegions = new Set(mcdonalds.map(m => m.region)).size;
+  const totalRegions = new Set(counted.map(m => m.region)).size;
   const streak = longestActiveStreak(visits);
 
   return {

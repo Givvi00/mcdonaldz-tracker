@@ -1,6 +1,7 @@
 import type { McDonald } from '@shared/types';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { formatDistance } from '@/utils/geo';
+import { isNewlyAdded } from '@/utils/catalog';
 import { shortMcName } from '@/utils/format';
 
 interface Props {
@@ -64,7 +65,19 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
     >
       <div className="flex justify-between items-start gap-3">
         <div className="flex-1 min-w-0">
-          <h3 className="font-bold text-sm text-gray-800 dark:text-gray-100 truncate">{mc.name}</h3>
+          <h3 className="font-bold text-sm text-gray-800 dark:text-gray-100 truncate">
+            {mc.name}
+            {!mc.opened && (
+              <span className="ml-2 align-middle text-[0.6rem] font-bold uppercase tracking-wide text-white bg-stone-500 rounded-full px-2 py-0.5">
+                Chiuso
+              </span>
+            )}
+            {isNewlyAdded(mc) && (
+              <span className="ml-2 align-middle text-[0.6rem] font-bold uppercase tracking-wide text-gray-800 bg-mc-yellow rounded-full px-2 py-0.5">
+                Nuovo
+              </span>
+            )}
+          </h3>
           <p className="text-xs text-gray-500 dark:text-gray-400">{mc.city}, {mc.region}</p>
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{mc.address}</p>
         </div>

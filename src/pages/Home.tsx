@@ -18,8 +18,8 @@ export function Home() {
     isVisited,
     getRegionStats,
     userPosition,
-    mcdonalds,
     getVisitedCount,
+    getCountedTotal,
     getNearestMcdonalds,
     getNearestUnvisited,
     getTopRegions,
@@ -53,7 +53,7 @@ export function Home() {
   const visitedInRegion = splitVisited ? filtered.filter(mc => isVisited(mc.id)) : [];
   const remaining = splitVisited ? filtered.filter(mc => !isVisited(mc.id)) : filtered;
   const visitedCount = getVisitedCount();
-  const total = mcdonalds.length;
+  const total = getCountedTotal();
   const percentage = total > 0 ? Math.round((visitedCount / total) * 100) : 0;
   const nearest = getNearestMcdonalds(4);
   const topRegions = getTopRegions(3);

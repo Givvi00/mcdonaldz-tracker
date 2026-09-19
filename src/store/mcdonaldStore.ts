@@ -4,6 +4,7 @@ import mcdonaldsData from '@shared/data/mcdonalds.json';
 import { getOrCreateUser, getVisits, addVisit, removeVisit } from '@/services/db';
 import { checkAndUnlockAchievements } from '@/services/achievements';
 import { distanceKm } from '@/utils/geo';
+import { countedMcdonalds, visitedIdSet } from '@/utils/catalog';
 import type { Coords, GeoStatus } from '@/hooks/useGeolocation';
 
 interface AppStore {
@@ -35,6 +36,8 @@ interface AppStore {
   getFilteredMcdonalds: () => McDonald[];
   isVisited: (mcdonaldId: string) => boolean;
   getVisitedCount: () => number;
+  /** Denominator for the progress: open restaurants plus closed ones you visited */
+  getCountedTotal: () => number;
   getRegionStats: () => Array<{ region: string; total: number; visited: number; percentage: number }>;
   getNearestMcdonalds: (limit?: number) => Array<McDonald & { distanceKm: number }>;
   getNearestUnvisited: () => (McDonald & { distanceKm: number }) | null;
@@ -100,7 +103,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
 
   getFilteredMcdonalds: () => {
     const { mcdonalds, searchQuery, filterRegion, filterVisited, visits } = get();
-    let filtered = mcdonalds;
+    let filtered = countedMcdonalds(mcdonalds, visits);
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -131,16 +134,23 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   },
 
   getVisitedCount: () => {
-    const { visits } = get();
-    return visits.length;
+    // Only visits that match a known restaurant (open or closed), so the count can never exceed the total
+    const { mcdonalds, visits } = get();
+    const known = new Set(mcdonalds.map(mc => mc.id));
+    return new Set(visits.map(v => v.mcdonaldId).filter(id => known.has(id))).size;
+  },
+
+  getCountedTotal: () => {
+    const { mcdonalds, visits } = get();
+    return countedMcdonalds(mcdonalds, visits).length;
   },
 
   getRegionStats: () => {
     const { mcdonalds, visits } = get();
-    const visitedIds = new Set(visits.map(v => v.mcdonaldId));
+    const visitedIds = visitedIdSet(visits);
     const regions: Record<string, { total: number; visited: number }> = {};
 
-    for (const mc of mcdonalds) {
+    for (const mc of countedMcdonalds(mcdonalds, visits)) {
       if (!regions[mc.region]) {
         regions[mc.region] = { total: 0, visited: 0 };
       }
@@ -161,7 +171,9 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   getNearestMcdonalds: (limit = 6) => {
     const { mcdonalds, userPosition } = get();
     if (!userPosition) return [];
+    // Closed restaurants are never "near you": there is nothing to visit
     return mcdonalds
+      .filter(mc => mc.opened)
       .map(mc => ({ ...mc, distanceKm: distanceKm(userPosition.lat, userPosition.lon, mc.lat, mc.lon) }))
       .sort((a, b) => a.distanceKm - b.distanceKm)
       .slice(0, limit);
@@ -170,9 +182,9 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   getNearestUnvisited: () => {
     const { mcdonalds, userPosition, visits } = get();
     if (!userPosition) return null;
-    const visitedIds = new Set(visits.map(v => v.mcdonaldId));
+    const visitedIds = visitedIdSet(visits);
     const nearest = mcdonalds
-      .filter(mc => !visitedIds.has(mc.id))
+      .filter(mc => mc.opened && !visitedIds.has(mc.id))
       .map(mc => ({ ...mc, distanceKm: distanceKm(userPosition.lat, userPosition.lon, mc.lat, mc.lon) }))
       .sort((a, b) => a.distanceKm - b.distanceKm)[0];
     return nearest ?? null;

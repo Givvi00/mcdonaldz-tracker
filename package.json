@@ -8,7 +8,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "build": "vite build",
     "preview": "vite preview",
-    "fetch-data": "tsx scripts/fetch-mcdonalds.ts"
+    "fetch-data": "tsx scripts/fetch-mcdonalds.ts",
+    "test:data": "tsx scripts/test-merge.ts && tsx scripts/test-catalog.ts"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.2",

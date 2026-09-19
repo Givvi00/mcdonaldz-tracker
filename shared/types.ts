@@ -6,7 +6,12 @@ export interface McDonald {
   region: string;
   city: string;
   address: string;
+  /** true while the restaurant is open. Closed ones are kept (never deleted) so visit history stays valid. */
   opened: boolean;
+  /** ISO date (YYYY-MM-DD) when it was seen closing */
+  closedAt?: string;
+  /** ISO date (YYYY-MM-DD) when it first appeared in the list; absent for the original dataset */
+  addedAt?: string;
 }
 
 export interface Visit {

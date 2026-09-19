@@ -38,7 +38,7 @@ export function NearbyPrompt() {
 
     const dismissed = getDismissed();
     const nearest = mcdonalds
-      .filter(mc => !isVisited(mc.id) && !dismissed.has(mc.id))
+      .filter(mc => mc.opened && !isVisited(mc.id) && !dismissed.has(mc.id))
       .map(mc => ({ mc, d: distanceKm(userPosition.lat, userPosition.lon, mc.lat, mc.lon) }))
       .sort((a, b) => a.d - b.d)[0];
 

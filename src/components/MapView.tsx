@@ -6,6 +6,8 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { StatusFilter } from '@/components/StatusFilter';
+import { countedMcdonalds } from '@/utils/catalog';
+import { markerBackground, popupHtml } from '@/utils/mapMarkers';
 import { openDirections } from '@/utils/navigation';
 import type { McDonald } from '@shared/types';
 
@@ -55,10 +57,10 @@ export function MapView() {
   const results = useMemo<McDonald[]>(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    return mcdonalds
+    return countedMcdonalds(mcdonalds, visits)
       .filter(mc => mc.name.toLowerCase().includes(q) || mc.city.toLowerCase().includes(q))
       .slice(0, 8);
-  }, [query, mcdonalds]);
+  }, [query, mcdonalds, visits]);
 
   // Init map
   useEffect(() => {
@@ -96,11 +98,13 @@ export function MapView() {
 
     mcdonalds.forEach((mc) => {
       const visited = isVisited(mc.id);
+      // A closed restaurant only stays on the map if you visited it
+      if (!mc.opened && !visited) return;
       if (statusFilter !== null && visited !== statusFilter) return;
       const icon = L.divIcon({
         html: `
           <div style="
-            background: ${visited ? 'linear-gradient(135deg, #4ade80, #16a34a)' : 'linear-gradient(135deg, #DA291C, #a8180d)'};
+            background: ${markerBackground(mc, visited)};
             color: white;
             border-radius: 50%;
             width: 30px;
@@ -121,40 +125,7 @@ export function MapView() {
       });
 
       const marker = L.marker([mc.lat, mc.lon], { icon, mcVisited: visited } as L.MarkerOptions);
-      marker.bindPopup(`
-        <div style="font-size: 13px; min-width: 160px;">
-          <strong style="font-family: 'Fredoka', sans-serif; font-size: 14px;">${mc.name}</strong><br/>
-          <span style="color: #6b7280;">${mc.city}, ${mc.region}</span><br/>
-          <div style="display: flex; gap: 6px; margin-top: 8px;">
-            <button id="toggle-${mc.id}" style="
-              padding: 6px 12px;
-              background: ${visited ? '#16a34a' : '#DA291C'};
-              color: white;
-              border: none;
-              border-radius: 999px;
-              cursor: pointer;
-              font-weight: 600;
-              font-family: 'Fredoka', sans-serif;
-              font-size: 12px;
-            ">
-              ${visited ? '✓ Visitato' : '🍟 Segna visita'}
-            </button>
-            <button id="directions-${mc.id}" style="
-              padding: 6px 12px;
-              background: #FFC72C;
-              color: #2f2522;
-              border: none;
-              border-radius: 999px;
-              cursor: pointer;
-              font-weight: 600;
-              font-family: 'Fredoka', sans-serif;
-              font-size: 12px;
-            ">
-              🧭 Portami lì
-            </button>
-          </div>
-        </div>
-      `);
+      marker.bindPopup(popupHtml(mc, visited));
 
       marker.on('popupopen', () => {
         const btn = document.getElementById(`toggle-${mc.id}`);

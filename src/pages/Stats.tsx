@@ -6,7 +6,7 @@ import { SodaGlass } from '@/components/SodaGlass';
 import type { Achievement } from '@shared/types';
 
 export function Stats() {
-  const { user, visits, getVisitedCount, getRegionStats, mcdonalds } = useMcdonaldStore();
+  const { user, visits, getVisitedCount, getCountedTotal, getRegionStats, mcdonalds } = useMcdonaldStore();
   const [achievements, setAchievements] = useState<Achievement[]>([]);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export function Stats() {
 
   const visitedCount = getVisitedCount();
   const regionStats = getRegionStats();
-  const totalMcdonalds = mcdonalds.length;
+  const totalMcdonalds = getCountedTotal();
   const progress = getAchievementProgress(mcdonalds, visits);
 
   return (

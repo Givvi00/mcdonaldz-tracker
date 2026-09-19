@@ -36,7 +36,11 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 ## Idee grandi (da valutare)
 - [ ] Notifica quando passi vicino a un Mc non visitato (Capacitor local notifications + posizione in background). Il popup di oggi compare solo all'apertura dell'app e una volta sola: è il passo più coerente col principio guida
 - [ ] Check-in verificato dal GPS (visita solo entro ~200 m), come modalità opzionale
-- [ ] Aggiornamento dati: rilevare Mc chiusi/nuovi con `fetch-data` senza perdere le visite
+- [x] Aperture e chiusure, fondamenta: ID stabili (l'elenco non si rinumera più), stato aperto/chiuso con data, chiusi visitati che continuano a contare, chiusi mai visitati che spariscono, etichette "Chiuso" e "Nuovo", nuovo `fetch-data` che unisce la raccolta all'elenco con rapporto delle differenze e freno al 5%. Vedi `docs/AGGIORNAMENTO-DATI.md`. Test: `npm run test:data`
+- [ ] Primo aggiornamento vero dell'elenco: raccolta da mcdonalds.it (browser reale) e `npm run fetch-data -- raccolta.json --dry-run`. Attenzione: il file attuale è stato generato con il vecchio script, quindi la prima unione può segnalare qualche "modificato" da controllare
+- [ ] Dati aggiornabili senza ricompilare l'APK: l'app scarica `mcdonalds.json` dal sito, lo tiene in memoria locale e usa quello incluso come riserva
+- [ ] Promemoria o automazione per l'aggiornamento periodico dell'elenco
+- [ ] Popup della mappa: in sviluppo (React StrictMode) e in schede in background la mappa può restare a metà animazione e il popup non aprirsi; su telefono funziona. Se capita di nuovo su un dispositivo reale, indagare `zoomToShowLayer` con i marker ricreati
 - [x] iPhone: PWA su GitHub Pages (manifest, icone, service worker offline, deploy automatico a ogni push su master): https://givvi00.github.io/mcdonaldz-tracker/ . Su iPhone: Safari → Condividi → "Aggiungi alla schermata Home". I dati dell'iPhone sono separati da quelli di Android: si trasferiscono con Esporta/Importa
 - [x] Aggiornamenti della web app: `version.json` a ogni build; banner "Nuova versione disponibile" (all'apertura, al ritorno in primo piano, alla riconnessione e ogni 30 min); Profilo con versione, data e codice build + "Controlla aggiornamenti"; cache del service worker per build, con pulizia delle vecchie
 - [x] Controllo dei tipi: `npm run typecheck` (prima `tsc -p tsconfig.app.json` non guardava nessun file di `src`); ora gira anche nella pubblicazione su Pages

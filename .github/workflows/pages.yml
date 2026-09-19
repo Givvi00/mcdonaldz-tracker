@@ -26,6 +26,8 @@ jobs:
       - run: npm ci
       - name: Type check
         run: npm run typecheck
+      - name: Data tests
+        run: npm run test:data
       - name: Build (served from /<repo>/)
         run: npm run build
         env:
