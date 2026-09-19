@@ -14,6 +14,27 @@ function dismissedRecently(): boolean {
   }
 }
 
+/** Copies the app address so it can be pasted into Safari. */
+function CopyLinkButton() {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(location.origin + location.pathname);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+  };
+  return (
+    <button
+      onClick={copy}
+      className="mt-3 rounded-full bg-mc-red text-white text-sm font-bold px-5 py-2 active:scale-95 transition-transform"
+    >
+      {copied ? '✓ Link copiato' : 'Copia link'}
+    </button>
+  );
+}
+
 /** How to install, for each situation. */
 function Instructions({ hint, onInstall }: { hint: InstallHint; onInstall: () => void }) {
   if (hint === 'prompt') {
@@ -36,6 +57,21 @@ function Instructions({ hint, onInstall }: { hint: InstallHint; onInstall: () =>
         <li>Scegli <strong>«Aggiungi alla schermata Home»</strong></li>
         <li>Tocca <strong>«Aggiungi»</strong></li>
       </ol>
+    );
+  }
+  if (hint === 'ios-other') {
+    return (
+      <>
+        <p className="text-sm text-gray-600 dark:text-gray-300">
+          Su iPhone l'installazione funziona da <strong>Safari</strong>, non da Chrome. Copia il link, aprilo in Safari e lì:
+        </p>
+        <ol className="mt-2 text-sm text-gray-600 dark:text-gray-300 list-decimal pl-5 space-y-1">
+          <li>Tocca <strong>Condividi</strong> ⬆️ (in basso)</li>
+          <li>Scegli <strong>«Aggiungi alla schermata Home»</strong></li>
+          <li>Tocca <strong>«Aggiungi»</strong></li>
+        </ol>
+        <CopyLinkButton />
+      </>
     );
   }
   if (hint === 'android-manual') {

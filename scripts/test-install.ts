@@ -15,6 +15,8 @@ function test(name: string, fn: () => void) {
 const UA = {
   iphoneSafari: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1',
   iphoneChrome: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/126.0.6478.153 Mobile/15E148 Safari/604.1',
+  iphoneFirefox: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/127.0 Mobile/15E148 Safari/605.1.15',
+  iphoneEdge: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 EdgiOS/126.2592.87 Mobile/15E148 Safari/605.1.15',
   iphoneInstagram: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Instagram 330.0.0.29.109 (iPhone14,5; iOS 17_5; it_IT; it-IT; scale=3.00; 1170x2532; 570239867)',
   ipadDesktopMode: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15',
   macSafari: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15',
@@ -35,8 +37,10 @@ test('iPhone con Safari: istruzioni Condividi → Aggiungi alla schermata Home',
   assert.equal(installHint(env(UA.iphoneSafari)), 'ios');
 });
 
-test('iPhone con Chrome: stesse istruzioni (da iOS 16.4 anche gli altri browser possono aggiungere)', () => {
-  assert.equal(installHint(env(UA.iphoneChrome)), 'ios');
+test("iPhone con Chrome, Firefox o Edge: si rimanda a Safari, dove l'installazione funziona davvero", () => {
+  assert.equal(installHint(env(UA.iphoneChrome)), 'ios-other');
+  assert.equal(installHint(env(UA.iphoneFirefox)), 'ios-other');
+  assert.equal(installHint(env(UA.iphoneEdge)), 'ios-other');
 });
 
 test('iPhone dentro Instagram: chiede di aprire nel browser', () => {

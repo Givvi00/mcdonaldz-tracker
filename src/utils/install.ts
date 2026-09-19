@@ -1,15 +1,16 @@
-import { isAndroid, isAppleTouchDevice, isInAppBrowser } from '@/utils/platform';
+import { isAndroid, isAppleTouchDevice, isInAppBrowser, isIosOtherBrowser } from '@/utils/platform';
 
 /**
  * What to tell the user about installing the web app on their home screen:
  * - installed: already running as an installed app, nothing to do
  * - prompt: the browser offers a one-tap install (Chrome on Android and desktop)
  * - ios: iPhone/iPad, where installing is Share → Add to Home Screen
+ * - ios-other: iPhone/iPad with Chrome, Firefox or Edge as the browser: installing works reliably only from Safari
  * - android-manual: Android without a one-tap offer, so the browser menu is needed
  * - inapp: inside another app's browser, which cannot install anything: open it in the real browser first
  * - none: nothing useful to show (the Android app, or a desktop browser without an install offer)
  */
-export type InstallHint = 'installed' | 'prompt' | 'ios' | 'android-manual' | 'inapp' | 'none';
+export type InstallHint = 'installed' | 'prompt' | 'ios' | 'ios-other' | 'android-manual' | 'inapp' | 'none';
 
 export interface InstallEnv {
   ua: string;
@@ -27,7 +28,7 @@ export function installHint(env: InstallEnv): InstallHint {
   if (env.standalone) return 'installed';
   if (isInAppBrowser(env.ua)) return 'inapp';
   if (env.hasPrompt) return 'prompt';
-  if (isAppleTouchDevice(env.ua, env.maxTouchPoints)) return 'ios';
+  if (isAppleTouchDevice(env.ua, env.maxTouchPoints)) return isIosOtherBrowser(env.ua) ? 'ios-other' : 'ios';
   if (isAndroid(env.ua)) return 'android-manual';
   return 'none';
 }
