@@ -79,3 +79,8 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [ ] **Recensioni**: per ogni ristorante visitato, un voto da 1 a 5 diviso per categorie (pulizia, bellezza del Mc, spazi esterni, ecc.; categorie da definire)
 - [ ] **Data di visita**: registrare quando si è stati in ogni ristorante (modificabile)
 - [ ] **Ristorante "verificato"**: gestione dello stato verificato, da spiegare con calma
+
+## Roadmap, livelli e collezionabili (idea del 20/09/2026)
+- [ ] **Roadmap dei livelli** nella pagina Stats: tutti i livelli in fila, come un percorso. Raggiunti: nome e icona in chiaro. Prossimo: in evidenza con barra e "mancano N visite". Futuri: sagoma con lucchetto, "???" al posto del nome e solo la soglia di ristoranti visitati. Da decidere: se il nome del prossimo livello si vede già (consigliato sì) e le soglie (proposta: 5, 15, 30, 60, 120, 250, 500, 828 = tutti)
+- [ ] **Achievement rifatti**: nomi in italiano con tono ironico da fast food, icone disegnate a tema cibo, anteprima html da approvare prima
+- [ ] **Regioni e collezionabili**: completamento delle regioni (es. "Abruzzo completato" come figurina/medaglia), da integrare con la roadmap. Altre idee di collezionabili da valutare insieme
