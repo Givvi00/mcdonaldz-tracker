@@ -9,7 +9,7 @@ import { distanceKm } from '@/utils/geo';
 import { FoodPattern } from '@/components/FoodPattern';
 import { FoodProgressBar } from '@/components/FoodProgressBar';
 import { LevelPill } from '@/components/LevelPill';
-import { EmptyTray } from '@/components/Tray';
+import { EmptyTray } from '@/components/EmptyTray';
 
 type SortBy = 'distance' | 'name';
 

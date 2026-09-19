@@ -6,7 +6,6 @@ import { SodaGlass } from '@/components/SodaGlass';
 import { FoodPattern } from '@/components/FoodPattern';
 import { FoodProgressBar } from '@/components/FoodProgressBar';
 import { LevelPill } from '@/components/LevelPill';
-import { Tray } from '@/components/Tray';
 import { Receipt } from '@/components/Receipt';
 import type { Achievement } from '@shared/types';
 
@@ -40,14 +39,6 @@ export function Stats() {
           <LevelPill visited={visitedCount} />
         </div>
       </div>
-
-      {/* Punti */}
-      <div className="bg-mc-yellow text-gray-800 rounded-2xl p-4 text-center shadow-sm">
-        <p className="text-sm font-semibold opacity-75">Punti Totali</p>
-        <p className="text-4xl font-display font-bold">{user?.totalPoints || 0}⭐</p>
-      </div>
-
-      <Tray visited={visitedCount} />
 
       {/* Region Stats */}
       <div>

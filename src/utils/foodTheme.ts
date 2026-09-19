@@ -3,7 +3,7 @@ import type { McDonald } from '@shared/types';
 /** Food used for the decorations: burger, fries, drink, soft serve (McFlurry), chicken (nuggets), pie */
 export const FOOD_EMOJI = ['🍔', '🍟', '🥤', '🍦', '🍗', '🥧'] as const;
 
-// ---- Levels: named after the menu, from the number of restaurants visited ----
+// ---- Levels: ranks earned with the number of restaurants visited ----
 
 export interface Level {
   min: number;
@@ -12,12 +12,12 @@ export interface Level {
 }
 
 export const LEVELS: readonly Level[] = [
-  { min: 0, name: 'Happy Meal', icon: '🧸' },
-  { min: 5, name: 'Cheeseburger', icon: '🍔' },
-  { min: 15, name: 'Menu Medium', icon: '🍟' },
-  { min: 30, name: 'Big Mac', icon: '🍔' },
-  { min: 60, name: 'Maxi Menu', icon: '🥤' },
-  { min: 120, name: 'Party Box', icon: '🎉' },
+  { min: 0, name: 'Assaggiatore', icon: '🥤' },
+  { min: 5, name: 'Cliente abituale', icon: '🍟' },
+  { min: 15, name: 'Divoratore di panini', icon: '🍔' },
+  { min: 30, name: 'Esperto del Drive', icon: '🚗' },
+  { min: 60, name: 'Maestro dei Mc', icon: '🎖️' },
+  { min: 120, name: 'Leggenda dei Mc', icon: '🏆' },
   { min: 250, name: 'Re del Drive', icon: '👑' },
 ];
 
@@ -25,6 +25,8 @@ export interface LevelInfo {
   level: Level;
   /** Position in LEVELS, from 0 */
   index: number;
+  /** Level number as shown to people, from 1 */
+  number: number;
   next: Level | null;
   /** Visits still needed for the next level (0 at the top level) */
   toNext: number;
@@ -37,29 +39,7 @@ export function levelInfo(visited: number): LevelInfo {
     if (count >= LEVELS[i].min) index = i;
   }
   const next = LEVELS[index + 1] ?? null;
-  return { level: LEVELS[index], index, next, toNext: next ? next.min - count : 0 };
-}
-
-// ---- Tray: fills up with food as the visits grow ----
-
-export interface TraySlot {
-  emoji: string;
-  label: string;
-  /** Visits needed to put it on the tray */
-  min: number;
-}
-
-export const TRAY_SLOTS: readonly TraySlot[] = [
-  { emoji: '🥤', label: 'Bibita', min: 1 },
-  { emoji: '🍟', label: 'Patatine', min: 5 },
-  { emoji: '🍔', label: 'Panino', min: 15 },
-  { emoji: '🍗', label: 'Nuggets', min: 30 },
-  { emoji: '🍦', label: 'McFlurry', min: 60 },
-  { emoji: '🥧', label: 'Dolcetto', min: 120 },
-];
-
-export function trayFilled(visited: number): boolean[] {
-  return TRAY_SLOTS.map(slot => visited >= slot.min);
+  return { level: LEVELS[index], index, number: index + 1, next, toNext: next ? next.min - count : 0 };
 }
 
 // ---- Restaurant kind, read from the name and address in the data ----

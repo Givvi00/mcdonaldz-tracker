@@ -7,6 +7,8 @@ import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { exportData, importData } from '@/services/db';
 import { readBackupSummary, saveBackup } from '@/services/backup';
 import { useTheme, type ThemeMode } from '@/hooks/useTheme';
+import { FoodPattern } from '@/components/FoodPattern';
+import { levelInfo } from '@/utils/foodTheme';
 import { choosesMapApp, getSavedMapApp, saveMapApp } from '@/utils/navigation';
 import { MAP_APPS, type MapApp } from '@/utils/directions';
 
@@ -19,6 +21,7 @@ const THEME_OPTIONS: Array<{ value: ThemeMode; label: string; icon: string }> = 
 export function Profile() {
   const { user, getVisitedCount, mcdonalds, catalogInfo } = useMcdonaldStore();
   const { mode, setMode } = useTheme();
+  const level = levelInfo(getVisitedCount());
   const [mapApp, setMapApp] = useState<MapApp | null>(getSavedMapApp);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [updateCheck, setUpdateCheck] = useState<UpdateCheck | 'checking' | null>(null);
@@ -65,10 +68,7 @@ export function Profile() {
     <div className="flex flex-col gap-6 pb-24 px-4 py-6">
       {/* User Info */}
       <div className="relative overflow-hidden bg-gradient-to-br from-mc-red to-mc-red-dark text-white rounded-3xl p-6 text-center shadow-lg shadow-red-900/20">
-        <div
-          className="absolute inset-0 opacity-[0.15] pointer-events-none"
-          style={{ backgroundImage: 'radial-gradient(circle, white 1.5px, transparent 1.5px)', backgroundSize: '18px 18px' }}
-        />
+        <FoodPattern />
         <div className="relative text-4xl mb-2 w-16 h-16 mx-auto flex items-center justify-center rounded-full bg-mc-yellow shadow-md">👤</div>
         <p className="relative text-sm opacity-90 font-display font-semibold">Profilo Utente</p>
         <p className="relative text-xs opacity-75 mt-2">ID: {user?.id.slice(0, 8)}...</p>
@@ -81,8 +81,10 @@ export function Profile() {
           <p className="text-3xl font-display font-bold text-mc-red mt-2">{getVisitedCount()}</p>
         </div>
         <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl text-center border border-gray-200 dark:border-gray-800">
-          <p className="text-sm text-gray-600 dark:text-gray-400 font-semibold">Punti</p>
-          <p className="text-3xl font-display font-bold text-mc-yellow mt-2">{user?.totalPoints || 0}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 font-semibold">Livello {level.number}</p>
+          <p className="text-lg font-display font-bold text-mc-red dark:text-red-400 mt-2 leading-tight">
+            {level.level.icon} {level.level.name}
+          </p>
         </div>
       </div>
 

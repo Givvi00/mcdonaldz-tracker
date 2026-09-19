@@ -17,7 +17,7 @@ const PAPER = '#FFFDF7';
 /** The visits as a till receipt: one line per region visited, a total, the level. The paper stays light in dark mode, like real paper. */
 export function Receipt({ rows, visited, total }: Props) {
   const lines = rows.filter(r => r.visited > 0).sort((a, b) => b.visited - a.visited || a.region.localeCompare(b.region, 'it'));
-  const { level } = levelInfo(visited);
+  const { level, number } = levelInfo(visited);
   const today = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
   return (
@@ -54,7 +54,7 @@ export function Receipt({ rows, visited, total }: Props) {
             </span>
           </p>
           <p className="mt-1 flex justify-between text-[0.75rem]">
-            <span>Menu</span>
+            <span>Livello {number}</span>
             <span>
               {level.icon} {level.name}
             </span>

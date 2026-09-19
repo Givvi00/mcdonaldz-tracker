@@ -36,6 +36,15 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [x] Tema McDonald's (19/09/2026): griglia sfalsata di emoji sulle card grandi, barra di progresso con le patatine, livelli col nome del menu (Happy Meal … Re del Drive), pioggia di cibo alla visita (più fitta per livello/achievement), vassoio che si riempie in Stats, scontrino in Stats, icone per tipo di locale (aeroporto, stazione, area di servizio, drive, centro commerciale), emoji diverse sui marker della mappa. Da verificare sul telefono
 - [ ] Achievement a tema (icone col cibo, nomi in italiano): in standby, da rivedere insieme
 
+## Feedback sul tema (19/09/2026) — da fare, in attesa di parlarne
+- [ ] Griglia di emoji: farla scorrere un po' più veloce (ora una tessera ogni 50 s, in `src/components/FoodPattern.tsx`)
+- [ ] Livelli: nomi e soglie sono provvisori, da rivedere insieme (oggi: Assaggiatore, Cliente abituale, Divoratore di panini, Esperto del Drive, Maestro dei Mc, Leggenda dei Mc, Re del Drive, a 0/5/15/30/60/120/250 visite; in `src/utils/foodTheme.ts`)
+- [ ] Festone di achievement/livello: le patatine devono partire proprio dalla scatolina, verso l'alto, ed esplodere; durare qualche secondo in più; aggiungere brillantini/scintillii (in `src/components/FoodRain.tsx`)
+- [ ] Toast dell'achievement in alto: sembra sparito. Nei test in Chrome senza interfaccia compariva ma coperto dalla pioggia (la pioggia ha z-index 2500, il toast 2000): da verificare sul serio
+- [ ] Stats: farla un po' più pulita; valutare lo scontrino prima della griglia delle regioni
+- [ ] Icone: disegni SVG al posto delle emoji standard, in anteprima in `Desktop/mcdz-anteprima/anteprima-icone.html` (spessore del contorno 2 come prima, con cursore per provare; dolcetto tolto perché non esiste). Set: panino, Big Mac, patatine, bibita, nuggets, McFlurry, panino con il pollo, McToast, Filet-O-Fish (rifatto da foto), McWrap, Tasty Basket (alette e nuggets, senza patatine), Happy Meal (M gialla come manico, faccina al centro), tre alette con un osso ciascuno; sottiletta più grande su panino e Big Mac, formaggio e maionese ben visibili sul Filet-O-Fish, M dell'Happy Meal più stretta. McCafé, cornetto e salsa scartati. Griglia della card con sfalsamento anche verticale e icone senza tagli (il layout è nello script della pagina di anteprima, da riportare in `FoodPattern.tsx`). Da approvare, poi sostituire nella griglia, nella pioggia e sui marker
+- Fatto e in attesa di conferma: punti tolti da Stats e Profilo (erano uguali alle visite), vassoio tolto da Stats (resta lo stato vuoto in Home)
+
 ## Idee medie (da valutare)
 - [ ] Diario delle visite: data, nota, cosa hai mangiato, foto
 - [ ] Card da condividere ("17/828 Mc, Toscana 23%") come immagine

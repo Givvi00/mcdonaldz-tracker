@@ -1,9 +1,9 @@
-// Checks the McDonald's-themed rules: levels, tray, restaurant kind, map marker emoji.
+// Checks the McDonald's-themed rules: levels, restaurant kind, map marker emoji.
 // Run with: npm run test:data
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { markerSymbol, popupHtml } from '../src/utils/mapMarkers';
-import { FOOD_EMOJI, LEVELS, TRAY_SLOTS, levelInfo, markerEmoji, restaurantKind, trayFilled } from '../src/utils/foodTheme';
+import { FOOD_EMOJI, LEVELS, levelInfo, markerEmoji, restaurantKind } from '../src/utils/foodTheme';
 
 let passed = 0;
 function test(name: string, fn: () => void) {
@@ -19,18 +19,20 @@ test('livelli: soglie in ordine crescente, si parte da zero', () => {
   for (let i = 1; i < LEVELS.length; i++) assert.ok(LEVELS[i].min > LEVELS[i - 1].min);
 });
 
-test('livello: 0 visite è Happy Meal e mancano 5 al successivo', () => {
+test('livello: 0 visite è il livello 1 e mancano 5 al successivo', () => {
   const info = levelInfo(0);
-  assert.equal(info.level.name, 'Happy Meal');
-  assert.equal(info.next?.name, 'Cheeseburger');
+  assert.equal(info.level.name, 'Assaggiatore');
+  assert.equal(info.number, 1);
+  assert.equal(info.next?.name, 'Cliente abituale');
   assert.equal(info.toNext, 5);
 });
 
 test('livello: la soglia esatta sale di livello, quella prima no', () => {
-  assert.equal(levelInfo(4).level.name, 'Happy Meal');
-  assert.equal(levelInfo(5).level.name, 'Cheeseburger');
-  assert.equal(levelInfo(14).level.name, 'Cheeseburger');
-  assert.equal(levelInfo(15).level.name, 'Menu Medium');
+  assert.equal(levelInfo(4).level.name, 'Assaggiatore');
+  assert.equal(levelInfo(5).level.name, 'Cliente abituale');
+  assert.equal(levelInfo(5).number, 2);
+  assert.equal(levelInfo(14).level.name, 'Cliente abituale');
+  assert.equal(levelInfo(15).level.name, 'Divoratore di panini');
   assert.equal(levelInfo(14).toNext, 1);
 });
 
@@ -43,18 +45,8 @@ test('livello massimo: nessun successivo, nulla da guadagnare', () => {
 });
 
 test('livello: valori strani (negativi, decimali) non rompono nulla', () => {
-  assert.equal(levelInfo(-3).level.name, 'Happy Meal');
-  assert.equal(levelInfo(5.9).level.name, 'Cheeseburger');
-});
-
-test('vassoio: si riempie man mano e non perde pezzi', () => {
-  assert.deepEqual(trayFilled(0), TRAY_SLOTS.map(() => false));
-  assert.equal(trayFilled(1).filter(Boolean).length, 1);
-  assert.equal(trayFilled(5).filter(Boolean).length, 2);
-  assert.equal(trayFilled(9999).every(Boolean), true);
-  for (let v = 1; v < 200; v++) {
-    assert.ok(trayFilled(v).filter(Boolean).length >= trayFilled(v - 1).filter(Boolean).length);
-  }
+  assert.equal(levelInfo(-3).level.name, 'Assaggiatore');
+  assert.equal(levelInfo(5.9).level.name, 'Cliente abituale');
 });
 
 test('tipo di locale: riconosciuto dal nome e dall\'indirizzo', () => {
