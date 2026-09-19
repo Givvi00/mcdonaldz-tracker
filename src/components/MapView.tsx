@@ -7,7 +7,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { StatusFilter } from '@/components/StatusFilter';
 import { countedMcdonalds } from '@/utils/catalog';
-import { markerBackground, popupHtml } from '@/utils/mapMarkers';
+import { markerBackground, markerSymbol, popupHtml } from '@/utils/mapMarkers';
 import { openDirections } from '@/utils/navigation';
 import type { McDonald } from '@shared/types';
 
@@ -117,7 +117,7 @@ export function MapView() {
             box-shadow: 0 2px 6px rgba(0,0,0,0.35);
             cursor: pointer;
           ">
-            ${visited ? '✓' : '🍟'}
+            ${markerSymbol(mc, visited)}
           </div>
         `,
         iconSize: [30, 30],

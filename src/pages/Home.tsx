@@ -6,6 +6,10 @@ import { StatusFilter } from '@/components/StatusFilter';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { SodaGlass } from '@/components/SodaGlass';
 import { distanceKm } from '@/utils/geo';
+import { FoodPattern } from '@/components/FoodPattern';
+import { FoodProgressBar } from '@/components/FoodProgressBar';
+import { LevelPill } from '@/components/LevelPill';
+import { EmptyTray } from '@/components/Tray';
 
 type SortBy = 'distance' | 'name';
 
@@ -76,26 +80,15 @@ export function Home() {
         onClick={() => setSelectedTab('stats')}
         className="relative mx-4 mt-4 text-left bg-gradient-to-br from-mc-red to-red-700 text-white rounded-3xl p-5 shadow-lg shadow-red-900/20 active:scale-[0.99] transition-transform overflow-hidden"
       >
-        <div
-          className="absolute inset-0 opacity-[0.15] pointer-events-none"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle, white 1.5px, transparent 1.5px)',
-            backgroundSize: '18px 18px',
-          }}
-        />
+        <FoodPattern />
         <div className="relative">
           <p className="text-xs font-display font-semibold uppercase tracking-wide opacity-80">Il tuo progresso</p>
           <div className="flex items-end gap-3 mt-1">
             <p className="text-4xl font-display font-bold">{visitedCount}</p>
             <p className="text-sm opacity-80 mb-1">/ {total} McDonald's · {percentage}%</p>
           </div>
-          <div className="w-full bg-white/25 rounded-full h-2 mt-3">
-            <div
-              className="bg-mc-yellow h-2 rounded-full transition-all"
-              style={{ width: `${percentage}%` }}
-            />
-          </div>
+          <FoodProgressBar percentage={percentage} />
+          <LevelPill visited={visitedCount} />
         </div>
       </button>
 
@@ -227,11 +220,7 @@ export function Home() {
         />
 
         {filtered.length === 0 ? (
-          <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-            <p className="text-4xl mb-2">🍟</p>
-            <p className="text-lg font-display font-semibold text-gray-700 dark:text-gray-300">Nessun McDonald's trovato</p>
-            <p className="text-sm">Prova a cambiare i filtri</p>
-          </div>
+          <EmptyTray title="Il vassoio è vuoto" hint="Nessun McDonald's con questi filtri: prova a cambiarli" />
         ) : (
           <div className="space-y-3">
             <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold px-1">

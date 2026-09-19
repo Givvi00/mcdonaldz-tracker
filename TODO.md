@@ -32,7 +32,9 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [x] Stats e achievement rivisti con la nuova palette in chiaro e scuro (testo rosso piccolo più chiaro in scuro per il contrasto). Restano in inglese i nomi degli achievement ("Local Hero", "7 Day Streak"…) e il titolo "Achievements"
 - [x] Tema della mappa: tile ritoccati in tono caldo sia in chiaro sia in scuro
 - [ ] Icona/splash monocromatica per Android 13+ (icona tematica) e barra di stato coordinata col tema
-- [ ] Uno stato vuoto/illustrazioni con lo stesso stile (bicchiere, patatine) per le liste vuote
+- [x] Stato vuoto con il vassoio (lista senza risultati in Home)
+- [x] Tema McDonald's (19/09/2026): griglia sfalsata di emoji sulle card grandi, barra di progresso con le patatine, livelli col nome del menu (Happy Meal … Re del Drive), pioggia di cibo alla visita (più fitta per livello/achievement), vassoio che si riempie in Stats, scontrino in Stats, icone per tipo di locale (aeroporto, stazione, area di servizio, drive, centro commerciale), emoji diverse sui marker della mappa. Da verificare sul telefono
+- [ ] Achievement a tema (icone col cibo, nomi in italiano): in standby, da rivedere insieme
 
 ## Idee medie (da valutare)
 - [ ] Diario delle visite: data, nota, cosa hai mangiato, foto

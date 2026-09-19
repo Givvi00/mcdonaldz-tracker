@@ -3,6 +3,7 @@ import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { formatDistance } from '@/utils/geo';
 import { isNewlyAdded } from '@/utils/catalog';
 import { shortMcName } from '@/utils/format';
+import { restaurantKind } from '@/utils/foodTheme';
 
 interface Props {
   mc: McDonald;
@@ -13,6 +14,7 @@ interface Props {
 export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
   const { isVisited, toggleVisit, focusOnMap } = useMcdonaldStore();
   const visited = isVisited(mc.id);
+  const kind = restaurantKind(mc);
 
   if (variant === 'compact') {
     return (
@@ -41,7 +43,10 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
               </span>
             )}
           </div>
-          <p className="font-bold text-sm text-gray-800 dark:text-gray-100 truncate">{shortMcName(mc.name)}</p>
+          <p className="font-bold text-sm text-gray-800 dark:text-gray-100 truncate">
+            {kind && <span title={kind.label} className="mr-1">{kind.emoji}</span>}
+            {shortMcName(mc.name)}
+          </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{mc.city}</p>
         </button>
         <button
@@ -66,6 +71,7 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
       <div className="flex justify-between items-start gap-3">
         <div className="flex-1 min-w-0">
           <h3 className="font-bold text-sm text-gray-800 dark:text-gray-100 truncate">
+            {kind && <span title={kind.label} className="mr-1">{kind.emoji}</span>}
             {mc.name}
             {!mc.opened && (
               <span className="ml-2 align-middle text-[0.6rem] font-bold uppercase tracking-wide text-white bg-stone-500 rounded-full px-2 py-0.5">

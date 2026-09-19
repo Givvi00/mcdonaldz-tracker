@@ -4,6 +4,7 @@ import { pickInitialCatalog, type CatalogInfo } from '@/services/catalogBoot';
 import { getOrCreateUser, getVisits, addVisit, removeVisit } from '@/services/db';
 import { checkAndUnlockAchievements } from '@/services/achievements';
 import { distanceKm } from '@/utils/geo';
+import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds, visitedIdSet } from '@/utils/catalog';
 import type { Coords, GeoStatus } from '@/hooks/useGeolocation';
 
@@ -22,10 +23,13 @@ interface AppStore {
   newlyUnlocked: Achievement['type'][];
   mapFocusId: string | null;
   updateAvailable: boolean;
+  /** A shower of food is playing: set by a new visit; `big` for a level up or an achievement */
+  celebration: { id: number; big: boolean } | null;
 
   initApp: () => Promise<void>;
   toggleVisit: (mcdonaldId: string) => Promise<void>;
   dismissUnlocked: (type: Achievement['type']) => void;
+  clearCelebration: () => void;
   setSelectedTab: (tab: 'home' | 'map' | 'stats' | 'profile') => void;
   setSearchQuery: (query: string) => void;
   setFilterRegion: (region: string | null) => void;
@@ -62,6 +66,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   newlyUnlocked: [],
   mapFocusId: null,
   updateAvailable: false,
+  celebration: null,
 
   initApp: async () => {
     const user = await getOrCreateUser();
@@ -76,6 +81,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     if (!user) return;
 
     const isVisited = visits.some(v => v.mcdonaldId === mcdonaldId);
+    const levelBefore = levelInfo(get().getVisitedCount()).index;
 
     if (isVisited) {
       await removeVisit(mcdonaldId, user.id);
@@ -91,8 +97,12 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
       if (unlocked.length > 0) {
         set(state => ({ newlyUnlocked: [...state.newlyUnlocked, ...unlocked] }));
       }
+      const leveledUp = levelInfo(get().getVisitedCount()).index > levelBefore;
+      set({ celebration: { id: Date.now(), big: unlocked.length > 0 || leveledUp } });
     }
   },
+
+  clearCelebration: () => set({ celebration: null }),
 
   dismissUnlocked: (type) => set(state => ({ newlyUnlocked: state.newlyUnlocked.filter(t => t !== type) })),
 

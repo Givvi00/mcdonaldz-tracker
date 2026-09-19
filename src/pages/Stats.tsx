@@ -3,6 +3,11 @@ import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { getAchievements } from '@/services/db';
 import { ACHIEVEMENTS, getAchievementProgress } from '@/services/achievements';
 import { SodaGlass } from '@/components/SodaGlass';
+import { FoodPattern } from '@/components/FoodPattern';
+import { FoodProgressBar } from '@/components/FoodProgressBar';
+import { LevelPill } from '@/components/LevelPill';
+import { Tray } from '@/components/Tray';
+import { Receipt } from '@/components/Receipt';
 import type { Achievement } from '@shared/types';
 
 export function Stats() {
@@ -18,23 +23,21 @@ export function Stats() {
   const visitedCount = getVisitedCount();
   const regionStats = getRegionStats();
   const totalMcdonalds = getCountedTotal();
+  const percentage = totalMcdonalds > 0 ? Math.round((visitedCount / totalMcdonalds) * 100) : 0;
   const progress = getAchievementProgress(mcdonalds, visits);
 
   return (
     <div className="flex flex-col gap-6 pb-24 px-4 py-6">
       {/* Big Counter */}
       <div className="relative bg-gradient-to-br from-mc-red to-red-700 text-white rounded-3xl p-6 text-center shadow-lg shadow-red-900/20 overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.15] pointer-events-none"
-          style={{ backgroundImage: 'radial-gradient(circle, white 1.5px, transparent 1.5px)', backgroundSize: '18px 18px' }}
-        />
+        <FoodPattern />
         <div className="relative">
           <p className="text-sm opacity-90 font-display font-semibold">Totale McDonald's Visitati</p>
           <p className="text-6xl font-display font-bold mt-2">{visitedCount}</p>
           <p className="text-sm opacity-90 mt-1">di {totalMcdonalds} in Italia</p>
-          <p className="text-2xl font-display font-bold mt-3">
-            {totalMcdonalds > 0 ? Math.round((visitedCount / totalMcdonalds) * 100) : 0}%
-          </p>
+          <p className="text-2xl font-display font-bold mt-3">{percentage}%</p>
+          <FoodProgressBar percentage={percentage} />
+          <LevelPill visited={visitedCount} />
         </div>
       </div>
 
@@ -43,6 +46,8 @@ export function Stats() {
         <p className="text-sm font-semibold opacity-75">Punti Totali</p>
         <p className="text-4xl font-display font-bold">{user?.totalPoints || 0}⭐</p>
       </div>
+
+      <Tray visited={visitedCount} />
 
       {/* Region Stats */}
       <div>
@@ -71,6 +76,8 @@ export function Stats() {
             ))}
         </div>
       </div>
+
+      <Receipt rows={regionStats} visited={visitedCount} total={totalMcdonalds} />
 
       {/* Achievements */}
       <div>

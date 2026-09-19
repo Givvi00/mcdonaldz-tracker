@@ -10,6 +10,7 @@ import { AchievementToast } from '@/components/AchievementToast';
 import { NearbyPrompt } from '@/components/NearbyPrompt';
 import { UpdateBanner } from '@/components/UpdateBanner';
 import { MapAppChooser } from '@/components/MapAppChooser';
+import { FoodRain } from '@/components/FoodRain';
 import { startUpdateChecks } from '@/services/updates';
 import { startCatalogRefresh } from '@/services/catalogRefresh';
 import './App.css';
@@ -45,6 +46,7 @@ function App() {
       <NearbyPrompt />
       <UpdateBanner />
       <MapAppChooser />
+      <FoodRain />
 
       {/* Wordmark header */}
       {selectedTab !== 'map' && (

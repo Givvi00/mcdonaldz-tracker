@@ -47,6 +47,27 @@ input, textarea, button {
   color: #d8c9b7;
 }
 
+/* Shower of food (FoodRain): falls the whole screen while drifting and spinning */
+@keyframes food-fall {
+  0% {
+    transform: translate3d(0, -12vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--drift), 108vh, 0) rotate(var(--spin));
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .food-rain {
+    display: none;
+  }
+}
+
 @keyframes soda-wave-spin {
   from {
     transform: translateX(-50%) rotate(0deg);
