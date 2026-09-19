@@ -28,17 +28,22 @@ export function foodIconSvg(name: FoodIconName, size: number): string {
 export interface Level {
   min: number;
   name: string;
-  icon: string;
+  icon: FoodIconName;
 }
 
 export const LEVELS: readonly Level[] = [
-  { min: 0, name: 'Assaggiatore', icon: '🥤' },
-  { min: 5, name: 'Cliente abituale', icon: '🍟' },
-  { min: 15, name: 'Divoratore di panini', icon: '🍔' },
-  { min: 30, name: 'Esperto del Drive', icon: '🚗' },
-  { min: 60, name: 'Maestro dei Mc', icon: '🎖️' },
-  { min: 120, name: 'Leggenda dei Mc', icon: '🏆' },
-  { min: 250, name: 'Re del Drive', icon: '👑' },
+  { min: 0, name: 'Solo un assaggio', icon: 'cup' },
+  { min: 5, name: 'Cliente abituale', icon: 'fries' },
+  { min: 15, name: 'Divoratore di panini', icon: 'burger' },
+  { min: 30, name: 'Re dei nuggets', icon: 'nuggets' },
+  { min: 50, name: 'Maniaco del McFlurry', icon: 'mcflurry' },
+  { min: 80, name: 'Happy Meal a 30 anni', icon: 'happy' },
+  { min: 120, name: 'Ali e nuggets, sempre', icon: 'wings' },
+  { min: 180, name: 'Big Mac di fiducia', icon: 'bigmac' },
+  { min: 260, name: 'Ospite fisso al Drive', icon: 'basket' },
+  { min: 380, name: 'Il cassiere sa già cosa vuoi', icon: 'filet' },
+  { min: 550, name: 'Mezza Italia in panini', icon: 'wrap' },
+  { min: 800, name: 'Leggenda del Drive', icon: 'toast' },
 ];
 
 export interface LevelInfo {

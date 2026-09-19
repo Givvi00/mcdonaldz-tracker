@@ -8,6 +8,7 @@ import { exportData, importData } from '@/services/db';
 import { readBackupSummary, saveBackup } from '@/services/backup';
 import { useTheme, type ThemeMode } from '@/hooks/useTheme';
 import { FoodPattern } from '@/components/FoodPattern';
+import { FoodIcon } from '@/components/FoodIcon';
 import { levelInfo } from '@/utils/foodTheme';
 import { choosesMapApp, getSavedMapApp, saveMapApp } from '@/utils/navigation';
 import { MAP_APPS, type MapApp } from '@/utils/directions';
@@ -83,7 +84,7 @@ export function Profile() {
         <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl text-center border border-gray-200 dark:border-gray-800">
           <p className="text-sm text-gray-600 dark:text-gray-400 font-semibold">Livello {level.number}</p>
           <p className="text-lg font-display font-bold text-mc-red dark:text-red-400 mt-2 leading-tight">
-            {level.level.icon} {level.level.name}
+            <FoodIcon name={level.level.icon} size={22} /> {level.level.name}
           </p>
         </div>
       </div>

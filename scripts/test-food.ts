@@ -22,14 +22,14 @@ test('livelli: soglie in ordine crescente, si parte da zero', () => {
 
 test('livello: 0 visite è il livello 1 e mancano 5 al successivo', () => {
   const info = levelInfo(0);
-  assert.equal(info.level.name, 'Assaggiatore');
+  assert.equal(info.level.name, 'Solo un assaggio');
   assert.equal(info.number, 1);
   assert.equal(info.next?.name, 'Cliente abituale');
   assert.equal(info.toNext, 5);
 });
 
 test('livello: la soglia esatta sale di livello, quella prima no', () => {
-  assert.equal(levelInfo(4).level.name, 'Assaggiatore');
+  assert.equal(levelInfo(4).level.name, 'Solo un assaggio');
   assert.equal(levelInfo(5).level.name, 'Cliente abituale');
   assert.equal(levelInfo(5).number, 2);
   assert.equal(levelInfo(14).level.name, 'Cliente abituale');
@@ -46,7 +46,7 @@ test('livello massimo: nessun successivo, nulla da guadagnare', () => {
 });
 
 test('livello: valori strani (negativi, decimali) non rompono nulla', () => {
-  assert.equal(levelInfo(-3).level.name, 'Assaggiatore');
+  assert.equal(levelInfo(-3).level.name, 'Solo un assaggio');
   assert.equal(levelInfo(5.9).level.name, 'Cliente abituale');
 });
 

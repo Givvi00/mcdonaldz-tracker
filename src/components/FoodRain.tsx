@@ -2,6 +2,9 @@ import { useEffect, useMemo } from 'react';
 import { FoodIcon } from '@/components/FoodIcon';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { FOOD_ICONS, LEVELS } from '@/utils/foodTheme';
+import { ACHIEVEMENTS } from '@/services/achievements';
+import { STAMP_INK } from '@/components/stampArt';
+import { Stamp } from '@/components/Stamp';
 
 const SPARKLE_COLORS = ['#FFC72C', '#FFFFFF', '#FFE58A', '#FFFFFF'];
 const pick = <T,>(items: readonly T[]): T => items[Math.floor(Math.random() * items.length)];
@@ -32,6 +35,8 @@ const BURSTS = [
   { left: 90, top: 54 },
   { left: 50, top: 46 },
 ];
+const STAMP_SHOWN = 3; // stamps drawn at once; more are just counted
+const stampTime = (n: number) => 3400 + (Math.min(n, STAMP_SHOWN) - 1) * 900;
 const LEVEL_AT = 2.6; // seconds: the level popup appears
 const BOX_SIZE = 120;
 const BOX_BOTTOM_VH = 12;
@@ -95,9 +100,9 @@ export function FoodRain() {
   const clearCelebration = useMcdonaldStore(state => state.clearCelebration);
 
   const show = useMemo(() => {
-    if (!celebration) return null;
+    if (!celebration || celebration.kind === 'stamp') return null;
 
-    if (!celebration.big) {
+    if (celebration.kind === 'visit') {
       const rain = Array.from({ length: SMALL.rain }, (_, i) => ({
         key: i,
         name: pick(FOOD_ICONS),
@@ -158,13 +163,17 @@ export function FoodRain() {
 
   useEffect(() => {
     if (!celebration) return;
-    const timer = setTimeout(clearCelebration, celebration.big ? BIG.time : SMALL.time);
+    const time =
+      celebration.kind === 'visit' ? SMALL.time : celebration.kind === 'stamp' ? stampTime(celebration.stamps.length) : BIG.time;
+    const timer = setTimeout(clearCelebration, time);
     return () => clearTimeout(timer);
   }, [celebration, clearCelebration]);
 
+  if (celebration?.kind === 'stamp') return <StampShow key={celebration.id} stamps={celebration.stamps} />;
   if (!celebration || !show) return null;
   const id = celebration.id;
-  const level = celebration.level ? LEVELS[celebration.level - 1] : null;
+  const big = celebration.kind === 'level' || celebration.kind === 'region';
+  const level = celebration.kind === 'level' ? LEVELS[celebration.level - 1] : null;
   const visited = useMcdonaldStore.getState().getVisitedCount();
 
   return (
@@ -197,7 +206,7 @@ export function FoodRain() {
         />
       ))}
 
-      {celebration.big && (
+      {big && (
         <div
           className="absolute"
           style={{
@@ -265,7 +274,7 @@ export function FoodRain() {
         </span>
       ))}
 
-      {level && celebration.level && (
+      {celebration.kind === 'level' && level && (
         <div
           className="absolute w-[19rem] max-w-[86vw] overflow-hidden rounded-[2rem] border-[3px] border-[#3B2A22] bg-gradient-to-b from-[#FFD75E] to-mc-yellow text-center text-[#3B2A22] shadow-2xl"
           style={{
@@ -292,6 +301,33 @@ export function FoodRain() {
         </div>
       )}
 
+      {celebration.kind === 'region' && (
+        <div
+          className="absolute w-[19rem] max-w-[86vw] overflow-hidden rounded-[2rem] border-[3px] border-[#3B2A22] bg-gradient-to-b from-[#FFF6CF] to-[#FFE27A] text-center text-[#3B2A22] shadow-2xl"
+          style={{
+            left: '50%',
+            top: '48%',
+            animation: `level-pop ${BIG.time - LEVEL_AT * 1000}ms ease-out ${LEVEL_AT}s both`,
+          }}
+        >
+          <div className="bg-mc-red px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-white">
+            Regione completata
+          </div>
+          <div className="px-5 pb-4 pt-3">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#3B2A22] bg-gradient-to-br from-[#FFE27A] to-[#F2AE00] text-3xl text-white shadow-md ring-4 ring-white/70">
+              ★
+            </div>
+            <p className="mt-2 font-display text-2xl font-bold leading-tight">{celebration.region}</p>
+            <p className="mt-2 inline-block rounded-full bg-[#3B2A22] px-3 py-0.5 text-sm font-semibold text-mc-yellow">
+              Figurina d'oro
+            </p>
+            <p className="mt-2 text-sm font-semibold">
+              Hai visitato tutti i {celebration.total} ristoranti
+            </p>
+          </div>
+        </div>
+      )}
+
       {show.rain.map(p => (
         <span
           key={`${id}-r${p.key}`}
@@ -309,6 +345,78 @@ export function FoodRain() {
           <FoodIcon name={p.name} size={p.size} />
         </span>
       ))}
+    </div>
+  );
+}
+
+/** A stamp slams onto the screen, a little ink ring spreads and a few stars fly, then it flies away. */
+function StampShow({ stamps }: { stamps: string[] }) {
+  const shown = stamps.slice(0, STAMP_SHOWN);
+  const extra = stamps.length - shown.length;
+  const total = stampTime(stamps.length) / 1000;
+  const size = shown.length === 1 ? 190 : 118;
+
+  return (
+    <div className="food-rain fixed inset-0 z-[2500] overflow-hidden pointer-events-none" aria-hidden="true">
+      <div
+        className="absolute inset-0 bg-black/30"
+        style={{ animation: `stamp-dim ${total}s ease-in-out both` }}
+      />
+      <div className="absolute inset-x-0 flex items-center justify-center gap-3" style={{ top: '38%', transform: 'translateY(-50%)' }}>
+        {shown.map((id, i) => {
+          const def = ACHIEVEMENTS[id];
+          if (!def) return null;
+          const at = 0.15 + i * 0.9;
+          const ink = STAMP_INK[def.family];
+          return (
+            <div
+              key={id}
+              className="relative"
+              style={{ width: size, height: size, animation: `stamp-out 0.6s ease-in ${total - 0.6}s both` }}
+            >
+              <span
+                className="absolute inset-0 rounded-full border-4"
+                style={{ borderColor: ink, animation: `stamp-ring 0.8s ease-out ${at + 0.45}s both` }}
+              />
+              <div className="absolute inset-0" style={{ animation: `stamp-slam 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.2) ${at}s both` }}>
+                <Stamp def={def} state="got" size={size} />
+              </div>
+              {Array.from({ length: 10 }, (_, k) => {
+                const angle = (k / 10) * Math.PI * 2;
+                const distance = 90 + (k % 3) * 25;
+                return (
+                  <span
+                    key={k}
+                    className="absolute"
+                    style={
+                      {
+                        left: '50%',
+                        top: '50%',
+                        lineHeight: 0,
+                        animation: `food-firework 1.3s cubic-bezier(0.2, 0.8, 0.3, 1) ${at + 0.5}s both`,
+                        '--dx': `${Math.round(Math.cos(angle) * distance)}px`,
+                        '--dy': `${Math.round(Math.sin(angle) * distance)}px`,
+                      } as React.CSSProperties
+                    }
+                  >
+                    <span style={{ display: 'block', marginLeft: -8, marginTop: -8 }}>
+                      <Sparkle size={16} color={k % 2 ? '#FFFFFF' : '#FFC72C'} />
+                    </span>
+                  </span>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+      {extra > 0 && (
+        <p
+          className="absolute inset-x-0 text-center font-display text-xl font-bold text-white drop-shadow-lg"
+          style={{ top: '52%', animation: `stamp-dim ${total}s ease-in-out both` }}
+        >
+          +{extra} {extra === 1 ? 'altro timbro' : 'altri timbri'}
+        </p>
+      )}
     </div>
   );
 }

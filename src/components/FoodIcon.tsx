@@ -1,4 +1,5 @@
 import { FOOD_SPRITE } from '@/components/foodSprite';
+import { STAMP_FILTER } from '@/components/stampArt';
 import type { FoodIconName } from '@/utils/foodTheme';
 
 /** The drawings of every food icon, once per page. Mounted in App; every FoodIcon (and the map) refers to it. */
@@ -10,7 +11,7 @@ export function FoodIconSprite() {
       style={{ position: 'absolute' }}
       aria-hidden="true"
       focusable="false"
-      dangerouslySetInnerHTML={{ __html: FOOD_SPRITE }}
+      dangerouslySetInnerHTML={{ __html: FOOD_SPRITE + STAMP_FILTER }}
     />
   );
 }

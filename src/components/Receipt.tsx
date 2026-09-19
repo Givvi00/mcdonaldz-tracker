@@ -63,7 +63,7 @@ export function Receipt({ rows, visited, total }: Props) {
           <p className="mt-1 flex justify-between text-[0.75rem]">
             <span>Livello {number}</span>
             <span>
-              {level.icon} {level.name}
+              <FoodIcon name={level.icon} size={14} /> {level.name}
             </span>
           </p>
           <p className="mt-4 text-center text-[0.7rem] text-gray-500">Grazie e a presto! <FoodIcon name="fries" size={14} /></p>

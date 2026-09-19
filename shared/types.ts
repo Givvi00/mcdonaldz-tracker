@@ -31,7 +31,8 @@ export interface User {
 export interface Achievement {
   id: string;
   userId: string;
-  type: 'LOCAL_HERO' | 'REGIONAL_MASTER' | 'NATION_CONQUEROR' | 'STREAK_7' | 'STREAK_30';
+  /** A stamp id (see services/achievements) or `REGION:<name>` for a completed region */
+  type: string;
   unlockedAt: number;
   value?: number;
 }

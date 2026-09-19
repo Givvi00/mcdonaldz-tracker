@@ -1,12 +1,23 @@
 import { create } from 'zustand';
-import type { McDonald, Visit, User, Achievement } from '@shared/types';
+import type { McDonald, Visit, User } from '@shared/types';
 import { pickInitialCatalog, type CatalogInfo } from '@/services/catalogBoot';
 import { getOrCreateUser, getVisits, addVisit, removeVisit } from '@/services/db';
 import { checkAndUnlockAchievements } from '@/services/achievements';
+import { syncRegionCompletions } from '@/services/regions';
 import { distanceKm } from '@/utils/geo';
 import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds, visitedIdSet } from '@/utils/catalog';
 import type { Coords, GeoStatus } from '@/hooks/useGeolocation';
+
+/** Something worth a celebration. A visit with nothing special is a light shower; the rest have their own show. */
+export type Celebration =
+  | { id: number; kind: 'visit' }
+  | { id: number; kind: 'level'; level: number }
+  | { id: number; kind: 'region'; region: string; total: number }
+  | { id: number; kind: 'stamp'; stamps: string[] };
+
+/** Pause between two celebrations that follow each other */
+const GAP_MS = 700;
 
 interface AppStore {
   mcdonalds: McDonald[];
@@ -20,19 +31,22 @@ interface AppStore {
   filterVisited: boolean | null;
   userPosition: Coords | null;
   locationStatus: GeoStatus;
-  newlyUnlocked: Achievement['type'][];
+  /** Stamps shown in the toast at the top */
+  newlyUnlocked: string[];
   /** Achievement to show in Stats after tapping its toast */
-  focusedAchievement: Achievement['type'] | null;
+  focusedAchievement: string | null;
   mapFocusId: string | null;
   updateAvailable: boolean;
-  /** A shower of food is playing: set by a new visit; `big` for a level up or an achievement */
-  celebration: { id: number; big: boolean; level: number | null } | null;
+  /** The celebration playing now, and the ones waiting for their turn (level, then region, then stamps) */
+  celebration: Celebration | null;
+  celebrationQueue: Celebration[];
 
   initApp: () => Promise<void>;
   toggleVisit: (mcdonaldId: string) => Promise<void>;
-  dismissUnlocked: (type: Achievement['type']) => void;
-  openAchievement: (type: Achievement['type']) => void;
+  dismissUnlocked: (type: string) => void;
+  openAchievement: (type: string) => void;
   clearFocusedAchievement: () => void;
+  enqueueCelebrations: (events: Celebration[]) => void;
   clearCelebration: () => void;
   setSelectedTab: (tab: 'home' | 'map' | 'stats' | 'profile') => void;
   setSearchQuery: (query: string) => void;
@@ -72,6 +86,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   mapFocusId: null,
   updateAvailable: false,
   celebration: null,
+  celebrationQueue: [],
 
   initApp: async () => {
     const user = await getOrCreateUser();
@@ -79,6 +94,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     set({ user, visits });
     // Catch up silently on anything already earned from past sessions (no toast).
     await checkAndUnlockAchievements(user.id, get().mcdonalds, visits);
+    await syncRegionCompletions(user.id, get().mcdonalds, visits);
   },
 
   toggleVisit: async (mcdonaldId: string) => {
@@ -98,17 +114,51 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     set({ visits: updatedVisits });
 
     if (!isVisited) {
-      const unlocked = await checkAndUnlockAchievements(user.id, get().mcdonalds, updatedVisits);
-      if (unlocked.length > 0) {
-        set(state => ({ newlyUnlocked: [...state.newlyUnlocked, ...unlocked] }));
-      }
+      const mcdonalds = get().mcdonalds;
+      const unlocked = await checkAndUnlockAchievements(user.id, mcdonalds, updatedVisits);
+      const touched = mcdonalds.find(m => m.id === mcdonaldId);
+      const newRegion = touched ? await syncRegionCompletions(user.id, mcdonalds, updatedVisits, touched.region) : null;
       const levelNow = levelInfo(get().getVisitedCount());
-      const leveledUp = levelNow.index > levelBefore;
-      set({ celebration: { id: Date.now(), big: unlocked.length > 0 || leveledUp, level: leveledUp ? levelNow.number : null } });
+
+      // In order of importance: the level, the region, then the stamps
+      const now = Date.now();
+      const events: Celebration[] = [];
+      if (levelNow.index > levelBefore) events.push({ id: now, kind: 'level', level: levelNow.number });
+      if (newRegion) events.push({ id: now + 1, kind: 'region', region: newRegion.region, total: newRegion.total });
+      if (unlocked.length > 0) events.push({ id: now + 2, kind: 'stamp', stamps: unlocked });
+      if (events.length === 0) events.push({ id: now, kind: 'visit' });
+      get().enqueueCelebrations(events);
     }
   },
 
-  clearCelebration: () => set({ celebration: null }),
+  enqueueCelebrations: (events) => {
+    const { celebration } = get();
+    if (celebration) {
+      set(state => ({ celebrationQueue: [...state.celebrationQueue, ...events] }));
+      return;
+    }
+    const [first, ...rest] = events;
+    set(state => ({
+      celebration: first,
+      celebrationQueue: [...state.celebrationQueue, ...rest],
+      newlyUnlocked: first.kind === 'stamp' ? first.stamps : state.newlyUnlocked,
+    }));
+  },
+
+  clearCelebration: () => {
+    set({ celebration: null });
+    if (get().celebrationQueue.length === 0) return;
+    // A short pause, then the next one
+    setTimeout(() => {
+      const [next, ...rest] = get().celebrationQueue;
+      if (!next || get().celebration) return;
+      set(state => ({
+        celebration: next,
+        celebrationQueue: rest,
+        newlyUnlocked: next.kind === 'stamp' ? next.stamps : state.newlyUnlocked,
+      }));
+    }, GAP_MS);
+  },
 
   dismissUnlocked: (type) => set(state => ({ newlyUnlocked: state.newlyUnlocked.filter(t => t !== type) })),
 

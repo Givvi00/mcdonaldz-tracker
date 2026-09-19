@@ -232,3 +232,101 @@ input, textarea, button {
     opacity: 1;
   }
 }
+
+/* Album of regions: a shine that sweeps over the silver and gold stickers, and a few twinkling stars */
+.fig-sweep {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -60%;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
+  transform: skewX(-20deg);
+  animation: fig-sweep 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+.fig-sweep-gold {
+  animation-duration: 2.8s;
+}
+.fig-spark {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+  animation: fig-twinkle 2.4s ease-in-out infinite;
+  opacity: 0;
+  pointer-events: none;
+}
+@keyframes fig-sweep {
+  0%,
+  55% {
+    left: -60%;
+  }
+  100% {
+    left: 130%;
+  }
+}
+@keyframes fig-twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fig-fx {
+    display: none;
+  }
+}
+
+/* A passport stamp coming down: big and see-through, then it lands with a bounce */
+@keyframes stamp-slam {
+  0% {
+    transform: scale(2.8) rotate(-16deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(0.9) rotate(2deg);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(1.06) rotate(-1deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+@keyframes stamp-ring {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+@keyframes stamp-out {
+  to {
+    transform: translateY(-40vh) scale(0.3);
+    opacity: 0;
+  }
+}
+@keyframes stamp-dim {
+  0% {
+    opacity: 0;
+  }
+  12%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
