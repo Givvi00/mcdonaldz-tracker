@@ -7,6 +7,8 @@ import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { exportData, importData } from '@/services/db';
 import { readBackupSummary, saveBackup } from '@/services/backup';
 import { useTheme, type ThemeMode } from '@/hooks/useTheme';
+import { choosesMapApp, getSavedMapApp, saveMapApp } from '@/utils/navigation';
+import { MAP_APPS, type MapApp } from '@/utils/directions';
 
 const THEME_OPTIONS: Array<{ value: ThemeMode; label: string; icon: string }> = [
   { value: 'system', label: 'Sistema', icon: '⚙️' },
@@ -17,6 +19,7 @@ const THEME_OPTIONS: Array<{ value: ThemeMode; label: string; icon: string }> = 
 export function Profile() {
   const { user, getVisitedCount, mcdonalds, catalogInfo } = useMcdonaldStore();
   const { mode, setMode } = useTheme();
+  const [mapApp, setMapApp] = useState<MapApp | null>(getSavedMapApp);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [updateCheck, setUpdateCheck] = useState<UpdateCheck | 'checking' | null>(null);
   const [catalogCheck, setCatalogCheck] = useState<CatalogRefresh | null>(null);
@@ -103,6 +106,34 @@ export function Profile() {
           ))}
         </div>
       </div>
+
+      {choosesMapApp() && (
+        <div>
+          <h3 className="font-display font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">App per le indicazioni</h3>
+          <div className="grid grid-cols-3 gap-2">
+            {MAP_APPS.map(app => (
+              <button
+                key={app.value}
+                onClick={() => {
+                  saveMapApp(app.value);
+                  setMapApp(app.value);
+                }}
+                className={`flex flex-col items-center gap-1 py-3 rounded-xl border-2 transition-all active:scale-[0.97] ${
+                  mapApp === app.value
+                    ? 'bg-mc-red/10 border-mc-red text-mc-red'
+                    : 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400'
+                }`}
+              >
+                <span className="text-xl">{app.icon}</span>
+                <span className="text-xs font-semibold">{app.label}</span>
+              </button>
+            ))}
+          </div>
+          {!mapApp && (
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Non ancora scelta: te lo chiederò al primo «Portami lì».</p>
+          )}
+        </div>
+      )}
 
       <InstallSection />
 

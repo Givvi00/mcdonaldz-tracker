@@ -14,7 +14,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [x] Bicchieri di coca con % in overlay (SodaGlass): onda a sinusoide, tante bolle proporzionali al livello (SodaRegion resta nel repo)
 - [x] Filtri Home: controllo Tutti / Visitati / Da visitare colorato, selettore regione a pannello con conteggi, ordina per Distanza / A–Z
 - [x] Filtro Visitati / Da visitare anche sulla mappa (componente condiviso `StatusFilter`)
-- [x] "Portami lì" nel popup della mappa (Android: geo: → app mappe predefinita; web: Google Maps)
+- [x] "Portami lì" nel popup della mappa: Android (app e web app) con geo: → app mappe predefinita; iPhone/iPad: la prima volta chiede Apple Maps / Google Maps / Waze, ricorda la scelta (cambiabile dal Profilo); computer: Google Maps. Da verificare sull'iPhone
 - [x] Icona Android: emoji 🍟 su rosso McDonald's (adaptive icon + icone classiche)
 - [x] Popup "Ti trovi qui?": mostra la distanza reale
 - [x] Backup/import: il Profilo già li aveva, ma il download via `<a download>` non funziona nella WebView Android. Ora su app nativa il file va nel menu di condivisione (plugin filesystem + share); l'import valida il file prima di scrivere

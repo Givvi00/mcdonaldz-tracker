@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "fetch-data": "tsx scripts/fetch-mcdonalds.ts",
-    "test:data": "tsx scripts/test-merge.ts && tsx scripts/test-catalog.ts && tsx scripts/test-catalog-update.ts && tsx scripts/test-install.ts"
+    "test:data": "tsx scripts/test-merge.ts && tsx scripts/test-catalog.ts && tsx scripts/test-catalog-update.ts && tsx scripts/test-install.ts && tsx scripts/test-directions.ts"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.2",
