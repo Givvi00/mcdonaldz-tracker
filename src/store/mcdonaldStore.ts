@@ -26,7 +26,7 @@ interface AppStore {
   mapFocusId: string | null;
   updateAvailable: boolean;
   /** A shower of food is playing: set by a new visit; `big` for a level up or an achievement */
-  celebration: { id: number; big: boolean } | null;
+  celebration: { id: number; big: boolean; level: number | null } | null;
 
   initApp: () => Promise<void>;
   toggleVisit: (mcdonaldId: string) => Promise<void>;
@@ -102,8 +102,9 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
       if (unlocked.length > 0) {
         set(state => ({ newlyUnlocked: [...state.newlyUnlocked, ...unlocked] }));
       }
-      const leveledUp = levelInfo(get().getVisitedCount()).index > levelBefore;
-      set({ celebration: { id: Date.now(), big: unlocked.length > 0 || leveledUp } });
+      const levelNow = levelInfo(get().getVisitedCount());
+      const leveledUp = levelNow.index > levelBefore;
+      set({ celebration: { id: Date.now(), big: unlocked.length > 0 || leveledUp, level: leveledUp ? levelNow.number : null } });
     }
   },
 

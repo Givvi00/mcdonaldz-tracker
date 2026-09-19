@@ -8,7 +8,6 @@ import { Stats } from '@/pages/Stats';
 import { Profile } from '@/pages/Profile';
 import { AchievementToast } from '@/components/AchievementToast';
 import { NearbyPrompt } from '@/components/NearbyPrompt';
-import { FoodPattern } from '@/components/FoodPattern';
 import { levelInfo } from '@/utils/foodTheme';
 import { UpdateBanner } from '@/components/UpdateBanner';
 import { MapAppChooser } from '@/components/MapAppChooser';
@@ -55,18 +54,17 @@ function App() {
       {/* Wordmark header */}
       {selectedTab !== 'map' && (
         <header
-          className="relative overflow-hidden flex items-center justify-between gap-3 px-4 pb-4 bg-gradient-to-b from-mc-red to-mc-red-dark text-white shadow-md shadow-red-900/20"
+          className="flex items-center justify-between gap-3 px-4 pb-4 bg-gradient-to-b from-mc-red to-mc-red-dark text-white shadow-md shadow-red-900/20"
           style={{ paddingTop: 'calc(1rem + var(--safe-top))' }}
         >
-          <FoodPattern opacity={0.18} />
-          <div className="relative">
+          <div>
             <p className="font-display font-bold text-2xl leading-tight">
               McDonaldz<span className="text-mc-yellow">.</span>
             </p>
             <p className="text-[0.65rem] uppercase tracking-wider text-white/75 -mt-0.5">Tracker</p>
           </div>
-          <p className="relative rounded-full bg-black/25 px-3 py-1 text-xs font-semibold whitespace-nowrap">
-            Livello {levelInfo(getVisitedCount()).number} · {getVisitedCount()} visitati
+          <p className="rounded-full bg-black/25 px-3 py-1 text-xs font-semibold whitespace-nowrap">
+            Livello {levelInfo(getVisitedCount()).number}
           </p>
         </header>
       )}

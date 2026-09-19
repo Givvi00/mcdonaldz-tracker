@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { FoodIcon } from '@/components/FoodIcon';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
-import { FOOD_ICONS } from '@/utils/foodTheme';
+import { FOOD_ICONS, LEVELS } from '@/utils/foodTheme';
 
 const SPARKLE_COLORS = ['#FFC72C', '#FFFFFF', '#FFE58A', '#FFFFFF'];
 const pick = <T,>(items: readonly T[]): T => items[Math.floor(Math.random() * items.length)];
@@ -9,28 +9,64 @@ const between = (min: number, max: number) => min + Math.random() * (max - min);
 
 // A visit: a light shower of food icons.
 // A level up or an achievement: no shower, fireworks made of fries and little stars. A box of fries rises from the
-// bottom, fries shoot out of it, and three bursts go off one after the other.
+// bottom; its fries leave one by one, each towards its own point in the sky where it bursts. The box ends up empty
+// and fades away.
 const SMALL = { rain: 14, time: 3600 };
 const BIG = {
-  sticks: 8,
-  launchAt: 0.55, // seconds: the fries leave the box
-  friesPerBurst: 14,
-  starsPerBurst: 12,
-  time: 8600,
-  boxMs: 3800,
+  firstLaunch: 0.8, // seconds
+  launchEvery: 0.55,
+  flight: 0.9,
+  friesPerBurst: 8,
+  starsPerBurst: 10,
+  time: 8400,
+  boxMs: 6000,
 };
+// Where each fry bursts: horizontal position in % of the width, vertical in % of the height
 const BURSTS = [
-  { left: 50, top: 40, at: 1.3 },
-  { left: 24, top: 30, at: 2.1 },
-  { left: 76, top: 34, at: 2.8 },
-  { left: 36, top: 22, at: 3.4 },
-  { left: 64, top: 26, at: 3.9 },
-  { left: 14, top: 44, at: 4.4 },
-  { left: 86, top: 46, at: 4.9 },
-  { left: 50, top: 28, at: 5.5 },
+  { left: 50, top: 32 },
+  { left: 20, top: 40 },
+  { left: 80, top: 36 },
+  { left: 36, top: 22 },
+  { left: 66, top: 24 },
+  { left: 10, top: 52 },
+  { left: 90, top: 54 },
+  { left: 50, top: 46 },
 ];
 const BOX_SIZE = 120;
 const BOX_BOTTOM_VH = 12;
+const FRIES_IN_BOX = BURSTS.length;
+const launchAt = (i: number) => BIG.firstLaunch + i * BIG.launchEvery;
+const burstAt = (i: number) => launchAt(i) + BIG.flight;
+
+/** The box of fries drawn here (not from the sprite) so each fry can leave it on its own. */
+function FriesBox({ size }: { size: number }) {
+  return (
+    <svg className="food-ico" width={size} height={size} viewBox="0 0 48 48" aria-hidden="true">
+      <g fill="#FFC72C">
+        {Array.from({ length: FRIES_IN_BOX }, (_, i) => {
+          const t = i / (FRIES_IN_BOX - 1);
+          const x = 8 + t * 29;
+          return (
+            <rect
+              key={i}
+              x={x}
+              y={i % 2 ? 5 : 8}
+              width="4.6"
+              height={i % 2 ? 24 : 21}
+              rx="1.6"
+              transform={`rotate(${Math.round(-15 + t * 30)} ${x + 2.3} 20)`}
+              style={{ animation: `food-fry-out 0.01s linear ${launchAt(i)}s both` }}
+            />
+          );
+        })}
+      </g>
+      <path d="M8 24 C14 26 34 26 40 24 L37 44 H11 Z" fill="#DA291C" />
+      <g clipPath="url(#food-clip-fries)">
+        <rect x="4" y="33" width="40" height="5" fill="#FFC72C" stroke="none" />
+      </g>
+    </svg>
+  );
+}
 
 const Sparkle = ({ size, color }: { size: number; color: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
@@ -62,26 +98,21 @@ export function FoodRain() {
         drift: Math.round(between(-60, 60)),
         spin: Math.round(between(-360, 360)),
       }));
-      return { rain, sticks: [], fries: [], stars: [] };
+      return { rain, rockets: [], fries: [], stars: [] };
     }
 
-    // Fries leaving the box, fanning out upwards
-    const sticks = Array.from({ length: BIG.sticks }, (_, i) => {
-      const spread = (i - (BIG.sticks - 1) / 2) / ((BIG.sticks - 1) / 2);
-      return {
-        key: i,
-        dx: Math.round(spread * between(40, 90)),
-        dy: -Math.round(between(40, 48)),
-        spin: Math.round(spread * between(160, 420)),
-        delay: BIG.launchAt + i * 0.03,
-      };
+    // One fry per burst leaves the box, pointing at where it will burst (rough phone proportions)
+    const rockets = BURSTS.map((b, i) => {
+      const dx = (b.left - 50) * 4.3;
+      const dy = b.top * 9 - 792 + 100;
+      return { key: i, left: b.left, top: b.top, rot: Math.round((Math.atan2(dx, -dy) * 180) / Math.PI), delay: launchAt(i) };
     });
 
-    // Each burst throws fries outwards (pointing away from the centre) and little stars
+    // Each burst throws little fries outwards (pointing away from the centre) and little stars
     const fries = BURSTS.flatMap((b, bi) =>
       Array.from({ length: BIG.friesPerBurst }, (_, i) => {
         const angle = (i / BIG.friesPerBurst) * Math.PI * 2 + between(-0.12, 0.12);
-        const distance = between(90, 150);
+        const distance = between(80, 140);
         return {
           key: `${bi}-${i}`,
           left: b.left,
@@ -89,7 +120,7 @@ export function FoodRain() {
           angleDeg: Math.round((angle * 180) / Math.PI),
           dx: Math.round(Math.cos(angle) * distance),
           dy: Math.round(Math.sin(angle) * distance),
-          delay: b.at + between(0, 0.06),
+          delay: burstAt(bi) + between(0, 0.05),
           duration: between(1.3, 1.8),
         };
       }),
@@ -97,7 +128,7 @@ export function FoodRain() {
     const stars = BURSTS.flatMap((b, bi) =>
       Array.from({ length: BIG.starsPerBurst }, (_, i) => {
         const angle = (i / BIG.starsPerBurst) * Math.PI * 2 + between(-0.2, 0.2);
-        const distance = between(60, 175);
+        const distance = between(55, 165);
         return {
           key: `${bi}-${i}`,
           left: b.left,
@@ -106,12 +137,12 @@ export function FoodRain() {
           color: pick(SPARKLE_COLORS),
           dx: Math.round(Math.cos(angle) * distance),
           dy: Math.round(Math.sin(angle) * distance),
-          delay: b.at + between(0, 0.1),
+          delay: burstAt(bi) + between(0, 0.1),
           duration: between(1.2, 1.9),
         };
       }),
     );
-    return { rain: [], sticks, fries, stars };
+    return { rain: [], rockets, fries, stars };
   }, [celebration]);
 
   useEffect(() => {
@@ -122,6 +153,7 @@ export function FoodRain() {
 
   if (!celebration || !show) return null;
   const id = celebration.id;
+  const level = celebration.level ? LEVELS[celebration.level - 1] : null;
 
   return (
     <div className="food-rain fixed inset-0 z-[2500] overflow-hidden pointer-events-none" aria-hidden="true">
@@ -137,31 +169,32 @@ export function FoodRain() {
             animation: `food-box ${BIG.boxMs}ms ease-out both`,
           }}
         >
-          <FoodIcon name="fries" size={BOX_SIZE} />
-          {show.sticks.map(p => (
-            <span
-              key={`${id}-s${p.key}`}
-              className="absolute"
-              style={
-                {
-                  left: '50%',
-                  top: '46%',
-                  marginLeft: -5,
-                  width: 10,
-                  height: 36,
-                  borderRadius: 4,
-                  background: '#FFC72C',
-                  border: '2px solid #3B2A22',
-                  animation: `food-launch 0.8s cubic-bezier(0.15, 0.85, 0.3, 1) ${p.delay}s both`,
-                  '--dx': `${p.dx}px`,
-                  '--dy': `${p.dy}vh`,
-                  '--spin': `${p.spin}deg`,
-                } as React.CSSProperties
-              }
-            />
-          ))}
+          <FriesBox size={BOX_SIZE} />
         </div>
       )}
+
+      {show.rockets.map(p => (
+        <span
+          key={`${id}-s${p.key}`}
+          className="absolute"
+          style={
+            {
+              left: '50%',
+              top: `calc(${100 - BOX_BOTTOM_VH}vh - 100px)`,
+              marginLeft: -5,
+              width: 10,
+              height: 34,
+              borderRadius: 4,
+              background: '#FFC72C',
+              border: '2px solid #3B2A22',
+              animation: `food-rocket ${BIG.flight}s cubic-bezier(0.2, 0.7, 0.35, 1) ${p.delay}s both`,
+              '--bl': p.left,
+              '--bt': p.top,
+              '--rot': `${p.rot}deg`,
+            } as React.CSSProperties
+          }
+        />
+      ))}
 
       {show.fries.map(p => (
         <span
@@ -181,11 +214,11 @@ export function FoodRain() {
           <span
             style={{
               display: 'block',
-              width: 8,
-              height: 28,
-              marginLeft: -4,
-              marginTop: -14,
-              borderRadius: 4,
+              width: 7,
+              height: 22,
+              marginLeft: -3.5,
+              marginTop: -11,
+              borderRadius: 3.5,
               background: '#FFC72C',
               border: '2px solid #3B2A22',
               transform: `rotate(${p.angleDeg + 90}deg)`,
@@ -214,6 +247,20 @@ export function FoodRain() {
           </span>
         </span>
       ))}
+
+      {level && (
+        <div
+          className="absolute rounded-3xl border-2 border-[#3B2A22] bg-mc-yellow px-6 py-3 text-center text-[#3B2A22] shadow-xl"
+          style={{
+            left: '50%',
+            top: '50%',
+            animation: `level-pop ${BIG.time - 3000}ms ease-out 3000ms both`,
+          }}
+        >
+          <p className="font-display text-2xl font-bold leading-tight">Sei al livello {celebration.level}!</p>
+          <p className="text-sm font-semibold">{level.name}</p>
+        </div>
+      )}
 
       {show.rain.map(p => (
         <span

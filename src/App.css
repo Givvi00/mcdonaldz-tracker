@@ -76,38 +76,68 @@ input, textarea, button {
   }
 }
 
-/* The box of fries rises, waits while the fries shoot out of it, then goes away */
+/* The box of fries rises, stays while the fries leave it one by one, then fades away empty */
 @keyframes food-box {
   0% {
     transform: translateY(140%);
+    opacity: 1;
   }
-  9% {
+  8% {
     transform: translateY(-6%);
   }
-  14% {
+  12% {
     transform: translateY(0);
   }
-  80% {
+  88% {
     transform: translateY(0);
     opacity: 1;
   }
   100% {
-    transform: translateY(60%);
+    transform: translateY(25%);
     opacity: 0;
   }
 }
 
-/* A fry leaving the box: straight up (dy in vh), spinning, gone at the top where the burst starts */
-@keyframes food-launch {
+/* A fry in the box: gone the moment it is launched */
+@keyframes food-fry-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* A fry flying from the box to where it bursts (--bl in vw, --bt in vh), pointing along its path */
+@keyframes food-rocket {
   0% {
-    transform: translate3d(0, 0, 0) rotate(0deg) scale(0.8);
+    transform: translate3d(0, 0, 0) rotate(var(--rot)) scaleY(0.7);
     opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(calc((var(--bl) - 50) * 1vw), calc(var(--bt) * 1vh - 88vh + 100px), 0) rotate(var(--rot)) scaleY(1);
+    opacity: 0;
+  }
+}
+
+/* "You reached level N" */
+@keyframes level-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0;
+  }
+  10% {
+    transform: translate(-50%, -50%) scale(1.06);
+    opacity: 1;
+  }
+  16% {
+    transform: translate(-50%, -50%) scale(1);
   }
   85% {
     opacity: 1;
   }
   100% {
-    transform: translate3d(var(--dx), var(--dy), 0) rotate(var(--spin)) scale(1);
+    transform: translate(-50%, -50%) scale(1);
     opacity: 0;
   }
 }
