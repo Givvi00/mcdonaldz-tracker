@@ -40,7 +40,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [ ] Achievement per regione completata e serie di giorni consecutivi
 
 ## Idee grandi (da valutare)
-- [ ] Notifica quando passi vicino a un Mc non visitato (Capacitor local notifications + posizione in background). Il popup di oggi compare solo all'apertura dell'app e una volta sola: è il passo più coerente col principio guida
+- [ ] **IN PAUSA (decisione del 19/09/2026)**: notifica quando passi vicino a un Mc non visitato. Funziona solo con app nativa (Capacitor local notifications + posizione in background; su web/PWA la posizione in background non esiste). Per ora si tiene solo la web app, quindi la si riprende se e quando si sceglie di fare le app ufficiali. Il popup di oggi compare solo all'apertura dell'app e una volta sola
 - [ ] Check-in verificato dal GPS (visita solo entro ~200 m), come modalità opzionale
 - [x] Aperture e chiusure, fondamenta: ID stabili (l'elenco non si rinumera più), stato aperto/chiuso con data, chiusi visitati che continuano a contare, chiusi mai visitati che spariscono, etichette "Chiuso" e "Nuovo", nuovo `fetch-data` che unisce la raccolta all'elenco con rapporto delle differenze e freno al 5%. Vedi `docs/AGGIORNAMENTO-DATI.md`. Test: `npm run test:data`
 - [ ] Primo aggiornamento vero dell'elenco: raccolta da mcdonalds.it (browser reale) e `npm run fetch-data -- raccolta.json --dry-run`. Attenzione: il file attuale è stato generato con il vecchio script, quindi la prima unione può segnalare qualche "modificato" da controllare
@@ -56,5 +56,5 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [x] Controllo dei tipi: `npm run typecheck` (prima `tsc -p tsconfig.app.json` non guardava nessun file di `src`); ora gira anche nella pubblicazione su Pages
 - [ ] Migrazioni del database locale: se cambia la struttura di IndexedDB (`db.ts`, versione 1) serve una migrazione esplicita nell'`upgrade`, altrimenti i dati esistenti non vengono letti. Consigliare un backup prima
 - [ ] iPhone, da verificare sul telefono: installazione, posizione, "Portami lì" (Apple Maps), Esporta/Importa, uso offline
-- [ ] iPhone nativo (facoltativo): build cloud + account Apple Developer, solo se servono le notifiche di prossimità in background
+- [ ] iPhone nativo (facoltativo, in pausa): build cloud + account Apple Developer, solo se servono le notifiche di prossimità in background
 - [x] Repository remoto su GitHub come backup del codice: https://github.com/Givvi00/mcdonaldz-tracker (**pubblico**, necessario per GitHub Pages gratuito; autore dei commit: noreply di GitHub). Dopo ogni sessione: `git push`
