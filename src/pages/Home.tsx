@@ -22,7 +22,6 @@ export function Home() {
     getVisitedCount,
     getCountedTotal,
     getNearestMcdonalds,
-    getNearestUnvisited,
     getTopRegions,
     locationStatus,
     setSelectedTab,
@@ -65,8 +64,9 @@ export function Home() {
   };
 
   const findNearest = () => {
-    const nearest = getNearestUnvisited();
-    if (nearest) focusOnMap(nearest.id);
+    // The closest open McDonald's, whether or not it is already visited
+    const [closest] = getNearestMcdonalds(1);
+    if (closest) focusOnMap(closest.id);
   };
 
   return (

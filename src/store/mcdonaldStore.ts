@@ -43,7 +43,6 @@ interface AppStore {
   getCountedTotal: () => number;
   getRegionStats: () => Array<{ region: string; total: number; visited: number; percentage: number }>;
   getNearestMcdonalds: (limit?: number) => Array<McDonald & { distanceKm: number }>;
-  getNearestUnvisited: () => (McDonald & { distanceKm: number }) | null;
   getTopRegions: (limit?: number) => Array<{ region: string; total: number; visited: number; percentage: number }>;
 }
 
@@ -184,17 +183,6 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
       .map(mc => ({ ...mc, distanceKm: distanceKm(userPosition.lat, userPosition.lon, mc.lat, mc.lon) }))
       .sort((a, b) => a.distanceKm - b.distanceKm)
       .slice(0, limit);
-  },
-
-  getNearestUnvisited: () => {
-    const { mcdonalds, userPosition, visits } = get();
-    if (!userPosition) return null;
-    const visitedIds = visitedIdSet(visits);
-    const nearest = mcdonalds
-      .filter(mc => mc.opened && !visitedIds.has(mc.id))
-      .map(mc => ({ ...mc, distanceKm: distanceKm(userPosition.lat, userPosition.lon, mc.lat, mc.lon) }))
-      .sort((a, b) => a.distanceKm - b.distanceKm)[0];
-    return nearest ?? null;
   },
 
   getTopRegions: (limit = 3) => {
