@@ -3,33 +3,28 @@ import { FoodIcon } from '@/components/FoodIcon';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { FOOD_ICONS } from '@/utils/foodTheme';
 
-const STREAMER_COLORS = ['#DA291C', '#FFC72C', '#F2AE00', '#7B3F1D', '#DA291C'];
 const SPARKLE_COLORS = ['#FFC72C', '#FFFFFF', '#FFE58A', '#FFFFFF'];
 const pick = <T,>(items: readonly T[]): T => items[Math.floor(Math.random() * items.length)];
 const between = (min: number, max: number) => min + Math.random() * (max - min);
 
-// A visit: a light shower. A level up or an achievement: a box of fries rises from the bottom, fries shoot out of it
-// and burst into food, streamers and sparkles, while a thicker, longer shower falls.
-// The box of fries with the burst and sparkles is switched off for now (too busy): only the shower falls.
-// Set FESTOON to true to bring it back.
-const FESTOON = false;
-
+// A visit: a light shower of food icons.
+// A level up or an achievement: no shower, fireworks made of fries and little stars. A box of fries rises from the
+// bottom, fries shoot out of it, and three bursts go off one after the other.
 const SMALL = { rain: 14, time: 3600 };
 const BIG = {
-  rain: 70,
-  burstFood: 30,
-  burstStreamers: 36,
-  burstSparkles: 20,
-  ambientSparkles: 22,
   sticks: 8,
   launchAt: 0.55, // seconds: the fries leave the box
-  burstAt: 1.3, // seconds: they burst at the top
-  time: 10500,
-  rainTime: 9500, // shower only: the last piece starts at 5.2 s and falls for up to 3.8 s
+  friesPerBurst: 14,
+  starsPerBurst: 12,
+  time: 6800,
 };
+const BURSTS = [
+  { left: 50, top: 40, at: 1.3 },
+  { left: 24, top: 30, at: 2.1 },
+  { left: 76, top: 34, at: 2.8 },
+];
 const BOX_SIZE = 120;
 const BOX_BOTTOM_VH = 12;
-const BURST_TOP_VH = 42;
 
 const Sparkle = ({ size, color }: { size: number; color: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
@@ -49,18 +44,20 @@ export function FoodRain() {
 
   const show = useMemo(() => {
     if (!celebration) return null;
-    const big = celebration.big;
-    const rain = Array.from({ length: big ? BIG.rain : SMALL.rain }, (_, i) => ({
-      key: i,
-      name: pick(FOOD_ICONS),
-      left: between(0, 100),
-      size: between(26, 44),
-      delay: big ? between(0.5, 5.2) : between(0, 0.7),
-      duration: big ? between(2, 3.8) : between(1.7, 2.8),
-      drift: Math.round(between(-60, 60)),
-      spin: Math.round(between(-360, 360)),
-    }));
-    if (!big || !FESTOON) return { rain, sticks: [], burst: [], sparkles: [], ambient: [] };
+
+    if (!celebration.big) {
+      const rain = Array.from({ length: SMALL.rain }, (_, i) => ({
+        key: i,
+        name: pick(FOOD_ICONS),
+        left: between(0, 100),
+        size: between(26, 44),
+        delay: between(0, 0.7),
+        duration: between(1.7, 2.8),
+        drift: Math.round(between(-60, 60)),
+        spin: Math.round(between(-360, 360)),
+      }));
+      return { rain, sticks: [], fries: [], stars: [] };
+    }
 
     // Fries leaving the box, fanning out upwards
     const sticks = Array.from({ length: BIG.sticks }, (_, i) => {
@@ -74,55 +71,46 @@ export function FoodRain() {
       };
     });
 
-    // Burst from the top: food and streamers go out in every direction, then everything falls with gravity
-    const burst = Array.from({ length: BIG.burstFood + BIG.burstStreamers }, (_, i) => {
-      const angle = between(0, Math.PI * 2);
-      const distance = between(90, 240);
-      const streamer = i >= BIG.burstFood;
-      return {
-        key: i,
-        streamer,
-        name: pick(FOOD_ICONS),
-        color: pick(STREAMER_COLORS),
-        size: between(26, 42),
-        length: Math.round(between(18, 40)),
-        dx: Math.round(Math.cos(angle) * distance),
-        dy: Math.round(Math.sin(angle) * distance),
-        delay: BIG.burstAt + between(0, 0.12),
-        duration: between(2.3, 3.6),
-        spin: Math.round(between(-540, 540)),
-      };
-    });
-
-    // Sparkles flying out with the burst, and twinkles scattered around the screen for a few seconds
-    const sparkles = Array.from({ length: BIG.burstSparkles }, (_, i) => {
-      const angle = between(0, Math.PI * 2);
-      const distance = between(60, 190);
-      return {
-        key: i,
-        size: between(12, 26),
-        color: pick(SPARKLE_COLORS),
-        dx: Math.round(Math.cos(angle) * distance),
-        dy: Math.round(Math.sin(angle) * distance),
-        delay: BIG.burstAt + between(0, 0.2),
-        duration: between(1.1, 1.8),
-      };
-    });
-    const ambient = Array.from({ length: BIG.ambientSparkles }, (_, i) => ({
-      key: i,
-      size: between(10, 22),
-      color: pick(SPARKLE_COLORS),
-      left: between(4, 94),
-      top: between(6, 78),
-      delay: between(BIG.burstAt, 6.5),
-      duration: between(0.9, 1.6),
-    }));
-    return { rain, sticks, burst, sparkles, ambient };
+    // Each burst throws fries outwards (pointing away from the centre) and little stars
+    const fries = BURSTS.flatMap((b, bi) =>
+      Array.from({ length: BIG.friesPerBurst }, (_, i) => {
+        const angle = (i / BIG.friesPerBurst) * Math.PI * 2 + between(-0.12, 0.12);
+        const distance = between(90, 150);
+        return {
+          key: `${bi}-${i}`,
+          left: b.left,
+          top: b.top,
+          angleDeg: Math.round((angle * 180) / Math.PI),
+          dx: Math.round(Math.cos(angle) * distance),
+          dy: Math.round(Math.sin(angle) * distance),
+          delay: b.at + between(0, 0.06),
+          duration: between(1.3, 1.8),
+        };
+      }),
+    );
+    const stars = BURSTS.flatMap((b, bi) =>
+      Array.from({ length: BIG.starsPerBurst }, (_, i) => {
+        const angle = (i / BIG.starsPerBurst) * Math.PI * 2 + between(-0.2, 0.2);
+        const distance = between(60, 175);
+        return {
+          key: `${bi}-${i}`,
+          left: b.left,
+          top: b.top,
+          size: between(13, 24),
+          color: pick(SPARKLE_COLORS),
+          dx: Math.round(Math.cos(angle) * distance),
+          dy: Math.round(Math.sin(angle) * distance),
+          delay: b.at + between(0, 0.1),
+          duration: between(1.2, 1.9),
+        };
+      }),
+    );
+    return { rain: [], sticks, fries, stars };
   }, [celebration]);
 
   useEffect(() => {
     if (!celebration) return;
-    const timer = setTimeout(clearCelebration, celebration.big ? (FESTOON ? BIG.time : BIG.rainTime) : SMALL.time);
+    const timer = setTimeout(clearCelebration, celebration.big ? BIG.time : SMALL.time);
     return () => clearTimeout(timer);
   }, [celebration, clearCelebration]);
 
@@ -131,7 +119,7 @@ export function FoodRain() {
 
   return (
     <div className="food-rain fixed inset-0 z-[2500] overflow-hidden pointer-events-none" aria-hidden="true">
-      {celebration.big && FESTOON && (
+      {celebration.big && (
         <div
           className="absolute"
           style={{
@@ -140,7 +128,7 @@ export function FoodRain() {
             width: BOX_SIZE,
             height: BOX_SIZE,
             marginLeft: -BOX_SIZE / 2,
-            animation: `food-box ${BIG.time * 0.4}ms ease-out both`,
+            animation: `food-box ${BIG.time * 0.55}ms ease-out both`,
           }}
         >
           <FoodIcon name="fries" size={BOX_SIZE} />
@@ -169,53 +157,55 @@ export function FoodRain() {
         </div>
       )}
 
-      {show.burst.map(p => (
+      {show.fries.map(p => (
         <span
-          key={`${id}-b${p.key}`}
+          key={`${id}-f${p.key}`}
           className="absolute"
           style={
             {
-              left: '50%',
-              top: `${BURST_TOP_VH}vh`,
+              left: `${p.left}%`,
+              top: `${p.top}vh`,
               lineHeight: 0,
-              animation: `food-burst ${p.duration}s cubic-bezier(0.2, 0.7, 0.3, 1) ${p.delay}s both`,
+              animation: `food-firework ${p.duration}s cubic-bezier(0.2, 0.8, 0.3, 1) ${p.delay}s both`,
               '--dx': `${p.dx}px`,
               '--dy': `${p.dy}px`,
-              '--spin': `${p.spin}deg`,
-              ...(p.streamer ? { width: 6, height: p.length, borderRadius: 3, background: p.color } : {}),
             } as React.CSSProperties
           }
         >
-          {p.streamer ? null : <FoodIcon name={p.name} size={p.size} />}
+          <span
+            style={{
+              display: 'block',
+              width: 8,
+              height: 28,
+              marginLeft: -4,
+              marginTop: -14,
+              borderRadius: 4,
+              background: '#FFC72C',
+              border: '2px solid #3B2A22',
+              transform: `rotate(${p.angleDeg + 90}deg)`,
+            }}
+          />
         </span>
       ))}
 
-      {show.sparkles.map(p => (
+      {show.stars.map(p => (
         <span
           key={`${id}-k${p.key}`}
           className="absolute"
           style={
             {
-              left: '50%',
-              top: `${BURST_TOP_VH}vh`,
+              left: `${p.left}%`,
+              top: `${p.top}vh`,
               lineHeight: 0,
-              animation: `food-sparkle-out ${p.duration}s ease-out ${p.delay}s both`,
+              animation: `food-firework ${p.duration}s cubic-bezier(0.2, 0.8, 0.3, 1) ${p.delay}s both`,
               '--dx': `${p.dx}px`,
               '--dy': `${p.dy}px`,
             } as React.CSSProperties
           }
         >
-          <Sparkle size={p.size} color={p.color} />
-        </span>
-      ))}
-
-      {show.ambient.map(p => (
-        <span
-          key={`${id}-a${p.key}`}
-          className="absolute"
-          style={{ left: `${p.left}%`, top: `${p.top}%`, lineHeight: 0, animation: `food-twinkle ${p.duration}s ease-in-out ${p.delay}s 2 both` }}
-        >
-          <Sparkle size={p.size} color={p.color} />
+          <span style={{ display: 'block', marginLeft: -p.size / 2, marginTop: -p.size / 2 }}>
+            <Sparkle size={p.size} color={p.color} />
+          </span>
         </span>
       ))}
 

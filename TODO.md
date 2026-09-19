@@ -39,7 +39,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 ## Feedback sul tema (19/09/2026) — da fare, in attesa di parlarne
 - [x] Griglia delle card: icone disegnate, colonne sfalsate anche in verticale, inclinata di 10° e più veloce (una tessera ogni 28 s), senza icone tagliate (`FoodPattern.tsx`). Da verificare sul telefono
 - [ ] Livelli: nomi e soglie sono provvisori, da rivedere insieme (oggi: Assaggiatore, Cliente abituale, Divoratore di panini, Esperto del Drive, Maestro dei Mc, Leggenda dei Mc, Re del Drive, a 0/5/15/30/60/120/250 visite; in `src/utils/foodTheme.ts`)
-- [x] Festone di achievement/livello: la scatola di patatine sale dal basso, le patatine schizzano in alto e scoppiano in icone, nastri e brillantini; dura circa 10 s (`FoodRain.tsx`). Da verificare sul telefono. **Disattivato per ora (troppo caotico): resta solo la pioggia; si riattiva con `FESTOON = true` in `FoodRain.tsx`**
+- [x] Achievement e livello nuovo: fuochi d'artificio di patatine e stelline (la scatola di patatine sale, le patatine schizzano in alto, tre scoppi uno dopo l'altro), senza icone che cadono; dura circa 7 s (`FoodRain.tsx`). Per una visita normale resta la pioggia leggera. Da verificare sul telefono
 - [x] Toast dell'achievement: ora sta sopra la pioggia (z-index 3000) e dura 5,5 s. Da verificare sul telefono. Poi reso più grande (con descrizione), 10 s, e cliccabile: porta in Stats sulla card di quell'achievement, evidenziata per 5 s
 - [x] Stats: scontrino prima delle regioni, e delle regioni si vedono solo quelle iniziate, con il pulsante "Mostra tutte le regioni". Da verificare sul telefono. Scontrino reso più chiaro: "I McDonald's che hai visitato, regione per regione", intestazione "RISTORANTI VISITATI", colonne REGIONE / VISITATI, "5 su 18", "TOTALE VISITATI"
 - [x] Icone disegnate (13: panino, Big Mac, panino con il pollo, McToast, Filet-O-Fish, McWrap, patatine, nuggets, alette, Tasty Basket, bibita, McFlurry, Happy Meal) al posto delle emoji di cibo: griglia, pioggia, marker della mappa, popup, barra di progresso, vassoio vuoto, scontrino. I disegni stanno in `src/components/foodSprite.ts`, generato dalla pagina di anteprima. Restano emoji i livelli, le icone per tipo di locale e i badge degli achievement
@@ -69,3 +69,13 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [ ] iPhone, da verificare sul telefono: installazione, posizione, "Portami lì" (Apple Maps), Esporta/Importa, uso offline
 - [ ] iPhone nativo (facoltativo, in pausa): build cloud + account Apple Developer, solo se servono le notifiche di prossimità in background
 - [x] Repository remoto su GitHub come backup del codice: https://github.com/Givvi00/mcdonaldz-tracker (**pubblico**, necessario per GitHub Pages gratuito; autore dei commit: noreply di GitHub). Dopo ogni sessione: `git push`
+
+## Da discutere insieme (19/09/2026)
+- [ ] **Logo del banner in alto**: il quadratino giallo con la M è troppo simile ai marchi; servono proposte (icona sopra il banner o struttura diversa dell'intestazione)
+- [ ] **Icona dell'app** (PWA e Android): oggi usa l'emoji della patatina, da cambiare assolutamente con un disegno nostro
+- [ ] **Marker della mappa**: ogni ristorante ha un'icona di cibo diversa e sembra che sia specializzato in quel prodotto. Da rivedere insieme come fare (non toccare prima)
+
+## Funzioni future (da approfondire, in coda)
+- [ ] **Recensioni**: per ogni ristorante visitato, un voto da 1 a 5 diviso per categorie (pulizia, bellezza del Mc, spazi esterni, ecc.; categorie da definire)
+- [ ] **Data di visita**: registrare quando si è stati in ogni ristorante (modificabile)
+- [ ] **Ristorante "verificato"**: gestione dello stato verificato, da spiegare con calma

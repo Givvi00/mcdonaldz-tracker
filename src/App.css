@@ -110,53 +110,22 @@ input, textarea, button {
   }
 }
 
-/* Sparkles: pop in, turn and shrink away */
-@keyframes food-twinkle {
-  0%,
-  100% {
-    transform: scale(0) rotate(0deg);
+/* Firework piece: flies out from the burst point, hangs for a moment, then drifts down and fades */
+@keyframes food-firework {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.2);
     opacity: 0;
+  }
+  12% {
+    opacity: 1;
   }
   40% {
-    transform: scale(1) rotate(60deg);
-    opacity: 1;
-  }
-  70% {
-    transform: scale(0.55) rotate(100deg);
-    opacity: 0.9;
-  }
-}
-
-@keyframes food-sparkle-out {
-  0% {
-    transform: translate3d(0, 0, 0) scale(0) rotate(0deg);
-    opacity: 0;
-  }
-  25% {
+    transform: translate3d(var(--dx), var(--dy), 0) scale(1);
     opacity: 1;
   }
   100% {
-    transform: translate3d(var(--dx), var(--dy), 0) scale(1) rotate(180deg);
+    transform: translate3d(calc(var(--dx) * 1.08), calc(var(--dy) + 70px), 0) scale(0.9);
     opacity: 0;
-  }
-}
-
-/* Pieces thrown out of the burst point, then pulled down by gravity */
-@keyframes food-burst {
-  0% {
-    transform: translate3d(0, 0, 0) rotate(0deg) scale(0.2);
-    opacity: 0;
-  }
-  6% {
-    opacity: 1;
-  }
-  35% {
-    transform: translate3d(var(--dx), var(--dy), 0) rotate(calc(var(--spin) * 0.4)) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate3d(calc(var(--dx) * 1.15), calc(var(--dy) + 105vh), 0) rotate(var(--spin)) scale(1);
-    opacity: 0.95;
   }
 }
 
