@@ -29,8 +29,8 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [ ] Tema chiaro e scuro su Stats, achievement e toast (controllati Home, Profilo e Mappa)
 
 ## Tematizzazione: cosa resta
-- [ ] Rivedere Stats e achievement con la nuova palette
-- [ ] Tema della mappa in modalità chiara (oggi solo i tile scuri sono ritoccati)
+- [x] Stats e achievement rivisti con la nuova palette in chiaro e scuro (testo rosso piccolo più chiaro in scuro per il contrasto). Restano in inglese i nomi degli achievement ("Local Hero", "7 Day Streak"…) e il titolo "Achievements"
+- [x] Tema della mappa: tile ritoccati in tono caldo sia in chiaro sia in scuro
 - [ ] Icona/splash monocromatica per Android 13+ (icona tematica) e barra di stato coordinata col tema
 - [ ] Uno stato vuoto/illustrazioni con lo stesso stile (bicchiere, patatine) per le liste vuote
 

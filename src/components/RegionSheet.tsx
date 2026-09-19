@@ -64,7 +64,7 @@ export function RegionSheet({ open, regions, selected, onSelect, onClose }: Prop
                   }`}
                 >
                   <p className="font-semibold text-sm text-gray-800 dark:text-gray-100 truncate">{region}</p>
-                  <p className="text-[0.7rem] font-bold text-mc-red mt-0.5">
+                  <p className="text-[0.7rem] font-bold text-mc-red dark:text-red-400 mt-0.5">
                     {visited}/{total}
                   </p>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1 mt-1.5">

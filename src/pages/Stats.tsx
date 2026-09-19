@@ -64,7 +64,7 @@ export function Stats() {
                 <p className="font-semibold text-[0.65rem] text-gray-800 dark:text-gray-100 truncate w-full mt-1">
                   {stat.region}
                 </p>
-                <p className="text-[0.6rem] font-bold text-mc-red">
+                <p className="text-[0.6rem] font-bold text-mc-red dark:text-red-400">
                   {stat.visited}/{stat.total} · {stat.percentage}%
                 </p>
               </div>

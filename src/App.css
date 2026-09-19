@@ -28,8 +28,13 @@ input, textarea, button {
   font-family: inherit;
 }
 
+/* Map tiles tinted warm so the standard blue/green map sits with the cream and red palette */
+.leaflet-tile-pane {
+  filter: sepia(0.2) saturate(0.8) hue-rotate(-6deg) brightness(1.03);
+}
+
 .map-dark .leaflet-tile-pane {
-  filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9);
+  filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9) sepia(0.25);
 }
 
 .dark .leaflet-popup-content-wrapper,

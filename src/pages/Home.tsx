@@ -111,7 +111,7 @@ export function Home() {
           {locationStatus === 'granted' && nearest.length > 0 && (
             <button
               onClick={findNearest}
-              className="flex items-center gap-1 text-xs font-semibold text-mc-red bg-mc-red/10 dark:bg-mc-red/20 px-3 py-1.5 rounded-full active:scale-[0.96] transition-transform"
+              className="flex items-center gap-1 text-xs font-semibold text-mc-red dark:text-red-400 bg-mc-red/10 dark:bg-mc-red/20 px-3 py-1.5 rounded-full active:scale-[0.96] transition-transform"
             >
               🎯 Il più vicino
             </button>
@@ -153,7 +153,7 @@ export function Home() {
                 </div>
                 <div className="mt-1.5">
                   <p className="font-semibold text-xs text-gray-800 dark:text-gray-100 truncate w-full">{r.region}</p>
-                  <p className="text-[0.65rem] font-bold text-mc-red">{r.visited}/{r.total} · {r.percentage}%</p>
+                  <p className="text-[0.65rem] font-bold text-mc-red dark:text-red-400">{r.visited}/{r.total} · {r.percentage}%</p>
                 </div>
               </button>
             ))}
@@ -177,7 +177,7 @@ export function Home() {
             onClick={() => setSheetOpen(true)}
             className={`flex-1 min-w-0 flex items-center justify-between gap-2 px-3 py-2 rounded-xl border text-sm font-semibold transition-colors ${
               filterRegion
-                ? 'bg-mc-red/10 dark:bg-mc-red/20 border-mc-red text-mc-red'
+                ? 'bg-mc-red/10 dark:bg-mc-red/20 border-mc-red text-mc-red dark:text-red-400'
                 : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200'
             }`}
           >
