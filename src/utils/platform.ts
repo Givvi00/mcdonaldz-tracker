@@ -20,3 +20,11 @@ export function isAndroid(ua: string): boolean {
 export function isMobileDevice(ua: string, maxTouchPoints: number): boolean {
   return isAppleTouchDevice(ua, maxTouchPoints) || isAndroid(ua) || /Mobile/i.test(ua);
 }
+
+/**
+ * Link that asks iOS to open a web address in Safari. It uses Safari's own (undocumented) x-safari-https scheme, so
+ * it is a best effort: other browsers may ignore it, which is why a copy-link fallback stays next to it.
+ */
+export function safariUrl(url: string): string | null {
+  return /^https?:\/\//.test(url) ? 'x-safari-' + url : null;
+}

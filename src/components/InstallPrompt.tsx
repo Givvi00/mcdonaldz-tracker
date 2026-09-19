@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useInstall } from '@/services/install';
 import type { InstallHint } from '@/utils/install';
+import { safariUrl } from '@/utils/platform';
 
 const DISMISS_KEY = 'mcdz-install-dismissed';
 const DISMISS_FOR_DAYS = 14;
@@ -15,7 +16,7 @@ function dismissedRecently(): boolean {
 }
 
 /** Copies the app address so it can be pasted into Safari. */
-function CopyLinkButton() {
+function OpenInSafariButtons() {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     try {
@@ -25,13 +26,25 @@ function CopyLinkButton() {
       setCopied(false);
     }
   };
+  const appUrl = location.origin + location.pathname;
+  const safari = safariUrl(appUrl);
   return (
-    <button
-      onClick={copy}
-      className="mt-3 rounded-full bg-mc-red text-white text-sm font-bold px-5 py-2 active:scale-95 transition-transform"
-    >
-      {copied ? '✓ Link copiato' : 'Copia link'}
-    </button>
+    <div className="mt-3 flex flex-wrap gap-2">
+      {safari && (
+        <a
+          href={safari}
+          className="rounded-full bg-mc-red text-white text-sm font-bold px-5 py-2 active:scale-95 transition-transform"
+        >
+          Apri in Safari
+        </a>
+      )}
+      <button
+        onClick={copy}
+        className="rounded-full border border-mc-red text-mc-red text-sm font-bold px-5 py-2 active:scale-95 transition-transform"
+      >
+        {copied ? '✓ Link copiato' : 'Copia link'}
+      </button>
+    </div>
   );
 }
 
@@ -63,14 +76,14 @@ function Instructions({ hint, onInstall }: { hint: InstallHint; onInstall: () =>
     return (
       <>
         <p className="text-sm text-gray-600 dark:text-gray-300">
-          Su iPhone l'installazione funziona da <strong>Safari</strong>, non da Chrome. Copia il link, aprilo in Safari e lì:
+          Su iPhone l'installazione funziona da <strong>Safari</strong>, non da Chrome. Tocca <strong>«Apri in Safari»</strong> (se non succede nulla, copia il link e incollalo in Safari) e lì:
         </p>
         <ol className="mt-2 text-sm text-gray-600 dark:text-gray-300 list-decimal pl-5 space-y-1">
           <li>Tocca <strong>Condividi</strong> ⬆️ (in basso)</li>
           <li>Scegli <strong>«Aggiungi alla schermata Home»</strong></li>
           <li>Tocca <strong>«Aggiungi»</strong></li>
         </ol>
-        <CopyLinkButton />
+        <OpenInSafariButtons />
       </>
     );
   }

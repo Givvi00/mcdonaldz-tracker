@@ -2,7 +2,7 @@
 // Run with: npm run test:data
 import assert from 'node:assert/strict';
 import { installHint, type InstallEnv } from '../src/utils/install';
-import { isAppleTouchDevice, isInAppBrowser, isMobileDevice } from '../src/utils/platform';
+import { isAppleTouchDevice, isInAppBrowser, isMobileDevice, safariUrl } from '../src/utils/platform';
 
 let passed = 0;
 function test(name: string, fn: () => void) {
@@ -41,6 +41,13 @@ test("iPhone con Chrome, Firefox o Edge: si rimanda a Safari, dove l'installazio
   assert.equal(installHint(env(UA.iphoneChrome)), 'ios-other');
   assert.equal(installHint(env(UA.iphoneFirefox)), 'ios-other');
   assert.equal(installHint(env(UA.iphoneEdge)), 'ios-other');
+});
+
+test('link per aprire in Safari: usa lo schema x-safari e rifiuta indirizzi non web', () => {
+  assert.equal(safariUrl('https://givvi00.github.io/mcdonaldz-tracker/'), 'x-safari-https://givvi00.github.io/mcdonaldz-tracker/');
+  assert.equal(safariUrl('http://localhost:5173/'), 'x-safari-http://localhost:5173/');
+  assert.equal(safariUrl('javascript:alert(1)'), null);
+  assert.equal(safariUrl('capacitor://localhost/'), null);
 });
 
 test('iPhone dentro Instagram: chiede di aprire nel browser', () => {
