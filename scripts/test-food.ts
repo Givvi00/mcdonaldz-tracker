@@ -100,10 +100,10 @@ test("markup di un'icona: misura e riferimento allo sprite", () => {
   assert.ok(svg.includes('width="20"') && svg.includes('href="#food-burger"'));
 });
 
-test('marker: la spunta se visitato, altrimenti il cibo del ristorante', () => {
+test('marker: la spunta se visitato, altrimenti nessun simbolo', () => {
   const mc = { id: 'mc0007', name: "McDonald's Test", lat: 0, lon: 0, region: 'X', city: 'Y', address: 'Z', opened: true };
   assert.equal(markerSymbol(mc, true), '✓');
-  assert.ok(markerSymbol(mc, false).includes(`#food-${markerIcon('mc0007')}`));
+  assert.equal(markerSymbol(mc, false), '');
 });
 
 test('popup: un locale speciale mostra la sua icona, uno normale no', () => {
