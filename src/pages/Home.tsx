@@ -4,11 +4,9 @@ import { McdonaldCard } from '@/components/McdonaldCard';
 import { RegionSheet } from '@/components/RegionSheet';
 import { StatusFilter } from '@/components/StatusFilter';
 import { InstallPrompt } from '@/components/InstallPrompt';
-import { SodaGlass } from '@/components/SodaGlass';
 import { distanceKm } from '@/utils/geo';
 import { FoodPattern } from '@/components/FoodPattern';
 import { FoodProgressBar } from '@/components/FoodProgressBar';
-import { LevelPill } from '@/components/LevelPill';
 import { EmptyTray } from '@/components/EmptyTray';
 
 type SortBy = 'distance' | 'name';
@@ -26,7 +24,6 @@ export function Home() {
     getVisitedCount,
     getCountedTotal,
     getNearestMcdonalds,
-    getTopRegions,
     locationStatus,
     setSelectedTab,
     focusOnMap,
@@ -60,12 +57,6 @@ export function Home() {
   const total = getCountedTotal();
   const percentage = total > 0 ? Math.round((visitedCount / total) * 100) : 0;
   const nearest = getNearestMcdonalds(4);
-  const topRegions = getTopRegions(3);
-
-  const jumpToRegion = (region: string) => {
-    setFilterRegion(filterRegion === region ? null : region);
-    listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
 
   const findNearest = () => {
     // The closest open McDonald's, whether or not it is already visited
@@ -88,7 +79,6 @@ export function Home() {
             <p className="text-sm opacity-80 mb-1">/ {total} McDonald's · {percentage}%</p>
           </div>
           <FoodProgressBar percentage={percentage} />
-          <LevelPill visited={visitedCount} />
         </div>
       </button>
 
@@ -126,33 +116,6 @@ export function Home() {
           </p>
         )}
       </section>
-
-      {/* Top regioni */}
-      {topRegions.length > 0 && (
-        <section className="px-4">
-          <h2 className="font-display font-semibold text-gray-800 dark:text-gray-100 mb-3 flex items-center gap-2">
-            <span className="flex items-center justify-center w-7 h-7 rounded-full bg-yellow-100 dark:bg-yellow-950/50 text-sm">🏆</span>
-            Top Regioni
-          </h2>
-          <div className="flex gap-3 overflow-x-auto pb-1 -mx-4 px-4">
-            {topRegions.map(r => (
-              <button
-                key={r.region}
-                onClick={() => jumpToRegion(r.region)}
-                className="flex-shrink-0 w-28 flex flex-col items-center text-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-3 shadow-sm hover:border-mc-red dark:hover:border-mc-red active:scale-[0.97] transition-all"
-              >
-                <div className="flex items-center justify-center" style={{ height: 105 }}>
-                  <SodaGlass region={r.region} percentage={r.percentage} />
-                </div>
-                <div className="mt-1.5">
-                  <p className="font-semibold text-xs text-gray-800 dark:text-gray-100 truncate w-full">{r.region}</p>
-                  <p className="text-[0.65rem] font-bold text-mc-red dark:text-red-400">{r.visited}/{r.total} · {r.percentage}%</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* Esplora tutti */}
       <section ref={listRef} className="px-4 pt-2 border-t border-gray-200 dark:border-gray-800">

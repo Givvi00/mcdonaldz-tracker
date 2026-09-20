@@ -294,8 +294,17 @@ input, textarea, button {
     transform: scale(0.9) rotate(2deg);
     opacity: 1;
   }
+  62% {
+    transform: scale(1.1) rotate(-2deg);
+  }
   70% {
-    transform: scale(1.06) rotate(-1deg);
+    transform: scale(1) translate(-7px, 3px) rotate(1deg);
+  }
+  78% {
+    transform: scale(1) translate(6px, -3px) rotate(-1deg);
+  }
+  86% {
+    transform: scale(1) translate(-3px, 2px);
   }
   100% {
     transform: scale(1) rotate(0deg);
@@ -329,4 +338,50 @@ input, textarea, button {
   100% {
     opacity: 0;
   }
+}
+
+/* An inked stamp never sits perfectly still: a tiny tremor, frame by frame */
+.stamp-jitter {
+  transform: rotate(var(--tilt, 0deg));
+  animation: stamp-jitter 1.3s steps(1, end) infinite;
+}
+@keyframes stamp-jitter {
+  0% {
+    transform: translate(0, 0) rotate(var(--tilt, 0deg));
+  }
+  20% {
+    transform: translate(0.8px, -0.6px) rotate(calc(var(--tilt, 0deg) + 0.9deg));
+  }
+  40% {
+    transform: translate(-0.7px, 0.7px) rotate(calc(var(--tilt, 0deg) - 0.7deg));
+  }
+  60% {
+    transform: translate(0.5px, 0.8px) rotate(calc(var(--tilt, 0deg) + 0.4deg));
+  }
+  80% {
+    transform: translate(-0.8px, -0.5px) rotate(calc(var(--tilt, 0deg) - 1deg));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stamp-jitter {
+    animation: none;
+  }
+}
+
+/* Passport: paper with fine waves, like the security print of a real one */
+.passport-paper {
+  background-color: #f6ecd6;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cg fill='none' stroke='%23E2D2B0' stroke-width='.8'%3E%3Cpath d='M0 12Q12 0 24 12T48 12'/%3E%3Cpath d='M0 12Q12 24 24 12T48 12' opacity='.7'/%3E%3Cpath d='M0 36Q12 24 24 36T48 36'/%3E%3Cpath d='M0 36Q12 48 24 36T48 36' opacity='.7'/%3E%3C/g%3E%3Ccircle cx='24' cy='24' r='1.3' fill='%23E2D2B0'/%3E%3C/svg%3E");
+}
+.passport-page {
+  background-color: #fffaf0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cg fill='none' stroke='%23EFE3C9' stroke-width='.8'%3E%3Cpath d='M0 12Q12 0 24 12T48 12'/%3E%3Cpath d='M0 12Q12 24 24 12T48 12' opacity='.7'/%3E%3Cpath d='M0 36Q12 24 24 36T48 36'/%3E%3Cpath d='M0 36Q12 48 24 36T48 36' opacity='.7'/%3E%3C/g%3E%3Ccircle cx='24' cy='24' r='1.3' fill='%23EFE3C9'/%3E%3C/svg%3E");
+}
+.passport-page-secret {
+  background-color: #f3ecfa;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cg fill='none' stroke='%23DDD0EE' stroke-width='.8'%3E%3Cpath d='M0 12Q12 0 24 12T48 12'/%3E%3Cpath d='M0 12Q12 24 24 12T48 12' opacity='.7'/%3E%3Cpath d='M0 36Q12 24 24 36T48 36'/%3E%3Cpath d='M0 36Q12 48 24 36T48 36' opacity='.7'/%3E%3C/g%3E%3Ccircle cx='24' cy='24' r='1.3' fill='%23DDD0EE'/%3E%3C/svg%3E");
+}
+.passport-cover {
+  background-color: #c6281c;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.16' stroke-width='.9'%3E%3Cpath d='M0 8Q8 0 16 8T32 8'/%3E%3Cpath d='M0 8Q8 16 16 8T32 8'/%3E%3Cpath d='M0 24Q8 16 16 24T32 24'/%3E%3Cpath d='M0 24Q8 32 16 24T32 24'/%3E%3C/g%3E%3C/svg%3E");
 }

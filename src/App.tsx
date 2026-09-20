@@ -18,7 +18,7 @@ import { startCatalogRefresh } from '@/services/catalogRefresh';
 import './App.css';
 
 function App() {
-  const { selectedTab, setSelectedTab, initApp, getVisitedCount, setUserPosition, setLocationStatus } =
+  const { selectedTab, setSelectedTab, initApp, getVisitedCount, setUserPosition, setLocationStatus, user } =
     useMcdonaldStore();
   useTheme();
   const { status: geoStatus, coords } = useGeolocation();
@@ -63,9 +63,12 @@ function App() {
             </p>
             <p className="text-[0.65rem] uppercase tracking-wider text-white/75 -mt-0.5">Tracker</p>
           </div>
-          <p className="rounded-full bg-black/25 px-3 py-1 text-xs font-semibold whitespace-nowrap">
-            Livello {levelInfo(getVisitedCount()).number}
-          </p>
+          <div className="flex min-w-0 flex-col items-end gap-1">
+            <p className="max-w-[10rem] truncate text-sm font-display font-semibold leading-none">{user?.name || 'Ospite'}</p>
+            <p className="rounded-full bg-black/25 px-3 py-1 text-xs font-semibold whitespace-nowrap">
+              Livello {levelInfo(getVisitedCount()).number}
+            </p>
+          </div>
         </header>
       )}
 

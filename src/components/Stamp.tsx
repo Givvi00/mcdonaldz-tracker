@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import type { AchievementDef } from '@/services/achievements';
 import { STAMP_INK, STAMP_SHAPES, STAMP_SYMBOLS } from '@/components/stampArt';
 
@@ -20,14 +21,14 @@ export function Stamp({ def, state, size = 88, className = '' }: { def: Achievem
     const inner = `<g transform="translate(48 48) scale(.84) translate(-48 -48)">${shape}</g>`;
     return (
       <svg
-        className={className}
+        className={`stamp-jitter mix-blend-multiply ${className}`}
         viewBox="0 0 96 96"
         width={size}
         height={size}
         aria-hidden="true"
-        style={{ color: STAMP_INK[def.family], transform: `rotate(${tiltOf(def.id)}deg)` }}
+        style={{ color: STAMP_INK[def.family], '--tilt': `${tiltOf(def.id)}deg` } as CSSProperties}
         dangerouslySetInnerHTML={{
-          __html: `<g filter="url(#stamp-ink)" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"><g stroke-width="4">${shape}</g><g stroke-width="2">${inner}</g><g stroke-width="3">${symbolGroup}</g></g>`,
+          __html: `<g filter="url(#stamp-ink)" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"><g stroke-width="5.5">${shape}</g><g stroke-width="2.4">${inner}</g><g stroke-width="3.6">${symbolGroup}</g></g>`,
         }}
       />
     );

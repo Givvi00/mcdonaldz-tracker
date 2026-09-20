@@ -20,7 +20,9 @@ const THEME_OPTIONS: Array<{ value: ThemeMode; label: string; icon: string }> = 
 ];
 
 export function Profile() {
-  const { user, getVisitedCount, mcdonalds, catalogInfo } = useMcdonaldStore();
+  const { user, getVisitedCount, mcdonalds, catalogInfo, renameUser } = useMcdonaldStore();
+  const [nameDraft, setNameDraft] = useState<string | null>(null);
+  const nameShown = nameDraft ?? user?.name ?? '';
   const { mode, setMode } = useTheme();
   const level = levelInfo(getVisitedCount());
   const [mapApp, setMapApp] = useState<MapApp | null>(getSavedMapApp);
@@ -71,8 +73,33 @@ export function Profile() {
       <div className="relative overflow-hidden bg-gradient-to-br from-mc-red to-mc-red-dark text-white rounded-3xl p-6 text-center shadow-lg shadow-red-900/20">
         <FoodPattern />
         <div className="relative text-4xl mb-2 w-16 h-16 mx-auto flex items-center justify-center rounded-full bg-mc-yellow shadow-md">👤</div>
-        <p className="relative text-sm opacity-90 font-display font-semibold">Profilo Utente</p>
+        <p className="relative text-lg font-display font-bold">{user?.name || 'Ospite'}</p>
         <p className="relative text-xs opacity-75 mt-2">ID: {user?.id.slice(0, 8)}...</p>
+      </div>
+
+      {/* Name shown in the header */}
+      <div>
+        <h3 className="font-display font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">Il tuo nome</h3>
+        <div className="flex gap-2">
+          <input
+            value={nameShown}
+            onChange={e => setNameDraft(e.target.value)}
+            maxLength={20}
+            placeholder="Ospite"
+            className="min-w-0 flex-1 rounded-xl border-2 border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold text-gray-800 outline-none focus:border-mc-red dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+          />
+          <button
+            onClick={async () => {
+              await renameUser(nameShown);
+              setNameDraft(null);
+            }}
+            disabled={nameDraft === null}
+            className="rounded-xl bg-mc-red px-4 py-2.5 text-sm font-bold text-white transition-transform active:scale-95 disabled:opacity-40"
+          >
+            Salva
+          </button>
+        </div>
+        <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Compare in alto a destra, sopra il livello. Resta solo su questo telefono.</p>
       </div>
 
       {/* Stats Summary */}

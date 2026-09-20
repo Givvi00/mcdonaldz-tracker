@@ -61,6 +61,15 @@ export async function getOrCreateUser(): Promise<User> {
   return newUser;
 }
 
+export async function setUserName(userId: string, name: string): Promise<User | null> {
+  const database = await initDB();
+  const user = await database.get('users', userId);
+  if (!user) return null;
+  const updated: User = { ...user, name: name.trim() || undefined };
+  await database.put('users', updated);
+  return updated;
+}
+
 export async function addVisit(mcdonaldId: string, userId: string): Promise<Visit> {
   const database = await initDB();
   const visit: Visit = {

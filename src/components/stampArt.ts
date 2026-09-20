@@ -13,7 +13,7 @@ export const STAMP_SYMBOLS: Record<string, string> = {
   skyline: '<path d="M7 40V25H16V40M18 40V11H29V40M31 40V20H41V40M5 40H43"/><path d="M22 17H25M22 23H25M22 29H25"/>',
   plane: '<path d="M24 6C26 6 27 8 27 10V20L41 28V32L27 28V36L31 39V42L24 40L17 42V39L21 36V28L7 32V28L21 20V10C21 8 22 6 24 6Z"/>',
   train: '<rect x="12" y="7" width="24" height="27" rx="6"/><path d="M12 21H36"/><circle cx="19" cy="28" r="1.6" fill="currentColor"/><circle cx="29" cy="28" r="1.6" fill="currentColor"/><path d="M17 34L12 42M31 34L36 42"/>',
-  car: '<path d="M7 31V25L12 16H36L41 25V31Z"/><path d="M12 25H36"/><circle cx="16" cy="33" r="4" fill="#fff"/><circle cx="32" cy="33" r="4" fill="#fff"/>',
+  car: '<path d="M7 31V25L12 16H36L41 25V31H37.5a5 5 0 0 1-10 0H20.5a5 5 0 0 1-10 0Z"/><path d="M12 25H36"/><circle cx="15.5" cy="31" r="1.4" fill="currentColor"/><circle cx="32.5" cy="31" r="1.4" fill="currentColor"/>',
   bag: '<path d="M10 16H38L36 41H12Z"/><path d="M17 21V14a7 7 0 0 1 14 0V21"/>',
   road: '<path d="M17 6L9 42M31 6L39 42"/><path d="M24 8V14M24 21V27M24 34V40"/>',
   rocket: '<path d="M24 6C32 12 33 24 30 32H18C15 24 16 12 24 6Z"/><circle cx="24" cy="20" r="3"/><path d="M18 32L12 38M30 32L36 38M24 34V42"/>',
@@ -40,6 +40,6 @@ export const STAMP_INK: Record<string, string> = {
   segreti: '#6B3FA0',
 };
 
-/** Rough-ink look for a stamp: a little displacement of the outline. Lives in the sprite (FoodIconSprite). */
+/** Rough-ink look for a stamp: a wobbly outline plus little gaps where the ink did not take. Lives in the sprite. */
 export const STAMP_FILTER =
-  '<filter id="stamp-ink" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".45" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.1"/></filter>';
+  '<filter id="stamp-ink" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".4" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" result="d"/><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="7" result="g"/><feColorMatrix in="g" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -6 0 0 0 4.3" result="holes"/><feComposite in="d" in2="holes" operator="in"/></filter>';

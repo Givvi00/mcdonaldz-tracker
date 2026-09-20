@@ -61,7 +61,7 @@ export function LevelRoadmap({ visited }: { visited: number }) {
   };
 
   return (
-    <div className="rounded-3xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+    <div className="isolate rounded-3xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
       {current > 0 && (
         <button
           onClick={() => setShowPassed(v => !v)}

@@ -23,6 +23,8 @@ export interface Visit {
 
 export interface User {
   id: string;
+  /** Shown in the header; set in the Profile */
+  name?: string;
   createdAt: number;
   totalVisits: number;
   totalPoints: number;

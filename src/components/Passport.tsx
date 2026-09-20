@@ -12,10 +12,10 @@ export function Passport({ unlocked, progress, focused }: Props) {
   const got = ACHIEVEMENT_LIST.filter(a => unlocked.has(a.id)).length;
 
   return (
-    <div className="rounded-[1.4rem] border-[3px] border-[#3B2A22] bg-[#F6ECD6] p-3 text-[#3B2A22] shadow-lg">
-      <div className="mb-3 flex items-center justify-between rounded-xl border-2 border-[#3B2A22] bg-gradient-to-br from-[#E8372A] to-[#B81F14] px-4 py-3 text-white">
-        <p className="font-display text-lg font-bold tracking-wide">PASSAPORTO McDONALDZ</p>
-        <span className="rounded-full bg-black/25 px-2.5 py-0.5 text-xs font-semibold">
+    <div className="passport-paper rounded-[1.4rem] border-[3px] border-[#3B2A22] p-3 text-[#3B2A22] shadow-lg">
+      <div className="passport-cover mb-3 flex items-center justify-between gap-2 rounded-xl border-2 border-[#3B2A22] px-4 py-3 text-white shadow-inner">
+        <p className="font-display text-lg font-bold leading-none tracking-wide">PASSAPORTO McDONALDZ</p>
+        <span className="inline-flex h-6 flex-none items-center justify-center whitespace-nowrap rounded-full bg-black/30 px-3 text-xs font-semibold leading-none">
           {got} / {ACHIEVEMENT_LIST.length} timbri
         </span>
       </div>
@@ -27,7 +27,7 @@ export function Passport({ unlocked, progress, focused }: Props) {
           <section
             key={family.id}
             className={`mb-3 rounded-xl border border-[#DCCDB2] p-3 last:mb-0 ${
-              family.id === 'segreti' ? 'bg-[#F3ECFA]' : 'bg-[#FFFAF0]'
+              family.id === 'segreti' ? 'passport-page-secret' : 'passport-page'
             }`}
           >
             <header className="flex items-baseline justify-between">

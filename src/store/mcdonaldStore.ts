@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { McDonald, Visit, User } from '@shared/types';
 import { pickInitialCatalog, type CatalogInfo } from '@/services/catalogBoot';
-import { getOrCreateUser, getVisits, addVisit, removeVisit } from '@/services/db';
+import { getOrCreateUser, getVisits, addVisit, removeVisit, setUserName } from '@/services/db';
 import { checkAndUnlockAchievements } from '@/services/achievements';
 import { syncRegionCompletions } from '@/services/regions';
 import { distanceKm } from '@/utils/geo';
@@ -42,6 +42,7 @@ interface AppStore {
   celebrationQueue: Celebration[];
 
   initApp: () => Promise<void>;
+  renameUser: (name: string) => Promise<void>;
   toggleVisit: (mcdonaldId: string) => Promise<void>;
   dismissUnlocked: (type: string) => void;
   openAchievement: (type: string) => void;
@@ -95,6 +96,13 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     // Catch up silently on anything already earned from past sessions (no toast).
     await checkAndUnlockAchievements(user.id, get().mcdonalds, visits);
     await syncRegionCompletions(user.id, get().mcdonalds, visits);
+  },
+
+  renameUser: async (name: string) => {
+    const { user } = get();
+    if (!user) return;
+    const updated = await setUserName(user.id, name);
+    if (updated) set({ user: updated });
   },
 
   toggleVisit: async (mcdonaldId: string) => {
