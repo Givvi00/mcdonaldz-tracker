@@ -408,11 +408,19 @@ function StampShow({ stamps }: { stamps: string[] }) {
   const extra = stamps.length - shown.length;
   const total = stampTime(stamps.length) / 1000;
   const size = shown.length === 1 ? 190 : 118;
+  const secret = shown.some(id => ACHIEVEMENTS[id]?.secret);
 
   return (
     <div className="food-rain fixed inset-0 z-[2500] overflow-hidden pointer-events-none" aria-hidden="true">
       <Veil ms={total * 1000} />
-      <div className="absolute inset-x-0 flex items-center justify-center gap-3" style={{ top: '38%', transform: 'translateY(-50%)' }}>
+      <div className="absolute inset-x-0 flex flex-col items-center gap-6" style={{ top: '42%', transform: 'translateY(-50%)' }}>
+        <p
+          className="font-display text-sm font-bold uppercase tracking-[0.25em] text-white drop-shadow-lg"
+          style={{ animation: `stamp-dim ${total}s ease-in-out both` }}
+        >
+          {secret ? 'Timbro segreto scoperto!' : shown.length + extra === 1 ? 'Timbro sbloccato!' : 'Timbri sbloccati!'}
+        </p>
+        <div className="flex items-start justify-center gap-3 pb-12">
         {shown.map((id, i) => {
           const def = ACHIEVEMENTS[id];
           if (!def) return null;
@@ -436,6 +444,12 @@ function StampShow({ stamps }: { stamps: string[] }) {
                 style={{ opacity: 0, animation: `stamp-ring 0.8s ease-out ${at + 0.45}s forwards` }}
                 dangerouslySetInnerHTML={{ __html: STAMP_SHAPES[def.shape] }}
               />
+              <p
+                className="absolute left-1/2 top-full mt-3 -translate-x-1/2 text-center font-display text-base font-bold leading-tight text-white drop-shadow-lg"
+                style={{ width: size + 12, opacity: 0, animation: `stamp-label 0.5s ease-out ${at + 0.7}s forwards` }}
+              >
+                {def.name}
+              </p>
               <div className="absolute inset-0" style={{ animation: `stamp-slam 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.2) ${at}s both` }}>
                 <Stamp def={def} state="got" size={size} />
               </div>
@@ -466,15 +480,16 @@ function StampShow({ stamps }: { stamps: string[] }) {
             </div>
           );
         })}
+        </div>
+        {extra > 0 && (
+          <p
+            className="-mt-6 font-display text-xl font-bold text-white drop-shadow-lg"
+            style={{ animation: `stamp-dim ${total}s ease-in-out both` }}
+          >
+            +{extra} {extra === 1 ? 'altro timbro' : 'altri timbri'}
+          </p>
+        )}
       </div>
-      {extra > 0 && (
-        <p
-          className="absolute inset-x-0 text-center font-display text-xl font-bold text-white drop-shadow-lg"
-          style={{ top: '52%', animation: `stamp-dim ${total}s ease-in-out both` }}
-        >
-          +{extra} {extra === 1 ? 'altro timbro' : 'altri timbri'}
-        </p>
-      )}
     </div>
   );
 }

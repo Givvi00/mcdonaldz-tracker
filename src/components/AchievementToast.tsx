@@ -10,6 +10,8 @@ const SHOWN = 3;
 /** "Stamp unlocked": one toast for all the stamps of a visit, stays 10 seconds; a tap opens them in the passport. */
 export function AchievementToast() {
   const { newlyUnlocked, clearUnlocked, openAchievements } = useMcdonaldStore();
+  // The stamp show already says what was unlocked: the toast waits for it to end, then stays for the tap to the passport
+  const showing = useMcdonaldStore(state => state.celebration?.kind === 'stamp');
   const defs = newlyUnlocked.map(id => ACHIEVEMENTS[id]).filter(Boolean);
   const key = newlyUnlocked.join(',');
 
@@ -17,7 +19,7 @@ export function AchievementToast() {
 
   // The toast fades out before it goes, whether it times out or is closed
   useEffect(() => {
-    if (!key) return;
+    if (!key || showing) return;
     setLeaving(false);
     const fade = setTimeout(() => setLeaving(true), SHOW_FOR_MS - FADE_MS);
     const done = setTimeout(clearUnlocked, SHOW_FOR_MS);
@@ -25,14 +27,14 @@ export function AchievementToast() {
       clearTimeout(fade);
       clearTimeout(done);
     };
-  }, [key, clearUnlocked]);
+  }, [key, showing, clearUnlocked]);
 
   const close = () => {
     setLeaving(true);
     setTimeout(clearUnlocked, FADE_MS);
   };
 
-  if (defs.length === 0) return null;
+  if (defs.length === 0 || showing) return null;
   const single = defs.length === 1 ? defs[0] : null;
   const secret = defs.some(d => d.secret);
 
