@@ -12,6 +12,7 @@ import { levelInfo } from '@/utils/foodTheme';
 import { UpdateBanner } from '@/components/UpdateBanner';
 import { MapAppChooser } from '@/components/MapAppChooser';
 import { FoodRain } from '@/components/FoodRain';
+import { CelebrationLab } from '@/components/CelebrationLab';
 import { FoodIconSprite } from '@/components/FoodIcon';
 import { startUpdateChecks } from '@/services/updates';
 import { startCatalogRefresh } from '@/services/catalogRefresh';
@@ -49,6 +50,7 @@ function App() {
       <MapAppChooser />
       <FoodIconSprite />
       <FoodRain />
+      {import.meta.env.DEV && <CelebrationLab />}
 
       {/* Wordmark header */}
       {selectedTab !== 'map' && (
