@@ -13,7 +13,7 @@ interface Props {
   total: number;
 }
 
-const PAPER = '#FFFDF7';
+const PAPER = '#FFFFFF';
 
 /** The visits as a till receipt: one line per region visited, a total, the level. The paper stays light in dark mode, like real paper. */
 export function Receipt({ rows, visited, total }: Props) {

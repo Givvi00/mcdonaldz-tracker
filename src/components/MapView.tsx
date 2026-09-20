@@ -254,11 +254,11 @@ export function MapView() {
       <button
         onClick={() => setSelectedTab('profile')}
         aria-label="Apri il profilo"
-        className={`absolute right-2.5 z-[1000] flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white shadow-md transition-transform active:scale-95 dark:border-gray-700 dark:bg-gray-900 ${
-          userPosition ? 'bottom-44' : 'bottom-28'
+        className={`absolute right-2.5 z-[1000] flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-mc-red bg-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-transform active:scale-95 dark:bg-gray-900 ${
+          userPosition ? 'bottom-48' : 'bottom-28'
         }`}
       >
-        <FoodIcon name={levelInfo(getVisitedCount()).level.icon} size={26} />
+        <FoodIcon name={levelInfo(getVisitedCount()).level.icon} size={30} />
         <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-mc-red px-1 text-[0.65rem] font-black text-white ring-2 ring-white dark:ring-gray-900">
           {levelInfo(getVisitedCount()).number}
         </span>
@@ -267,7 +267,7 @@ export function MapView() {
         <button
           onClick={centerOnUser}
           aria-label="Centra sulla mia posizione"
-          className="absolute bottom-28 right-2.5 z-[1000] w-11 h-11 flex items-center justify-center rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-md text-xl active:scale-95 transition-transform"
+          className="absolute bottom-28 right-2.5 z-[1000] w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-gray-900 border-[3px] border-[#3B2A22] dark:border-gray-500 shadow-[0_4px_12px_rgba(0,0,0,0.5)] text-2xl active:scale-95 transition-transform"
         >
           🎯
         </button>

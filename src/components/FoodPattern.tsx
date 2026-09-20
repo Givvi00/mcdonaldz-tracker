@@ -1,39 +1,9 @@
 import { useId, useMemo } from 'react';
-import type { FoodIconName } from '@/utils/foodTheme';
+import { ICON, TILE_H, TILE_W, patternIcons } from '@/utils/patternLayout';
 
-// Lattice of icons: the columns are shifted up and down alternately, the whole thing is tilted and slides sideways.
-const ICON = 34;
-const COLS = 6;
-const COL_PITCH = 52;
-const ROW_PITCH = 62;
-const TILE_W = COLS * COL_PITCH;
-const TILE_H = 2 * ROW_PITCH;
 const ROWS_TILT = -10;
-const SLIDE_SECONDS = 28;
-const ORDER: FoodIconName[] = ['burger', 'fries', 'cup', 'happy', 'toast', 'nuggets', 'mcflurry', 'wrap', 'wings', 'filet', 'basket', 'bigmac'];
-
-interface Placed {
-  key: string;
-  name: FoodIconName;
-  x: number;
-  y: number;
-}
-
-/** Icons of one tile. One that would cross the bottom edge is drawn again above the top edge, so the repeat never cuts it. */
-function placeIcons(): Placed[] {
-  const placed: Placed[] = [];
-  let k = 0;
-  for (let c = 0; c < COLS; c++) {
-    for (let r = 0; r < 2; r++) {
-      const name = ORDER[(k++ * 5) % ORDER.length];
-      const x = c * COL_PITCH + (COL_PITCH - ICON) / 2;
-      const y = r * ROW_PITCH + (c % 2) * (ROW_PITCH / 2) + 8;
-      placed.push({ key: `${c}-${r}`, name, x, y });
-      if (y + ICON > TILE_H) placed.push({ key: `${c}-${r}-wrap`, name, x, y: y - TILE_H });
-    }
-  }
-  return placed;
-}
+/** About 11 pixels per second, whatever the width of the tile */
+const SLIDE_SECONDS = Math.round(TILE_W / 11);
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -44,7 +14,7 @@ const prefersReducedMotion = () =>
  */
 export function FoodPattern({ opacity = 0.22 }: { opacity?: number }) {
   const id = useId().replace(/:/g, '');
-  const icons = useMemo(placeIcons, []);
+  const icons = useMemo(() => patternIcons(), []);
   const still = prefersReducedMotion();
   return (
     <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none" style={{ opacity }}>

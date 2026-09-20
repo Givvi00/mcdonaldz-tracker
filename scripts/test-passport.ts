@@ -5,8 +5,9 @@ import type { McDonald, Visit } from '../shared/types';
 import { ACHIEVEMENT_LIST, getAchievementProgress } from '../src/services/achievements';
 import { regionSummaries, regionTier } from '../src/services/regions';
 import { STAMP_INK, STAMP_SHAPES, STAMP_SYMBOLS } from '../src/components/stampArt';
-import { LEVELS } from '../src/utils/foodTheme';
+import { FOOD_ICONS, LEVELS } from '../src/utils/foodTheme';
 import { backupNudge } from '../src/services/backupReminder';
+import { COLS, MIN_SAME_DISTANCE, patternSlots, wrappedDistance } from '../src/utils/patternLayout';
 
 let passed = 0;
 function test(name: string, fn: () => void) {
@@ -182,6 +183,21 @@ test('promemoria backup: solo se ci sono visite da proteggere e il backup manca 
   assert.equal(backupNudge(0), false);
   assert.equal(backupNudge(2), false);
   assert.equal(backupNudge(10), true); // nessun backup fatto (in Node non c'è localStorage)
+});
+
+test('sfondo di icone: la stessa icona non sta mai vicina a un altra uguale, e le usa tutte', () => {
+  const slots = patternSlots();
+  assert.equal(slots.length, COLS * 2);
+  assert.equal(new Set(slots.map(s => s.name)).size, FOOD_ICONS.length);
+  for (let i = 0; i < slots.length; i++) {
+    for (let j = i + 1; j < slots.length; j++) {
+      if (slots[i].name === slots[j].name) {
+        assert.ok(wrappedDistance(slots[i], slots[j]) >= MIN_SAME_DISTANCE, `${slots[i].name} troppo vicina`);
+      }
+    }
+  }
+  // Sempre lo stesso disegno a ogni apertura
+  assert.deepEqual(patternSlots().map(s => s.name), patternSlots().map(s => s.name));
 });
 
 console.log(`\n${passed} controlli superati.`);
