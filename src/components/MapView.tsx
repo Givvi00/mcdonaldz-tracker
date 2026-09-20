@@ -192,12 +192,31 @@ export function MapView() {
     }
   };
 
+  /**
+   * Centre the map on a restaurant and open its popup. Jump straight there (a flight and the cluster's own zoom used to
+   * fight each other and left the map somewhere else), let the cluster reveal the marker, then centre on it again: a bit
+   * lower than the middle of the screen, so the popup above it fits in view too.
+   */
+  const focusMarker = (mc: McDonald, marker: L.Marker) => {
+    const m = map.current;
+    const cluster = clusterGroup.current;
+    if (!m || !cluster) return;
+    m.invalidateSize();
+    m.setView([mc.lat, mc.lon], 16, { animate: false });
+    cluster.zoomToShowLayer(marker, () => {
+      const zoom = m.getZoom();
+      const point = m.project(marker.getLatLng(), zoom);
+      point.y -= 70;
+      m.setView(m.unproject(point, zoom), zoom, { animate: false });
+      marker.openPopup();
+    });
+  };
+
   const selectResult = (mc: McDonald) => {
     setQuery('');
-    map.current?.flyTo([mc.lat, mc.lon], 15, { duration: 0.75 });
     const marker = markers.current.get(mc.id);
     if (marker && clusterGroup.current) {
-      clusterGroup.current.zoomToShowLayer(marker, () => marker.openPopup());
+      focusMarker(mc, marker);
     } else {
       // Hidden by the status filter: show everything again so the marker exists
       setStatusFilter(null);
@@ -214,10 +233,7 @@ export function MapView() {
       setStatusFilter(null);
       return;
     }
-    if (mc && marker && clusterGroup.current) {
-      map.current.flyTo([mc.lat, mc.lon], 15, { duration: 0.75 });
-      clusterGroup.current.zoomToShowLayer(marker, () => marker.openPopup());
-    }
+    if (mc && marker && clusterGroup.current) focusMarker(mc, marker);
     clearMapFocus();
   }, [mapFocusId, mcdonalds, clearMapFocus, statusFilter]);
 

@@ -8,6 +8,7 @@ interface Row {
 }
 
 interface Props {
+  name?: string | null;
   rows: Row[];
   visited: number;
   total: number;
@@ -16,21 +17,19 @@ interface Props {
 const PAPER = '#FFFFFF';
 
 /** The visits as a till receipt: one line per region visited, a total, the level. The paper stays light in dark mode, like real paper. */
-export function Receipt({ rows, visited, total }: Props) {
+export function Receipt({ name, rows, visited, total }: Props) {
   const lines = rows.filter(r => r.visited > 0).sort((a, b) => b.visited - a.visited || a.region.localeCompare(b.region, 'it'));
   const { level, number } = levelInfo(visited);
   const today = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
   return (
     <div>
-      <h3 className="font-display font-semibold text-lg text-gray-800 dark:text-gray-100 flex items-center gap-2">
-        <span className="flex items-center justify-center w-7 h-7 rounded-full bg-yellow-100 dark:bg-yellow-950/50 text-sm">🧾</span>
-        Il tuo scontrino
-      </h3>
-      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-3">I McDonald's che hai visitato, regione per regione</p>
       <div className="mx-auto max-w-sm [filter:drop-shadow(0_0_1px_rgba(59,42,34,0.6))_drop-shadow(0_6px_10px_rgba(59,42,34,0.25))]">
         <div className="px-5 pt-5 pb-3 font-mono text-[0.8rem] text-gray-800" style={{ background: PAPER }}>
           <p className="text-center font-bold tracking-widest">McDONALDZ</p>
+          <p className="text-center text-[0.7rem] tracking-wide">
+            {name ? `Benvenuto al McDrive, ${name}` : 'Benvenuto al McDrive'}
+          </p>
           <p className="text-center text-[0.72rem] font-bold tracking-wider">RISTORANTI VISITATI</p>
           <p className="text-center text-[0.7rem] text-gray-500">Ordine n. {visited} · {today}</p>
           <div className="my-3 border-t-2 border-dashed border-gray-300" />

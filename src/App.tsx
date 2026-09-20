@@ -18,7 +18,7 @@ import { startCatalogRefresh } from '@/services/catalogRefresh';
 import './App.css';
 
 function App() {
-  const { selectedTab, setSelectedTab, initApp, getVisitedCount, setUserPosition, setLocationStatus, user } =
+  const { selectedTab, setSelectedTab, initApp, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile } =
     useMcdonaldStore();
   useTheme();
   const { status: geoStatus, coords } = useGeolocation();
@@ -63,11 +63,11 @@ function App() {
             <p className="text-[0.65rem] uppercase tracking-wider text-white/75 -mt-0.5">Tracker</p>
           </div>
           <button
-            onClick={() => setSelectedTab('profile')}
+            onClick={() => openProfile(user?.name ? undefined : 'name')}
             aria-label="Apri il profilo"
             className="min-w-0 max-w-[55%] rounded-2xl bg-black/25 px-3.5 py-1.5 text-right transition-transform active:scale-95"
           >
-            <p className="truncate text-xs leading-tight text-white/80">{user?.name ? `Ciao, ${user.name}` : 'Ciao!'}</p>
+            <p className="truncate text-xs leading-tight text-white/80">{user?.name ? `Ciao, ${user.name}` : 'Ciao! Registrati'}</p>
             <p className="font-display text-base font-bold leading-tight">Livello {levelInfo(getVisitedCount()).number}</p>
           </button>
         </header>

@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { ACHIEVEMENTS } from '@/services/achievements';
 import { Stamp } from '@/components/Stamp';
 
 const SHOW_FOR_MS = 10000;
+const FADE_MS = 500;
 const SHOWN = 3;
 
 /** "Stamp unlocked": one toast for all the stamps of a visit, stays 10 seconds; a tap opens them in the passport. */
@@ -12,11 +13,24 @@ export function AchievementToast() {
   const defs = newlyUnlocked.map(id => ACHIEVEMENTS[id]).filter(Boolean);
   const key = newlyUnlocked.join(',');
 
+  const [leaving, setLeaving] = useState(false);
+
+  // The toast fades out before it goes, whether it times out or is closed
   useEffect(() => {
     if (!key) return;
-    const timer = setTimeout(clearUnlocked, SHOW_FOR_MS);
-    return () => clearTimeout(timer);
+    setLeaving(false);
+    const fade = setTimeout(() => setLeaving(true), SHOW_FOR_MS - FADE_MS);
+    const done = setTimeout(clearUnlocked, SHOW_FOR_MS);
+    return () => {
+      clearTimeout(fade);
+      clearTimeout(done);
+    };
   }, [key, clearUnlocked]);
+
+  const close = () => {
+    setLeaving(true);
+    setTimeout(clearUnlocked, FADE_MS);
+  };
 
   if (defs.length === 0) return null;
   const single = defs.length === 1 ? defs[0] : null;
@@ -27,7 +41,10 @@ export function AchievementToast() {
       className="fixed inset-x-3 z-[3000] flex justify-center pointer-events-none"
       style={{ top: 'calc(0.75rem + var(--safe-top))' }}
     >
-      <div className="relative w-full max-w-md pointer-events-auto animate-[toast-in_0.35s_ease-out]">
+      <div
+        className="relative w-full max-w-md pointer-events-auto"
+        style={{ animation: leaving ? `toast-out ${FADE_MS}ms ease-in forwards` : 'toast-in 0.5s cubic-bezier(0.2, 0.8, 0.3, 1) both' }}
+      >
         <button
           onClick={() => openAchievements(newlyUnlocked)}
           className="w-full flex items-center gap-4 bg-gradient-to-br from-mc-yellow to-amber-500 text-gray-900 rounded-3xl pl-4 pr-10 py-4 shadow-2xl shadow-black/40 border-2 border-white/70 text-left active:scale-[0.98] transition-transform"
@@ -59,7 +76,7 @@ export function AchievementToast() {
           </div>
         </button>
         <button
-          onClick={clearUnlocked}
+          onClick={close}
           aria-label="Chiudi"
           className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/10 text-gray-800 text-sm font-bold active:scale-95 transition-transform"
         >

@@ -66,7 +66,7 @@ export function Stats() {
       <Section icon="mcflurry" title="Regioni">
         <RegionAlbum summaries={summaries} wasComplete={wasComplete} />
         <div className="mt-5">
-          <Receipt rows={regionStats} visited={visitedCount} total={totalMcdonalds} />
+          <Receipt name={user?.name} rows={regionStats} visited={visitedCount} total={totalMcdonalds} />
         </div>
       </Section>
     </div>

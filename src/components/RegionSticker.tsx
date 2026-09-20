@@ -24,6 +24,46 @@ function wavePath(x0: number, y: number, period: number, periods: number, amp: n
   return `${d} L ${x0 + period * periods} ${bottom} L ${x0} ${bottom} Z`;
 }
 
+/** Just the wavy top edge of the liquid: the foam */
+function waveLine(x0: number, y: number, period: number, periods: number, amp: number): string {
+  let d = `M ${x0} ${y} Q ${x0 + period / 4} ${y - 2 * amp} ${x0 + period / 2} ${y}`;
+  for (let i = 1; i < periods * 2; i++) d += ` T ${x0 + (period / 2) * (i + 1)} ${y}`;
+  return d;
+}
+
+// Glitter for the finished stickers: [x, y, size, delay] in card units
+const GLITTER: Array<[number, number, number, number]> = [
+  [22, 24, 3.2, 0],
+  [96, 20, 2.6, 0.5],
+  [16, 66, 2.2, 1.1],
+  [100, 58, 3.4, 0.3],
+  [58, 16, 2.4, 1.4],
+  [34, 92, 2.8, 0.8],
+  [88, 92, 2.2, 1.7],
+  [48, 50, 2, 1.0],
+  [74, 34, 2.6, 0.2],
+  [64, 78, 2.4, 1.3],
+];
+
+/** A four-pointed star that grows and shrinks, on its own timing */
+function Glint({ x, y, size, delay, still }: { x: number; y: number; size: number; delay: number; still: boolean }) {
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <path
+        d="M0 -3 C.3 -.8 .8 -.3 3 0 C.8 .3 .3 .8 0 3 C-.3 .8 -.8 .3 -3 0 C-.8 -.3 -.3 -.8 0 -3Z"
+        fill="#FFF7C2"
+        stroke="#F2AE00"
+        strokeWidth=".35"
+        transform={`scale(${still ? size / 2 : 0})`}
+      >
+        {!still && (
+          <animateTransform attributeName="transform" type="scale" values={`0;${size};0`} dur="2.2s" begin={`${delay}s`} repeatCount="indefinite" />
+        )}
+      </path>
+    </g>
+  );
+}
+
 /**
  * One region as a sticker. In progress: the region fills with cola from the bottom, with a moving wave and rising
  * bubbles. Not started: a see-through card with a big question mark. Complete (gold) or complete-with-something-new
@@ -85,8 +125,9 @@ export function RegionSticker({ summary, tier }: { summary: RegionSummary; tier:
             <stop offset="1" stopColor="#B3BCC4" />
           </linearGradient>
           <linearGradient id={`cola${uid}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#FF7F5C" />
-            <stop offset="1" stopColor="#D42317" />
+            <stop offset="0" stopColor="#7A3418" />
+            <stop offset=".55" stopColor="#4A1F0E" />
+            <stop offset="1" stopColor="#24100A" />
           </linearGradient>
           {shape && (
             <clipPath id={`clip${uid}`}>
@@ -126,6 +167,7 @@ export function RegionSticker({ summary, tier }: { summary: RegionSummary; tier:
                       <animateTransform attributeName="transform" type="translate" from="0 0" to={`${-period} 0`} dur="2.8s" repeatCount="indefinite" />
                     )}
                     <path d={wavePath(-period, level, period, Math.ceil(shape.width / period) + 3, amp, shape.height + 6)} fill={`url(#cola${uid})`} />
+                    <path d={waveLine(-period, level, period, Math.ceil(shape.width / period) + 3, amp)} fill="none" stroke="#F1D9B5" strokeWidth={1.6 / scale} strokeLinecap="round" />
                   </g>
                   {bubbles.map((b, i) => (
                     <circle key={i} cx={b.x} cy={b.y} r={b.r / scale} fill="#fff" fillOpacity=".75">
@@ -171,6 +213,8 @@ export function RegionSticker({ summary, tier }: { summary: RegionSummary; tier:
             {pct}%
           </text>
         </g>
+
+        {shiny && GLITTER.slice(0, tier === 'gold' ? GLITTER.length : 4).map(([x, y, size, delay], i) => <Glint key={i} x={x} y={y} size={size} delay={delay} still={still} />)}
 
         {shiny && (
           <g transform="rotate(-16 60 58)" filter="url(#stamp-ink)" opacity=".92">

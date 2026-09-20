@@ -36,6 +36,8 @@ interface AppStore {
   /** Stamps to show in the passport after tapping the toast (all of them, when there are several) */
   focusedAchievements: string[];
   mapFocusId: string | null;
+  /** What to jump to when the profile opens ("name": the name field) */
+  profileFocus: 'name' | null;
   updateAvailable: boolean;
   /** The celebration playing now, and the ones waiting for their turn (level, then region, then stamps) */
   celebration: Celebration | null;
@@ -47,6 +49,8 @@ interface AppStore {
   clearUnlocked: () => void;
   openAchievements: (types: string[]) => void;
   clearFocusedAchievement: () => void;
+  openProfile: (focus?: 'name') => void;
+  clearProfileFocus: () => void;
   enqueueCelebrations: (events: Celebration[]) => void;
   clearCelebration: () => void;
   setSelectedTab: (tab: 'home' | 'map' | 'stats' | 'profile') => void;
@@ -85,6 +89,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   newlyUnlocked: [],
   focusedAchievements: [],
   mapFocusId: null,
+  profileFocus: null,
   updateAvailable: false,
   celebration: null,
   celebrationQueue: [],
@@ -173,6 +178,10 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   openAchievements: (types) => set({ newlyUnlocked: [], celebration: null, selectedTab: 'stats', focusedAchievements: types }),
 
   clearFocusedAchievement: () => set({ focusedAchievements: [] }),
+
+  openProfile: (focus) => set({ selectedTab: 'profile', profileFocus: focus ?? null }),
+
+  clearProfileFocus: () => set({ profileFocus: null }),
 
   setSelectedTab: (tab) => set({ selectedTab: tab }),
   setSearchQuery: (query) => set({ searchQuery: query }),

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { applyUpdate, checkForUpdate, type UpdateCheck } from '@/services/updates';
 import { refreshCatalog, type CatalogRefresh } from '@/services/catalogRefresh';
@@ -22,7 +22,19 @@ const THEME_OPTIONS: Array<{ value: ThemeMode; label: string; icon: string }> = 
 ];
 
 export function Profile() {
-  const { user, getVisitedCount, mcdonalds, catalogInfo, renameUser } = useMcdonaldStore();
+  const { user, getVisitedCount, mcdonalds, catalogInfo, renameUser, profileFocus, clearProfileFocus } = useMcdonaldStore();
+  const nameInput = useRef<HTMLInputElement>(null);
+
+  // Arrived from "Ciao! Registrati": bring the name field into view and start typing
+  useEffect(() => {
+    if (profileFocus !== 'name') return;
+    const t = setTimeout(() => {
+      nameInput.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      nameInput.current?.focus({ preventScroll: true });
+      clearProfileFocus();
+    }, 250);
+    return () => clearTimeout(t);
+  }, [profileFocus, clearProfileFocus]);
   const [, setBackupTick] = useState(0);
   const [nameDraft, setNameDraft] = useState<string | null>(null);
   const nameShown = nameDraft ?? user?.name ?? '';
@@ -112,6 +124,7 @@ export function Profile() {
         <h3 className="font-display font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">Il tuo nome</h3>
         <div className="flex gap-2">
           <input
+            ref={nameInput}
             value={nameShown}
             onChange={e => setNameDraft(e.target.value)}
             maxLength={20}
