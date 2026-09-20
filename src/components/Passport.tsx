@@ -4,7 +4,7 @@ import { Stamp } from '@/components/Stamp';
 interface Props {
   unlocked: ReadonlySet<string>;
   progress: Record<string, AchievementProgress>;
-  focused: string | null;
+  focused: string[];
 }
 
 /** The achievements as the stamps of a passport, one page per family. Cream in the light theme, dark brown in the dark one. */
@@ -47,7 +47,7 @@ export function Passport({ unlocked, progress, focused }: Props) {
                     key={def.id}
                     id={`ach-${def.id}`}
                     className={`flex flex-col items-center rounded-xl p-1 text-center transition-all ${
-                      focused === def.id
+                      focused.includes(def.id)
                         ? 'animate-pulse ring-4 ring-mc-red ring-offset-2 ring-offset-[#FFFAF0] dark:ring-offset-[#362A22]'
                         : ''
                     }`}

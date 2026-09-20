@@ -15,10 +15,9 @@ import { Receipt } from '@/components/Receipt';
 import type { Achievement } from '@shared/types';
 
 export function Stats() {
-  const { user, visits, getVisitedCount, getCountedTotal, getRegionStats, mcdonalds, focusedAchievement, clearFocusedAchievement } =
+  const { user, visits, getVisitedCount, getCountedTotal, getRegionStats, mcdonalds, focusedAchievements, clearFocusedAchievement } =
     useMcdonaldStore();
   const [achievements, setAchievements] = useState<Achievement[]>([]);
-  const [showReceipt, setShowReceipt] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -28,16 +27,16 @@ export function Stats() {
 
   // Arrived from an achievement toast: scroll to that achievement and highlight it for a few seconds
   useEffect(() => {
-    if (!focusedAchievement) return;
+    if (focusedAchievements.length === 0) return;
     const scroll = setTimeout(() => {
-      document.getElementById(`ach-${focusedAchievement}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById(`ach-${focusedAchievements[0]}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 400);
     const clear = setTimeout(clearFocusedAchievement, 5000);
     return () => {
       clearTimeout(scroll);
       clearTimeout(clear);
     };
-  }, [focusedAchievement, clearFocusedAchievement]);
+  }, [focusedAchievements, clearFocusedAchievement]);
 
   const visitedCount = getVisitedCount();
   const regionStats = getRegionStats();
@@ -68,22 +67,14 @@ export function Stats() {
       </Section>
 
       <Section icon="burger" title="Passaporto">
-        <Passport unlocked={unlockedIds} progress={progress} focused={focusedAchievement} />
+        <Passport unlocked={unlockedIds} progress={progress} focused={focusedAchievements} />
       </Section>
 
       <Section icon="mcflurry" title="Regioni">
         <RegionAlbum summaries={summaries} wasComplete={wasComplete} />
-        <button
-          onClick={() => setShowReceipt(v => !v)}
-          className="mt-3 w-full rounded-xl border-2 border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 py-2.5 text-sm font-semibold text-gray-600 dark:text-gray-300 active:scale-[0.98] transition-transform"
-        >
-          {showReceipt ? 'Nascondi lo scontrino' : 'Mostra lo scontrino'}
-        </button>
-        {showReceipt && (
-          <div className="mt-4">
-            <Receipt rows={regionStats} visited={visitedCount} total={totalMcdonalds} />
-          </div>
-        )}
+        <div className="mt-5">
+          <Receipt rows={regionStats} visited={visitedCount} total={totalMcdonalds} />
+        </div>
       </Section>
     </div>
   );

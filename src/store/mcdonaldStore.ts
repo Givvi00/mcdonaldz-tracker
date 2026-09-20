@@ -33,8 +33,8 @@ interface AppStore {
   locationStatus: GeoStatus;
   /** Stamps shown in the toast at the top */
   newlyUnlocked: string[];
-  /** Achievement to show in Stats after tapping its toast */
-  focusedAchievement: string | null;
+  /** Stamps to show in the passport after tapping the toast (all of them, when there are several) */
+  focusedAchievements: string[];
   mapFocusId: string | null;
   updateAvailable: boolean;
   /** The celebration playing now, and the ones waiting for their turn (level, then region, then stamps) */
@@ -44,8 +44,8 @@ interface AppStore {
   initApp: () => Promise<void>;
   renameUser: (name: string) => Promise<void>;
   toggleVisit: (mcdonaldId: string) => Promise<void>;
-  dismissUnlocked: (type: string) => void;
-  openAchievement: (type: string) => void;
+  clearUnlocked: () => void;
+  openAchievements: (types: string[]) => void;
   clearFocusedAchievement: () => void;
   enqueueCelebrations: (events: Celebration[]) => void;
   clearCelebration: () => void;
@@ -83,7 +83,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   userPosition: null,
   locationStatus: 'idle',
   newlyUnlocked: [],
-  focusedAchievement: null,
+  focusedAchievements: [],
   mapFocusId: null,
   updateAvailable: false,
   celebration: null,
@@ -168,16 +168,11 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     }, GAP_MS);
   },
 
-  dismissUnlocked: (type) => set(state => ({ newlyUnlocked: state.newlyUnlocked.filter(t => t !== type) })),
+  clearUnlocked: () => set({ newlyUnlocked: [] }),
 
-  openAchievement: (type) =>
-    set(state => ({
-      newlyUnlocked: state.newlyUnlocked.filter(t => t !== type),
-      selectedTab: 'stats',
-      focusedAchievement: type,
-    })),
+  openAchievements: (types) => set({ newlyUnlocked: [], celebration: null, selectedTab: 'stats', focusedAchievements: types }),
 
-  clearFocusedAchievement: () => set({ focusedAchievement: null }),
+  clearFocusedAchievement: () => set({ focusedAchievements: [] }),
 
   setSelectedTab: (tab) => set({ selectedTab: tab }),
   setSearchQuery: (query) => set({ searchQuery: query }),

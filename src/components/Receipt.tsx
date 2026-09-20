@@ -28,7 +28,7 @@ export function Receipt({ rows, visited, total }: Props) {
         Il tuo scontrino
       </h3>
       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-3">I McDonald's che hai visitato, regione per regione</p>
-      <div className="mx-auto max-w-sm drop-shadow-md">
+      <div className="mx-auto max-w-sm [filter:drop-shadow(0_0_1px_rgba(59,42,34,0.6))_drop-shadow(0_6px_10px_rgba(59,42,34,0.25))]">
         <div className="px-5 pt-5 pb-3 font-mono text-[0.8rem] text-gray-800" style={{ background: PAPER }}>
           <p className="text-center font-bold tracking-widest">McDONALDZ</p>
           <p className="text-center text-[0.72rem] font-bold tracking-wider">RISTORANTI VISITATI</p>

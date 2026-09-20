@@ -383,7 +383,7 @@ function StampShow({ stamps }: { stamps: string[] }) {
                 stroke={ink}
                 strokeWidth="3"
                 strokeLinejoin="round"
-                style={{ animation: `stamp-ring 0.8s ease-out ${at + 0.45}s both` }}
+                style={{ opacity: 0, animation: `stamp-ring 0.8s ease-out ${at + 0.45}s forwards` }}
                 dangerouslySetInnerHTML={{ __html: STAMP_SHAPES[def.shape] }}
               />
               <div className="absolute inset-0" style={{ animation: `stamp-slam 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.2) ${at}s both` }}>
