@@ -42,7 +42,7 @@ function App() {
   ];
 
   return (
-    <div className="h-screen bg-gray-50 dark:bg-gray-950 flex flex-col transition-colors">
+    <div className="h-screen bg-gray-50 dark:bg-gray-950 flex flex-col transition-colors" style={{ height: '100dvh' }}>
       <AchievementToast />
       <NearbyPrompt />
       <UpdateBanner />
@@ -74,7 +74,7 @@ function App() {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto overscroll-contain">
         {selectedTab === 'home' && <Home />}
         {selectedTab === 'map' && <MapView />}
         {selectedTab === 'stats' && <Stats />}

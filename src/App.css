@@ -26,6 +26,15 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* The page itself never scrolls: only the content area does. Otherwise, on Android, the header slides away at the bottom. */
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
