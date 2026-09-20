@@ -499,3 +499,19 @@ input, textarea, button {
     transform: translate(-50%, 0);
   }
 }
+
+/* The gold sticker of a completed region turns in like a coin and settles */
+@keyframes region-sticker-in {
+  0% {
+    transform: perspective(600px) rotateY(-180deg) scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: perspective(600px) rotateY(12deg) scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(600px) rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+}

@@ -5,6 +5,7 @@ import { FOOD_ICONS, LEVELS } from '@/utils/foodTheme';
 import { ACHIEVEMENTS } from '@/services/achievements';
 import { STAMP_INK, STAMP_SHAPES } from '@/components/stampArt';
 import { Stamp } from '@/components/Stamp';
+import { RegionSticker } from '@/components/RegionSticker';
 
 const pick = <T,>(items: readonly T[]): T => items[Math.floor(Math.random() * items.length)];
 const between = (min: number, max: number) => min + Math.random() * (max - min);
@@ -62,9 +63,10 @@ const planFor = (level: number | null): Plan => {
   }));
   const lastBurst = Math.max(...bursts.map(b => b.launch)) + FLIGHT;
   const time = Math.round((lastBurst + 2.6) * 1000);
-  const colors = ['#FFC72C', '#FFFFFF', '#FFE58A', '#FFFFFF'];
-  if (t >= 0.3) colors.push('#DA291C');
-  if (t >= 0.6) colors.push('#FF8A3D', '#FFC72C');
+  // A region is all gold; a level adds red and orange as it grows
+  const colors = level === null ? ['#FFC72C', '#FFE58A', '#F5C542', '#FFFFFF', '#FFD75E'] : ['#FFC72C', '#FFFFFF', '#FFE58A', '#FFFFFF'];
+  if (level !== null && t >= 0.3) colors.push('#DA291C');
+  if (level !== null && t >= 0.6) colors.push('#FF8A3D', '#FFC72C');
   return {
     bursts,
     friesPerBurst: Math.round(6 + t * 4),
@@ -354,10 +356,9 @@ export function FoodRain() {
             Regione completata
           </div>
           <div className="px-5 pb-4 pt-3">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#3B2A22] bg-gradient-to-br from-[#FFE27A] to-[#F2AE00] text-3xl text-white shadow-md ring-4 ring-white/70">
-              ★
+            <div className="mx-auto w-40" style={{ animation: `region-sticker-in 1.1s cubic-bezier(0.2, 0.9, 0.3, 1.15) ${plan.levelAt + 0.1}s both` }}>
+              <RegionSticker summary={{ region: celebration.region, total: celebration.total, visited: celebration.total, complete: true }} tier="gold" />
             </div>
-            <p className="mt-2 font-display text-2xl font-bold leading-tight">{celebration.region}</p>
             <p className="mt-2 inline-block rounded-full bg-[#3B2A22] px-3 py-0.5 text-sm font-semibold text-mc-yellow">
               Figurina d'oro
             </p>
