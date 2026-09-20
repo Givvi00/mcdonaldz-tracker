@@ -42,7 +42,7 @@ function App() {
   ];
 
   return (
-    <div className="h-screen bg-gray-50 dark:bg-gray-950 flex flex-col transition-colors" style={{ height: '100dvh' }}>
+    <div className="fixed inset-0 bg-gray-50 dark:bg-gray-950 flex flex-col transition-colors">
       <AchievementToast />
       <NearbyPrompt />
       <UpdateBanner />
@@ -83,7 +83,7 @@ function App() {
 
       {/* Bottom Navigation */}
       <div
-        className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex justify-around items-center transition-colors"
+        className="flex-none relative z-10 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex justify-around items-center transition-colors"
         style={{ height: 'calc(5rem + var(--safe-bottom))', paddingBottom: 'var(--safe-bottom)' }}
       >
         {NAV_ITEMS.map(({ tab, icon, label }) => {

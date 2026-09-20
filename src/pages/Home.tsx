@@ -65,7 +65,7 @@ export function Home() {
   };
 
   return (
-    <div className="flex flex-col gap-6 pb-24">
+    <div className="flex flex-col gap-6 pb-8">
       {/* Hero progress */}
       <button
         onClick={() => setSelectedTab('stats')}

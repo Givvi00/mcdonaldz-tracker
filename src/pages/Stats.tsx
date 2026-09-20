@@ -46,7 +46,7 @@ export function Stats() {
   const wasComplete = new Set(summaries.map(r => r.region).filter(r => unlockedIds.has(regionRecordType(r))));
 
   return (
-    <div className="flex flex-col gap-6 pb-24 px-4 py-6">
+    <div className="flex flex-col gap-6 pb-8 px-4 py-6">
       {/* Big Counter */}
       <div className="relative bg-gradient-to-br from-mc-red to-red-700 text-white rounded-3xl p-6 text-center shadow-lg shadow-red-900/20 overflow-hidden">
         <FoodPattern />

@@ -222,7 +222,7 @@ export function MapView() {
   }, [mapFocusId, mcdonalds, clearMapFocus, statusFilter]);
 
   return (
-    <div className="relative w-full" style={{ height: 'calc(100dvh - 5rem - var(--safe-bottom))' }}>
+    <div className="relative w-full" style={{ height: '100%' }}>
       <div className="absolute left-3 right-3 z-[1000]" style={{ top: 'calc(0.75rem + var(--safe-top))' }}>
         <div className="relative">
           <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">🔎</span>
