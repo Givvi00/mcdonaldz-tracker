@@ -7,6 +7,7 @@ import { regionSummaries, regionTier } from '../src/services/regions';
 import { STAMP_INK, STAMP_SHAPES, STAMP_SYMBOLS } from '../src/components/stampArt';
 import { FOOD_ICONS, LEVELS } from '../src/utils/foodTheme';
 import { backupNudge } from '../src/services/backupReminder';
+import { pathPoints, pointInPolygon, pointsInside, splitName } from '../src/utils/regionSticker';
 import { COLS, MIN_SAME_DISTANCE, patternSlots, wrappedDistance } from '../src/utils/patternLayout';
 
 let passed = 0;
@@ -198,6 +199,25 @@ test('sfondo di icone: la stessa icona non sta mai vicina a un altra uguale, e l
   }
   // Sempre lo stesso disegno a ogni apertura
   assert.deepEqual(patternSlots().map(s => s.name), patternSlots().map(s => s.name));
+});
+
+test('nomi delle figurine: i lunghi vanno su due righe, spezzati dopo il trattino o allo spazio', () => {
+  assert.deepEqual(splitName('LAZIO'), ['LAZIO']);
+  assert.deepEqual(splitName('EMILIA-ROMAGNA'), ['EMILIA-', 'ROMAGNA']);
+  assert.deepEqual(splitName('TRENTINO-ALTO ADIGE'), ['TRENTINO-', 'ALTO ADIGE']);
+  assert.deepEqual(splitName("VALLE D'AOSTA"), ['VALLE', "D'AOSTA"]);
+  const fvg = splitName('FRIULI-VENEZIA GIULIA');
+  assert.equal(fvg.length, 2);
+  assert.ok(fvg.every(line => line.length <= 14));
+});
+
+test('punti nelle figurine: stanno dentro il contorno e sono sempre gli stessi', () => {
+  const square = 'M0,0 L10,0 L10,10 L0,10 Z';
+  const first = pointsInside(square, 10, 10, 8, 'x');
+  assert.equal(first.length, 8);
+  for (const [x, y] of first) assert.ok(x >= 0 && x <= 10 && y >= 0 && y <= 10);
+  assert.deepEqual(first, pointsInside(square, 10, 10, 8, 'x'));
+  assert.ok(pointInPolygon(5, 5, pathPoints(square)) && !pointInPolygon(15, 5, pathPoints(square)));
 });
 
 console.log(`\n${passed} controlli superati.`);
