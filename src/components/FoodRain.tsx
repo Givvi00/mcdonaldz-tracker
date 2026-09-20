@@ -357,7 +357,7 @@ const VEIL_OUT_MS = 900;
 function Veil({ ms }: { ms: number }) {
   return (
     <div
-      className="pointer-events-auto absolute inset-0 bg-black/45 backdrop-blur-[3px]"
+      className="pointer-events-auto absolute inset-0 bg-black/45"
       style={{ animation: `veil-in ${VEIL_IN_MS}ms ease-out both, veil-out ${VEIL_OUT_MS}ms ease-in ${ms - VEIL_OUT_MS}ms forwards` }}
     />
   );

@@ -14,18 +14,9 @@ const H = 452;
 const PAGES = FAMILIES.length + 1; // the cover, then one page per family
 const MAX_ANGLE = 180;
 const SETTLE_MS = 480;
-// Turned pages stay on the left as thin strips showing their back; room is kept for them
-const STRIP = 15;
-const STEP = 3;
-const PAD = 30;
+// Room to the left of the book: the pages already turned lie there and go off the edge of the screen
+const PAD = 10;
 const THICK = 5;
-
-/** A page past the vertical is squeezed so that, once turned, it only leaves a strip on the left of the book */
-const squeeze = (angle: number) => {
-  if (angle <= 90) return 1;
-  const min = STRIP / W;
-  return min + (1 - min) * Math.pow(1 - (angle - 90) / 90, 6);
-};
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -55,7 +46,7 @@ function useFit(box: React.RefObject<HTMLDivElement | null>) {
 const GOLD_TEXT = 'bg-gradient-to-b from-[#FFE9A0] via-[#F5C542] to-[#D99A12] bg-clip-text text-transparent';
 
 /** The cover: red leather, double gold frame with stitching, foil lettering, a sheen that passes over it */
-function Cover({ got, total }: { got: number; total: number }) {
+function Cover({ got, total, sheen }: { got: number; total: number; sheen: boolean }) {
   return (
     <div className="passport-leather relative h-full w-full overflow-hidden rounded-[14px] border-[3px] border-[#3B2A22] shadow-xl dark:border-[#6B5546]">
       <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-black/35 to-black/10" />
@@ -98,7 +89,7 @@ function Cover({ got, total }: { got: number; total: number }) {
           </p>
         </div>
       </div>
-      <div className="passport-sheen pointer-events-none absolute inset-0" />
+      {sheen && <div className="passport-sheen pointer-events-none absolute inset-0" />}
     </div>
   );
 }
@@ -207,23 +198,26 @@ function FamilyPage({
   );
 }
 
-interface Turn {
-  dir: 'next' | 'prev';
-  /** 0 = page flat, 1 = page fully turned */
-  progress: number;
-  settling: boolean;
-}
+type Dir = 'next' | 'prev';
 
-/** The achievements as a real passport: a leather cover, then a page for each family, turned by hand or with the buttons. */
+/**
+ * The achievements as a real passport: a leather cover, then a page for each family, turned by hand.
+ * While a page turns nothing is re-rendered: its transform is written straight to the element on every frame,
+ * which keeps the animation light on a phone. The turned pages stay on the left and run off the edge of the screen.
+ */
 export function Passport({ unlocked, progress, focused }: Props) {
   const box = useRef<HTMLDivElement>(null);
   const k = useFit(box);
   const [page, setPage] = useState(0);
-  const [turn, setTurn] = useState<Turn | null>(null);
+  const [turnDir, setTurnDir] = useState<Dir | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
+  const pageRef = useRef(0);
+  const pages = useRef<(HTMLDivElement | null)[]>([]);
   const frame = useRef<number | null>(null);
-  const drag = useRef<{ x: number; y: number; active: boolean; dir?: 'next' | 'prev'; progress: number } | null>(null);
+  const busy = useRef(false);
+  const drag = useRef<{ x: number; y: number; active: boolean; dir?: Dir; progress: number } | null>(null);
   const got = ACHIEVEMENT_LIST.filter(a => unlocked.has(a.id)).length;
+  pageRef.current = page;
 
   // Arriving from a stamp toast: open the passport at the page of the first stamp
   useEffect(() => {
@@ -231,7 +225,9 @@ export function Passport({ unlocked, progress, focused }: Props) {
     const def = ACHIEVEMENT_LIST.find(a => a.id === focused[0]);
     const index = def ? FAMILIES.findIndex(f => f.id === def.family) + 1 : 0;
     if (index > 0) {
-      setTurn(null);
+      if (frame.current) cancelAnimationFrame(frame.current);
+      busy.current = false;
+      setTurnDir(null);
       setPage(index);
       setSelected(focused[0]);
     }
@@ -244,38 +240,53 @@ export function Passport({ unlocked, progress, focused }: Props) {
     [],
   );
 
-  const canGo = (dir: 'next' | 'prev') => (dir === 'next' ? page < PAGES - 1 : page > 0);
+  const canGo = (dir: Dir) => (dir === 'next' ? page < PAGES - 1 : page > 0);
 
-  /** Let go of a page: it finishes turning or falls back. Driven by hand (not CSS) because the squeeze is not linear */
-  const settle = (dir: 'next' | 'prev', complete: boolean, from: number) => {
+  /** Write the position of the turning page straight to the DOM (amount = how far the gesture has gone, 0..1) */
+  const applyTurn = (dir: Dir, amount: number) => {
+    const index = dir === 'next' ? pageRef.current : pageRef.current - 1;
+    const el = pages.current[index];
+    if (!el) return;
+    const angle = MAX_ANGLE * (dir === 'next' ? amount : 1 - amount);
+    el.style.transform = `rotateY(${-angle}deg)`;
+    const front = el.querySelector<HTMLElement>('[data-shade="front"]');
+    const back = el.querySelector<HTMLElement>('[data-shade="back"]');
+    if (front) front.style.opacity = String(0.32 * Math.min(1, angle / 90));
+    if (back) back.style.opacity = String(0.05 + 0.3 * (1 - Math.max(0, (angle - 90) / 90)));
+  };
+
+  /** Let go of a page: it finishes turning or falls back */
+  const settle = (dir: Dir, complete: boolean, from: number) => {
+    busy.current = true;
     const to = complete ? 1 : 0;
     const start = performance.now();
     const step = (now: number) => {
       const t = Math.min(1, (now - start) / SETTLE_MS);
-      const eased = 1 - Math.pow(1 - t, 3);
+      applyTurn(dir, from + (to - from) * (1 - Math.pow(1 - t, 3)));
       if (t < 1) {
-        setTurn({ dir, progress: from + (to - from) * eased, settling: true });
         frame.current = requestAnimationFrame(step);
-      } else {
-        if (complete) setPage(p => p + (dir === 'next' ? 1 : -1));
-        setTurn(null);
+        return;
       }
+      busy.current = false;
+      if (complete) setPage(p => p + (dir === 'next' ? 1 : -1));
+      setTurnDir(null);
     };
-    setTurn({ dir, progress: from, settling: true });
     frame.current = requestAnimationFrame(step);
   };
 
-  const turnBy = (dir: 'next' | 'prev') => {
-    if (turn || !canGo(dir)) return;
+  const turnBy = (dir: Dir) => {
+    if (busy.current || !canGo(dir)) return;
     if (prefersReducedMotion()) {
       setPage(p => p + (dir === 'next' ? 1 : -1));
       return;
     }
+    busy.current = true;
+    setTurnDir(dir);
     settle(dir, true, 0);
   };
 
   const onPointerDown = (e: React.PointerEvent) => {
-    if (turn) return;
+    if (busy.current) return;
     drag.current = { x: e.clientX, y: e.clientY, active: false, progress: 0 };
   };
   const onPointerMove = (e: React.PointerEvent) => {
@@ -285,125 +296,119 @@ export function Passport({ unlocked, progress, focused }: Props) {
     const dy = e.clientY - d.y;
     if (!d.active) {
       if (Math.abs(dx) < 8 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
-      const dir = dx < 0 ? 'next' : 'prev';
+      const dir: Dir = dx < 0 ? 'next' : 'prev';
       if (!canGo(dir)) {
         drag.current = null;
         return;
       }
       d.active = true;
       d.dir = dir;
+      setTurnDir(dir);
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     }
     d.progress = Math.min(1, Math.abs(dx) / (W * k));
-    setTurn({ dir: d.dir as 'next' | 'prev', progress: d.progress, settling: false });
+    applyTurn(d.dir as Dir, d.progress);
   };
   const onPointerEnd = () => {
     const d = drag.current;
     drag.current = null;
-    if (!d) return;
-    if (d.active && d.dir) settle(d.dir, d.progress > 0.35, d.progress);
+    if (!d || !d.active || !d.dir) return;
+    settle(d.dir, d.progress > 0.35, d.progress);
   };
   const onCoverTap = () => {
-    if (page === 0 && !turn) turnBy('next');
+    if (page === 0 && !turnDir) turnBy('next');
   };
 
-  const pageContent = (index: number) =>
-    index === 0 ? (
-      <Cover got={got} total={ACHIEVEMENT_LIST.length} />
-    ) : (
-      <FamilyPage
-        family={FAMILIES[index - 1]}
-        number={index}
-        unlocked={unlocked}
-        progress={progress}
-        focused={focused}
-        selected={selected}
-        onSelect={setSelected}
-      />
-    );
-
-  // Which page moves and which one lies under it
-  const turning = turn ? (turn.dir === 'next' ? page : page - 1) : null;
-  const under = turn ? (turn.dir === 'next' ? page + 1 : page) : null;
-  const angle = turn ? MAX_ANGLE * (turn.dir === 'next' ? turn.progress : 1 - turn.progress) : 0;
-  const t = Math.max(0, (angle - 90) / 90);
+  const turning = turnDir ? (turnDir === 'next' ? page : page - 1) : null;
 
   return (
     <div>
-      <div ref={box} className="flex justify-center">
-        <div className="relative" style={{ width: (W + PAD) * k, height: H * k }}>
-          <div
-            className="absolute top-0 touch-pan-y select-none [perspective:1500px]"
-            style={{ left: PAD * k, width: W, height: H, transform: `scale(${k})`, transformOrigin: 'top left' }}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerEnd}
-            onPointerCancel={onPointerEnd}
-          >
-            {/* pages already turned stay on the left, a strip of their back each */}
-            {Array.from({ length: page }, (_, j) =>
-              j === turning ? null : (
-                <div
-                  key={`strip-${j}`}
-                  className={`absolute rounded-l-md border ${j === 0 ? 'passport-leather border-[#3B2A22]' : 'border-[#C9A24A]/70 bg-gradient-to-l from-[#D9C79B] to-[#F1E6CC]'}`}
-                  style={{ top: 2, height: H - 4, left: -(STRIP + (page - 1 - j) * STEP), width: STRIP + 2, zIndex: 0, boxShadow: 'inset -5px 0 5px rgba(0,0,0,.22)' }}
-                />
-              ),
-            )}
-            {Array.from({ length: PAGES }, (_, index) => {
-              const isTurning = index === turning;
-              const visible = turn ? index === turning || index === under : index === page;
-              return (
-                <div
-                  key={index}
-                  className="absolute inset-0"
-                  style={{
-                    zIndex: isTurning ? 3 : 1,
-                    visibility: visible ? 'visible' : 'hidden',
-                    transformOrigin: 'left center',
-                    transformStyle: 'preserve-3d',
-                    transform: isTurning ? `rotateY(${-angle}deg) scaleX(${squeeze(angle)})` : undefined,
-                  }}
-                  onClick={index === 0 ? onCoverTap : undefined}
-                >
-                  <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden' }}>
-                    {pageContent(index)}
-                    {isTurning && <div className="pointer-events-none absolute inset-0 rounded-[14px] bg-black" style={{ opacity: 0.32 * Math.min(1, angle / 90) }} />}
-                  </div>
-                  {isTurning && (
-                    <>
-                      {/* the back of the sheet, seen once it is past the vertical */}
-                      <div
-                        className={`absolute inset-0 rounded-[14px] border-[3px] border-[#3B2A22] dark:border-[#6B5546] ${index === 0 ? 'passport-leather' : 'passport-page'}`}
-                        style={{ transform: 'rotateY(180deg)', backfaceVisibility: 'hidden' }}
-                      >
-                        <div className="absolute inset-y-0 right-0 w-9 bg-gradient-to-l from-black/25 to-transparent" />
-                        <div className="absolute inset-0 rounded-[11px] bg-black" style={{ opacity: 0.05 + 0.3 * (1 - t) }} />
+      {/* wider than the column, so the pages that go off to the left are cut by the edge of the screen and not by the column */}
+      <div className="-mx-4 overflow-x-clip px-4">
+        <div ref={box} className="flex justify-center">
+          <div className="relative" style={{ width: (W + PAD) * k, height: H * k }}>
+            <div
+              className="absolute top-0 touch-pan-y select-none [perspective:1500px]"
+              style={{ left: PAD * k, width: W, height: H, transform: `scale(${k})`, transformOrigin: 'top left' }}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerEnd}
+              onPointerCancel={onPointerEnd}
+            >
+              {Array.from({ length: PAGES }, (_, index) => {
+                const isTurning = index === turning;
+                const turned = index < page;
+                const visible = index <= page || (turnDir === 'next' && index === page + 1);
+                const showFront = index >= page - 1 && index <= page + 1;
+                const showBack = index <= page;
+                return (
+                  <div
+                    key={index}
+                    ref={el => {
+                      pages.current[index] = el;
+                    }}
+                    className="absolute inset-0"
+                    style={{
+                      zIndex: isTurning ? 100 : index,
+                      visibility: visible ? 'visible' : 'hidden',
+                      transformOrigin: 'left center',
+                      transformStyle: 'preserve-3d',
+                      transform: turned ? `rotateY(-${MAX_ANGLE}deg)` : undefined,
+                      willChange: isTurning ? 'transform' : undefined,
+                    }}
+                    onClick={index === 0 ? onCoverTap : undefined}
+                  >
+                    {showFront && (
+                      <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden' }}>
+                        {index === 0 ? (
+                          <Cover got={got} total={ACHIEVEMENT_LIST.length} sheen={page === 0} />
+                        ) : (
+                          <FamilyPage
+                            family={FAMILIES[index - 1]}
+                            number={index}
+                            unlocked={unlocked}
+                            progress={progress}
+                            focused={focused}
+                            selected={selected}
+                            onSelect={setSelected}
+                          />
+                        )}
+                        <div data-shade="front" className="pointer-events-none absolute inset-0 rounded-[14px] bg-black" style={{ opacity: 0 }} />
                       </div>
-                      {/* the thickness of the sheet, along its free edge */}
-                      <div
-                        className="absolute right-0 top-[3px] bottom-[3px]"
-                        style={{
-                          width: THICK,
-                          transformOrigin: 'right center',
-                          transform: 'rotateY(-90deg)',
-                          background: index === 0 ? 'linear-gradient(#5A1510,#7D150D)' : 'linear-gradient(90deg,#CDB98A,#EADFC0)',
-                        }}
-                      />
-                    </>
-                  )}
-                </div>
-              );
-            })}
+                    )}
+                    {showBack && (
+                      <>
+                        {/* the back of the sheet, seen once it is past the vertical */}
+                        <div
+                          className={`absolute inset-0 rounded-[14px] border-[3px] border-[#3B2A22] dark:border-[#6B5546] ${index === 0 ? 'passport-leather' : 'passport-page'}`}
+                          style={{ transform: 'rotateY(180deg)', backfaceVisibility: 'hidden' }}
+                        >
+                          <div className="absolute inset-y-0 right-0 w-9 bg-gradient-to-l from-black/25 to-transparent" />
+                          <div data-shade="back" className="absolute inset-0 rounded-[11px] bg-black" style={{ opacity: 0.05 }} />
+                        </div>
+                        {/* the thickness of the sheet, along its free edge */}
+                        <div
+                          className="absolute right-0 top-[3px] bottom-[3px]"
+                          style={{
+                            width: THICK,
+                            transformOrigin: 'right center',
+                            transform: 'rotateY(-90deg)',
+                            background: index === 0 ? 'linear-gradient(#5A1510,#7D150D)' : 'linear-gradient(90deg,#CDB98A,#EADFC0)',
+                          }}
+                        />
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-2 text-center">
-        <p className="text-[0.65rem] text-gray-500 dark:text-gray-400">
-          {page === 0 ? 'Scorri con il dito per aprirlo' : 'Scorri con il dito per girare pagina'}
-        </p>
-      </div>
+      <p className="mt-2 text-center text-[0.65rem] text-gray-500 dark:text-gray-400">
+        {page === 0 ? 'Scorri con il dito per aprirlo' : 'Scorri con il dito per girare pagina'}
+      </p>
     </div>
   );
 }

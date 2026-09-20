@@ -186,9 +186,6 @@ export function Home() {
           <EmptyTray title="Il vassoio è vuoto" hint="Nessun McDonald's con questi filtri: prova a cambiarli" />
         ) : (
           <div className="space-y-3">
-            <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold px-1">
-              {filtered.length} McDonald's
-            </p>
             {visitedInRegion.length > 0 && (
               <>
                 <p className="text-xs font-display font-semibold text-green-700 dark:text-green-400 px-1 pt-1">
