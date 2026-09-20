@@ -6,7 +6,6 @@ import { ACHIEVEMENTS } from '@/services/achievements';
 import { STAMP_INK, STAMP_SHAPES } from '@/components/stampArt';
 import { Stamp } from '@/components/Stamp';
 
-const SPARKLE_COLORS = ['#FFC72C', '#FFFFFF', '#FFE58A', '#FFFFFF'];
 const pick = <T,>(items: readonly T[]): T => items[Math.floor(Math.random() * items.length)];
 const between = (min: number, max: number) => min + Math.random() * (max - min);
 
@@ -15,15 +14,6 @@ const between = (min: number, max: number) => min + Math.random() * (max - min);
 // bottom; its fries leave one by one, each towards its own point in the sky where it bursts. The box ends up empty
 // and fades away.
 const SMALL = { rain: 14, time: 3600 };
-const BIG = {
-  firstLaunch: 0.8, // seconds
-  launchEvery: 0.55,
-  flight: 0.9,
-  friesPerBurst: 8,
-  starsPerBurst: 10,
-  time: 8400,
-  boxMs: 6000,
-};
 // Where each fry bursts: horizontal position in % of the width, vertical in % of the height
 const BURSTS = [
   { left: 50, top: 32 },
@@ -34,33 +24,72 @@ const BURSTS = [
   { left: 10, top: 52 },
   { left: 90, top: 54 },
   { left: 50, top: 46 },
+  { left: 26, top: 58 },
+  { left: 74, top: 60 },
+  { left: 50, top: 16 },
+  { left: 50, top: 62 },
 ];
+const FLIGHT = 0.9; // seconds a fry takes to reach its point in the sky
 const STAMP_SHOWN = 3; // stamps drawn at once; more are just counted
 const stampTime = (n: number) => 3400 + (Math.min(n, STAMP_SHOWN) - 1) * 900;
-const LEVEL_AT = 2.6; // seconds: the level popup appears
 const BOX_SIZE = 120;
 const BOX_BOTTOM_VH = 12;
-const FRIES_IN_BOX = BURSTS.length;
-const launchAt = (i: number) => BIG.firstLaunch + i * BIG.launchEvery;
-const burstAt = (i: number) => launchAt(i) + BIG.flight;
 
-/** Position of fry i inside the box, in box units (48) and the px it maps to at BOX_SIZE */
-const fryGeom = (i: number) => {
-  const t = i / (FRIES_IN_BOX - 1);
+/** How big the show is: it grows with the level (2 to 12), so a low level is short and small and the last ones are grand. */
+interface Plan {
+  /** Where and when (seconds) each fry leaves the box */
+  bursts: { left: number; top: number; launch: number }[];
+  friesPerBurst: number;
+  starsPerBurst: number;
+  /** Multiplier on how far the bursts spread */
+  spread: number;
+  colors: string[];
+  time: number;
+  boxMs: number;
+  /** Seconds: when the popup appears */
+  levelAt: number;
+}
+
+const planFor = (level: number | null): Plan => {
+  const t = level === null ? 0.5 : Math.min(1, Math.max(0, (level - 2) / 10));
+  const count = Math.round(4 + t * 8);
+  const every = 0.6 - t * 0.2;
+  const bursts = BURSTS.slice(0, count).map((b, i) => ({ ...b, launch: 0.8 + i * every }));
+  const lastBurst = bursts[count - 1].launch + FLIGHT;
+  const time = Math.round((lastBurst + 2.6) * 1000);
+  const colors = ['#FFC72C', '#FFFFFF', '#FFE58A', '#FFFFFF'];
+  if (t >= 0.3) colors.push('#DA291C');
+  if (t >= 0.6) colors.push('#FF8A3D', '#FFC72C');
+  return {
+    bursts,
+    friesPerBurst: Math.round(6 + t * 4),
+    starsPerBurst: Math.round(8 + t * 6),
+    spread: 0.85 + t * 0.35,
+    colors,
+    time,
+    boxMs: time - 2400,
+    levelAt: Math.min(2.6, lastBurst - 0.6),
+  };
+};
+
+/** Position of fry i of n inside the box, in box units (48) and the px it maps to at BOX_SIZE */
+const fryGeom = (i: number, n: number) => {
+  const t = n > 1 ? i / (n - 1) : 0.5;
   const k = BOX_SIZE / 48;
-  const x = 8 + t * 29;
+  const span = Math.min(29, 10 + n * 2.4);
+  const x = 24 - 2.3 - span / 2 + t * span;
   const h = i % 2 ? 24 : 21;
   const y = i % 2 ? 5 : 8;
   return { x, y, h, rot: Math.round(-15 + t * 30), offX: (x + 2.3 - 24) * k, top: y * k, height: h * k };
 };
 
 /** The box of fries drawn here (not from the sprite) so each fry can leave it on its own. */
-function FriesBox({ size }: { size: number }) {
+function FriesBox({ size, plan }: { size: number; plan: Plan }) {
   return (
     <svg className="food-ico" width={size} height={size} viewBox="0 0 48 48" aria-hidden="true">
       <g fill="#FFC72C">
-        {Array.from({ length: FRIES_IN_BOX }, (_, i) => {
-          const { x, y, h, rot } = fryGeom(i);
+        {plan.bursts.map((burst, i) => {
+          const { x, y, h, rot } = fryGeom(i, plan.bursts.length);
           return (
             <rect
               key={i}
@@ -70,7 +99,7 @@ function FriesBox({ size }: { size: number }) {
               height={h}
               rx="1.6"
               transform={`rotate(${rot} ${x + 2.3} 20)`}
-              style={{ animation: `food-fry-out 0.01s linear ${launchAt(i)}s both` }}
+              style={{ animation: `food-fry-out 0.01s linear ${burst.launch}s both` }}
             />
           );
         })}
@@ -99,6 +128,8 @@ export function FoodRain() {
   const celebration = useMcdonaldStore(state => state.celebration);
   const clearCelebration = useMcdonaldStore(state => state.clearCelebration);
 
+  const plan = useMemo(() => planFor(celebration?.kind === 'level' ? celebration.level : null), [celebration]);
+
   const show = useMemo(() => {
     if (!celebration || celebration.kind === 'stamp') return null;
 
@@ -117,18 +148,18 @@ export function FoodRain() {
     }
 
     // One fry per burst leaves the box, pointing at where it will burst (rough phone proportions)
-    const rockets = BURSTS.map((b, i) => {
+    const rockets = plan.bursts.map((b, i) => {
       const dx = (b.left - 50) * 4.3;
       const dy = b.top * 9 - 792 + 60;
-      const g = fryGeom(i);
-      return { key: i, left: b.left, top: b.top, rot: Math.round((Math.atan2(dx, -dy) * 180) / Math.PI), rot0: g.rot, offX: g.offX, top0: g.top, height: g.height, delay: launchAt(i) };
+      const g = fryGeom(i, plan.bursts.length);
+      return { key: i, left: b.left, top: b.top, rot: Math.round((Math.atan2(dx, -dy) * 180) / Math.PI), rot0: g.rot, offX: g.offX, top0: g.top, height: g.height, delay: b.launch };
     });
 
     // Each burst throws little fries outwards (pointing away from the centre) and little stars
-    const fries = BURSTS.flatMap((b, bi) =>
-      Array.from({ length: BIG.friesPerBurst }, (_, i) => {
-        const angle = (i / BIG.friesPerBurst) * Math.PI * 2 + between(-0.12, 0.12);
-        const distance = between(80, 140);
+    const fries = plan.bursts.flatMap((b, bi) =>
+      Array.from({ length: plan.friesPerBurst }, (_, i) => {
+        const angle = (i / plan.friesPerBurst) * Math.PI * 2 + between(-0.12, 0.12);
+        const distance = between(80, 140) * plan.spread;
         return {
           key: `${bi}-${i}`,
           left: b.left,
@@ -136,38 +167,38 @@ export function FoodRain() {
           angleDeg: Math.round((angle * 180) / Math.PI),
           dx: Math.round(Math.cos(angle) * distance),
           dy: Math.round(Math.sin(angle) * distance),
-          delay: burstAt(bi) + between(0, 0.05),
+          delay: b.launch + FLIGHT + between(0, 0.05),
           duration: between(1.3, 1.8),
         };
       }),
     );
-    const stars = BURSTS.flatMap((b, bi) =>
-      Array.from({ length: BIG.starsPerBurst }, (_, i) => {
-        const angle = (i / BIG.starsPerBurst) * Math.PI * 2 + between(-0.2, 0.2);
-        const distance = between(55, 165);
+    const stars = plan.bursts.flatMap((b, bi) =>
+      Array.from({ length: plan.starsPerBurst }, (_, i) => {
+        const angle = (i / plan.starsPerBurst) * Math.PI * 2 + between(-0.2, 0.2);
+        const distance = between(55, 165) * plan.spread;
         return {
           key: `${bi}-${i}`,
           left: b.left,
           top: b.top,
           size: between(13, 24),
-          color: pick(SPARKLE_COLORS),
+          color: pick(plan.colors),
           dx: Math.round(Math.cos(angle) * distance),
           dy: Math.round(Math.sin(angle) * distance),
-          delay: burstAt(bi) + between(0, 0.1),
+          delay: b.launch + FLIGHT + between(0, 0.1),
           duration: between(1.2, 1.9),
         };
       }),
     );
     return { rain: [], rockets, fries, stars };
-  }, [celebration]);
+  }, [celebration, plan]);
 
   useEffect(() => {
     if (!celebration) return;
     const time =
-      celebration.kind === 'visit' ? SMALL.time : celebration.kind === 'stamp' ? stampTime(celebration.stamps.length) : BIG.time;
+      celebration.kind === 'visit' ? SMALL.time : celebration.kind === 'stamp' ? stampTime(celebration.stamps.length) : plan.time;
     const timer = setTimeout(clearCelebration, time);
     return () => clearTimeout(timer);
-  }, [celebration, clearCelebration]);
+  }, [celebration, clearCelebration, plan]);
 
   if (celebration?.kind === 'stamp') return <StampShow key={celebration.id} stamps={celebration.stamps} />;
   if (!celebration || !show) return null;
@@ -178,7 +209,7 @@ export function FoodRain() {
 
   return (
     <div className="food-rain fixed inset-0 z-[2500] overflow-hidden pointer-events-none" aria-hidden="true">
-      {big && <Veil ms={BIG.time} />}
+      {big && <Veil ms={plan.time} />}
       {/* Under the box, so a fry comes out from behind its front */}
       {show.rockets.map(p => (
         <span
@@ -195,7 +226,7 @@ export function FoodRain() {
               background: '#FFC72C',
               border: '2px solid #3B2A22',
               opacity: 0,
-              animation: `food-rocket ${BIG.flight}s cubic-bezier(0.25, 0.6, 0.45, 1) ${p.delay}s forwards`,
+              animation: `food-rocket ${FLIGHT}s cubic-bezier(0.25, 0.6, 0.45, 1) ${p.delay}s forwards`,
               '--bl': p.left,
               '--bt': p.top,
               '--rot': `${p.rot}deg`,
@@ -216,10 +247,10 @@ export function FoodRain() {
             width: BOX_SIZE,
             height: BOX_SIZE,
             marginLeft: -BOX_SIZE / 2,
-            animation: `food-box ${BIG.boxMs}ms ease-out both`,
+            animation: `food-box ${plan.boxMs}ms ease-out both`,
           }}
         >
-          <FriesBox size={BOX_SIZE} />
+          <FriesBox size={BOX_SIZE} plan={plan} />
         </div>
       )}
 
@@ -281,7 +312,7 @@ export function FoodRain() {
           style={{
             left: '50%',
             top: '48%',
-            animation: `level-pop ${BIG.time - LEVEL_AT * 1000}ms ease-out ${LEVEL_AT}s both`,
+            animation: `level-pop ${plan.time - plan.levelAt * 1000}ms ease-out ${plan.levelAt}s both`,
           }}
         >
           <div className="bg-mc-red px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-white">
@@ -308,7 +339,7 @@ export function FoodRain() {
           style={{
             left: '50%',
             top: '48%',
-            animation: `level-pop ${BIG.time - LEVEL_AT * 1000}ms ease-out ${LEVEL_AT}s both`,
+            animation: `level-pop ${plan.time - plan.levelAt * 1000}ms ease-out ${plan.levelAt}s both`,
           }}
         >
           <div className="bg-mc-red px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-white">
