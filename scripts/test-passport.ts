@@ -6,6 +6,7 @@ import { ACHIEVEMENT_LIST, getAchievementProgress } from '../src/services/achiev
 import { regionSummaries, regionTier } from '../src/services/regions';
 import { STAMP_INK, STAMP_SHAPES, STAMP_SYMBOLS } from '../src/components/stampArt';
 import { LEVELS } from '../src/utils/foodTheme';
+import { backupNudge } from '../src/services/backupReminder';
 
 let passed = 0;
 function test(name: string, fn: () => void) {
@@ -175,6 +176,12 @@ test('livelli: sono 12, con le soglie decise', () => {
     [0, 5, 15, 30, 50, 80, 120, 180, 260, 380, 550, 800],
   );
   for (const l of LEVELS) assert.ok(l.name.length > 0 && l.icon);
+});
+
+test('promemoria backup: solo se ci sono visite da proteggere e il backup manca o è vecchio', () => {
+  assert.equal(backupNudge(0), false);
+  assert.equal(backupNudge(2), false);
+  assert.equal(backupNudge(10), true); // nessun backup fatto (in Node non c'è localStorage)
 });
 
 console.log(`\n${passed} controlli superati.`);

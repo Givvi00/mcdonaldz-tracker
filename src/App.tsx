@@ -39,7 +39,6 @@ function App() {
     { tab: 'home' as const, icon: '🏠', label: 'Home' },
     { tab: 'map' as const, icon: '🗺️', label: 'Mappa' },
     { tab: 'stats' as const, icon: '📊', label: 'Stats' },
-    { tab: 'profile' as const, icon: '👤', label: 'Profilo' },
   ];
 
   return (
@@ -63,10 +62,14 @@ function App() {
             </p>
             <p className="text-[0.65rem] uppercase tracking-wider text-white/75 -mt-0.5">Tracker</p>
           </div>
-          <div className="min-w-0 max-w-[55%] rounded-2xl bg-black/25 px-3.5 py-1.5 text-right">
+          <button
+            onClick={() => setSelectedTab('profile')}
+            aria-label="Apri il profilo"
+            className="min-w-0 max-w-[55%] rounded-2xl bg-black/25 px-3.5 py-1.5 text-right transition-transform active:scale-95"
+          >
             <p className="truncate text-xs leading-tight text-white/80">{user?.name ? `Ciao, ${user.name}` : 'Ciao!'}</p>
             <p className="font-display text-base font-bold leading-tight">Livello {levelInfo(getVisitedCount()).number}</p>
-          </div>
+          </button>
         </header>
       )}
 

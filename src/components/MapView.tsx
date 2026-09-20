@@ -6,6 +6,8 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { StatusFilter } from '@/components/StatusFilter';
+import { FoodIcon } from '@/components/FoodIcon';
+import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds } from '@/utils/catalog';
 import { markerBackground, markerSymbol, popupHtml } from '@/utils/mapMarkers';
 import { openDirections } from '@/utils/navigation';
@@ -49,7 +51,7 @@ export function MapView() {
   const clusterGroup = useRef<L.MarkerClusterGroup | null>(null);
   const markers = useRef<Map<string, L.Marker>>(new Map());
   const userMarker = useRef<L.Marker | null>(null);
-  const { mcdonalds, visits, isVisited, toggleVisit, mapFocusId, clearMapFocus, userPosition } = useMcdonaldStore();
+  const { mcdonalds, visits, isVisited, toggleVisit, mapFocusId, clearMapFocus, userPosition, setSelectedTab, getVisitedCount } = useMcdonaldStore();
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<boolean | null>(null);
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
@@ -249,6 +251,18 @@ export function MapView() {
         )}
       </div>
       <div ref={mapContainer} className={`w-full h-full ${isDark ? 'map-dark' : ''}`} />
+      <button
+        onClick={() => setSelectedTab('profile')}
+        aria-label="Apri il profilo"
+        className={`absolute right-2.5 z-[1000] flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white shadow-md transition-transform active:scale-95 dark:border-gray-700 dark:bg-gray-900 ${
+          userPosition ? 'bottom-44' : 'bottom-28'
+        }`}
+      >
+        <FoodIcon name={levelInfo(getVisitedCount()).level.icon} size={26} />
+        <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-mc-red px-1 text-[0.65rem] font-black text-white ring-2 ring-white dark:ring-gray-900">
+          {levelInfo(getVisitedCount()).number}
+        </span>
+      </button>
       {userPosition && (
         <button
           onClick={centerOnUser}

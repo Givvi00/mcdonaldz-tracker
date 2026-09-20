@@ -4,13 +4,11 @@ import { getAchievements } from '@/services/db';
 import { getAchievementProgress } from '@/services/achievements';
 import { regionRecordType, regionSummaries } from '@/services/regions';
 import { FoodIcon } from '@/components/FoodIcon';
-import { LevelRoadmap } from '@/components/LevelRoadmap';
 import { Passport } from '@/components/Passport';
 import { RegionAlbum } from '@/components/RegionAlbum';
 import type { FoodIconName } from '@/utils/foodTheme';
 import { FoodPattern } from '@/components/FoodPattern';
 import { FoodProgressBar } from '@/components/FoodProgressBar';
-import { LevelPill } from '@/components/LevelPill';
 import { Receipt } from '@/components/Receipt';
 import type { Achievement } from '@shared/types';
 
@@ -58,13 +56,8 @@ export function Stats() {
           <p className="text-sm opacity-90 mt-1">di {totalMcdonalds} in Italia</p>
           <p className="text-2xl font-display font-bold mt-3">{percentage}%</p>
           <FoodProgressBar percentage={percentage} />
-          <LevelPill visited={visitedCount} />
         </div>
       </div>
-
-      <Section icon="fries" title="Il tuo percorso">
-        <LevelRoadmap visited={visitedCount} />
-      </Section>
 
       <Section icon="burger" title="Passaporto">
         <Passport unlocked={unlockedIds} progress={progress} focused={focusedAchievements} />

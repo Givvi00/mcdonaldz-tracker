@@ -10,6 +10,8 @@ import { useTheme, type ThemeMode } from '@/hooks/useTheme';
 import { FoodPattern } from '@/components/FoodPattern';
 import { FoodIcon } from '@/components/FoodIcon';
 import { levelInfo } from '@/utils/foodTheme';
+import { LevelRoadmap } from '@/components/LevelRoadmap';
+import { lastBackupAt, markBackupDone, backupNudge } from '@/services/backupReminder';
 import { choosesMapApp, getSavedMapApp, saveMapApp } from '@/utils/navigation';
 import { MAP_APPS, type MapApp } from '@/utils/directions';
 
@@ -21,6 +23,7 @@ const THEME_OPTIONS: Array<{ value: ThemeMode; label: string; icon: string }> = 
 
 export function Profile() {
   const { user, getVisitedCount, mcdonalds, catalogInfo, renameUser } = useMcdonaldStore();
+  const [, setBackupTick] = useState(0);
   const [nameDraft, setNameDraft] = useState<string | null>(null);
   const nameShown = nameDraft ?? user?.name ?? '';
   const { mode, setMode } = useTheme();
@@ -46,6 +49,8 @@ export function Profile() {
   const handleExport = async () => {
     try {
       await saveBackup(await exportData());
+      markBackupDone();
+      setBackupTick(t => t + 1);
     } catch (error) {
       alert(`Impossibile salvare il backup: ${(error as Error).message}`);
     }
@@ -69,12 +74,37 @@ export function Profile() {
 
   return (
     <div className="flex flex-col gap-6 pb-24 px-4 py-6">
-      {/* User Info */}
+      {/* You: greeting and level */}
       <div className="relative overflow-hidden bg-gradient-to-br from-mc-red to-mc-red-dark text-white rounded-3xl p-6 text-center shadow-lg shadow-red-900/20">
         <FoodPattern />
-        <div className="relative text-4xl mb-2 w-16 h-16 mx-auto flex items-center justify-center rounded-full bg-mc-yellow shadow-md">👤</div>
+        <div className="relative mx-auto mb-2 flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#3B2A22] bg-mc-yellow shadow-md">
+          <FoodIcon name={level.level.icon} size={38} />
+        </div>
         <p className="relative text-lg font-display font-bold">{user?.name ? `Ciao, ${user.name}` : 'Ciao!'}</p>
-        <p className="relative text-xs opacity-75 mt-2">ID: {user?.id.slice(0, 8)}...</p>
+        <p className="relative mt-0.5 font-display text-sm font-semibold opacity-90">
+          Livello {level.number} · {level.level.name}
+        </p>
+        <p className="relative mt-1 text-xs opacity-75">{getVisitedCount()} McDonald's visitati</p>
+      </div>
+
+      {backupNudge(getVisitedCount()) && (
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-200">
+          <p className="font-semibold">
+            {lastBackupAt() ? 'È passato un po\' di tempo dall\'ultimo backup.' : 'Non hai ancora fatto un backup.'}
+          </p>
+          <p className="mt-0.5 text-xs opacity-80">I tuoi dati stanno solo su questo telefono: un backup li mette al sicuro.</p>
+          <button
+            onClick={handleExport}
+            className="mt-2 rounded-xl bg-mc-yellow px-3 py-1.5 text-xs font-bold text-gray-800 active:scale-95"
+          >
+            Esporta ora
+          </button>
+        </div>
+      )}
+
+      <div>
+        <h3 className="font-display font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">Il tuo percorso</h3>
+        <LevelRoadmap visited={getVisitedCount()} />
       </div>
 
       {/* Name shown in the header */}
@@ -100,20 +130,6 @@ export function Profile() {
           </button>
         </div>
         <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Compare in alto a destra, sopra il livello. Resta solo su questo telefono.</p>
-      </div>
-
-      {/* Stats Summary */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl text-center border border-gray-200 dark:border-gray-800">
-          <p className="text-sm text-gray-600 dark:text-gray-400 font-semibold">Visite Totali</p>
-          <p className="text-3xl font-display font-bold text-mc-red mt-2">{getVisitedCount()}</p>
-        </div>
-        <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl text-center border border-gray-200 dark:border-gray-800">
-          <p className="text-sm text-gray-600 dark:text-gray-400 font-semibold">Livello {level.number}</p>
-          <p className="text-lg font-display font-bold text-mc-red dark:text-red-400 mt-2 leading-tight">
-            <FoodIcon name={level.level.icon} size={22} /> {level.level.name}
-          </p>
-        </div>
       </div>
 
       {/* Theme */}
@@ -169,7 +185,10 @@ export function Profile() {
 
       {/* Data Management */}
       <div>
-        <h3 className="font-display font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">Gestisci Dati</h3>
+        <h3 className="font-display font-semibold text-lg mb-1 text-gray-800 dark:text-gray-100">Gestisci Dati</h3>
+        <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
+          Ultimo backup: {lastBackupAt() ? new Date(lastBackupAt() as number).toLocaleDateString('it-IT', { dateStyle: 'medium' }) : 'mai'}
+        </p>
         <div className="space-y-2">
           <button
             onClick={handleExport}
