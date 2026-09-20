@@ -16,7 +16,9 @@ const MAX_ANGLE = 180;
 const SETTLE_MS = 480;
 // Room to the left of the book: the pages already turned lie there and go off the edge of the screen
 const PAD = 10;
-const THICK = 5;
+// The sheet is a stack of thin rounded layers, so its thickness follows the rounded corners of the page
+const HALF = 2.5;
+const LAYERS = [-1.9, -0.65, 0.65, 1.9];
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -359,7 +361,7 @@ export function Passport({ unlocked, progress, focused }: Props) {
                     onClick={index === 0 ? onCoverTap : undefined}
                   >
                     {showFront && (
-                      <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden' }}>
+                      <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden', transform: `translateZ(${HALF}px)` }}>
                         {index === 0 ? (
                           <Cover got={got} total={ACHIEVEMENT_LIST.length} sheen={page === 0} />
                         ) : (
@@ -381,21 +383,19 @@ export function Passport({ unlocked, progress, focused }: Props) {
                         {/* the back of the sheet, seen once it is past the vertical */}
                         <div
                           className={`absolute inset-0 rounded-[14px] border-[3px] border-[#3B2A22] dark:border-[#6B5546] ${index === 0 ? 'passport-leather' : 'passport-page'}`}
-                          style={{ transform: 'rotateY(180deg)', backfaceVisibility: 'hidden' }}
+                          style={{ transform: `rotateY(180deg) translateZ(${HALF}px)`, backfaceVisibility: 'hidden' }}
                         >
                           <div className="absolute inset-y-0 right-0 w-9 bg-gradient-to-l from-black/25 to-transparent" />
                           <div data-shade="back" className="absolute inset-0 rounded-[11px] bg-black" style={{ opacity: 0.05 }} />
                         </div>
-                        {/* the thickness of the sheet, along its free edge */}
-                        <div
-                          className="absolute right-0 top-[3px] bottom-[3px]"
-                          style={{
-                            width: THICK,
-                            transformOrigin: 'right center',
-                            transform: 'rotateY(-90deg)',
-                            background: index === 0 ? 'linear-gradient(#5A1510,#7D150D)' : 'linear-gradient(90deg,#CDB98A,#EADFC0)',
-                          }}
-                        />
+                        {/* the thickness of the sheet: rounded layers between the two faces */}
+                        {LAYERS.map(z => (
+                          <div
+                            key={z}
+                            className={`absolute inset-0 rounded-[14px] border ${index === 0 ? 'border-[#3B2A22] bg-[#8F1A10]' : 'border-[#C9A24A]/60 bg-[#E9DDBE]'}`}
+                            style={{ transform: `translateZ(${z}px)` }}
+                          />
+                        ))}
                       </>
                     )}
                   </div>
