@@ -54,8 +54,13 @@ const planFor = (level: number | null): Plan => {
   const t = level === null ? 0.5 : Math.min(1, Math.max(0, (level - 2) / 10));
   const count = Math.round(4 + t * 8);
   const every = 0.6 - t * 0.2;
-  const bursts = BURSTS.slice(0, count).map((b, i) => ({ ...b, launch: 0.8 + i * every }));
-  const lastBurst = bursts[count - 1].launch + FLIGHT;
+  // From level 10 the last three fries leave together: a grand finale
+  const finale = level !== null && level >= 10;
+  const bursts = BURSTS.slice(0, count).map((b, i) => ({
+    ...b,
+    launch: finale && i >= count - 3 ? 0.8 + (count - 4) * every + 0.6 + (i - (count - 3)) * 0.08 : 0.8 + i * every,
+  }));
+  const lastBurst = Math.max(...bursts.map(b => b.launch)) + FLIGHT;
   const time = Math.round((lastBurst + 2.6) * 1000);
   const colors = ['#FFC72C', '#FFFFFF', '#FFE58A', '#FFFFFF'];
   if (t >= 0.3) colors.push('#DA291C');
@@ -205,7 +210,7 @@ export function FoodRain() {
   const id = celebration.id;
   const big = celebration.kind === 'level' || celebration.kind === 'region';
   const level = celebration.kind === 'level' ? LEVELS[celebration.level - 1] : null;
-  const visited = useMcdonaldStore.getState().getVisitedCount();
+  const visited = Math.max(useMcdonaldStore.getState().getVisitedCount(), level?.min ?? 0);
 
   return (
     <div className="food-rain fixed inset-0 z-[2500] overflow-hidden pointer-events-none" aria-hidden="true">
@@ -319,8 +324,11 @@ export function FoodRain() {
             Nuovo livello
           </div>
           <div className="px-5 pb-4 pt-3">
-            <div className="mx-auto -mt-0.5 flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#3B2A22] bg-mc-red font-display text-4xl font-bold text-white shadow-md ring-4 ring-white/70">
-              {celebration.level}
+            <div className="relative mx-auto -mt-0.5 flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full border-[3px] border-[#3B2A22] bg-white shadow-md ring-4 ring-white/70">
+              <FoodIcon name={level.icon} size={48} />
+              <span className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border-2 border-[#3B2A22] bg-mc-red font-display text-sm font-bold text-white">
+                {celebration.level}
+              </span>
             </div>
             <p className="mt-2 font-display text-2xl font-bold leading-tight">Livello {celebration.level} raggiunto!</p>
             <p className="mt-2 inline-block rounded-full bg-[#3B2A22] px-3 py-0.5 text-sm font-semibold text-mc-yellow">
