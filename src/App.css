@@ -447,3 +447,25 @@ input, textarea, button {
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='5'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E"),
     linear-gradient(160deg, #d3301f, #9e1a10);
 }
+
+/* A soft sheen that passes over the leather cover every few seconds */
+.passport-sheen {
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.26) 50%, transparent 62%);
+  background-size: 260% 100%;
+  animation: passport-sheen 6s ease-in-out infinite;
+}
+@keyframes passport-sheen {
+  0%,
+  55% {
+    background-position: 130% 0;
+  }
+  100% {
+    background-position: -70% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .passport-sheen {
+    animation: none;
+    opacity: 0;
+  }
+}
