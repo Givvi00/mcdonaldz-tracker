@@ -1,5 +1,4 @@
 import { FoodIcon } from '@/components/FoodIcon';
-import { levelInfo } from '@/utils/foodTheme';
 
 interface Row {
   region: string;
@@ -19,7 +18,6 @@ const PAPER = '#FFFFFF';
 /** The visits as a till receipt: one line per region visited, a total, the level. The paper stays light in dark mode, like real paper. */
 export function Receipt({ name, rows, visited, total }: Props) {
   const lines = rows.filter(r => r.visited > 0).sort((a, b) => b.visited - a.visited || a.region.localeCompare(b.region, 'it'));
-  const { level, number } = levelInfo(visited);
   const today = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
   return (
@@ -57,12 +55,6 @@ export function Receipt({ name, rows, visited, total }: Props) {
             <span>TOTALE VISITATI</span>
             <span className="tabular-nums whitespace-nowrap">
               {visited} su {total}
-            </span>
-          </p>
-          <p className="mt-1 flex justify-between text-[0.75rem]">
-            <span>Livello {number}</span>
-            <span>
-              <FoodIcon name={level.icon} size={14} /> {level.name}
             </span>
           </p>
           <p className="mt-4 text-center text-[0.7rem] text-gray-500">Grazie e a presto! <FoodIcon name="fries" size={14} /></p>

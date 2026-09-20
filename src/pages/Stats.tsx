@@ -59,9 +59,7 @@ export function Stats() {
         </div>
       </div>
 
-      <Section icon="burger" title="Passaporto">
-        <Passport unlocked={unlockedIds} progress={progress} focused={focusedAchievements} />
-      </Section>
+      <Passport unlocked={unlockedIds} progress={progress} focused={focusedAchievements} />
 
       <Section icon="mcflurry" title="Regioni">
         <RegionAlbum summaries={summaries} wasComplete={wasComplete} />

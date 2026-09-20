@@ -25,7 +25,7 @@ function useFit(box: React.RefObject<HTMLDivElement | null>) {
     const update = () => {
       const el = box.current;
       if (!el) return;
-      const availH = Math.max(320, window.innerHeight - 250);
+      const availH = Math.max(320, window.innerHeight - 200);
       setK(Math.min(el.clientWidth / W, availH / H, 1));
     };
     update();
@@ -305,16 +305,21 @@ export function Passport({ unlocked, progress, focused }: Props) {
   return (
     <div>
       <div ref={box} className="flex justify-center">
-        <div className="relative" style={{ width: W * k, height: H * k + 22 * k }}>
-          {/* the edge of the pages and a ribbon bookmark */}
-          <div className="absolute" style={{ left: 0, top: 0, width: W * k, height: H * k }}>
-            <div className="absolute rounded-r-md border border-[#C9A24A]/70 bg-[#F1E6CC]" style={{ right: -4 * k, top: 8 * k, bottom: 8 * k, width: 4 * k }} />
-            <div className="absolute rounded-r-md border border-[#C9A24A]/70 bg-[#E6D7B4]" style={{ right: -8 * k, top: 14 * k, bottom: 14 * k, width: 4 * k }} />
-          </div>
-          <div
-            className="absolute z-10 bg-gradient-to-b from-[#E0342A] to-[#A8180E] shadow-md"
-            style={{ right: 34 * k, top: H * k - 6 * k, width: 16 * k, height: 34 * k, clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%)' }}
-          />
+        <div className="relative" style={{ width: W * k, height: H * k }}>
+          {/* the edge of the pages on the right: one sheet per page still to turn, so it thins out as you go on */}
+          {Array.from({ length: PAGES - 1 }, (_, i) => (
+            <div
+              key={i}
+              className={`absolute rounded-r-md border border-[#C9A24A]/70 transition-opacity duration-300 ${i % 2 ? 'bg-[#E6D7B4]' : 'bg-[#F1E6CC]'}`}
+              style={{
+                left: W * k - 2 * k + i * 3.5 * k,
+                width: 6 * k,
+                top: (7 + i * 2) * k,
+                height: (H - 14 - i * 4) * k,
+                opacity: i < PAGES - 1 - page ? 1 : 0,
+              }}
+            />
+          ))}
 
           <div
             className="absolute left-0 top-0 touch-pan-y select-none [perspective:1500px]"
@@ -350,33 +355,15 @@ export function Passport({ unlocked, progress, focused }: Props) {
         </div>
       </div>
 
-      <div className="mt-2 flex items-center justify-between gap-2">
-        <button
-          onClick={() => turnBy('prev')}
-          disabled={page === 0 || !!turn}
-          className="rounded-xl border-2 border-gray-200 bg-gray-50 px-3 py-1.5 text-sm font-semibold text-gray-600 transition-transform active:scale-95 disabled:opacity-30 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
-          aria-label="Pagina precedente"
-        >
-          ‹
-        </button>
-        <div className="text-center">
-          <div className="flex items-center justify-center gap-1.5" aria-hidden="true">
-            {Array.from({ length: PAGES }, (_, i) => (
-              <span key={i} className={`h-2 w-2 rounded-full transition-colors ${i === page ? 'bg-mc-red' : 'bg-gray-300 dark:bg-gray-700'}`} />
-            ))}
-          </div>
-          <p className="mt-1 text-[0.65rem] text-gray-500 dark:text-gray-400">
-            {page === 0 ? 'Scorri con il dito per aprirlo' : 'Scorri con il dito per girare pagina'}
-          </p>
+      <div className="mt-2 text-center">
+        <div className="flex items-center justify-center gap-1.5" aria-hidden="true">
+          {Array.from({ length: PAGES }, (_, i) => (
+            <span key={i} className={`h-2 w-2 rounded-full transition-colors ${i === page ? 'bg-mc-red' : 'bg-gray-300 dark:bg-gray-700'}`} />
+          ))}
         </div>
-        <button
-          onClick={() => turnBy('next')}
-          disabled={page === PAGES - 1 || !!turn}
-          className="rounded-xl bg-mc-red px-3 py-1.5 text-sm font-bold text-white transition-transform active:scale-95 disabled:opacity-30"
-          aria-label={page === 0 ? 'Apri il passaporto' : 'Pagina successiva'}
-        >
-          ›
-        </button>
+        <p className="mt-1 text-[0.65rem] text-gray-500 dark:text-gray-400">
+          {page === 0 ? 'Scorri con il dito per aprirlo' : 'Scorri con il dito per girare pagina'}
+        </p>
       </div>
     </div>
   );
