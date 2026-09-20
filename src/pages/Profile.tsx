@@ -73,7 +73,7 @@ export function Profile() {
       <div className="relative overflow-hidden bg-gradient-to-br from-mc-red to-mc-red-dark text-white rounded-3xl p-6 text-center shadow-lg shadow-red-900/20">
         <FoodPattern />
         <div className="relative text-4xl mb-2 w-16 h-16 mx-auto flex items-center justify-center rounded-full bg-mc-yellow shadow-md">👤</div>
-        <p className="relative text-lg font-display font-bold">{user?.name || 'Ospite'}</p>
+        <p className="relative text-lg font-display font-bold">{user?.name ? `Ciao, ${user.name}` : 'Ciao!'}</p>
         <p className="relative text-xs opacity-75 mt-2">ID: {user?.id.slice(0, 8)}...</p>
       </div>
 

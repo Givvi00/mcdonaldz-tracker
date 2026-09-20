@@ -18,6 +18,7 @@ export function Stats() {
   const { user, visits, getVisitedCount, getCountedTotal, getRegionStats, mcdonalds, focusedAchievement, clearFocusedAchievement } =
     useMcdonaldStore();
   const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [showReceipt, setShowReceipt] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -66,14 +67,23 @@ export function Stats() {
         <LevelRoadmap visited={visitedCount} />
       </Section>
 
-      <Receipt rows={regionStats} visited={visitedCount} total={totalMcdonalds} />
-
-      <Section icon="mcflurry" title="Album delle regioni">
-        <RegionAlbum summaries={summaries} wasComplete={wasComplete} />
-      </Section>
-
       <Section icon="burger" title="Passaporto">
         <Passport unlocked={unlockedIds} progress={progress} focused={focusedAchievement} />
+      </Section>
+
+      <Section icon="mcflurry" title="Regioni">
+        <RegionAlbum summaries={summaries} wasComplete={wasComplete} />
+        <button
+          onClick={() => setShowReceipt(v => !v)}
+          className="mt-3 w-full rounded-xl border-2 border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 py-2.5 text-sm font-semibold text-gray-600 dark:text-gray-300 active:scale-[0.98] transition-transform"
+        >
+          {showReceipt ? 'Nascondi lo scontrino' : 'Mostra lo scontrino'}
+        </button>
+        {showReceipt && (
+          <div className="mt-4">
+            <Receipt rows={regionStats} visited={visitedCount} total={totalMcdonalds} />
+          </div>
+        )}
       </Section>
     </div>
   );

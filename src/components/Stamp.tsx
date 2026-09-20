@@ -21,7 +21,7 @@ export function Stamp({ def, state, size = 88, className = '' }: { def: Achievem
     const inner = `<g transform="translate(48 48) scale(.84) translate(-48 -48)">${shape}</g>`;
     return (
       <svg
-        className={`stamp-jitter mix-blend-multiply ${className}`}
+        className={`stamp-jitter mix-blend-multiply dark:mix-blend-normal dark:brightness-[1.6] ${className}`}
         viewBox="0 0 96 96"
         width={size}
         height={size}

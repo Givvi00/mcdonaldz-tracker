@@ -3,7 +3,7 @@ import { FoodIcon } from '@/components/FoodIcon';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { FOOD_ICONS, LEVELS } from '@/utils/foodTheme';
 import { ACHIEVEMENTS } from '@/services/achievements';
-import { STAMP_INK } from '@/components/stampArt';
+import { STAMP_INK, STAMP_SHAPES } from '@/components/stampArt';
 import { Stamp } from '@/components/Stamp';
 
 const SPARKLE_COLORS = ['#FFC72C', '#FFFFFF', '#FFE58A', '#FFFFFF'];
@@ -374,9 +374,17 @@ function StampShow({ stamps }: { stamps: string[] }) {
               className="relative"
               style={{ width: size, height: size, animation: `stamp-out 0.6s ease-in ${total - 0.6}s both` }}
             >
-              <span
-                className="absolute inset-0 rounded-full border-4"
-                style={{ borderColor: ink, animation: `stamp-ring 0.8s ease-out ${at + 0.45}s both` }}
+              <svg
+                className="absolute inset-0"
+                viewBox="0 0 96 96"
+                width={size}
+                height={size}
+                fill="none"
+                stroke={ink}
+                strokeWidth="3"
+                strokeLinejoin="round"
+                style={{ animation: `stamp-ring 0.8s ease-out ${at + 0.45}s both` }}
+                dangerouslySetInnerHTML={{ __html: STAMP_SHAPES[def.shape] }}
               />
               <div className="absolute inset-0" style={{ animation: `stamp-slam 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.2) ${at}s both` }}>
                 <Stamp def={def} state="got" size={size} />

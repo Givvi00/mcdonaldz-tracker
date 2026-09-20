@@ -63,11 +63,9 @@ function App() {
             </p>
             <p className="text-[0.65rem] uppercase tracking-wider text-white/75 -mt-0.5">Tracker</p>
           </div>
-          <div className="flex min-w-0 flex-col items-end gap-1">
-            <p className="max-w-[10rem] truncate text-sm font-display font-semibold leading-none">{user?.name || 'Ospite'}</p>
-            <p className="rounded-full bg-black/25 px-3 py-1 text-xs font-semibold whitespace-nowrap">
-              Livello {levelInfo(getVisitedCount()).number}
-            </p>
+          <div className="min-w-0 max-w-[55%] rounded-2xl bg-black/25 px-3.5 py-1.5 text-right">
+            <p className="truncate text-xs leading-tight text-white/80">{user?.name ? `Ciao, ${user.name}` : 'Ciao!'}</p>
+            <p className="font-display text-base font-bold leading-tight">Livello {levelInfo(getVisitedCount()).number}</p>
           </div>
         </header>
       )}
