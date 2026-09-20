@@ -50,26 +50,19 @@ export function RegionSheet({ open, regions, selected, onSelect, onClose }: Prop
           </button>
 
           <div className="grid grid-cols-2 gap-2">
-            {regions.map(({ region, total, visited }) => {
+            {regions.map(({ region }) => {
               const active = selected === region;
-              const pct = total > 0 ? (visited / total) * 100 : 0;
               return (
                 <button
                   key={region}
                   onClick={() => pick(active ? null : region)}
-                  className={`text-left p-3 rounded-2xl border transition-colors ${
+                  className={`text-left px-3 py-3 rounded-2xl border transition-colors ${
                     active
                       ? 'bg-mc-red/10 dark:bg-mc-red/20 border-mc-red'
                       : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800'
                   }`}
                 >
                   <p className="font-semibold text-sm text-gray-800 dark:text-gray-100 truncate">{region}</p>
-                  <p className="text-[0.7rem] font-bold text-mc-red dark:text-red-400 mt-0.5">
-                    {visited}/{total}
-                  </p>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1 mt-1.5">
-                    <div className="bg-mc-yellow h-1 rounded-full" style={{ width: `${pct}%` }} />
-                  </div>
                 </button>
               );
             })}

@@ -127,7 +127,7 @@ export function Profile() {
             ref={nameInput}
             value={nameShown}
             onChange={e => setNameDraft(e.target.value)}
-            maxLength={20}
+            maxLength={16}
             placeholder="Ospite"
             className="min-w-0 flex-1 rounded-xl border-2 border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold text-gray-800 outline-none focus:border-mc-red dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
           />

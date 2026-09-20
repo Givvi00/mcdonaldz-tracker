@@ -12,8 +12,20 @@ interface Props {
 const W = 340;
 const H = 452;
 const PAGES = FAMILIES.length + 1; // the cover, then one page per family
-const MAX_ANGLE = 108;
-const SETTLE_MS = 330;
+const MAX_ANGLE = 180;
+const SETTLE_MS = 480;
+// Turned pages stay on the left as thin strips showing their back; room is kept for them
+const STRIP = 15;
+const STEP = 3;
+const PAD = 30;
+const THICK = 5;
+
+/** A page past the vertical is squeezed so that, once turned, it only leaves a strip on the left of the book */
+const squeeze = (angle: number) => {
+  if (angle <= 90) return 1;
+  const min = STRIP / W;
+  return min + (1 - min) * Math.pow(1 - (angle - 90) / 90, 6);
+};
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -26,7 +38,7 @@ function useFit(box: React.RefObject<HTMLDivElement | null>) {
       const el = box.current;
       if (!el) return;
       const availH = Math.max(320, window.innerHeight - 200);
-      setK(Math.min(el.clientWidth / W, availH / H, 1));
+      setK(Math.min(el.clientWidth / (W + PAD), availH / H, 1));
     };
     update();
     const observer = new ResizeObserver(update);
@@ -185,7 +197,11 @@ function FamilyPage({
 
       <div className="absolute inset-x-0 bottom-2 flex items-center justify-center gap-2 text-[10px] font-semibold text-[#A08F80] dark:text-[#8E7D6C]">
         <span className="font-display text-[13px] font-bold opacity-50">Mz.</span>
-        <span>· pagina {number} ·</span>
+        <span className="flex items-center gap-1" aria-label={`Pagina ${number} di ${PAGES - 1}`}>
+          {Array.from({ length: PAGES }, (_, i) => (
+            <span key={i} className={`h-1.5 w-1.5 rounded-full ${i === number ? 'bg-mc-red' : 'bg-[#C9A24A]/50'}`} />
+          ))}
+        </span>
       </div>
     </section>
   );
@@ -205,7 +221,7 @@ export function Passport({ unlocked, progress, focused }: Props) {
   const [page, setPage] = useState(0);
   const [turn, setTurn] = useState<Turn | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const frame = useRef<number | null>(null);
   const drag = useRef<{ x: number; y: number; active: boolean; dir?: 'next' | 'prev'; progress: number } | null>(null);
   const got = ACHIEVEMENT_LIST.filter(a => unlocked.has(a.id)).length;
 
@@ -223,20 +239,30 @@ export function Passport({ unlocked, progress, focused }: Props) {
 
   useEffect(
     () => () => {
-      if (timer.current) clearTimeout(timer.current);
+      if (frame.current) cancelAnimationFrame(frame.current);
     },
     [],
   );
 
   const canGo = (dir: 'next' | 'prev') => (dir === 'next' ? page < PAGES - 1 : page > 0);
 
-  /** Let go of a page: it finishes turning or falls back, with a short animation */
-  const settle = (dir: 'next' | 'prev', complete: boolean) => {
-    setTurn({ dir, progress: complete ? 1 : 0, settling: true });
-    timer.current = setTimeout(() => {
-      if (complete) setPage(p => p + (dir === 'next' ? 1 : -1));
-      setTurn(null);
-    }, SETTLE_MS);
+  /** Let go of a page: it finishes turning or falls back. Driven by hand (not CSS) because the squeeze is not linear */
+  const settle = (dir: 'next' | 'prev', complete: boolean, from: number) => {
+    const to = complete ? 1 : 0;
+    const start = performance.now();
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / SETTLE_MS);
+      const eased = 1 - Math.pow(1 - t, 3);
+      if (t < 1) {
+        setTurn({ dir, progress: from + (to - from) * eased, settling: true });
+        frame.current = requestAnimationFrame(step);
+      } else {
+        if (complete) setPage(p => p + (dir === 'next' ? 1 : -1));
+        setTurn(null);
+      }
+    };
+    setTurn({ dir, progress: from, settling: true });
+    frame.current = requestAnimationFrame(step);
   };
 
   const turnBy = (dir: 'next' | 'prev') => {
@@ -245,8 +271,7 @@ export function Passport({ unlocked, progress, focused }: Props) {
       setPage(p => p + (dir === 'next' ? 1 : -1));
       return;
     }
-    setTurn({ dir, progress: 0, settling: false });
-    requestAnimationFrame(() => requestAnimationFrame(() => settle(dir, true)));
+    settle(dir, true, 0);
   };
 
   const onPointerDown = (e: React.PointerEvent) => {
@@ -269,14 +294,14 @@ export function Passport({ unlocked, progress, focused }: Props) {
       d.dir = dir;
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     }
-    d.progress = Math.min(1, Math.abs(dx) / (W * k * 0.8));
+    d.progress = Math.min(1, Math.abs(dx) / (W * k));
     setTurn({ dir: d.dir as 'next' | 'prev', progress: d.progress, settling: false });
   };
   const onPointerEnd = () => {
     const d = drag.current;
     drag.current = null;
     if (!d) return;
-    if (d.active && d.dir) settle(d.dir, d.progress > 0.35);
+    if (d.active && d.dir) settle(d.dir, d.progress > 0.35, d.progress);
   };
   const onCoverTap = () => {
     if (page === 0 && !turn) turnBy('next');
@@ -300,35 +325,31 @@ export function Passport({ unlocked, progress, focused }: Props) {
   // Which page moves and which one lies under it
   const turning = turn ? (turn.dir === 'next' ? page : page - 1) : null;
   const under = turn ? (turn.dir === 'next' ? page + 1 : page) : null;
-  const angle = turn ? -MAX_ANGLE * (turn.dir === 'next' ? turn.progress : 1 - turn.progress) : 0;
+  const angle = turn ? MAX_ANGLE * (turn.dir === 'next' ? turn.progress : 1 - turn.progress) : 0;
+  const t = Math.max(0, (angle - 90) / 90);
 
   return (
     <div>
       <div ref={box} className="flex justify-center">
-        <div className="relative" style={{ width: W * k, height: H * k }}>
-          {/* the edge of the pages on the right: one sheet per page still to turn, so it thins out as you go on */}
-          {Array.from({ length: PAGES - 1 }, (_, i) => (
-            <div
-              key={i}
-              className={`absolute rounded-r-md border border-[#C9A24A]/70 transition-opacity duration-300 ${i % 2 ? 'bg-[#E6D7B4]' : 'bg-[#F1E6CC]'}`}
-              style={{
-                left: W * k - 2 * k + i * 3.5 * k,
-                width: 6 * k,
-                top: (7 + i * 2) * k,
-                height: (H - 14 - i * 4) * k,
-                opacity: i < PAGES - 1 - page ? 1 : 0,
-              }}
-            />
-          ))}
-
+        <div className="relative" style={{ width: (W + PAD) * k, height: H * k }}>
           <div
-            className="absolute left-0 top-0 touch-pan-y select-none [perspective:1500px]"
-            style={{ width: W, height: H, transform: `scale(${k})`, transformOrigin: 'top left' }}
+            className="absolute top-0 touch-pan-y select-none [perspective:1500px]"
+            style={{ left: PAD * k, width: W, height: H, transform: `scale(${k})`, transformOrigin: 'top left' }}
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerEnd}
             onPointerCancel={onPointerEnd}
           >
+            {/* pages already turned stay on the left, a strip of their back each */}
+            {Array.from({ length: page }, (_, j) =>
+              j === turning ? null : (
+                <div
+                  key={`strip-${j}`}
+                  className={`absolute rounded-l-md border ${j === 0 ? 'passport-leather border-[#3B2A22]' : 'border-[#C9A24A]/70 bg-gradient-to-l from-[#D9C79B] to-[#F1E6CC]'}`}
+                  style={{ top: 2, height: H - 4, left: -(STRIP + (page - 1 - j) * STEP), width: STRIP + 2, zIndex: 0, boxShadow: 'inset -5px 0 5px rgba(0,0,0,.22)' }}
+                />
+              ),
+            )}
             {Array.from({ length: PAGES }, (_, index) => {
               const isTurning = index === turning;
               const visible = turn ? index === turning || index === under : index === page;
@@ -340,14 +361,37 @@ export function Passport({ unlocked, progress, focused }: Props) {
                     zIndex: isTurning ? 3 : 1,
                     visibility: visible ? 'visible' : 'hidden',
                     transformOrigin: 'left center',
-                    backfaceVisibility: 'hidden',
-                    transform: isTurning ? `rotateY(${angle}deg)` : undefined,
-                    filter: isTurning ? `brightness(${1 - (0.3 * Math.abs(angle)) / MAX_ANGLE})` : undefined,
-                    transition: isTurning && turn?.settling ? `transform ${SETTLE_MS}ms cubic-bezier(0.3, 0.6, 0.3, 1), filter ${SETTLE_MS}ms` : undefined,
+                    transformStyle: 'preserve-3d',
+                    transform: isTurning ? `rotateY(${-angle}deg) scaleX(${squeeze(angle)})` : undefined,
                   }}
                   onClick={index === 0 ? onCoverTap : undefined}
                 >
-                  {pageContent(index)}
+                  <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden' }}>
+                    {pageContent(index)}
+                    {isTurning && <div className="pointer-events-none absolute inset-0 rounded-[14px] bg-black" style={{ opacity: 0.32 * Math.min(1, angle / 90) }} />}
+                  </div>
+                  {isTurning && (
+                    <>
+                      {/* the back of the sheet, seen once it is past the vertical */}
+                      <div
+                        className={`absolute inset-0 rounded-[14px] border-[3px] border-[#3B2A22] dark:border-[#6B5546] ${index === 0 ? 'passport-leather' : 'passport-page'}`}
+                        style={{ transform: 'rotateY(180deg)', backfaceVisibility: 'hidden' }}
+                      >
+                        <div className="absolute inset-y-0 right-0 w-9 bg-gradient-to-l from-black/25 to-transparent" />
+                        <div className="absolute inset-0 rounded-[11px] bg-black" style={{ opacity: 0.05 + 0.3 * (1 - t) }} />
+                      </div>
+                      {/* the thickness of the sheet, along its free edge */}
+                      <div
+                        className="absolute right-0 top-[3px] bottom-[3px]"
+                        style={{
+                          width: THICK,
+                          transformOrigin: 'right center',
+                          transform: 'rotateY(-90deg)',
+                          background: index === 0 ? 'linear-gradient(#5A1510,#7D150D)' : 'linear-gradient(90deg,#CDB98A,#EADFC0)',
+                        }}
+                      />
+                    </>
+                  )}
                 </div>
               );
             })}
@@ -356,12 +400,7 @@ export function Passport({ unlocked, progress, focused }: Props) {
       </div>
 
       <div className="mt-2 text-center">
-        <div className="flex items-center justify-center gap-1.5" aria-hidden="true">
-          {Array.from({ length: PAGES }, (_, i) => (
-            <span key={i} className={`h-2 w-2 rounded-full transition-colors ${i === page ? 'bg-mc-red' : 'bg-gray-300 dark:bg-gray-700'}`} />
-          ))}
-        </div>
-        <p className="mt-1 text-[0.65rem] text-gray-500 dark:text-gray-400">
+        <p className="text-[0.65rem] text-gray-500 dark:text-gray-400">
           {page === 0 ? 'Scorri con il dito per aprirlo' : 'Scorri con il dito per girare pagina'}
         </p>
       </div>

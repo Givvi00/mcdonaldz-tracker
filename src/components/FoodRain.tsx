@@ -178,6 +178,7 @@ export function FoodRain() {
 
   return (
     <div className="food-rain fixed inset-0 z-[2500] overflow-hidden pointer-events-none" aria-hidden="true">
+      {big && <Veil ms={BIG.time} />}
       {/* Under the box, so a fry comes out from behind its front */}
       {show.rockets.map(p => (
         <span
@@ -349,6 +350,19 @@ export function FoodRain() {
   );
 }
 
+const VEIL_IN_MS = 600;
+const VEIL_OUT_MS = 900;
+
+/** Dims and softly blurs the app for the whole celebration and swallows taps, so nothing else can be pressed meanwhile */
+function Veil({ ms }: { ms: number }) {
+  return (
+    <div
+      className="pointer-events-auto absolute inset-0 bg-black/45 backdrop-blur-[3px]"
+      style={{ animation: `veil-in ${VEIL_IN_MS}ms ease-out both, veil-out ${VEIL_OUT_MS}ms ease-in ${ms - VEIL_OUT_MS}ms forwards` }}
+    />
+  );
+}
+
 /** A stamp slams onto the screen, a little ink ring spreads and a few stars fly, then it flies away. */
 function StampShow({ stamps }: { stamps: string[] }) {
   const shown = stamps.slice(0, STAMP_SHOWN);
@@ -358,10 +372,7 @@ function StampShow({ stamps }: { stamps: string[] }) {
 
   return (
     <div className="food-rain fixed inset-0 z-[2500] overflow-hidden pointer-events-none" aria-hidden="true">
-      <div
-        className="absolute inset-0 bg-black/30"
-        style={{ animation: `stamp-dim ${total}s ease-in-out both` }}
-      />
+      <Veil ms={total * 1000} />
       <div className="absolute inset-x-0 flex items-center justify-center gap-3" style={{ top: '38%', transform: 'translateY(-50%)' }}>
         {shown.map((id, i) => {
           const def = ACHIEVEMENTS[id];
