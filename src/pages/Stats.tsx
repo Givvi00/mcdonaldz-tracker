@@ -44,6 +44,7 @@ export function Stats() {
   const progress = getAchievementProgress(mcdonalds, visits);
   const summaries = regionSummaries(mcdonalds, visits);
   const unlockedIds = new Set(achievements.map(a => a.type));
+  const unlockedAt = Object.fromEntries(achievements.map(a => [a.type, a.unlockedAt]));
   const wasComplete = new Set(summaries.map(r => r.region).filter(r => unlockedIds.has(regionRecordType(r))));
 
   const tiers: Record<string, RegionTier> = {};
@@ -63,7 +64,7 @@ export function Stats() {
         </div>
       </div>
 
-      <Passport unlocked={unlockedIds} progress={progress} focused={focusedAchievements} />
+      <Passport unlocked={unlockedIds} unlockedAt={unlockedAt} progress={progress} focused={focusedAchievements} />
 
       <Section icon="mcflurry" title="Regioni">
         <ItalyMap tiers={tiers} className="mx-auto mb-5 w-full max-w-[15rem]" />

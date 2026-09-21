@@ -4,6 +4,8 @@ import { Stamp } from '@/components/Stamp';
 
 interface Props {
   unlocked: ReadonlySet<string>;
+  /** When each stamp was earned (ms), by stamp id */
+  unlockedAt: Record<string, number>;
   progress: Record<string, AchievementProgress>;
   focused: string[];
 }
@@ -44,6 +46,9 @@ function useFit(box: React.RefObject<HTMLDivElement | null>) {
   }, [box]);
   return k;
 }
+
+const shortDate = (ms: number) => new Date(ms).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: '2-digit' });
+const longDate = (ms: number) => new Date(ms).toLocaleDateString('it-IT', { dateStyle: 'long' });
 
 const GOLD_TEXT = 'bg-gradient-to-b from-[#FFE9A0] via-[#F5C542] to-[#D99A12] bg-clip-text text-transparent';
 
@@ -100,6 +105,7 @@ function FamilyPage({
   family,
   number,
   unlocked,
+  unlockedAt,
   progress,
   focused,
   selected,
@@ -108,6 +114,7 @@ function FamilyPage({
   family: (typeof FAMILIES)[number];
   number: number;
   unlocked: ReadonlySet<string>;
+  unlockedAt: Record<string, number>;
   progress: Record<string, AchievementProgress>;
   focused: string[];
   selected: string | null;
@@ -154,6 +161,9 @@ function FamilyPage({
               <span className={`mt-0.5 text-[10.5px] font-bold leading-tight ${has ? '' : 'text-[#A08F80] dark:text-[#8E7D6C]'}`}>
                 {state === 'secret' ? '???' : def.name}
               </span>
+              {has && unlockedAt[def.id] && (
+                <span className="text-[9.5px] font-semibold text-[#8A7563] dark:text-[#B9A793]">{shortDate(unlockedAt[def.id])}</span>
+              )}
               {state === 'no' && p && p.target > 1 && (
                 <span className="text-[10px] font-bold text-mc-red dark:text-red-400">
                   {p.current}/{p.target}
@@ -174,6 +184,9 @@ function FamilyPage({
             </p>
             <p className="text-[#7A6657] dark:text-[#B9A793]">
               {current.secret && !currentHas ? 'Timbro segreto: lo scopri per caso.' : current.description}
+              {currentHas && unlockedAt[current.id] && (
+                <span className="font-bold text-[#3B2A22] dark:text-[#F3E7D3]"> · Ottenuto il {longDate(unlockedAt[current.id])}</span>
+              )}
               {!currentHas && currentProgress && currentProgress.target > 1 && (
                 <span className="font-bold text-mc-red dark:text-red-400">
                   {' '}
@@ -207,7 +220,7 @@ type Dir = 'next' | 'prev';
  * While a page turns nothing is re-rendered: its transform is written straight to the element on every frame,
  * which keeps the animation light on a phone. The turned pages stay on the left and run off the edge of the screen.
  */
-export function Passport({ unlocked, progress, focused }: Props) {
+export function Passport({ unlocked, unlockedAt, progress, focused }: Props) {
   const box = useRef<HTMLDivElement>(null);
   const k = useFit(box);
   const [page, setPage] = useState(0);
@@ -375,6 +388,7 @@ export function Passport({ unlocked, progress, focused }: Props) {
                             family={FAMILIES[index - 1]}
                             number={index}
                             unlocked={unlocked}
+                            unlockedAt={unlockedAt}
                             progress={progress}
                             focused={focused}
                             selected={selected}
