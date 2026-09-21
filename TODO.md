@@ -71,8 +71,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [x] Repository remoto su GitHub come backup del codice: https://github.com/Givvi00/mcdonaldz-tracker (**pubblico**, necessario per GitHub Pages gratuito; autore dei commit: noreply di GitHub). Dopo ogni sessione: `git push`
 
 ## Da discutere insieme (19/09/2026)
-- [ ] **Logo del banner in alto**: il quadratino giallo con la M è troppo simile ai marchi; servono proposte (icona sopra il banner o struttura diversa dell'intestazione)
-- [ ] **Icona dell'app** (PWA e Android): oggi usa l'emoji della patatina, da cambiare assolutamente con un disegno nostro
+- [x] **Logo del banner in alto** e **icona dell'app**: già rifatti (19/09/2026): scritta "McDonald.z" nel banner al posto del quadratino giallo, icona rossa con segnaposto giallo con spunta e "Mz." bianco (`public/icons`). Voci rimaste indietro nel TODO, aggiornate il 21/09/2026. Resta da fare l'icona monocromatica per Android 13+ (riga più sopra)
 - [ ] **Marker della mappa**: ogni ristorante ha un'icona di cibo diversa e sembra che sia specializzato in quel prodotto. Da rivedere insieme come fare (non toccare prima)
 
 ## Funzioni future (da approfondire, in coda)
