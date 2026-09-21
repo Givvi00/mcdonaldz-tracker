@@ -340,11 +340,15 @@ export function Passport({ unlocked, progress, focused }: Props) {
               {Array.from({ length: PAGES }, (_, index) => {
                 const isTurning = index === turning;
                 const turned = index < page;
-                // Only the last two turned pages can be seen (they all lie on the same spot): the older ones are
-                // removed from rendering, so the phone does not pile up 3D layers and start to glitch
-                const visible = (index <= page && index >= page - 2) || (turnDir === 'next' && index === page + 1);
-                const showFront = index >= page - 1 && index <= page + 1;
-                const showBack = index <= page;
+                // Keep as little as possible alive: the phone glitches when many big 3D layers pile up.
+                // Turned pages all lie on the same spot, so only the last one (and the one below while going back) is seen.
+                const visible =
+                  index === page ||
+                  (index === page - 1 && page > 0) ||
+                  (index === page - 2 && turnDir === 'prev') ||
+                  (index === page + 1 && turnDir === 'next');
+                const showFront = index === page || index === page + 1 || isTurning || (index === page - 1 && turnDir === 'prev');
+                const showBack = isTurning || (index < page && index >= page - 2);
                 return (
                   <div
                     key={index}
@@ -380,7 +384,7 @@ export function Passport({ unlocked, progress, focused }: Props) {
                         <div data-shade="front" className="pointer-events-none absolute inset-0 rounded-[14px] bg-black" style={{ opacity: 0 }} />
                       </div>
                     )}
-                    {showBack && visible && (
+                    {showBack && (
                       <>
                         {/* the back of the sheet, seen once it is past the vertical */}
                         <div
@@ -391,7 +395,7 @@ export function Passport({ unlocked, progress, focused }: Props) {
                           <div data-shade="back" className="absolute inset-0 rounded-[11px] bg-black" style={{ opacity: 0.05 }} />
                         </div>
                         {/* the thickness of the sheet: rounded layers between the two faces */}
-                        {LAYERS.map(z => (
+                        {isTurning && LAYERS.map(z => (
                           <div
                             key={z}
                             className={`absolute inset-0 rounded-[14px] border ${index === 0 ? 'border-[#3B2A22] bg-[#8F1A10]' : 'border-[#C9A24A]/60 bg-[#E9DDBE]'}`}
