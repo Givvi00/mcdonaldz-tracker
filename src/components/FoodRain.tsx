@@ -269,7 +269,8 @@ export function FoodRain() {
             width: BOX_SIZE,
             height: BOX_SIZE,
             marginLeft: -BOX_SIZE / 2,
-            animation: `food-box ${plan.boxMs}ms ease-out ${plan.offset}s both`,
+            opacity: 0, // hidden while it waits its turn (a region flies first)
+            animation: `food-box ${plan.boxMs}ms ease-out ${plan.offset}s forwards`,
           }}
         >
           <FriesBox size={BOX_SIZE} plan={plan} />
