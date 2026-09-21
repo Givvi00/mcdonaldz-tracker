@@ -340,7 +340,9 @@ export function Passport({ unlocked, progress, focused }: Props) {
               {Array.from({ length: PAGES }, (_, index) => {
                 const isTurning = index === turning;
                 const turned = index < page;
-                const visible = index <= page || (turnDir === 'next' && index === page + 1);
+                // Only the last two turned pages can be seen (they all lie on the same spot): the older ones are
+                // removed from rendering, so the phone does not pile up 3D layers and start to glitch
+                const visible = (index <= page && index >= page - 2) || (turnDir === 'next' && index === page + 1);
                 const showFront = index >= page - 1 && index <= page + 1;
                 const showBack = index <= page;
                 return (
@@ -352,7 +354,7 @@ export function Passport({ unlocked, progress, focused }: Props) {
                     className="absolute inset-0"
                     style={{
                       zIndex: isTurning ? 100 : index,
-                      visibility: visible ? 'visible' : 'hidden',
+                      display: visible ? undefined : 'none',
                       transformOrigin: 'left center',
                       transformStyle: 'preserve-3d',
                       transform: turned ? `rotateY(-${MAX_ANGLE}deg)` : undefined,
@@ -378,7 +380,7 @@ export function Passport({ unlocked, progress, focused }: Props) {
                         <div data-shade="front" className="pointer-events-none absolute inset-0 rounded-[14px] bg-black" style={{ opacity: 0 }} />
                       </div>
                     )}
-                    {showBack && (
+                    {showBack && visible && (
                       <>
                         {/* the back of the sheet, seen once it is past the vertical */}
                         <div
