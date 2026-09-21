@@ -1,6 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
+import { upgradeBackup, type BackupData } from '@/services/db';
 
 export function backupFilename(): string {
   return `mcdonaldz-backup-${new Date().toISOString().split('T')[0]}.json`;
@@ -48,5 +49,6 @@ export function readBackupSummary(text: string): { visits: number } {
   }
   const visits = (data as { visits?: unknown })?.visits;
   if (!Array.isArray(visits)) throw new Error('Il file non sembra un backup di McDonaldz');
+  upgradeBackup(data as BackupData); // refuses a backup made by a newer version of the app
   return { visits: visits.length };
 }
