@@ -69,7 +69,7 @@ function Glint({ x, y, size, delay, still }: { x: number; y: number; size: numbe
  * bubbles. Not started: a see-through card with a big question mark. Complete (gold) or complete-with-something-new
  * (silver): metallic colours, a dot per restaurant, a wide "COMPLETATA" / "1 NUOVO" stamp and a passing shine.
  */
-export function RegionSticker({ summary, tier }: { summary: RegionSummary; tier: RegionTier }) {
+export function RegionSticker({ summary, tier, completedAt }: { summary: RegionSummary; tier: RegionTier; /** when the region was completed (ms), shown on gold and silver */ completedAt?: number }) {
   const uid = useId().replace(/:/g, '');
   const shape = REGION_SHAPES[summary.region];
   const still = prefersReducedMotion();
@@ -188,6 +188,12 @@ export function RegionSticker({ summary, tier }: { summary: RegionSummary; tier:
           {empty && (
             <text x="60" y="74" textAnchor="middle" fontFamily="Fredoka, system-ui" fontWeight="700" fontSize="50" fill="#fff" stroke={INK} strokeWidth="1.8" paintOrder="stroke">
               ?
+            </text>
+          )}
+
+          {shiny && completedAt && (
+            <text x="105" y="98.5" textAnchor="end" fontFamily="system-ui" fontWeight="700" fontSize="6.6" fill={tier === 'gold' ? '#8A5A00' : '#5F6F7D'}>
+              {new Date(completedAt).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' })}
             </text>
           )}
 

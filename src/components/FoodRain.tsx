@@ -383,7 +383,7 @@ export function FoodRain() {
           </div>
           <div className="px-5 pb-4 pt-3">
             <div className="mx-auto w-40" style={{ animation: `region-sticker-in 1.1s cubic-bezier(0.2, 0.9, 0.3, 1.15) ${plan.levelAt + 0.1}s both` }}>
-              <RegionSticker summary={{ region: celebration.region, total: celebration.total, visited: celebration.total, complete: true }} tier="gold" />
+              <RegionSticker summary={{ region: celebration.region, total: celebration.total, visited: celebration.total, complete: true }} tier="gold" completedAt={Date.now()} />
             </div>
             <p className="mt-2 inline-block rounded-full bg-[#3B2A22] px-3 py-0.5 text-sm font-semibold text-mc-yellow">
               Figurina d'oro

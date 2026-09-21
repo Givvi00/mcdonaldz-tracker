@@ -44,6 +44,9 @@ export function Stats() {
   const progress = getAchievementProgress(mcdonalds, visits);
   const summaries = regionSummaries(mcdonalds, visits);
   const unlockedIds = new Set(achievements.map(a => a.type));
+  const completedAt = Object.fromEntries(
+    achievements.filter(a => a.type.startsWith('REGION:')).map(a => [a.type.slice('REGION:'.length), a.unlockedAt]),
+  );
   const unlockedAt = Object.fromEntries(achievements.map(a => [a.type, a.unlockedAt]));
   const wasComplete = new Set(summaries.map(r => r.region).filter(r => unlockedIds.has(regionRecordType(r))));
 
@@ -68,7 +71,7 @@ export function Stats() {
 
       <Section icon="mcflurry" title="Regioni">
         <ItalyMap tiers={tiers} className="mx-auto mb-5 w-full max-w-[15rem]" />
-        <RegionAlbum summaries={summaries} wasComplete={wasComplete} />
+        <RegionAlbum summaries={summaries} wasComplete={wasComplete} completedAt={completedAt} />
         <div className="mt-5">
           <Receipt name={user?.name} rows={regionStats} visited={visitedCount} total={totalMcdonalds} />
         </div>

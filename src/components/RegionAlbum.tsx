@@ -6,12 +6,14 @@ interface Props {
   summaries: RegionSummary[];
   /** Regions completed at least once (a stored record) */
   wasComplete: ReadonlySet<string>;
+  /** When each region was first completed (ms), by region name */
+  completedAt: Record<string, number>;
 }
 
 const TIER_ORDER: Record<RegionTier, number> = { gold: 0, silver: 1, progress: 2, empty: 3 };
 
 /** The regions as a sticker album: gold when complete, silver when a new restaurant opened after you completed it. */
-export function RegionAlbum({ summaries, wasComplete }: Props) {
+export function RegionAlbum({ summaries, wasComplete, completedAt }: Props) {
   const tiles = summaries
     .map(s => ({ s, tier: regionTier(s, wasComplete.has(s.region)) }))
     .sort((a, b) => TIER_ORDER[a.tier] - TIER_ORDER[b.tier] || b.s.visited / b.s.total - a.s.visited / a.s.total || a.s.region.localeCompare(b.s.region));
@@ -27,7 +29,7 @@ export function RegionAlbum({ summaries, wasComplete }: Props) {
       </p>
       <div className="grid grid-cols-3 gap-3">
         {shown.map(({ s, tier }) => (
-          <RegionSticker key={s.region} summary={s} tier={tier} />
+          <RegionSticker key={s.region} summary={s} tier={tier} completedAt={completedAt[s.region]} />
         ))}
       </div>
       {unstarted > 0 && (
