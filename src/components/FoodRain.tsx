@@ -6,6 +6,8 @@ import { ACHIEVEMENTS } from '@/services/achievements';
 import { STAMP_INK, STAMP_SHAPES } from '@/components/stampArt';
 import { Stamp } from '@/components/Stamp';
 import { RegionSticker } from '@/components/RegionSticker';
+import { RegionFlight, FLIGHT_END } from '@/components/RegionFlight';
+import { regionSummaries, type RegionTier } from '@/services/regions';
 
 const pick = <T,>(items: readonly T[]): T => items[Math.floor(Math.random() * items.length)];
 const between = (min: number, max: number) => min + Math.random() * (max - min);
@@ -49,20 +51,30 @@ interface Plan {
   boxMs: number;
   /** Seconds: when the popup appears */
   levelAt: number;
+  /** Seconds the fireworks and the box wait (the region leaves Italy first) */
+  offset: number;
+  /** Milliseconds added at the end, once the popup is gone (the region flies back to the map) */
+  tail: number;
 }
+
+// A region first plays its flight out of Italy: the fireworks start when the region reaches the centre
+const REGION_OFFSET = 1.9;
+const REGION_POPUP_AT = 2.7;
 
 const planFor = (level: number | null): Plan => {
   const t = level === null ? 0.5 : Math.min(1, Math.max(0, (level - 2) / 10));
-  const count = Math.round(4 + t * 8);
-  const every = 0.6 - t * 0.2;
+  const count = level === null ? 6 : Math.round(4 + t * 8);
+  const every = level === null ? 0.5 : 0.6 - t * 0.2;
+  const offset = level === null ? REGION_OFFSET : 0;
+  const tail = level === null ? Math.round(FLIGHT_END * 1000) : 0;
   // From level 10 the last three fries leave together: a grand finale
   const finale = level !== null && level >= 10;
   const bursts = BURSTS.slice(0, count).map((b, i) => ({
     ...b,
-    launch: finale && i >= count - 3 ? 0.8 + (count - 4) * every + 0.6 + (i - (count - 3)) * 0.08 : 0.8 + i * every,
+    launch: offset + (finale && i >= count - 3 ? 0.8 + (count - 4) * every + 0.6 + (i - (count - 3)) * 0.08 : 0.8 + i * every),
   }));
   const lastBurst = Math.max(...bursts.map(b => b.launch)) + FLIGHT;
-  const time = Math.round((lastBurst + 2.6) * 1000);
+  const time = Math.round((lastBurst + 2.6) * 1000) + tail;
   // A region is all gold; a level adds red and orange as it grows
   const colors = level === null ? ['#FFC72C', '#FFE58A', '#F5C542', '#FFFFFF', '#FFD75E'] : ['#FFC72C', '#FFFFFF', '#FFE58A', '#FFFFFF'];
   if (level !== null && t >= 0.3) colors.push('#DA291C');
@@ -74,8 +86,10 @@ const planFor = (level: number | null): Plan => {
     spread: 0.85 + t * 0.35,
     colors,
     time,
-    boxMs: time - 2400,
-    levelAt: Math.min(2.6, lastBurst - 0.6),
+    boxMs: time - tail - 2400 - offset * 1000,
+    levelAt: level === null ? REGION_POPUP_AT : Math.min(2.6, lastBurst - 0.6),
+    offset,
+    tail,
   };
 };
 
@@ -213,6 +227,7 @@ export function FoodRain() {
   const big = celebration.kind === 'level' || celebration.kind === 'region';
   const level = celebration.kind === 'level' ? LEVELS[celebration.level - 1] : null;
   const visited = Math.max(useMcdonaldStore.getState().getVisitedCount(), level?.min ?? 0);
+  const tiers = regionTiers(celebration.kind === 'region');
 
   return (
     <div className="food-rain fixed inset-0 z-[2500] overflow-hidden pointer-events-none" aria-hidden="true">
@@ -254,7 +269,7 @@ export function FoodRain() {
             width: BOX_SIZE,
             height: BOX_SIZE,
             marginLeft: -BOX_SIZE / 2,
-            animation: `food-box ${plan.boxMs}ms ease-out both`,
+            animation: `food-box ${plan.boxMs}ms ease-out ${plan.offset}s both`,
           }}
         >
           <FriesBox size={BOX_SIZE} plan={plan} />
@@ -319,7 +334,7 @@ export function FoodRain() {
           style={{
             left: '50%',
             top: '48%',
-            animation: `level-pop ${plan.time - plan.levelAt * 1000}ms ease-out ${plan.levelAt}s both`,
+            animation: `level-pop ${plan.time - plan.tail - plan.levelAt * 1000}ms ease-out ${plan.levelAt}s both`,
           }}
         >
           <div className="bg-mc-red px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-white">
@@ -344,12 +359,22 @@ export function FoodRain() {
       )}
 
       {celebration.kind === 'region' && (
+        <RegionFlight
+          key={id}
+          region={celebration.region}
+          tiers={tiers}
+          returnAt={(plan.time - plan.tail) / 1000}
+          total={plan.time / 1000}
+        />
+      )}
+
+      {celebration.kind === 'region' && (
         <div
           className="absolute w-[19rem] max-w-[86vw] overflow-hidden rounded-[2rem] border-[3px] border-[#3B2A22] bg-gradient-to-b from-[#FFF6CF] to-[#FFE27A] text-center text-[#3B2A22] shadow-2xl"
           style={{
             left: '50%',
             top: '48%',
-            animation: `level-pop ${plan.time - plan.levelAt * 1000}ms ease-out ${plan.levelAt}s both`,
+            animation: `level-pop ${plan.time - plan.tail - plan.levelAt * 1000}ms ease-out ${plan.levelAt}s both`,
           }}
         >
           <div className="bg-mc-red px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-white">
@@ -493,4 +518,13 @@ function StampShow({ stamps }: { stamps: string[] }) {
       </div>
     </div>
   );
+}
+
+/** Colour of every region on the map of the flight: gold if complete, light if started, grey if not */
+function regionTiers(needed: boolean): Record<string, RegionTier> {
+  if (!needed) return {};
+  const { mcdonalds, visits } = useMcdonaldStore.getState();
+  const tiers: Record<string, RegionTier> = {};
+  for (const r of regionSummaries(mcdonalds, visits)) tiers[r.region] = r.complete ? 'gold' : r.visited > 0 ? 'progress' : 'empty';
+  return tiers;
 }

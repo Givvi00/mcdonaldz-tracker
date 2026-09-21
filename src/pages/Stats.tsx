@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { getAchievements } from '@/services/db';
 import { getAchievementProgress } from '@/services/achievements';
-import { regionRecordType, regionSummaries } from '@/services/regions';
+import { regionRecordType, regionSummaries, regionTier, type RegionTier } from '@/services/regions';
+import { ItalyMap } from '@/components/ItalyMap';
 import { FoodIcon } from '@/components/FoodIcon';
 import { Passport } from '@/components/Passport';
 import { RegionAlbum } from '@/components/RegionAlbum';
@@ -45,6 +46,9 @@ export function Stats() {
   const unlockedIds = new Set(achievements.map(a => a.type));
   const wasComplete = new Set(summaries.map(r => r.region).filter(r => unlockedIds.has(regionRecordType(r))));
 
+  const tiers: Record<string, RegionTier> = {};
+  for (const r of summaries) tiers[r.region] = regionTier(r, wasComplete.has(r.region));
+
   return (
     <div className="flex flex-col gap-6 pb-8 px-4 py-6">
       {/* Big Counter */}
@@ -62,6 +66,7 @@ export function Stats() {
       <Passport unlocked={unlockedIds} progress={progress} focused={focusedAchievements} />
 
       <Section icon="mcflurry" title="Regioni">
+        <ItalyMap tiers={tiers} className="mx-auto mb-5 w-full max-w-[15rem]" />
         <RegionAlbum summaries={summaries} wasComplete={wasComplete} />
         <div className="mt-5">
           <Receipt name={user?.name} rows={regionStats} visited={visitedCount} total={totalMcdonalds} />
