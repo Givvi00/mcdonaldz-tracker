@@ -207,6 +207,14 @@ export async function removeVisit(mcdonaldId: string, userId: string): Promise<v
   }
 }
 
+/** Changes the day of a visit (kept at noon: once edited, the time of day means nothing) */
+export async function setVisitDate(mcdonaldId: string, visitedAt: number): Promise<void> {
+  const database = await initDB();
+  const visit = await database.getFromIndex('visits', 'by-mcdonaldId', mcdonaldId);
+  if (!visit) return;
+  await database.put('visits', { ...visit, visitedAt, dateEdited: true });
+}
+
 export async function getVisits(): Promise<Visit[]> {
   const database = await initDB();
   return database.getAll('visits');

@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import type { McDonald } from '@shared/types';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { formatDistance } from '@/utils/geo';
 import { isNewlyAdded } from '@/utils/catalog';
 import { shortMcName } from '@/utils/format';
 import { restaurantKind } from '@/utils/foodTheme';
+import { VisitDateSheet, formatVisitDate } from '@/components/VisitDateSheet';
 
 interface Props {
   mc: McDonald;
@@ -12,8 +14,10 @@ interface Props {
 }
 
 export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
-  const { isVisited, toggleVisit, focusOnMap } = useMcdonaldStore();
+  const { isVisited, toggleVisit, focusOnMap, visits, changeVisitDate } = useMcdonaldStore();
+  const [editingDate, setEditingDate] = useState(false);
   const visited = isVisited(mc.id);
+  const visit = visited ? visits.find(v => v.mcdonaldId === mc.id) : undefined;
   const kind = restaurantKind(mc);
 
   if (variant === 'compact') {
@@ -60,6 +64,7 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
   }
 
   return (
+    <>
     <div
       className={`p-4 rounded-2xl border transition-all cursor-pointer shadow-sm active:scale-[0.98] ${
         visited
@@ -86,6 +91,18 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
           </h3>
           <p className="text-xs text-gray-500 dark:text-gray-400">{mc.city}, {mc.region}</p>
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{mc.address}</p>
+          {visit && (
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                setEditingDate(true);
+              }}
+              className="mt-2 inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-[0.7rem] font-semibold text-green-800 active:scale-95 dark:bg-green-900/40 dark:text-green-300"
+            >
+              📅 Visitato il {formatVisitDate(visit.visitedAt)}
+              <span className="opacity-60">· Cambia</span>
+            </button>
+          )}
         </div>
         <div className="flex flex-col items-end gap-2 flex-shrink-0">
           <div
@@ -103,5 +120,14 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
         </div>
       </div>
     </div>
+    {editingDate && visit && (
+      <VisitDateSheet
+        name={mc.name}
+        visitedAt={visit.visitedAt}
+        onSave={ms => void changeVisitDate(mc.id, ms)}
+        onClose={() => setEditingDate(false)}
+      />
+    )}
+    </>
   );
 }

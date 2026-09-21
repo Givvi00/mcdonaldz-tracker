@@ -122,20 +122,22 @@ export function getAchievementProgress(mcdonalds: McDonald[], visits: Visit[]): 
   const visitedRegions = new Set(visitedMcs.map(mc => mc.region));
   const islands = (visitedRegions.has('Sicilia') ? 1 : 0) + (visitedRegions.has('Sardegna') ? 1 : 0);
 
-  const pioneer = visits.some(v => {
+  // Stamps that depend on when you were there only count visits marked on the spot, not the ones whose date was edited
+  const live = visits.filter(v => !v.dateEdited);
+  const pioneer = live.some(v => {
     const mc = byId.get(v.mcdonaldId);
     const added = mc?.addedAt ? Date.parse(mc.addedAt) : NaN;
     return Number.isFinite(added) && v.visitedAt - added >= 0 && v.visitedAt - added < NEW_FOR_DAYS * DAY;
   });
   const beforeClosing = visitedMcs.some(mc => !mc.opened);
 
-  const nightOwl = visits.some(v => new Date(v.visitedAt).getHours() < 5);
-  const ferragosto = visits.some(v => {
+  const nightOwl = live.some(v => new Date(v.visitedAt).getHours() < 5);
+  const ferragosto = live.some(v => {
     const d = new Date(v.visitedAt);
     return d.getMonth() === 7 && d.getDate() === 15;
   });
   const perDay = new Map<string, number>();
-  for (const v of visits) {
+  for (const v of live) {
     const key = new Date(v.visitedAt).toDateString();
     perDay.set(key, (perDay.get(key) || 0) + 1);
   }

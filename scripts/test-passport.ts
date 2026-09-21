@@ -147,6 +147,17 @@ test('segreti: notte, Ferragosto, due nello stesso giorno, il 77°', () => {
   assert.ok(done(list, list.slice(0, 77).map(m => visit(m)), 'LUCKY_77'));
 });
 
+test('una visita con la data cambiata a mano non vale per i timbri a orario', () => {
+  const list = Array.from({ length: 3 }, () => mc({ addedAt: '2026-06-01' }));
+  const edited = (m: McDonald, when: number): Visit => ({ ...visit(m, when), dateEdited: true });
+  assert.ok(!done(list, [edited(list[0], new Date(2026, 5, 10, 3, 0).getTime())], 'NIGHT_OWL'));
+  assert.ok(!done(list, [edited(list[0], new Date(2026, 7, 15, 13, 0).getTime())], 'FERRAGOSTO'));
+  assert.ok(!done(list, [edited(list[0], new Date(2026, 5, 10, 9).getTime()), visit(list[1], new Date(2026, 5, 10, 20).getTime())], 'DOUBLE'));
+  assert.ok(!done(list, [edited(list[0], new Date(2026, 5, 10, 12).getTime())], 'PIONEER'));
+  // the stamps that do not depend on the date still count it
+  assert.ok(done(list, [edited(list[0], new Date(2026, 5, 10, 12).getTime())], 'FIRST_STAMP'));
+});
+
 test('regioni: completa quando ogni ristorante che conta è visitato; il chiuso mai visitato non blocca', () => {
   const a = mc({ region: 'Molise' });
   const b = mc({ region: 'Molise' });

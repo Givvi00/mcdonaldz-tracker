@@ -18,6 +18,8 @@ export interface Visit {
   id: string;
   mcdonaldId: string;
   visitedAt: number;
+  /** The date was changed by hand: the time of day is no longer reliable, so time-based stamps ignore this visit */
+  dateEdited?: boolean;
   notes?: string;
 }
 

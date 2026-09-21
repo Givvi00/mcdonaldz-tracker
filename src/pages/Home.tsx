@@ -9,7 +9,7 @@ import { FoodPattern } from '@/components/FoodPattern';
 import { FoodProgressBar } from '@/components/FoodProgressBar';
 import { EmptyTray } from '@/components/EmptyTray';
 
-type SortBy = 'distance' | 'name';
+type SortBy = 'distance' | 'name' | 'recent';
 
 export function Home() {
   const {
@@ -22,6 +22,7 @@ export function Home() {
     getRegionStats,
     userPosition,
     getVisitedCount,
+    visits,
     getCountedTotal,
     getNearestMcdonalds,
     locationStatus,
@@ -45,6 +46,10 @@ export function Home() {
     filtered.sort((a, b) => (a.distanceKm ?? 0) - (b.distanceKm ?? 0));
   } else if (sortBy === 'name') {
     filtered.sort((a, b) => a.name.localeCompare(b.name, 'it'));
+  } else if (sortBy === 'recent') {
+    // The last ones you visited first; the ones not visited yet follow in alphabetical order
+    const when = new Map(visits.map(v => [v.mcdonaldId, v.visitedAt]));
+    filtered.sort((a, b) => (when.get(b.id) ?? 0) - (when.get(a.id) ?? 0) || a.name.localeCompare(b.name, 'it'));
   }
   const regionStats = getRegionStats()
     .slice()
@@ -164,12 +169,22 @@ export function Home() {
             <button
               onClick={() => setSortBy('name')}
               className={`px-2.5 py-1.5 rounded-lg transition-all ${
-                !sortByDistance
+                !sortByDistance && sortBy !== 'recent'
                   ? 'bg-white dark:bg-gray-900 shadow-sm text-gray-800 dark:text-gray-100'
                   : 'text-gray-500 dark:text-gray-400'
               }`}
             >
               A–Z
+            </button>
+            <button
+              onClick={() => setSortBy('recent')}
+              className={`px-2.5 py-1.5 rounded-lg transition-all ${
+                sortBy === 'recent'
+                  ? 'bg-white dark:bg-gray-900 shadow-sm text-gray-800 dark:text-gray-100'
+                  : 'text-gray-500 dark:text-gray-400'
+              }`}
+            >
+              Recenti
             </button>
           </div>
         </div>

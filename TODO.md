@@ -77,7 +77,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 
 ## Funzioni future (da approfondire, in coda)
 - [ ] **Recensioni**: per ogni ristorante visitato, un voto da 1 a 5 diviso per categorie (pulizia, bellezza del Mc, spazi esterni, ecc.; categorie da definire)
-- [ ] **Data di visita**: registrare quando si è stati in ogni ristorante (modificabile)
+- [x] **Data di visita** (21/09/2026): sulla card del ristorante visitato "Visitato il … · Cambia" apre il selettore (`VisitDateSheet.tsx`, mai nel futuro); nuovo ordinamento "Recenti" in Home. La visita con data cambiata porta `dateEdited` e non vale per i timbri a orario (Nottambulo, Ferragosto, Doppietta, Pioniere). Nessuna migrazione: il campo è opzionale. Da provare sul telefono. Non fatto: data nel popup della mappa e "ultima visita" in Stats
 - [ ] **Ristorante "verificato"** (chiarito il 21/09/2026): distintivo per i ristoranti davvero visitati e tracciati con il GPS (la visita è stata segnata sul posto). Collegato al check-in verificato dal GPS più sopra (visita solo entro ~200 m). Da decidere: cosa succede alle visite già segnate a mano (restano "non verificate"?) e se il distintivo conta per livelli o timbri
 
 ## Roadmap, livelli e collezionabili (idea del 20/09/2026)
