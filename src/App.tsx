@@ -16,6 +16,7 @@ import { CelebrationLab } from '@/components/CelebrationLab';
 import { FoodIconSprite } from '@/components/FoodIcon';
 import { startUpdateChecks } from '@/services/updates';
 import { startCatalogRefresh } from '@/services/catalogRefresh';
+import { requestPersistentStorage } from '@/services/storagePersist';
 import './App.css';
 
 function App() {
@@ -30,6 +31,9 @@ function App() {
 
   useEffect(() => startUpdateChecks(), []);
   useEffect(() => startCatalogRefresh(), []);
+  useEffect(() => {
+    void requestPersistentStorage();
+  }, []);
 
   useEffect(() => {
     setLocationStatus(geoStatus);

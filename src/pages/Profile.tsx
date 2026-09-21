@@ -6,6 +6,7 @@ import { InstallSection } from '@/components/InstallPrompt';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { exportData, importData } from '@/services/db';
 import { readBackupSummary, saveBackup } from '@/services/backup';
+import { persistState, requestPersistentStorage, type PersistState } from '@/services/storagePersist';
 import { useTheme, type ThemeMode } from '@/hooks/useTheme';
 import { FoodPattern } from '@/components/FoodPattern';
 import { FoodIcon } from '@/components/FoodIcon';
@@ -36,6 +37,11 @@ export function Profile() {
     return () => clearTimeout(t);
   }, [profileFocus, clearProfileFocus]);
   const [, setBackupTick] = useState(0);
+  const [persist, setPersist] = useState<PersistState>('unknown');
+  useEffect(() => {
+    void persistState().then(setPersist);
+    void requestPersistentStorage().then(setPersist);
+  }, []);
   const [nameDraft, setNameDraft] = useState<string | null>(null);
   const nameShown = nameDraft ?? user?.name ?? '';
   const { mode, setMode } = useTheme();
@@ -201,6 +207,8 @@ export function Profile() {
         <h3 className="font-display font-semibold text-lg mb-1 text-gray-800 dark:text-gray-100">Gestisci Dati</h3>
         <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
           Ultimo backup: {lastBackupAt() ? new Date(lastBackupAt() as number).toLocaleDateString('it-IT', { dateStyle: 'medium' }) : 'mai'}
+          {persist === 'yes' && ' · Dati protetti dal browser'}
+          {persist === 'no' && ' · Il browser potrebbe cancellare i dati se manca spazio: fai un backup ogni tanto'}
         </p>
         <div className="space-y-2">
           <button
