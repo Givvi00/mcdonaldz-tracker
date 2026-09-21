@@ -72,7 +72,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 
 ## Da discutere insieme (19/09/2026)
 - [x] **Logo del banner in alto** e **icona dell'app**: già rifatti (19/09/2026): scritta "McDonald.z" nel banner al posto del quadratino giallo, icona rossa con segnaposto giallo con spunta e "Mz." bianco (`public/icons`). Voci rimaste indietro nel TODO, aggiornate il 21/09/2026. Resta da fare l'icona monocromatica per Android 13+ (riga più sopra)
-- [ ] **Marker della mappa**: ogni ristorante ha un'icona di cibo diversa e sembra che sia specializzato in quel prodotto. Da rivedere insieme come fare (non toccare prima)
+- [x] **Marker della mappa**: risolto, ora sono semplici marker rossi (da visitare) e verdi (visitati), senza icone di cibo (commit 8d40efd). Voce rimasta indietro, aggiornata il 21/09/2026
 
 ## Funzioni future (da approfondire, in coda)
 - [ ] **Recensioni**: per ogni ristorante visitato, un voto da 1 a 5 diviso per categorie (pulizia, bellezza del Mc, spazi esterni, ecc.; categorie da definire)
