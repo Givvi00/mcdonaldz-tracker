@@ -40,6 +40,9 @@ export function Stats() {
   const visitedCount = getVisitedCount();
   const regionStats = getRegionStats();
   const totalMcdonalds = getCountedTotal();
+  const latest = visits.reduce<(typeof visits)[number] | null>((best, v) => (!best || v.visitedAt > best.visitedAt ? v : best), null);
+  const lastMc = latest ? mcdonalds.find(m => m.id === latest.mcdonaldId) : undefined;
+  const lastVisit = latest && lastMc ? { city: lastMc.city, visitedAt: latest.visitedAt } : null;
   const percentage = totalMcdonalds > 0 ? Math.round((visitedCount / totalMcdonalds) * 100) : 0;
   const progress = getAchievementProgress(mcdonalds, visits);
   const summaries = regionSummaries(mcdonalds, visits);
@@ -62,6 +65,11 @@ export function Stats() {
           <p className="text-sm opacity-90 font-display font-semibold">Totale McDonald's Visitati</p>
           <p className="text-6xl font-display font-bold mt-2">{visitedCount}</p>
           <p className="text-sm opacity-90 mt-1">di {totalMcdonalds} in Italia</p>
+          {lastVisit && (
+            <p className="mt-1 text-xs opacity-80">
+              Ultimo Mc: {lastVisit.city} · {new Date(lastVisit.visitedAt).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}
+            </p>
+          )}
           <p className="text-2xl font-display font-bold mt-3">{percentage}%</p>
           <FoodProgressBar percentage={percentage} />
         </div>

@@ -58,13 +58,13 @@ interface Plan {
 }
 
 // A region first plays its flight out of Italy: the fireworks start when the region reaches the centre
-const REGION_OFFSET = 1.9;
-const REGION_POPUP_AT = 2.7;
+const REGION_OFFSET = 1.5;
+const REGION_POPUP_AT = 2.2;
 
 const planFor = (level: number | null): Plan => {
   const t = level === null ? 0.5 : Math.min(1, Math.max(0, (level - 2) / 10));
-  const count = level === null ? 6 : Math.round(4 + t * 8);
-  const every = level === null ? 0.5 : 0.6 - t * 0.2;
+  const count = level === null ? 5 : Math.round(4 + t * 8);
+  const every = level === null ? 0.4 : 0.6 - t * 0.2;
   const offset = level === null ? REGION_OFFSET : 0;
   const tail = level === null ? Math.round(FLIGHT_END * 1000) : 0;
   // From level 10 the last three fries leave together: a grand finale
@@ -74,7 +74,7 @@ const planFor = (level: number | null): Plan => {
     launch: offset + (finale && i >= count - 3 ? 0.8 + (count - 4) * every + 0.6 + (i - (count - 3)) * 0.08 : 0.8 + i * every),
   }));
   const lastBurst = Math.max(...bursts.map(b => b.launch)) + FLIGHT;
-  const time = Math.round((lastBurst + 2.6) * 1000) + tail;
+  const time = Math.round((lastBurst + (level === null ? 2.2 : 2.6)) * 1000) + tail;
   // A region is all gold; a level adds red and orange as it grows
   const colors = level === null ? ['#FFC72C', '#FFE58A', '#F5C542', '#FFFFFF', '#FFD75E'] : ['#FFC72C', '#FFFFFF', '#FFE58A', '#FFFFFF'];
   if (level !== null && t >= 0.3) colors.push('#DA291C');

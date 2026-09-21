@@ -4,8 +4,8 @@ import { applyUpdate, checkForUpdate, type UpdateCheck } from '@/services/update
 import { refreshCatalog, type CatalogRefresh } from '@/services/catalogRefresh';
 import { InstallSection } from '@/components/InstallPrompt';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
-import { exportData, importData } from '@/services/db';
-import { readBackupSummary, saveBackup } from '@/services/backup';
+import { exportData, getPreMigrationBackup, importData } from '@/services/db';
+import { backupFilename, readBackupSummary, saveBackup } from '@/services/backup';
 import { persistState, requestPersistentStorage, type PersistState } from '@/services/storagePersist';
 import { useTheme, type ThemeMode } from '@/hooks/useTheme';
 import { FoodPattern } from '@/components/FoodPattern';
@@ -38,6 +38,7 @@ export function Profile() {
   }, [profileFocus, clearProfileFocus]);
   const [, setBackupTick] = useState(0);
   const [persist, setPersist] = useState<PersistState>('unknown');
+  const [safetyCopy] = useState(getPreMigrationBackup);
   useEffect(() => {
     void persistState().then(setPersist);
     void requestPersistentStorage().then(setPersist);
@@ -223,6 +224,21 @@ export function Profile() {
           >
             📤 Importa Dati
           </button>
+          {safetyCopy && (
+            <div className="rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-xs text-gray-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
+              <p>
+                Prima dell'ultimo aggiornamento dei dati l'app ne ha messo da parte una copia (
+                {new Date(safetyCopy.savedAt).toLocaleDateString('it-IT', { dateStyle: 'medium' })}). Se qualcosa non torna, scaricala e
+                poi importala qui sopra.
+              </p>
+              <button
+                onClick={() => void saveBackup(safetyCopy.json, backupFilename().replace('backup', 'copia-di-sicurezza'))}
+                className="mt-2 rounded-lg bg-gray-100 px-3 py-1.5 font-semibold text-gray-800 active:scale-95 dark:bg-gray-800 dark:text-gray-100"
+              >
+                Scarica la copia di sicurezza
+              </button>
+            </div>
+          )}
           <input
             ref={fileInputRef}
             type="file"

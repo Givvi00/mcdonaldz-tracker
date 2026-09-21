@@ -4,8 +4,8 @@ import { ItalyMap, TIER_FILL } from '@/components/ItalyMap';
 import type { RegionTier } from '@/services/regions';
 
 /** How long the return of the region to the map takes at the end, and the pause after it (seconds) */
-export const FLIGHT_BACK = 1.1;
-export const FLIGHT_END = 1.8;
+export const FLIGHT_BACK = 0.9;
+export const FLIGHT_END = 1.4;
 
 const GOLD = TIER_FILL.gold;
 const EASE = 'cubic-bezier(0.5, 0, 0.2, 1)';
@@ -28,11 +28,11 @@ export function RegionFlight({ region, tiers, returnAt, total }: { region: strin
     const home = 'translate(0px, 0px) scale(1)';
     const start = TIER_FILL.progress;
     return `
-@keyframes rf-map { 0% { opacity: 0 } ${p(0.5)} { opacity: 1 } ${p(2.4)} { opacity: 1 } ${p(3)} { opacity: .25 } ${p(R - 0.4)} { opacity: .25 } ${p(R)} { opacity: 1 } ${p(R + 1.3)} { opacity: 1 } 100% { opacity: 0 } }
-@keyframes rf-fly { 0% { transform: ${home} } ${p(1.3)} { transform: ${home}; animation-timing-function: ${EASE} } ${p(2.5)} { transform: ${away} } ${p(R)} { transform: ${away}; animation-timing-function: ${EASE} } ${p(R + FLIGHT_BACK)} { transform: ${home} } 100% { transform: ${home} } }
-@keyframes rf-fill { 0% { fill: ${start} } ${p(0.6)} { fill: ${start} } ${p(1.1)} { fill: ${GOLD} } 100% { fill: ${GOLD} } }
-@keyframes rf-inner { 0% { opacity: 1 } ${p(2.8)} { opacity: 1 } ${p(3.1)} { opacity: 0 } ${p(R - 0.05)} { opacity: 0 } ${p(R)} { opacity: 1 } 100% { opacity: 1 } }
-@keyframes rf-hole { 0% { fill: ${start} } ${p(1.3)} { fill: ${start} } ${p(1.6)} { fill: rgba(255,255,255,0) } ${p(R + FLIGHT_BACK - 0.2)} { fill: rgba(255,255,255,0) } ${p(R + FLIGHT_BACK)} { fill: ${GOLD} } 100% { fill: ${GOLD} } }
+@keyframes rf-map { 0% { opacity: 0 } ${p(0.4)} { opacity: 1 } ${p(2)} { opacity: 1 } ${p(2.6)} { opacity: .25 } ${p(R - 0.4)} { opacity: .25 } ${p(R)} { opacity: 1 } ${p(R + FLIGHT_BACK + 0.1)} { opacity: 1 } 100% { opacity: 0 } }
+@keyframes rf-fly { 0% { transform: ${home} } ${p(1.0)} { transform: ${home}; animation-timing-function: ${EASE} } ${p(2)} { transform: ${away} } ${p(R)} { transform: ${away}; animation-timing-function: ${EASE} } ${p(R + FLIGHT_BACK)} { transform: ${home} } 100% { transform: ${home} } }
+@keyframes rf-fill { 0% { fill: ${start} } ${p(0.5)} { fill: ${start} } ${p(0.9)} { fill: ${GOLD} } 100% { fill: ${GOLD} } }
+@keyframes rf-inner { 0% { opacity: 1 } ${p(2.3)} { opacity: 1 } ${p(2.6)} { opacity: 0 } ${p(R - 0.05)} { opacity: 0 } ${p(R)} { opacity: 1 } 100% { opacity: 1 } }
+@keyframes rf-hole { 0% { fill: ${start} } ${p(1.0)} { fill: ${start} } ${p(1.3)} { fill: rgba(255,255,255,0) } ${p(R + FLIGHT_BACK - 0.2)} { fill: rgba(255,255,255,0) } ${p(R + FLIGHT_BACK)} { fill: ${GOLD} } 100% { fill: ${GOLD} } }
 `;
   }, [shape, returnAt, total]);
 

@@ -30,7 +30,11 @@ export function markerSymbol(_mc: McDonald, visited: boolean): string {
 }
 
 /** Content of the map popup. A closed restaurant shows a "Chiuso" badge and no directions button. */
-export function popupHtml(mc: McDonald, visited: boolean): string {
+export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number): string {
+  const visitDate =
+    visited && visitedAt
+      ? `<button id="date-${mc.id}" style="margin-top: 6px; padding: 3px 9px; border: none; border-radius: 999px; background: #dcfce7; color: #166534; font-size: 11px; font-weight: 600; cursor: pointer;">📅 Visitato il ${new Date(visitedAt).toLocaleDateString('it-IT', { dateStyle: 'medium' })} · Cambia</button><br/>`
+      : '';
   const closedBadge = mc.opened
     ? ''
     : `<span style="display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 999px; background: #78716c; color: white; font-size: 11px; font-weight: 600;">Chiuso${mc.closedAt ? ` dal ${escapeHtml(mc.closedAt)}` : ''}</span>`;
@@ -47,6 +51,7 @@ export function popupHtml(mc: McDonald, visited: boolean): string {
           <strong style="font-family: 'Fredoka', sans-serif; font-size: 14px;">${kindBadge}${escapeHtml(mc.name)}</strong><br/>
           <span style="color: #6b7280;">${escapeHtml(mc.city)}, ${escapeHtml(mc.region)}</span><br/>
           ${closedBadge}
+          ${visitDate}
           <div style="display: flex; gap: 6px; margin-top: 8px;">
             <button id="toggle-${mc.id}" style="${pillButton(visited ? '#16a34a' : '#DA291C', 'white')}">
               ${visited ? '✓ Visitato' : `${foodIconSvg('fries', 15)} Segna visita`}

@@ -10,6 +10,7 @@ import { FoodIcon } from '@/components/FoodIcon';
 import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds } from '@/utils/catalog';
 import { markerBackground, markerSymbol, popupHtml } from '@/utils/mapMarkers';
+import { VisitDateSheet } from '@/components/VisitDateSheet';
 import { openDirections } from '@/utils/navigation';
 import type { McDonald } from '@shared/types';
 
@@ -51,8 +52,9 @@ export function MapView() {
   const clusterGroup = useRef<L.MarkerClusterGroup | null>(null);
   const markers = useRef<Map<string, L.Marker>>(new Map());
   const userMarker = useRef<L.Marker | null>(null);
-  const { mcdonalds, visits, isVisited, toggleVisit, mapFocusId, clearMapFocus, userPosition, setSelectedTab, getVisitedCount } = useMcdonaldStore();
+  const { mcdonalds, visits, isVisited, toggleVisit, changeVisitDate, mapFocusId, clearMapFocus, userPosition, setSelectedTab, getVisitedCount } = useMcdonaldStore();
   const [query, setQuery] = useState('');
+  const [dateFor, setDateFor] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<boolean | null>(null);
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
 
@@ -127,7 +129,7 @@ export function MapView() {
       });
 
       const marker = L.marker([mc.lat, mc.lon], { icon, mcVisited: visited } as L.MarkerOptions);
-      marker.bindPopup(popupHtml(mc, visited));
+      marker.bindPopup(popupHtml(mc, visited, visits.find(v => v.mcdonaldId === mc.id)?.visitedAt));
 
       marker.on('popupopen', () => {
         const btn = document.getElementById(`toggle-${mc.id}`);
@@ -135,6 +137,13 @@ export function MapView() {
           btn.onclick = (e) => {
             e.preventDefault();
             toggleVisit(mc.id);
+          };
+        }
+        const dateBtn = document.getElementById(`date-${mc.id}`);
+        if (dateBtn) {
+          dateBtn.onclick = e => {
+            e.preventDefault();
+            setDateFor(mc.id);
           };
         }
         const directionsBtn = document.getElementById(`directions-${mc.id}`);
@@ -266,6 +275,14 @@ export function MapView() {
           </div>
         )}
       </div>
+      {dateFor && visits.find(v => v.mcdonaldId === dateFor) && (
+        <VisitDateSheet
+          name={mcdonalds.find(m => m.id === dateFor)?.name ?? ''}
+          visitedAt={visits.find(v => v.mcdonaldId === dateFor)!.visitedAt}
+          onSave={ms => void changeVisitDate(dateFor, ms)}
+          onClose={() => setDateFor(null)}
+        />
+      )}
       <div ref={mapContainer} className={`w-full h-full ${isDark ? 'map-dark' : ''}`} />
       <button
         onClick={() => setSelectedTab('profile')}
