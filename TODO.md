@@ -89,8 +89,8 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [ ] Da rivedere insieme dopo la prova: durata della coda di feste (livello + regione + timbri possono superare i 20 secondi), disegni delle figurine per regione, icona del livello 12, timbri "Nottambulo/Ferragosto/Doppietta" (dipendono dall'orario in cui si segna la visita: più precisi con la "data di visita")
 
 ## Rifiniture del 22/09/2026
-- [x] Il voto compare in automatico appena finisce la festa della visita appena segnata (non serve più cercare il pulsante "Vota" dopo): nuovo , store . Il pulsante "Vota"/"★ media" sulla card resta per cambiare il voto in un secondo momento
-- [x] Distintivo "verificato col GPS" impreziosito: sulla card sostituisce del tutto il cerchio verde con un mini timbro stile sigillo, una corona zigrinata blu che ruota piano intorno alla spunta ferma (). Mappa e popup restano come prima (pallino piccolo, per restare leggeri con tanti marker)
+- [x] Il voto compare in automatico appena finisce la festa della visita appena segnata (non serve più cercare il pulsante "Vota" dopo): nuovo `AutoRatingPrompt.tsx`, store `pendingRatingFor`. Il pulsante "Vota"/"★ media" sulla card resta per cambiare il voto in un secondo momento
+- [x] Distintivo "verificato col GPS" impreziosito: sulla card sostituisce del tutto il cerchio verde con un mini timbro stile sigillo, una corona zigrinata blu che ruota piano intorno alla spunta ferma (`VerifiedBadge.tsx`). Mappa e popup restano come prima (pallino piccolo, per restare leggeri con tanti marker)
 
 ## Account, community e onboarding (idea del 22/09/2026, da capire con calma)
 - [ ] **Utenze/account**: oggi non esistono, ogni telefono ha i propri dati locali senza login. Serve per: community tra amici, seguire altri utenti, classifiche/gare, vedere il livello degli amici. Grosso cambio di architettura, da progettare a parte
