@@ -88,6 +88,10 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [x] (20/09/2026, in locale, da provare sul telefono) Roadmap dei 12 livelli, passaporto con 23 timbri (achievement), album delle regioni con figurine oro/argento, feste diverse per livello, regione e timbro con coda ordinata. Nuovo `src/services/regions.ts` (una regione completata viene ricordata come record `REGION:<nome>` accanto agli achievement). Le serie di giorni consecutivi sono state tolte. Test: `scripts/test-passport.ts`
 - [ ] Da rivedere insieme dopo la prova: durata della coda di feste (livello + regione + timbri possono superare i 20 secondi), disegni delle figurine per regione, icona del livello 12, timbri "Nottambulo/Ferragosto/Doppietta" (dipendono dall'orario in cui si segna la visita: più precisi con la "data di visita")
 
+## Rifiniture del 22/09/2026
+- [x] Il voto compare in automatico appena finisce la festa della visita appena segnata (non serve più cercare il pulsante "Vota" dopo): nuovo , store . Il pulsante "Vota"/"★ media" sulla card resta per cambiare il voto in un secondo momento
+- [x] Distintivo "verificato col GPS" impreziosito: sulla card sostituisce del tutto il cerchio verde con un mini timbro stile sigillo, una corona zigrinata blu che ruota piano intorno alla spunta ferma (). Mappa e popup restano come prima (pallino piccolo, per restare leggeri con tanti marker)
+
 ## Account, community e onboarding (idea del 22/09/2026, da capire con calma)
 - [ ] **Utenze/account**: oggi non esistono, ogni telefono ha i propri dati locali senza login. Serve per: community tra amici, seguire altri utenti, classifiche/gare, vedere il livello degli amici. Grosso cambio di architettura, da progettare a parte
 - [ ] **Salvataggio in remoto**: serve un server con hosting e database (oggi tutto vive solo nell'IndexedDB del dispositivo, vedi `src/services/db.ts`); da capire login, sincronizzazione tra dispositivi, costi e chi lo mantiene

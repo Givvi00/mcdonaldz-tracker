@@ -45,6 +45,8 @@ interface AppStore {
   /** The celebration playing now, and the ones waiting for their turn (level, then region, then stamps) */
   celebration: Celebration | null;
   celebrationQueue: Celebration[];
+  /** A restaurant just marked visited, to ask about once its celebration is done (not a change of date or an unmark) */
+  pendingRatingFor: string | null;
 
   initApp: () => Promise<void>;
   renameUser: (name: string) => Promise<void>;
@@ -60,6 +62,7 @@ interface AppStore {
   clearProfileFocus: () => void;
   enqueueCelebrations: (events: Celebration[]) => void;
   clearCelebration: () => void;
+  clearPendingRating: () => void;
   setSelectedTab: (tab: 'home' | 'map' | 'stats' | 'profile') => void;
   setSearchQuery: (query: string) => void;
   setFilterRegion: (region: string | null) => void;
@@ -100,6 +103,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   updateAvailable: false,
   celebration: null,
   celebrationQueue: [],
+  pendingRatingFor: null,
 
   initApp: async () => {
     const user = await getOrCreateUser();
@@ -155,6 +159,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
       if (unlocked.length > 0) events.push({ id: now + 2, kind: 'stamp', stamps: unlocked });
       if (events.length === 0) events.push({ id: now, kind: 'visit' });
       get().enqueueCelebrations(events);
+      set({ pendingRatingFor: mcdonaldId });
     }
   },
 
@@ -169,6 +174,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     await setVisitRating(mcdonaldId, rating);
     const updatedVisits = await getVisits();
     set({ visits: updatedVisits });
+    if (get().pendingRatingFor === mcdonaldId) set({ pendingRatingFor: null });
     const unlocked = await checkAndUnlockAchievements(user.id, mcdonalds, updatedVisits);
     if (unlocked.length > 0) get().enqueueCelebrations([{ id: Date.now(), kind: 'stamp', stamps: unlocked }]);
   },
@@ -186,6 +192,8 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
       newlyUnlocked: first.kind === 'stamp' ? first.stamps : state.newlyUnlocked,
     }));
   },
+
+  clearPendingRating: () => set({ pendingRatingFor: null }),
 
   clearCelebration: () => {
     set({ celebration: null });

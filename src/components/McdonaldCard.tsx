@@ -7,6 +7,7 @@ import { shortMcName } from '@/utils/format';
 import { restaurantKind } from '@/utils/foodTheme';
 import { VisitDateSheet, formatVisitDate } from '@/components/VisitDateSheet';
 import { VisitRatingSheet, averageRating } from '@/components/VisitRatingSheet';
+import { VerifiedBadge } from '@/components/VerifiedBadge';
 
 interface Props {
   mc: McDonald;
@@ -122,7 +123,11 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
           )}
         </div>
         <div className="flex flex-col items-end gap-2 flex-shrink-0">
-          <div className="relative">
+          {visit?.verified ? (
+            <div title="Visita verificata col GPS" className="drop-shadow-sm">
+              <VerifiedBadge size={32} />
+            </div>
+          ) : (
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white shadow-sm ring-2 ring-white dark:ring-gray-900 ${
                 visited ? 'bg-gradient-to-br from-green-400 to-green-600' : 'bg-gray-300 dark:bg-gray-700'
@@ -130,15 +135,7 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
             >
               {visited ? '✓' : '○'}
             </div>
-            {visit?.verified && (
-              <span
-                title="Visita verificata col GPS"
-                className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-[0.55rem] text-white ring-2 ring-white dark:ring-gray-900"
-              >
-                ✓
-              </span>
-            )}
-          </div>
+          )}
           {distanceKm !== undefined && (
             <span className="text-[0.65rem] font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full whitespace-nowrap">
               {formatDistance(distanceKm)}

@@ -12,6 +12,7 @@ import { levelInfo } from '@/utils/foodTheme';
 import { UpdateBanner } from '@/components/UpdateBanner';
 import { MapAppChooser } from '@/components/MapAppChooser';
 import { FoodRain } from '@/components/FoodRain';
+import { AutoRatingPrompt } from '@/components/AutoRatingPrompt';
 import { CelebrationLab } from '@/components/CelebrationLab';
 import { FoodIconSprite } from '@/components/FoodIcon';
 import { startUpdateChecks } from '@/services/updates';
@@ -54,6 +55,7 @@ function App() {
       <MapAppChooser />
       <FoodIconSprite />
       <FoodRain />
+      <AutoRatingPrompt />
       {import.meta.env.DEV && <CelebrationLab />}
 
       {/* Wordmark header */}
