@@ -83,7 +83,7 @@ export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number, ve
               : ''
           }
           <div style="display: flex; gap: 6px; margin-top: 8px;">
-            <button id="toggle-${mc.id}" style="${pillButton(visited ? '#16a34a' : '#DA291C', 'white')}">
+            <button id="toggle-${mc.id}" style="${pillButton(verified ? '#2563eb' : visited ? '#16a34a' : '#DA291C', 'white')}">
               ${visited ? '✓ Visitato' : `${foodIconSvg('fries', 15)} Segna visita`}
             </button>
             ${directions}

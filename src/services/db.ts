@@ -135,10 +135,58 @@ export async function openAppDB(version = DB_VERSION, steps: Record<number, Migr
   });
 }
 
-export async function initDB(): Promise<IDBPDatabase<AppDB>> {
-  if (db) return db;
-  db = await openAppDB();
-  return db;
+/**
+ * Deletes every visit, stamp and setting on this device. The open connection is closed first: while it is open the
+ * browser holds the deletion back, and a reload in the meantime would leave the data where it was.
+ */
+export async function wipeAllData(): Promise<void> {
+  await closeDB();
+  try {
+    localStorage.clear();
+  } catch {
+    // storage unavailable: nothing to clear
+  }
+  await new Promise<void>((resolve, reject) => {
+    const req = indexedDB.deleteDatabase(DB_NAME);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+    // Another tab of the app still has it open: it closes its connection when told (see initDB), give it a moment
+    req.onblocked = () => setTimeout(resolve, 1500);
+  });
+}
+
+// One connection for the whole app. Everything asks for the database at startup at the same moment: keeping the
+// promise (not the connection) makes them share one, instead of opening several and forgetting all but the last,
+// which would stay open for ever and hold back a deletion or a future upgrade of the structure.
+let dbPromise: Promise<IDBPDatabase<AppDB>> | null = null;
+
+export function initDB(): Promise<IDBPDatabase<AppDB>> {
+  dbPromise ??= openAppDB().then(
+    connection => {
+      db = connection;
+      // Another tab (a newer version of the app, or "Cancella tutto") needs the database: step aside
+      connection.addEventListener('versionchange', () => {
+        connection.close();
+        if (db === connection) {
+          db = null;
+          dbPromise = null;
+        }
+      });
+      return connection;
+    },
+    error => {
+      dbPromise = null;
+      throw error;
+    },
+  );
+  return dbPromise;
+}
+
+async function closeDB(): Promise<void> {
+  const pending = dbPromise;
+  dbPromise = null;
+  db = null;
+  if (pending) (await pending.catch(() => null))?.close();
 }
 
 export async function getOrCreateUser(): Promise<User> {

@@ -64,12 +64,12 @@ export const ACHIEVEMENT_LIST: readonly AchievementDef[] = [
   def('HIGHWAY', 'tipi', 'rect', 'road', 'Pausa in autostrada', "Un McDonald's in area di servizio"),
   def('ALL_KINDS', 'tipi', 'rect', 'star', 'Collezione completa', 'Un McDonald\'s per ogni tipo di locale'),
   def('BEFORE_CLOSING', 'rari', 'shield', 'hourglass', 'Ci sono stato prima che chiudesse', "Hai visitato un McDonald's che poi ha chiuso"),
-  def('PIONEER', 'rari', 'shield', 'rocket', 'Pioniere', "Visita un McDonald's appena aperto"),
+  def('PIONEER', 'rari', 'shield', 'rocket', 'Pioniere', "Visita un McDonald's appena aperto, verificato col GPS"),
   def('CRITIC', 'rari', 'shield', 'star', 'Critico gastronomico', "Vota almeno 10 McDonald's che hai visitato"),
   def('GPS_VERIFIED', 'rari', 'shield', 'pincheck', 'Sul posto', "Segna 25 visite col GPS attivo, mentre sei davvero lì"),
-  def('NIGHT_OWL', 'segreti', 'circle', 'moon', 'Nottambulo', 'Segna una visita tra mezzanotte e le cinque', true),
-  def('FERRAGOSTO', 'segreti', 'circle', 'sun', 'Ferragosto a tavola', "Un McDonald's il 15 agosto", true),
-  def('DOUBLE', 'segreti', 'circle', 'two', 'Doppietta', "Due McDonald's nello stesso giorno", true),
+  def('NIGHT_OWL', 'segreti', 'circle', 'moon', 'Nottambulo', 'Una visita verificata col GPS tra mezzanotte e le cinque', true),
+  def('FERRAGOSTO', 'segreti', 'circle', 'sun', 'Ferragosto a tavola', "Un McDonald's il 15 agosto, verificato col GPS", true),
+  def('DOUBLE', 'segreti', 'circle', 'two', 'Doppietta', "Due McDonald's nello stesso giorno, verificati col GPS", true),
   def('LUCKY_77', 'segreti', 'circle', 'seven', 'Fortunello', "Il tuo 77° McDonald's", true),
 ];
 

@@ -23,7 +23,7 @@ function message(outcome: VerifyOutcome, name: string): { title: string; hint?: 
   }
 }
 
-/** How a GPS check went, for a few seconds above the bottom navigation */
+/** How a GPS check went, for a few seconds at the top of the screen */
 export function VerifyToast() {
   const notice = useMcdonaldStore(state => state.verifyNotice);
   const clear = useMcdonaldStore(state => state.clearVerifyNotice);
@@ -48,7 +48,8 @@ export function VerifyToast() {
       className={`fixed inset-x-3 z-[2800] mx-auto flex max-w-md items-center gap-3 rounded-2xl px-4 py-3 shadow-lg shadow-black/25 animate-[toast-in_0.35s_ease-out] ${
         ok ? 'bg-blue-600 text-white' : 'bg-gray-800 text-white dark:bg-gray-700'
       }`}
-      style={{ bottom: 'calc(5rem + var(--safe-bottom) + 0.75rem)' }}
+      // At the top, like the stamp toasts: at the bottom it would cover the rating sheet that opens at the same moment
+      style={{ top: 'calc(0.75rem + var(--safe-top))' }}
     >
       {ok ? <VerifiedBadge size={34} /> : <span className="text-xl">📍</span>}
       <div className="min-w-0">

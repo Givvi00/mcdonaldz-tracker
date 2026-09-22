@@ -113,7 +113,7 @@ export function Home() {
           </div>
         )}
         {(locationStatus === 'loading' || locationStatus === 'idle') && (
-          <p className="text-sm text-gray-500 dark:text-gray-400">Rilevamento posizione in corso...</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Rilevamento posizione in corso…</p>
         )}
         {(locationStatus === 'denied' || locationStatus === 'unsupported') && (
           <p className="text-sm text-gray-500 dark:text-gray-400">

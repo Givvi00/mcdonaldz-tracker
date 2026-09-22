@@ -95,6 +95,17 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [x] Una visita verificata **non può cambiare data** (card, popup e anche lo store la rifiuta): la data è la prova del GPS
 - [x] I timbri a orario (Nottambulo, Ferragosto, Doppietta, Pioniere) valgono **solo con visite verificate col GPS**, non più con qualsiasi visita a data non modificata. Fortunello (77°) resta un semplice conteggio. Test aggiornati in `scripts/test-passport.ts`
 
+## Verifica GPS affidabile e controllo generale (22/09/2026)
+- [x] La verifica non usa più la posizione letta all'apertura (vecchia e poco precisa): subito dopo aver segnato la visita, in sottofondo, una lettura nuova ad alta precisione; vale solo entro 200 m e con precisione migliore di 100 m (`src/services/gpsCheck.ts`, test in `scripts/test-gps.ts`). Le visite verificate prima di oggi restano verificate
+- [x] "Verifica ora" su card, "Vicino a te" e popup della mappa per una visita segnata a mano quando sembri lì; la data della visita resta quella originale, i timbri a orario usano il momento della verifica (`verifiedAt`)
+- [x] Avviso in alto con l'esito: verificata / sei a N m / segnale debole / posizione non disponibile
+- [x] Togliere una visita chiede conferma (prima bastava un tocco sulla card e si perdeva anche il sigillo); scheda di conferma unica `ConfirmSheet.tsx`, usata anche per "Cancella tutto"
+- [x] Bug: "Cancella tutto" ricaricava prima di aver cancellato e il database aperto bloccava la cancellazione; ora `wipeAllData()`. Bug più profondo: all'avvio si aprivano più connessioni al database e quelle dimenticate restavano aperte (avrebbero bloccato anche una futura migrazione); ora una sola connessione condivisa, che si chiude se un'altra scheda deve aggiornare il database (test in `scripts/test-migration.ts`)
+- [x] Profilo senza finestre di sistema (alert/confirm): messaggi dentro la pagina; testi all'italiana ("I tuoi dati", "Salva un backup", "Ripristina da un backup", "Cancella tutti i dati"); ultima riga in italiano
+- [x] Coerenza: sigillo anche sulle card "Vicino a te", card verificate con bordo blu, pulsante "✓ Visitato" blu nel popup se verificata, sigillo al posto di 🔵 in Stats, descrizioni dei timbri a orario che citano il GPS, nota della scheda data aggiornata, "…" al posto di "...", "Ciao! Come ti chiami?" al posto di "Ciao! Registrati" (non esiste un account), spazio per la barra dell'iPhone in tutte le schede dal basso, "Ti trovi qui?" non propone più un Mc appena segnato
+- [ ] Da decidere (visivo, meglio guardarlo sul telefono): tre stili diversi per i titoli di sezione (Home: emoji in cerchio piccolo; Stats: icona disegnata in cerchio giallo; Profilo: solo testo). Proposta: tutti come Stats
+- [ ] Da decidere: l'avviso di verifica e il banner "Nuova versione" possono comparire insieme; e "Ti trovi qui?" potrebbe proporre anche "Verifica ora" per un Mc già segnato quando ci torni
+
 ## Account, community e onboarding (idea del 22/09/2026, da capire con calma)
 - [ ] **Utenze/account**: oggi non esistono, ogni telefono ha i propri dati locali senza login. Serve per: community tra amici, seguire altri utenti, classifiche/gare, vedere il livello degli amici. Grosso cambio di architettura, da progettare a parte
 - [ ] **Salvataggio in remoto**: serve un server con hosting e database (oggi tutto vive solo nell'IndexedDB del dispositivo, vedi `src/services/db.ts`); da capire login, sincronizzazione tra dispositivi, costi e chi lo mantiene

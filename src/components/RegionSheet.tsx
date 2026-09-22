@@ -37,7 +37,7 @@ export function RegionSheet({ open, regions, selected, onSelect, onClose }: Prop
           </button>
         </div>
 
-        <div className="overflow-y-auto px-4 pb-6">
+        <div className="overflow-y-auto px-4 pb-6" style={{ paddingBottom: 'calc(1.5rem + var(--safe-bottom))' }}>
           <button
             onClick={() => pick(null)}
             className={`w-full mb-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${

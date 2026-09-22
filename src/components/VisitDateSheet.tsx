@@ -31,6 +31,7 @@ export function VisitDateSheet({ name, visitedAt, onSave, onClose }: Props) {
     <div className="fixed inset-0 z-[2100] flex items-end justify-center bg-black/40" onClick={onClose}>
       <div
         className="w-full max-w-lg bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl border-t border-gray-200 dark:border-gray-800 animate-[toast-in_0.25s_ease-out] px-5 pt-4 pb-6"
+        style={{ paddingBottom: 'calc(1.5rem + var(--safe-bottom))' }}
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between pb-3">
@@ -52,7 +53,8 @@ export function VisitDateSheet({ name, visitedAt, onSave, onClose }: Props) {
           className="w-full rounded-xl border-2 border-mc-yellow bg-white px-3 py-3 text-base font-semibold text-gray-800 dark:bg-gray-900 dark:text-gray-100"
         />
         <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-          Con la data cambiata a mano, questa visita non vale per i timbri legati all'orario (Nottambulo, Ferragosto, Doppietta, Pioniere).
+          I timbri legati all'orario (Nottambulo, Ferragosto, Doppietta, Pioniere) valgono solo per le visite verificate col GPS:
+          se torni lì, usa «Verifica ora».
         </p>
         <button
           disabled={!valid}

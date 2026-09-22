@@ -9,7 +9,10 @@ import {
   MIGRATIONS,
   backupVersion,
   getPreMigrationBackup,
+  getVisits,
+  initDB,
   openAppDB,
+  wipeAllData,
   snapshotBeforeUpgrade,
   upgradeBackup,
   type Migration,
@@ -144,6 +147,21 @@ await test('backups: old files count as version 1, newer ones are refused', () =
   const steps = { 2: (d: typeof data) => ({ ...d, visits: d.visits.map(v => ({ ...v, verified: false })) }) };
   const up = upgradeBackup(data, steps as never, 2) as unknown as { visits: { verified: boolean }[] };
   assert.equal(up.visits[0].verified, false);
+});
+
+await reset();
+await test('many callers at startup share one connection, and "Cancella tutto" really deletes', async () => {
+  await seedVersion1();
+  // everything in the app asks for the database at the same moment when it starts
+  const connections = await Promise.all([initDB(), initDB(), initDB(), getVisits()]);
+  assert.equal(connections[0], connections[1]);
+  assert.equal(connections[1], connections[2]);
+  assert.equal((connections[3] as unknown[]).length, 2);
+  await wipeAllData();
+  const names = (await indexedDB.databases()).map(d => d.name);
+  assert.ok(!names.includes(DB_NAME), 'the database is still there');
+  // and the app can start again from scratch afterwards
+  assert.equal((await getVisits()).length, 0);
 });
 
 console.log(`\n${passed} migration checks passed`);

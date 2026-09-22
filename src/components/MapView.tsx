@@ -273,7 +273,7 @@ export function MapView() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Cerca un McDonald's sulla mappa..."
+            placeholder="Cerca un McDonald's sulla mappa…"
             className="w-full pl-10 pr-3 py-2.5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 shadow-md focus:outline-none focus:ring-2 focus:ring-mc-red font-medium"
           />
         </div>

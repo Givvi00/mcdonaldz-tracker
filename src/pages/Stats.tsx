@@ -6,6 +6,7 @@ import { regionRecordType, regionSummaries, regionTier, type RegionTier } from '
 import { ItalyMap } from '@/components/ItalyMap';
 import { FoodIcon } from '@/components/FoodIcon';
 import { Passport } from '@/components/Passport';
+import { VerifiedBadge } from '@/components/VerifiedBadge';
 import { RegionAlbum } from '@/components/RegionAlbum';
 import type { FoodIconName } from '@/utils/foodTheme';
 import { FoodPattern } from '@/components/FoodPattern';
@@ -72,7 +73,9 @@ export function Stats() {
             </p>
           )}
           {verifiedCount > 0 && (
-            <p className="mt-1 text-xs opacity-80">🔵 {verifiedCount} verificate col GPS</p>
+            <p className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-white/15 py-0.5 pl-0.5 pr-2.5 text-xs font-semibold">
+              <VerifiedBadge size={20} /> {verifiedCount} {verifiedCount === 1 ? 'verificata' : 'verificate'} col GPS
+            </p>
           )}
           <p className="text-2xl font-display font-bold mt-3">{percentage}%</p>
           <FoodProgressBar percentage={percentage} />

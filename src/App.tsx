@@ -79,7 +79,7 @@ function App() {
             aria-label="Apri il profilo"
             className="min-w-0 max-w-[55%] rounded-2xl bg-black/25 px-3.5 py-1.5 text-right transition-transform active:scale-95"
           >
-            <p className="truncate text-xs leading-tight text-white/80">{user?.name ? `Ciao, ${user.name}` : 'Ciao! Registrati'}</p>
+            <p className="truncate text-xs leading-tight text-white/80">{user?.name ? `Ciao, ${user.name}` : 'Ciao! Come ti chiami?'}</p>
             <p className="font-display text-base font-bold leading-tight">Livello {levelInfo(getVisitedCount()).number}</p>
           </button>
         </header>

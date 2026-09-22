@@ -4,7 +4,8 @@ import { applyUpdate, checkForUpdate, type UpdateCheck } from '@/services/update
 import { refreshCatalog, type CatalogRefresh } from '@/services/catalogRefresh';
 import { InstallSection } from '@/components/InstallPrompt';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
-import { exportData, getPreMigrationBackup, importData } from '@/services/db';
+import { exportData, getPreMigrationBackup, importData, wipeAllData } from '@/services/db';
+import { ConfirmSheet } from '@/components/ConfirmSheet';
 import { backupFilename, readBackupSummary, saveBackup } from '@/services/backup';
 import { persistState, requestPersistentStorage, type PersistState } from '@/services/storagePersist';
 import { useTheme, type ThemeMode } from '@/hooks/useTheme';
@@ -23,10 +24,12 @@ const THEME_OPTIONS: Array<{ value: ThemeMode; label: string; icon: string }> = 
 ];
 
 export function Profile() {
-  const { user, getVisitedCount, mcdonalds, catalogInfo, renameUser, profileFocus, clearProfileFocus } = useMcdonaldStore();
+  const { user, getVisitedCount, mcdonalds, catalogInfo, renameUser, profileFocus, clearProfileFocus, initApp } = useMcdonaldStore();
+  const [dataMessage, setDataMessage] = useState<{ ok: boolean; text: string } | null>(null);
+  const [confirmWipe, setConfirmWipe] = useState(false);
   const nameInput = useRef<HTMLInputElement>(null);
 
-  // Arrived from "Ciao! Registrati": bring the name field into view and start typing
+  // Arrived from "Ciao! Come ti chiami?": bring the name field into view and start typing
   useEffect(() => {
     if (profileFocus !== 'name') return;
     const t = setTimeout(() => {
@@ -67,11 +70,13 @@ export function Profile() {
 
   const handleExport = async () => {
     try {
-      await saveBackup(await exportData());
+      const saved = await saveBackup(await exportData());
+      if (!saved) return;
       markBackupDone();
       setBackupTick(t => t + 1);
+      setDataMessage({ ok: true, text: 'Backup salvato' });
     } catch (error) {
-      alert(`Impossibile salvare il backup: ${(error as Error).message}`);
+      setDataMessage({ ok: false, text: `Impossibile salvare il backup: ${(error as Error).message}` });
     }
   };
 
@@ -84,11 +89,17 @@ export function Profile() {
       const text = await file.text();
       const { visits } = readBackupSummary(text);
       await importData(text);
-      alert(`Backup importato: ${visits} visite.`);
-      window.location.reload();
+      await initApp();
+      setDataMessage({ ok: true, text: `Backup importato: ${visits} ${visits === 1 ? 'visita' : 'visite'}` });
     } catch (error) {
-      alert(`Errore nell'importazione: ${(error as Error).message}`);
+      setDataMessage({ ok: false, text: `Importazione non riuscita: ${(error as Error).message}` });
     }
+  };
+
+  const handleWipe = async () => {
+    setConfirmWipe(false);
+    await wipeAllData();
+    window.location.reload();
   };
 
   return (
@@ -116,7 +127,7 @@ export function Profile() {
             onClick={handleExport}
             className="mt-2 rounded-xl bg-mc-yellow px-3 py-1.5 text-xs font-bold text-gray-800 active:scale-95"
           >
-            Esporta ora
+            Salva un backup ora
           </button>
         </div>
       )}
@@ -205,7 +216,7 @@ export function Profile() {
 
       {/* Data Management */}
       <div>
-        <h3 className="font-display font-semibold text-lg mb-1 text-gray-800 dark:text-gray-100">Gestisci Dati</h3>
+        <h3 className="font-display font-semibold text-lg mb-1 text-gray-800 dark:text-gray-100">I tuoi dati</h3>
         <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
           Ultimo backup: {lastBackupAt() ? new Date(lastBackupAt() as number).toLocaleDateString('it-IT', { dateStyle: 'medium' }) : 'mai'}
           {persist === 'yes' && ' · Dati protetti dal browser'}
@@ -216,14 +227,27 @@ export function Profile() {
             onClick={handleExport}
             className="w-full bg-mc-yellow hover:brightness-95 text-gray-800 font-bold py-3 rounded-xl transition-all active:scale-[0.98] shadow-sm"
           >
-            📥 Esporta Dati (Backup)
+            📥 Salva un backup
           </button>
           <button
             onClick={() => fileInputRef.current?.click()}
             className="w-full bg-white dark:bg-gray-900 border-2 border-mc-yellow text-gray-800 dark:text-gray-100 font-bold py-3 rounded-xl transition-all active:scale-[0.98] shadow-sm"
           >
-            📤 Importa Dati
+            📤 Ripristina da un backup
           </button>
+          {dataMessage && (
+            <p
+              role="status"
+              className={`rounded-xl px-3 py-2 text-xs font-semibold ${
+                dataMessage.ok
+                  ? 'bg-green-50 text-green-800 dark:bg-green-950/40 dark:text-green-300'
+                  : 'bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300'
+              }`}
+            >
+              {dataMessage.ok ? '✓ ' : ''}
+              {dataMessage.text}
+            </p>
+          )}
           {safetyCopy && (
             <div className="rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-xs text-gray-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
               <p>
@@ -287,31 +311,35 @@ export function Profile() {
         {catalogCheck === 'rejected' && (
           <p className="text-xs mt-1 font-semibold" role="status">Nuovo elenco non applicato: non ha superato i controlli di sicurezza</p>
         )}
-        <p className="text-xs opacity-75 mt-3">Track your McDonald's visits in Italy 🍔🗺️</p>
+        <p className="text-xs opacity-75 mt-3">I McDonald's che hai visitato in Italia, uno per uno 🍔🗺️</p>
       </div>
 
       {/* Clear Warning */}
       <div className="bg-red-50 dark:bg-red-950/30 p-4 rounded-2xl text-center text-sm text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900">
-        <p className="font-display font-semibold">⚠️ Cancella Dati</p>
-        <p className="text-xs mt-1 opacity-75">Prima di cancellare i dati, esporta un backup!</p>
+        <p className="font-display font-semibold">⚠️ Cancella tutti i dati</p>
+        <p className="text-xs mt-1 opacity-75">Visite, timbri, voti e impostazioni di questo telefono. Prima salva un backup.</p>
         <button
-          onClick={() => {
-            if (confirm('Sei sicuro? Tutti i dati verranno cancellati.')) {
-              localStorage.clear();
-              indexedDB.databases().then(dbs => {
-                dbs.forEach(db => {
-                  if (db.name) indexedDB.deleteDatabase(db.name);
-                });
-              });
-              alert('Dati cancellati. Ricarica la pagina.');
-              window.location.reload();
-            }
-          }}
+          onClick={() => setConfirmWipe(true)}
           className="mt-3 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl text-xs transition-all active:scale-[0.97] shadow-sm"
         >
-          🗑️ Cancella Tutto
+          🗑️ Cancella tutto
         </button>
       </div>
+
+      {confirmWipe && (
+        <ConfirmSheet
+          title="Cancellare tutto?"
+          body={
+            <>
+              Spariscono {getVisitedCount()} {getVisitedCount() === 1 ? 'visita' : 'visite'}, i timbri, i voti e le impostazioni. Non si può
+              annullare{lastBackupAt() ? '' : ', e non hai ancora salvato un backup'}.
+            </>
+          }
+          confirmLabel="Cancella tutto"
+          onCancel={() => setConfirmWipe(false)}
+          onConfirm={() => void handleWipe()}
+        />
+      )}
     </div>
   );
 }
