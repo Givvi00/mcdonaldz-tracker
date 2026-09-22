@@ -7,10 +7,15 @@ import { distanceKm } from '@/utils/geo';
 
 /** How close you must be to the restaurant */
 export const GPS_VERIFY_RADIUS_KM = 0.2;
-/** How precise the reading must be (the phone's own estimate, in metres): a rough one proves nothing */
-export const GPS_MAX_ACCURACY_M = 100;
-/** How long to wait for a precise reading before giving up */
-const FIX_TIMEOUT_MS = 12000;
+/**
+ * How precise the reading must be (the phone's own estimate, in metres): a rough one proves nothing. Inside a building
+ * a phone often stays around 50-150 m, and a computer (Wi-Fi only) rarely does better than ~150 m.
+ */
+export const GPS_MAX_ACCURACY_M = 150;
+/** How long to keep listening for a better reading before judging the best one received */
+const FIX_WINDOW_MS = 10000;
+/** A reading this good is enough: stop listening at once */
+const GOOD_ENOUGH_M = 40;
 
 export interface Fix {
   lat: number;
@@ -52,17 +57,40 @@ export function canOfferVerify(
   return distanceKm(position.lat, position.lon, mc.lat, mc.lon) <= VERIFY_OFFER_KM;
 }
 
-/** A new, precise reading taken now (never a cached one); null when the phone cannot give one */
-export function freshFix(): Promise<Fix | null> {
+/**
+ * The best reading the phone gives in the next few seconds (never a cached one); null when it gives none. The first
+ * reading is often rough (the GPS is just waking up, or you are indoors) and improves after a moment, so it keeps
+ * listening and returns early as soon as one is good enough (or already proves you are at the target restaurant).
+ */
+export function freshFix(target?: Pick<McDonald, 'lat' | 'lon'>): Promise<Fix | null> {
   return new Promise(resolve => {
     if (typeof navigator === 'undefined' || !('geolocation' in navigator)) {
       resolve(null);
       return;
     }
-    navigator.geolocation.getCurrentPosition(
-      pos => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude, accuracy: pos.coords.accuracy }),
-      () => resolve(null),
-      { enableHighAccuracy: true, maximumAge: 0, timeout: FIX_TIMEOUT_MS },
+    let best: Fix | null = null;
+    let done = false;
+    let watchId: number | null = null;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+      resolve(best);
+    };
+    const timer = setTimeout(finish, FIX_WINDOW_MS);
+    watchId = navigator.geolocation.watchPosition(
+      pos => {
+        const fix = { lat: pos.coords.latitude, lon: pos.coords.longitude, accuracy: pos.coords.accuracy };
+        if (!best || fix.accuracy < best.accuracy) best = fix;
+        // Already proof enough that you are there, or as precise as it gets: no need to wait any longer
+        if (fix.accuracy <= GOOD_ENOUGH_M || (target && judgeFix(best, target).result === 'ok')) finish();
+      },
+      // Permission denied: no point in waiting. Other errors (no signal yet) may pass: keep listening
+      error => {
+        if (error.code === error.PERMISSION_DENIED) finish();
+      },
+      { enableHighAccuracy: true, maximumAge: 0, timeout: FIX_WINDOW_MS },
     );
   });
 }

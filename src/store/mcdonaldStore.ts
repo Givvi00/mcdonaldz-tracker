@@ -240,7 +240,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     if (verifying.includes(mcdonaldId)) return { result: 'unavailable' };
 
     set(state => ({ verifying: [...state.verifying, mcdonaldId] }));
-    const fix = await freshFix();
+    const fix = await freshFix(mc);
     const outcome = judgeFix(fix, mc);
     // The visit may have been undone while waiting for the reading
     const stillVisited = get().visits.some(v => v.mcdonaldId === mcdonaldId);

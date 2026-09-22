@@ -1,7 +1,7 @@
 // Checks the rule that decides whether a GPS reading proves you are at a restaurant, and when "Verifica ora" is offered.
 // Run with: npm run test:data
 import assert from 'node:assert/strict';
-import { canOfferVerify, judgeFix } from '../src/services/gpsCheck';
+import { canOfferVerify, freshFix, judgeFix } from '../src/services/gpsCheck';
 
 let passed = 0;
 function test(name: string, fn: () => void) {
@@ -27,6 +27,11 @@ test('preciso ma lontano: dice quanto', () => {
   assert.equal(judgeFix({ lat: north(260), lon: mc.lon, accuracy: 10 }, mc).result, 'far');
 });
 
+test('dentro un edificio (margine fino a 150 m) basta', () => {
+  assert.deepEqual(judgeFix({ lat: mc.lat, lon: mc.lon, accuracy: 120 }, mc), { result: 'ok' });
+  assert.deepEqual(judgeFix({ lat: mc.lat, lon: mc.lon, accuracy: 150 }, mc), { result: 'ok' });
+});
+
 test('segnale impreciso vicino: non basta, e lo dice', () => {
   const out = judgeFix({ lat: mc.lat, lon: mc.lon, accuracy: 800 }, mc);
   assert.deepEqual(out, { result: 'imprecise', accuracyM: 800 });
@@ -48,5 +53,37 @@ test('"Verifica ora": solo per una visita non verificata, quando sembri lì', ()
   assert.equal(canOfferVerify({}, mc, null), false);
   assert.equal(canOfferVerify({}, mc, { lat: north(5000), lon: mc.lon }), false);
 });
+
+// A pretend phone: sends the given readings one after the other, 50 ms apart
+function fakePhone(readings: { lat: number; lon: number; accuracy: number }[]) {
+  let cleared = false;
+  const geolocation = {
+    watchPosition(ok: (p: { coords: { latitude: number; longitude: number; accuracy: number } }) => void) {
+      readings.forEach((r, i) =>
+        setTimeout(() => !cleared && ok({ coords: { latitude: r.lat, longitude: r.lon, accuracy: r.accuracy } }), 50 * (i + 1)),
+      );
+      return 1;
+    },
+    clearWatch() {
+      cleared = true;
+    },
+  };
+  Object.defineProperty(globalThis, 'navigator', { value: { geolocation }, configurable: true });
+}
+
+await (async () => {
+  fakePhone([
+    { lat: mc.lat, lon: mc.lon, accuracy: 900 },
+    { lat: mc.lat, lon: mc.lon, accuracy: 60 },
+    { lat: mc.lat, lon: mc.lon, accuracy: 10 },
+  ]);
+  const start = Date.now();
+  const fix = await freshFix(mc);
+  test('lettura: aspetta che migliori e si ferma appena basta per verificare', () => {
+    assert.equal(fix?.accuracy, 60);
+    assert.ok(Date.now() - start < 1000, 'waited too long');
+    assert.equal(judgeFix(fix, mc).result, 'ok');
+  });
+})();
 
 console.log(`\n${passed} GPS checks passed`);
