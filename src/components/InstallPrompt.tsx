@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useInstall } from '@/services/install';
 import type { InstallHint } from '@/utils/install';
 import { safariUrl } from '@/utils/platform';
+import { SectionTitle } from '@/components/SectionTitle';
 
 const DISMISS_KEY = 'mcdz-install-dismissed';
 const DISMISS_FOR_DAYS = 14;
@@ -142,7 +143,7 @@ export function InstallSection() {
 
   return (
     <div>
-      <h3 className="font-display font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">Installa l'app</h3>
+      <SectionTitle icon="chicken">Installa l'app</SectionTitle>
       <div className="rounded-2xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-4">
         {hint === 'installed' ? (
           <p className="text-sm font-semibold text-green-700 dark:text-green-400">✓ App installata su questo dispositivo</p>

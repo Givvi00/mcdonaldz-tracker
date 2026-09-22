@@ -8,6 +8,7 @@ import { distanceKm } from '@/utils/geo';
 import { FoodPattern } from '@/components/FoodPattern';
 import { FoodProgressBar } from '@/components/FoodProgressBar';
 import { EmptyTray } from '@/components/EmptyTray';
+import { SectionTitle } from '@/components/SectionTitle';
 
 type SortBy = 'distance' | 'name' | 'recent';
 
@@ -92,10 +93,9 @@ export function Home() {
       {/* Vicino a te */}
       <section className="px-4">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-display font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
-            <span className="flex items-center justify-center w-7 h-7 rounded-full bg-pink-100 dark:bg-pink-950/50 text-sm">📍</span>
+          <SectionTitle icon="fries" className="">
             Vicino a te
-          </h2>
+          </SectionTitle>
           {locationStatus === 'granted' && nearest.length > 0 && (
             <button
               onClick={findNearest}
@@ -124,10 +124,9 @@ export function Home() {
 
       {/* Esplora tutti */}
       <section ref={listRef} className="px-4 pt-2 border-t border-gray-200 dark:border-gray-800">
-        <h2 className="font-display font-semibold text-gray-800 dark:text-gray-100 mb-3 mt-4 flex items-center gap-2">
-          <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-800 text-sm">🔎</span>
+        <SectionTitle icon="burger" className="mb-3 mt-4">
           Esplora tutti
-        </h2>
+        </SectionTitle>
 
         {/* Stato: visitati / da visitare */}
         <StatusFilter value={filterVisited} onChange={setFilterVisited} className="mb-3" />

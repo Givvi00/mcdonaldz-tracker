@@ -6,6 +6,7 @@ import { InstallSection } from '@/components/InstallPrompt';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { exportData, getPreMigrationBackup, importData, wipeAllData } from '@/services/db';
 import { ConfirmSheet } from '@/components/ConfirmSheet';
+import { SectionTitle } from '@/components/SectionTitle';
 import { backupFilename, readBackupSummary, saveBackup } from '@/services/backup';
 import { persistState, requestPersistentStorage, type PersistState } from '@/services/storagePersist';
 import { useTheme, type ThemeMode } from '@/hooks/useTheme';
@@ -133,13 +134,13 @@ export function Profile() {
       )}
 
       <div>
-        <h3 className="font-display font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">Il tuo percorso</h3>
+        <SectionTitle icon="happy">Il tuo percorso</SectionTitle>
         <LevelRoadmap visited={getVisitedCount()} />
       </div>
 
       {/* Name shown in the header */}
       <div>
-        <h3 className="font-display font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">Il tuo nome</h3>
+        <SectionTitle icon="cup">Il tuo nome</SectionTitle>
         <div className="flex gap-2">
           <input
             ref={nameInput}
@@ -165,7 +166,7 @@ export function Profile() {
 
       {/* Theme */}
       <div>
-        <h3 className="font-display font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">Aspetto</h3>
+        <SectionTitle icon="mcflurry">Aspetto</SectionTitle>
         <div className="grid grid-cols-3 gap-2">
           {THEME_OPTIONS.map(opt => (
             <button
@@ -186,7 +187,7 @@ export function Profile() {
 
       {choosesMapApp() && (
         <div>
-          <h3 className="font-display font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">App per le indicazioni</h3>
+          <SectionTitle icon="wrap">App per le indicazioni</SectionTitle>
           <div className="grid grid-cols-3 gap-2">
             {MAP_APPS.map(app => (
               <button
@@ -216,7 +217,7 @@ export function Profile() {
 
       {/* Data Management */}
       <div>
-        <h3 className="font-display font-semibold text-lg mb-1 text-gray-800 dark:text-gray-100">I tuoi dati</h3>
+        <SectionTitle icon="basket" className="mb-1">I tuoi dati</SectionTitle>
         <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
           Ultimo backup: {lastBackupAt() ? new Date(lastBackupAt() as number).toLocaleDateString('it-IT', { dateStyle: 'medium' }) : 'mai'}
           {persist === 'yes' && ' · Dati protetti dal browser'}

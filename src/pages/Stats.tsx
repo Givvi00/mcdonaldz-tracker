@@ -4,7 +4,6 @@ import { getAchievements } from '@/services/db';
 import { getAchievementProgress } from '@/services/achievements';
 import { regionRecordType, regionSummaries, regionTier, type RegionTier } from '@/services/regions';
 import { ItalyMap } from '@/components/ItalyMap';
-import { FoodIcon } from '@/components/FoodIcon';
 import { Passport } from '@/components/Passport';
 import { VerifiedBadge } from '@/components/VerifiedBadge';
 import { RegionAlbum } from '@/components/RegionAlbum';
@@ -12,6 +11,7 @@ import type { FoodIconName } from '@/utils/foodTheme';
 import { FoodPattern } from '@/components/FoodPattern';
 import { FoodProgressBar } from '@/components/FoodProgressBar';
 import { Receipt } from '@/components/Receipt';
+import { SectionTitle } from '@/components/SectionTitle';
 import type { Achievement } from '@shared/types';
 
 export function Stats() {
@@ -98,12 +98,7 @@ export function Stats() {
 function Section({ icon, title, children }: { icon: FoodIconName; title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h3 className="font-display font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100 flex items-center gap-2">
-        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-950/50">
-          <FoodIcon name={icon} size={20} />
-        </span>
-        {title}
-      </h3>
+      <SectionTitle icon={icon}>{title}</SectionTitle>
       {children}
     </div>
   );
