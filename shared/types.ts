@@ -28,8 +28,11 @@ export interface Visit {
   visitedAt: number;
   /** The date was changed by hand: the time of day is no longer reliable, so time-based stamps ignore this visit */
   dateEdited?: boolean;
-  /** True when the phone's own position was within GPS_VERIFY_RADIUS_KM of the restaurant the moment it was marked visited */
+  /** True once the phone read a fresh, precise position at the restaurant (see services/gpsCheck) */
   verified?: boolean;
+  /** When that reading happened: right after marking it, or later when you went back and tapped "Verifica ora".
+   *  Absent on the first verified visits (September 2026), which were confirmed at `visitedAt`. */
+  verifiedAt?: number;
   rating?: VisitRating;
   notes?: string;
 }

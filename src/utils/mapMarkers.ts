@@ -51,7 +51,7 @@ export function markerSymbol(_mc: McDonald, visited: boolean): string {
 }
 
 /** Content of the map popup. A closed restaurant shows a "Chiuso" badge and no directions button. */
-export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number, verified?: boolean): string {
+export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number, verified?: boolean, canVerify = false): string {
   const formattedDate = visitedAt ? new Date(visitedAt).toLocaleDateString('it-IT', { dateStyle: 'medium' }) : '';
   // A verified visit is locked (no "Cambia"): the date is the phone's own proof of when you were there
   const visitDate =
@@ -77,6 +77,11 @@ export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number, ve
           <span style="color: #6b7280;">${escapeHtml(mc.city)}, ${escapeHtml(mc.region)}</span><br/>
           ${closedBadge}
           ${visitDate}
+          ${
+            canVerify
+              ? `<button id="verify-${mc.id}" style="margin-top: 6px; padding: 3px 10px; border: 1px solid #60a5fa; border-radius: 999px; background: white; color: #1d4ed8; font-size: 11px; font-weight: 600; cursor: pointer;">📍 Verifica ora</button><br/>`
+              : ''
+          }
           <div style="display: flex; gap: 6px; margin-top: 8px;">
             <button id="toggle-${mc.id}" style="${pillButton(visited ? '#16a34a' : '#DA291C', 'white')}">
               ${visited ? '✓ Visitato' : `${foodIconSvg('fries', 15)} Segna visita`}

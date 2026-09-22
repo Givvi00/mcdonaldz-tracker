@@ -125,23 +125,24 @@ export function getAchievementProgress(mcdonalds: McDonald[], visits: Visit[]): 
   const islands = (visitedRegions.has('Sicilia') ? 1 : 0) + (visitedRegions.has('Sardegna') ? 1 : 0);
 
   // Stamps that depend on exactly when you were there only count visits the GPS itself confirmed, not ones you just
-  // said happened (whatever the time on them says, it could be edited or simply typed in later from the couch)
-  const live = visits.filter(v => v.verified);
+  // said happened (whatever the time on them says, it could be edited or simply typed in later from the couch), and
+  // they use the moment of that confirmation: an old visit verified today proves you were there today, not back then
+  const live = visits.filter(v => v.verified).map(v => ({ mcdonaldId: v.mcdonaldId, at: v.verifiedAt ?? v.visitedAt }));
   const pioneer = live.some(v => {
     const mc = byId.get(v.mcdonaldId);
     const added = mc?.addedAt ? Date.parse(mc.addedAt) : NaN;
-    return Number.isFinite(added) && v.visitedAt - added >= 0 && v.visitedAt - added < NEW_FOR_DAYS * DAY;
+    return Number.isFinite(added) && v.at - added >= 0 && v.at - added < NEW_FOR_DAYS * DAY;
   });
   const beforeClosing = visitedMcs.some(mc => !mc.opened);
 
-  const nightOwl = live.some(v => new Date(v.visitedAt).getHours() < 5);
+  const nightOwl = live.some(v => new Date(v.at).getHours() < 5);
   const ferragosto = live.some(v => {
-    const d = new Date(v.visitedAt);
+    const d = new Date(v.at);
     return d.getMonth() === 7 && d.getDate() === 15;
   });
   const perDay = new Map<string, number>();
   for (const v of live) {
-    const key = new Date(v.visitedAt).toDateString();
+    const key = new Date(v.at).toDateString();
     perDay.set(key, (perDay.get(key) || 0) + 1);
   }
   const doubleDay = [...perDay.values()].some(n => n >= 2);

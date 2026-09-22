@@ -13,6 +13,8 @@ import { UpdateBanner } from '@/components/UpdateBanner';
 import { MapAppChooser } from '@/components/MapAppChooser';
 import { FoodRain } from '@/components/FoodRain';
 import { AutoRatingPrompt } from '@/components/AutoRatingPrompt';
+import { VerifyToast } from '@/components/VerifyToast';
+import { UnmarkConfirm } from '@/components/UnmarkConfirm';
 import { CelebrationLab } from '@/components/CelebrationLab';
 import { FoodIconSprite } from '@/components/FoodIcon';
 import { startUpdateChecks } from '@/services/updates';
@@ -56,6 +58,8 @@ function App() {
       <FoodIconSprite />
       <FoodRain />
       <AutoRatingPrompt />
+      <VerifyToast />
+      <UnmarkConfirm />
       {import.meta.env.DEV && <CelebrationLab />}
 
       {/* Wordmark header */}

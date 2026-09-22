@@ -60,7 +60,8 @@ export function NearbyPrompt() {
     setNearby(null);
   };
 
-  if (!nearby || !candidate) return null;
+  // Marked in the meantime (from a card or the map): nothing left to suggest
+  if (!nearby || !candidate || isVisited(candidate.id)) return null;
 
   return (
     <div

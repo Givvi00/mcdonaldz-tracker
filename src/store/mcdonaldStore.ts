@@ -1,16 +1,30 @@
 import { create } from 'zustand';
 import type { McDonald, Visit, User, VisitRating } from '@shared/types';
 import { pickInitialCatalog, type CatalogInfo } from '@/services/catalogBoot';
-import { getOrCreateUser, getVisits, addVisit, removeVisit, setUserName, setVisitDate, setVisitRating } from '@/services/db';
+import {
+  getOrCreateUser,
+  getVisits,
+  addVisit,
+  removeVisit,
+  setUserName,
+  setVisitDate,
+  setVisitRating,
+  setVisitVerified,
+} from '@/services/db';
 import { checkAndUnlockAchievements } from '@/services/achievements';
 import { syncRegionCompletions } from '@/services/regions';
+import { freshFix, judgeFix, type VerifyOutcome } from '@/services/gpsCheck';
 import { distanceKm } from '@/utils/geo';
 import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds, visitedIdSet } from '@/utils/catalog';
 import type { Coords, GeoStatus } from '@/hooks/useGeolocation';
 
-/** How close the phone's own position must be to a restaurant, the moment you mark it, to earn the GPS-verified badge */
-export const GPS_VERIFY_RADIUS_KM = 0.2;
+/** The outcome of a GPS check, shown for a few seconds at the bottom of the screen */
+export interface VerifyNotice {
+  id: number;
+  mcdonaldId: string;
+  outcome: VerifyOutcome;
+}
 
 /** Something worth a celebration. A visit with nothing special is a light shower; the rest have their own show. */
 export type Celebration =
@@ -47,14 +61,29 @@ interface AppStore {
   celebrationQueue: Celebration[];
   /** A restaurant just marked visited, to ask about once its celebration is done (not a change of date or an unmark) */
   pendingRatingFor: string | null;
+  /** Restaurants whose GPS check is running now */
+  verifying: string[];
+  verifyNotice: VerifyNotice | null;
+  /** A visit you asked to remove, waiting for you to confirm (a tap by mistake must not lose it, least of all a verified one) */
+  unmarkRequest: string | null;
 
   initApp: () => Promise<void>;
   renameUser: (name: string) => Promise<void>;
   toggleVisit: (mcdonaldId: string) => Promise<void>;
+  /** What every "visited" button calls: marks straight away, but asks before removing a visit */
+  requestToggle: (mcdonaldId: string) => void;
+  cancelUnmark: () => void;
   /** Sets the day of an existing visit (a stamp is never lost by changing a date, so nothing is celebrated) */
   changeVisitDate: (mcdonaldId: string, visitedAt: number) => Promise<void>;
   /** Sets your vote for a visited restaurant (can unlock the "Critico gastronomico" stamp) */
   rateVisit: (mcdonaldId: string, rating: VisitRating) => Promise<void>;
+  /**
+   * Reads a fresh, precise position and, if it proves you are at the restaurant, marks its visit as verified (and
+   * checks the stamps that need it). `quiet`: only a success is announced (the automatic check after marking a
+   * visit from home is expected to fail, it is not worth a message).
+   */
+  verifyVisit: (mcdonaldId: string, options?: { quiet?: boolean }) => Promise<VerifyOutcome>;
+  clearVerifyNotice: () => void;
   clearUnlocked: () => void;
   openAchievements: (types: string[]) => void;
   clearFocusedAchievement: () => void;
@@ -104,6 +133,9 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   celebration: null,
   celebrationQueue: [],
   pendingRatingFor: null,
+  verifying: [],
+  verifyNotice: null,
+  unmarkRequest: null,
 
   initApp: async () => {
     const user = await getOrCreateUser();
@@ -122,7 +154,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   },
 
   toggleVisit: async (mcdonaldId: string) => {
-    const { user, visits, mcdonalds, userPosition, locationStatus } = get();
+    const { user, visits, locationStatus } = get();
     if (!user) return;
 
     const isVisited = visits.some(v => v.mcdonaldId === mcdonaldId);
@@ -131,18 +163,13 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     if (isVisited) {
       await removeVisit(mcdonaldId, user.id);
     } else {
-      // Marked while the phone's own position says you are really there: worth the GPS-verified badge
-      const mc = mcdonalds.find(m => m.id === mcdonaldId);
-      const verified =
-        locationStatus === 'granted' &&
-        !!userPosition &&
-        !!mc &&
-        distanceKm(userPosition.lat, userPosition.lon, mc.lat, mc.lon) <= GPS_VERIFY_RADIUS_KM;
-      await addVisit(mcdonaldId, user.id, verified);
+      await addVisit(mcdonaldId, user.id);
     }
 
     const updatedVisits = await getVisits();
     set({ visits: updatedVisits });
+    // In the background, with a fresh reading: if you are really there, the new visit becomes verified a moment later
+    if (!isVisited && locationStatus === 'granted') void get().verifyVisit(mcdonaldId, { quiet: true });
 
     if (!isVisited) {
       const mcdonalds = get().mcdonalds;
@@ -196,6 +223,43 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   },
 
   clearPendingRating: () => set({ pendingRatingFor: null }),
+
+  requestToggle: (mcdonaldId: string) => {
+    if (get().visits.some(v => v.mcdonaldId === mcdonaldId)) set({ unmarkRequest: mcdonaldId });
+    else void get().toggleVisit(mcdonaldId);
+  },
+
+  cancelUnmark: () => set({ unmarkRequest: null }),
+
+  verifyVisit: async (mcdonaldId, options = {}) => {
+    const { user, mcdonalds, visits, verifying } = get();
+    const mc = mcdonalds.find(m => m.id === mcdonaldId);
+    const visit = visits.find(v => v.mcdonaldId === mcdonaldId);
+    if (!user || !mc || !visit) return { result: 'unavailable' };
+    if (visit.verified) return { result: 'ok' };
+    if (verifying.includes(mcdonaldId)) return { result: 'unavailable' };
+
+    set(state => ({ verifying: [...state.verifying, mcdonaldId] }));
+    const fix = await freshFix();
+    const outcome = judgeFix(fix, mc);
+    // The visit may have been undone while waiting for the reading
+    const stillVisited = get().visits.some(v => v.mcdonaldId === mcdonaldId);
+
+    if (outcome.result === 'ok' && stillVisited) {
+      await setVisitVerified(mcdonaldId, Date.now());
+      const updatedVisits = await getVisits();
+      set({ visits: updatedVisits });
+      const unlocked = await checkAndUnlockAchievements(user.id, get().mcdonalds, updatedVisits);
+      if (unlocked.length > 0) get().enqueueCelebrations([{ id: Date.now(), kind: 'stamp', stamps: unlocked }]);
+    }
+    set(state => ({ verifying: state.verifying.filter(id => id !== mcdonaldId) }));
+    if (stillVisited && (!options.quiet || outcome.result === 'ok')) {
+      set({ verifyNotice: { id: Date.now(), mcdonaldId, outcome } });
+    }
+    return outcome;
+  },
+
+  clearVerifyNotice: () => set({ verifyNotice: null }),
 
   clearCelebration: () => {
     set({ celebration: null });

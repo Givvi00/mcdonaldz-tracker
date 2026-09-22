@@ -169,13 +169,12 @@ export async function setUserName(userId: string, name: string): Promise<User | 
   return updated;
 }
 
-export async function addVisit(mcdonaldId: string, userId: string, verified = false): Promise<Visit> {
+export async function addVisit(mcdonaldId: string, userId: string): Promise<Visit> {
   const database = await initDB();
   const visit: Visit = {
     id: 'visit_' + Date.now(),
     mcdonaldId,
     visitedAt: Date.now(),
-    ...(verified ? { verified: true } : {}),
   };
 
   await database.add('visits', visit);
@@ -214,6 +213,14 @@ export async function setVisitDate(mcdonaldId: string, visitedAt: number): Promi
   const visit = await database.getFromIndex('visits', 'by-mcdonaldId', mcdonaldId);
   if (!visit) return;
   await database.put('visits', { ...visit, visitedAt, dateEdited: true });
+}
+
+/** Marks a visit as confirmed by the GPS at `verifiedAt` (the date of the visit itself does not change) */
+export async function setVisitVerified(mcdonaldId: string, verifiedAt: number): Promise<void> {
+  const database = await initDB();
+  const visit = await database.getFromIndex('visits', 'by-mcdonaldId', mcdonaldId);
+  if (!visit || visit.verified) return;
+  await database.put('visits', { ...visit, verified: true, verifiedAt });
 }
 
 /** Sets (or replaces) your vote for a visited restaurant */

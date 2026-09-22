@@ -12,6 +12,7 @@ import { countedMcdonalds } from '@/utils/catalog';
 import { markerBackground, markerSymbol, popupHtml, verifiedSealMarkup } from '@/utils/mapMarkers';
 import { VisitDateSheet } from '@/components/VisitDateSheet';
 import { openDirections } from '@/utils/navigation';
+import { canOfferVerify } from '@/services/gpsCheck';
 import type { McDonald } from '@shared/types';
 
 const OSM_TILES = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -54,7 +55,7 @@ export function MapView() {
   const clusterGroup = useRef<L.MarkerClusterGroup | null>(null);
   const markers = useRef<Map<string, L.Marker>>(new Map());
   const userMarker = useRef<L.Marker | null>(null);
-  const { mcdonalds, visits, isVisited, toggleVisit, changeVisitDate, mapFocusId, clearMapFocus, userPosition, setSelectedTab, getVisitedCount } = useMcdonaldStore();
+  const { mcdonalds, visits, isVisited, requestToggle, verifyVisit, changeVisitDate, mapFocusId, clearMapFocus, userPosition, setSelectedTab, getVisitedCount } = useMcdonaldStore();
   const [query, setQuery] = useState('');
   const [dateFor, setDateFor] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<boolean | null>(null);
@@ -136,14 +137,24 @@ export function MapView() {
       });
 
       const marker = L.marker([mc.lat, mc.lon], { icon, mcVisited: visited } as L.MarkerOptions);
-      marker.bindPopup(popupHtml(mc, visited, visit?.visitedAt, visit?.verified));
+      marker.bindPopup(popupHtml(mc, visited, visit?.visitedAt, visit?.verified, canOfferVerify(visit, mc, userPosition)));
 
       marker.on('popupopen', () => {
         const btn = document.getElementById(`toggle-${mc.id}`);
         if (btn) {
           btn.onclick = (e) => {
             e.preventDefault();
-            toggleVisit(mc.id);
+            // Removing asks first (the sheet opens above the map); the popup closes so it does not sit over it
+            if (visited) marker.closePopup();
+            requestToggle(mc.id);
+          };
+        }
+        const verifyBtn = document.getElementById(`verify-${mc.id}`);
+        if (verifyBtn) {
+          verifyBtn.onclick = e => {
+            e.preventDefault();
+            marker.closePopup();
+            void verifyVisit(mc.id);
           };
         }
         const dateBtn = document.getElementById(`date-${mc.id}`);
@@ -165,7 +176,7 @@ export function MapView() {
       markers.current.set(mc.id, marker);
       clusterGroup.current!.addLayer(marker);
     });
-  }, [mcdonalds, visits, isVisited, toggleVisit, statusFilter]);
+  }, [mcdonalds, visits, isVisited, requestToggle, verifyVisit, statusFilter, userPosition]);
 
   // User position marker (outside the cluster group so it is always visible)
   useEffect(() => {
