@@ -111,7 +111,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 ## Verificato: filtro, diamante, Stats (22/09/2026)
 - [x] Filtro "Verificati" in Home e sulla mappa: Tutti / Da visitare / Visitati / Verificati (`StatusFilter.tsx`, regola unica `matchesStatus`)
 - [x] Regione di diamante: completa e ogni Mc **aperto** con visita verificata (i chiusi non contano, lì non si torna). Figurina azzurra iridescente con timbro "DIAMANTE", puntini blu, più luccichii; prima nell'album, contata a parte ("di diamante: N"); azzurra anche sulla mappa dell'Italia. Festa dedicata quando una regione diventa di diamante verificando l'ultimo Mc (volo da oro ad azzurro, fuochi color ghiaccio). Record `DIAMOND:<regione>` accanto a `REGION:`. Pulsante "Diamante" nel pannello di prova delle feste. Test in `scripts/test-passport.ts`
-- [x] Più spazio in Stats: "N verificate · X% delle visite" nella scheda rossa; nello scontrino colonna "VER." per regione e riga "DI CUI VERIFICATI"
+- [x] Più spazio in Stats: "N verificate · X% delle visite" nella scheda rossa; nello scontrino tre colonne per regione e nel totale: visitati (spunta verde), verificati (sigillo blu), totale
 - [x] Emoji 📍 e 🔎 rimesse nei titoli della Home (stesso cerchio giallo degli altri)
 - [ ] Da guardare sul telefono: figurina di diamante, festa di diamante, filtro a 4 voci (larghezza su schermi stretti), scontrino
 
