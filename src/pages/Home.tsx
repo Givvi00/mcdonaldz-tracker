@@ -123,10 +123,8 @@ export function Home() {
       </section>
 
       {/* Esplora tutti */}
-      <section ref={listRef} className="px-4 pt-2 border-t border-gray-200 dark:border-gray-800">
-        <SectionTitle icon="burger" className="mb-3 mt-4">
-          Esplora tutti
-        </SectionTitle>
+      <section ref={listRef} className="px-4">
+        <SectionTitle icon="burger">Esplora tutti</SectionTitle>
 
         {/* Stato: visitati / da visitare */}
         <StatusFilter value={filterVisited} onChange={setFilterVisited} className="mb-3" />
