@@ -59,7 +59,7 @@ export function Stats() {
   for (const r of summaries) tiers[r.region] = regionTier(r, wasComplete.has(r.region));
 
   return (
-    <div className="flex flex-col gap-6 pb-8 px-4 py-6">
+    <div className="flex flex-col gap-6 px-4 pt-4 pb-8">
       {/* Big Counter */}
       <div className="relative bg-gradient-to-br from-mc-red to-red-700 text-white rounded-3xl p-6 text-center shadow-lg shadow-red-900/20 overflow-hidden">
         <FoodPattern />

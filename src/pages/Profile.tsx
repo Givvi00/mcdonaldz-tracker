@@ -104,7 +104,7 @@ export function Profile() {
   };
 
   return (
-    <div className="flex flex-col gap-6 pb-8 px-4 py-6">
+    <div className="flex flex-col gap-6 px-4 pt-4 pb-8">
       {/* You: greeting and level */}
       <div className="relative overflow-hidden bg-gradient-to-br from-mc-red to-mc-red-dark text-white rounded-3xl p-6 text-center shadow-lg shadow-red-900/20">
         <FoodPattern />
