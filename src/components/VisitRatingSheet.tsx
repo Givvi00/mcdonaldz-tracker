@@ -36,15 +36,20 @@ interface Props {
   initial?: VisitRating;
   onSave: (rating: VisitRating) => void;
   onClose: () => void;
+  /** True right after marking a visit: sits above a level/region/stamp celebration's veil, so both are usable at once */
+  aboveCelebration?: boolean;
 }
 
 /** Bottom sheet to vote a visited restaurant on four quick categories, 1 to 5 stars each */
-export function VisitRatingSheet({ name, initial, onSave, onClose }: Props) {
+export function VisitRatingSheet({ name, initial, onSave, onClose, aboveCelebration }: Props) {
   const [rating, setRating] = useState<VisitRating>(initial ?? { cleanliness: 0, staff: 0, outdoorSpace: 0, speed: 0 });
   const valid = CATEGORIES.every(c => rating[c.key] > 0);
 
   return (
-    <div className="fixed inset-0 z-[2100] flex items-end justify-center bg-black/40" onClick={onClose}>
+    <div
+      className={`fixed inset-0 ${aboveCelebration ? 'z-[2600]' : 'z-[2100]'} flex items-end justify-center bg-black/40`}
+      onClick={onClose}
+    >
       <div
         className="w-full max-w-lg bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl border-t border-gray-200 dark:border-gray-800 animate-[toast-in_0.25s_ease-out] px-5 pt-4 pb-6"
         onClick={e => e.stopPropagation()}

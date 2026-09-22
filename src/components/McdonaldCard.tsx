@@ -124,8 +124,8 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
         </div>
         <div className="flex flex-col items-end gap-2 flex-shrink-0">
           {visit?.verified ? (
-            <div title="Visita verificata col GPS" className="drop-shadow-sm">
-              <VerifiedBadge size={32} />
+            <div title="Visita verificata col GPS">
+              <VerifiedBadge size={34} />
             </div>
           ) : (
             <div

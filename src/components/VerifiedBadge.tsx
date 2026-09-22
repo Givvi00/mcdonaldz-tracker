@@ -1,3 +1,5 @@
+import { useId } from 'react';
+
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
@@ -5,7 +7,7 @@ const prefersReducedMotion = () =>
 const TEETH = 16;
 const OUTER_R = 17;
 const INNER_R = 14;
-const RING_PATH = (() => {
+export const RING_PATH = (() => {
   const pts: string[] = [];
   for (let i = 0; i < TEETH * 2; i++) {
     const r = i % 2 === 0 ? OUTER_R : INNER_R;
@@ -17,28 +19,65 @@ const RING_PATH = (() => {
   return pts.join(' ') + ' Z';
 })();
 
+const SPARKLES = [
+  { x: 5, y: 8, size: 3.2, delay: 0 },
+  { x: 34, y: 30, size: 2.6, delay: 0.9 },
+];
+
+function Sparkle({ x, y, size, delay, still }: { x: number; y: number; size: number; delay: number; still: boolean }) {
+  return (
+    <path
+      d={`M${x} ${y - size}C${x + size * 0.1} ${y - size * 0.25} ${x + size * 0.25} ${y - size * 0.1} ${x + size} ${y}C${x + size * 0.25} ${y + size * 0.1} ${x + size * 0.1} ${y + size * 0.25} ${x} ${y + size}C${x - size * 0.1} ${y + size * 0.25} ${x - size * 0.25} ${y + size * 0.1} ${x - size} ${y}C${x - size * 0.25} ${y - size * 0.1} ${x - size * 0.1} ${y - size * 0.25} ${x} ${y - size}Z`}
+      fill="#EAF4FF"
+    >
+      {!still && (
+        <animate attributeName="opacity" values="0;1;0" dur="2.4s" begin={`${delay}s`} repeatCount="indefinite" />
+      )}
+    </path>
+  );
+}
+
 /**
  * A little "verified" seal for a visit confirmed by the phone's own GPS at the moment you marked it: a slowly
- * spinning knurled coin edge (like a wax seal) around a plain checkmark, which stays upright.
+ * spinning knurled coin edge (like a wax seal), a soft blue glow behind it and a couple of sparkles, around a
+ * plain checkmark that stays upright.
  */
-export function VerifiedBadge({ size = 32 }: { size?: number }) {
+export function VerifiedBadge({ size = 34 }: { size?: number }) {
   const still = prefersReducedMotion();
+  const uid = useId().replace(/:/g, '');
   return (
-    <svg viewBox="0 0 40 40" width={size} height={size} role="img" aria-label="Visita verificata col GPS">
+    <svg
+      viewBox="0 0 40 40"
+      width={size}
+      height={size}
+      role="img"
+      aria-label="Visita verificata col GPS"
+      style={{ overflow: 'visible', filter: `drop-shadow(0 1px 3px rgba(15,52,122,.55)) drop-shadow(0 0 6px rgba(59,130,246,.55))` }}
+    >
       <defs>
-        <linearGradient id="verified-grad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#7DB8FF" />
-          <stop offset="0.55" stopColor="#3B82F6" />
-          <stop offset="1" stopColor="#1D4ED8" />
+        <linearGradient id={`verified-grad-${uid}`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#9DCCFF" />
+          <stop offset="0.5" stopColor="#3B82F6" />
+          <stop offset="1" stopColor="#1541A8" />
         </linearGradient>
+        <radialGradient id={`verified-glow-${uid}`}>
+          <stop offset="0" stopColor="#7DB8FF" stopOpacity=".65" />
+          <stop offset="1" stopColor="#7DB8FF" stopOpacity="0" />
+        </radialGradient>
       </defs>
+      <circle cx="20" cy="20" r="19" fill={`url(#verified-glow-${uid})`} />
       <g>
-        <path d={RING_PATH} fill="url(#verified-grad)" stroke="#12327A" strokeWidth="0.6" strokeLinejoin="round" />
+        <path d={RING_PATH} fill={`url(#verified-grad-${uid})`} stroke="#0C2A66" strokeWidth="0.6" strokeLinejoin="round" />
         {!still && (
-          <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="9s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="7s" repeatCount="indefinite" />
         )}
       </g>
-      <circle cx="20" cy="20" r="12.5" fill="url(#verified-grad)" stroke="#fff" strokeWidth="2" />
+      {SPARKLES.map((s, i) => (
+        <Sparkle key={i} {...s} still={still} />
+      ))}
+      <circle cx="20" cy="20" r="12.5" fill={`url(#verified-grad-${uid})`} stroke="#fff" strokeWidth="2" />
+      {/* a glossy highlight across the top, like a polished stone */}
+      <path d="M12.72,13.89 A9.5,9.5 0 0 1 27.28,13.89" fill="none" stroke="#fff" strokeOpacity=".4" strokeWidth="1.6" strokeLinecap="round" />
       <path d="M14 20.3L18 24.3L26.5 15" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );

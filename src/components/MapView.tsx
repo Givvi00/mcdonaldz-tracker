@@ -9,7 +9,7 @@ import { StatusFilter } from '@/components/StatusFilter';
 import { FoodIcon } from '@/components/FoodIcon';
 import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds } from '@/utils/catalog';
-import { markerBackground, markerSymbol, popupHtml } from '@/utils/mapMarkers';
+import { markerBackground, markerSymbol, popupHtml, verifiedSealMarkup } from '@/utils/mapMarkers';
 import { VisitDateSheet } from '@/components/VisitDateSheet';
 import { openDirections } from '@/utils/navigation';
 import type { McDonald } from '@shared/types';
@@ -127,7 +127,7 @@ export function MapView() {
             </div>
             ${
               visit?.verified
-                ? `<span style="position: absolute; top: -3px; right: -3px; width: 14px; height: 14px; border-radius: 50%; background: #3b82f6; color: white; font-size: 9px; display: flex; align-items: center; justify-content: center; border: 2px solid white;">✓</span>`
+                ? `<span style="position: absolute; top: -5px; right: -5px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4));">${verifiedSealMarkup(mc.id, 17)}</span>`
                 : ''
             }
           </div>
