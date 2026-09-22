@@ -16,6 +16,8 @@ import type { McDonald } from '@shared/types';
 
 const OSM_TILES = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const TILE_ATTRIBUTION = '© OpenStreetMap contributors';
+/** Box of a verified marker: its seal then measures about 33 px, a little more than the 30 px plain markers */
+const SEAL_BOX = 36;
 
 function clusterIcon(cluster: L.MarkerCluster): L.DivIcon {
   const children = cluster.getAllChildMarkers();
@@ -106,10 +108,11 @@ export function MapView() {
       // A closed restaurant only stays on the map if you visited it
       if (!mc.opened && !visited) return;
       if (statusFilter !== null && visited !== statusFilter) return;
-      // A verified visit gets its own marker (the seal), not a plain circle with a badge stuck on the side
+      // A verified visit gets its own marker (the seal), not a plain circle with a badge stuck on the side. The seal's
+      // teeth end inside its box, so the box is bigger than the 30 px circles for the seal to look a touch larger
       const icon = L.divIcon({
         html: visit?.verified
-          ? `<div style="width: 30px; height: 30px; cursor: pointer; filter: drop-shadow(0 2px 4px rgba(0,0,0,.4));">${verifiedSealMarkup(mc.id, 30)}</div>`
+          ? `<div style="width: ${SEAL_BOX}px; height: ${SEAL_BOX}px; cursor: pointer; filter: drop-shadow(0 2px 4px rgba(0,0,0,.4));">${verifiedSealMarkup(mc.id, SEAL_BOX)}</div>`
           : `
           <div style="
             background: ${markerBackground(mc, visited)};
@@ -128,7 +131,7 @@ export function MapView() {
             ${markerSymbol(mc, visited)}
           </div>
         `,
-        iconSize: [30, 30],
+        iconSize: visit?.verified ? [SEAL_BOX, SEAL_BOX] : [30, 30],
         className: '',
       });
 
