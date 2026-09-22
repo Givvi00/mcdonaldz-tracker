@@ -106,30 +106,26 @@ export function MapView() {
       // A closed restaurant only stays on the map if you visited it
       if (!mc.opened && !visited) return;
       if (statusFilter !== null && visited !== statusFilter) return;
+      // A verified visit gets its own marker (the seal), not a plain circle with a badge stuck on the side
       const icon = L.divIcon({
-        html: `
-          <div style="position: relative; width: 30px; height: 30px;">
-            <div style="
-              background: ${markerBackground(mc, visited)};
-              color: white;
-              border-radius: 50%;
-              width: 30px;
-              height: 30px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 15px;
-              border: 2px solid white;
-              box-shadow: 0 2px 6px rgba(0,0,0,0.35);
-              cursor: pointer;
-            ">
-              ${markerSymbol(mc, visited)}
-            </div>
-            ${
-              visit?.verified
-                ? `<span style="position: absolute; top: -5px; right: -5px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4));">${verifiedSealMarkup(mc.id, 17)}</span>`
-                : ''
-            }
+        html: visit?.verified
+          ? `<div style="width: 30px; height: 30px; cursor: pointer; filter: drop-shadow(0 2px 4px rgba(0,0,0,.4));">${verifiedSealMarkup(mc.id, 30)}</div>`
+          : `
+          <div style="
+            background: ${markerBackground(mc, visited)};
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+            cursor: pointer;
+          ">
+            ${markerSymbol(mc, visited)}
           </div>
         `,
         iconSize: [30, 30],

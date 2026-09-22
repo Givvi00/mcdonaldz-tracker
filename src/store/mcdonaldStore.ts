@@ -164,6 +164,8 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   },
 
   changeVisitDate: async (mcdonaldId: string, visitedAt: number) => {
+    // A verified visit is proof of exactly when you were there: changing the date would defeat the point
+    if (get().visits.find(v => v.mcdonaldId === mcdonaldId)?.verified) return;
     await setVisitDate(mcdonaldId, visitedAt);
     set({ visits: await getVisits() });
   },

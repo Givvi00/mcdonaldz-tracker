@@ -5,8 +5,8 @@ const prefersReducedMotion = () =>
 
 // A coin-edge ring (knurled, like a wax seal) around the centre, built once as a plain path string
 const TEETH = 16;
-const OUTER_R = 17;
-const INNER_R = 14;
+const OUTER_R = 18.5;
+const INNER_R = 16;
 export const RING_PATH = (() => {
   const pts: string[] = [];
   for (let i = 0; i < TEETH * 2; i++) {
@@ -42,7 +42,7 @@ function Sparkle({ x, y, size, delay, still }: { x: number; y: number; size: num
  * spinning knurled coin edge (like a wax seal), a soft blue glow behind it and a couple of sparkles, around a
  * plain checkmark that stays upright.
  */
-export function VerifiedBadge({ size = 34 }: { size?: number }) {
+export function VerifiedBadge({ size = 38 }: { size?: number }) {
   const still = prefersReducedMotion();
   const uid = useId().replace(/:/g, '');
   return (
@@ -65,7 +65,7 @@ export function VerifiedBadge({ size = 34 }: { size?: number }) {
           <stop offset="1" stopColor="#7DB8FF" stopOpacity="0" />
         </radialGradient>
       </defs>
-      <circle cx="20" cy="20" r="19" fill={`url(#verified-glow-${uid})`} />
+      <circle cx="20" cy="20" r="20" fill={`url(#verified-glow-${uid})`} />
       <g>
         <path d={RING_PATH} fill={`url(#verified-grad-${uid})`} stroke="#0C2A66" strokeWidth="0.6" strokeLinejoin="round" />
         {!still && (
@@ -75,9 +75,9 @@ export function VerifiedBadge({ size = 34 }: { size?: number }) {
       {SPARKLES.map((s, i) => (
         <Sparkle key={i} {...s} still={still} />
       ))}
-      <circle cx="20" cy="20" r="12.5" fill={`url(#verified-grad-${uid})`} stroke="#fff" strokeWidth="2" />
+      <circle cx="20" cy="20" r="15" fill={`url(#verified-grad-${uid})`} stroke="#fff" strokeWidth="2" />
       {/* a glossy highlight across the top, like a polished stone */}
-      <path d="M12.72,13.89 A9.5,9.5 0 0 1 27.28,13.89" fill="none" stroke="#fff" strokeOpacity=".4" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M11.19,12.61 A11.5,11.5 0 0 1 28.81,12.61" fill="none" stroke="#fff" strokeOpacity=".4" strokeWidth="1.8" strokeLinecap="round" />
       <path d="M14 20.3L18 24.3L26.5 15" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );

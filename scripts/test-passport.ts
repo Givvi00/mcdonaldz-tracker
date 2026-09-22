@@ -34,6 +34,8 @@ const visit = (m: McDonald, when = new Date(2026, 5, 10, 13, 0).getTime()): Visi
   mcdonaldId: m.id,
   visitedAt: when,
 });
+/** A visit the GPS itself confirmed: the only kind that counts for the stamps that depend on exactly when it happened */
+const verified = (m: McDonald, when?: number): Visit => ({ ...visit(m, when), verified: true });
 const done = (list: McDonald[], visits: Visit[], id: string) => {
   const p = getAchievementProgress(list, visits)[id];
   return p.target > 0 && p.current >= p.target;
@@ -126,36 +128,40 @@ test('rarità: un chiuso visitato conta, uno mai visitato no; pioniere solo entr
   assert.ok(!done([closed, open], [visit(open)], 'BEFORE_CLOSING'));
 
   const fresh = mc({ addedAt: '2026-06-01' });
-  assert.ok(done([fresh], [visit(fresh, new Date(2026, 5, 10, 12).getTime())], 'PIONEER'));
-  assert.ok(!done([fresh], [visit(fresh, new Date(2026, 8, 10, 12).getTime())], 'PIONEER'));
-  assert.ok(!done([open], [visit(open)], 'PIONEER'));
+  assert.ok(done([fresh], [verified(fresh, new Date(2026, 5, 10, 12).getTime())], 'PIONEER'));
+  assert.ok(!done([fresh], [verified(fresh, new Date(2026, 8, 10, 12).getTime())], 'PIONEER'));
+  assert.ok(!done([open], [verified(open)], 'PIONEER'));
 });
 
 test('segreti: notte, Ferragosto, due nello stesso giorno, il 77°', () => {
   const list = Array.from({ length: 80 }, () => mc({ city: 'Roma' }));
-  assert.ok(done(list, [visit(list[0], new Date(2026, 5, 10, 3, 0).getTime())], 'NIGHT_OWL'));
-  assert.ok(!done(list, [visit(list[0], new Date(2026, 5, 10, 5, 0).getTime())], 'NIGHT_OWL'));
-  assert.ok(done(list, [visit(list[0], new Date(2026, 7, 15, 13, 0).getTime())], 'FERRAGOSTO'));
-  assert.ok(!done(list, [visit(list[0], new Date(2026, 7, 16, 13, 0).getTime())], 'FERRAGOSTO'));
+  assert.ok(done(list, [verified(list[0], new Date(2026, 5, 10, 3, 0).getTime())], 'NIGHT_OWL'));
+  assert.ok(!done(list, [verified(list[0], new Date(2026, 5, 10, 5, 0).getTime())], 'NIGHT_OWL'));
+  assert.ok(done(list, [verified(list[0], new Date(2026, 7, 15, 13, 0).getTime())], 'FERRAGOSTO'));
+  assert.ok(!done(list, [verified(list[0], new Date(2026, 7, 16, 13, 0).getTime())], 'FERRAGOSTO'));
   assert.ok(
-    done(list, [visit(list[0], new Date(2026, 5, 10, 9).getTime()), visit(list[1], new Date(2026, 5, 10, 20).getTime())], 'DOUBLE'),
+    done(list, [verified(list[0], new Date(2026, 5, 10, 9).getTime()), verified(list[1], new Date(2026, 5, 10, 20).getTime())], 'DOUBLE'),
   );
   assert.ok(
-    !done(list, [visit(list[0], new Date(2026, 5, 10, 9).getTime()), visit(list[1], new Date(2026, 5, 11, 9).getTime())], 'DOUBLE'),
+    !done(list, [verified(list[0], new Date(2026, 5, 10, 9).getTime()), verified(list[1], new Date(2026, 5, 11, 9).getTime())], 'DOUBLE'),
   );
+  // the 77th restaurant is just a count: it does not need to be verified
   assert.ok(!done(list, list.slice(0, 76).map(m => visit(m)), 'LUCKY_77'));
   assert.ok(done(list, list.slice(0, 77).map(m => visit(m)), 'LUCKY_77'));
 });
 
-test('una visita con la data cambiata a mano non vale per i timbri a orario', () => {
+test('solo le visite verificate col GPS valgono per i timbri a orario', () => {
   const list = Array.from({ length: 3 }, () => mc({ addedAt: '2026-06-01' }));
-  const edited = (m: McDonald, when: number): Visit => ({ ...visit(m, when), dateEdited: true });
+  const edited = (m: McDonald, when: number): Visit => ({ ...verified(m, when), verified: false, dateEdited: true });
+  // a plain visit, marked without the GPS confirming you were there, at the right moment for each stamp
+  assert.ok(!done(list, [visit(list[0], new Date(2026, 5, 10, 3, 0).getTime())], 'NIGHT_OWL'));
+  assert.ok(!done(list, [visit(list[0], new Date(2026, 7, 15, 13, 0).getTime())], 'FERRAGOSTO'));
+  assert.ok(!done(list, [visit(list[0], new Date(2026, 5, 10, 9).getTime()), visit(list[1], new Date(2026, 5, 10, 20).getTime())], 'DOUBLE'));
+  assert.ok(!done(list, [visit(list[0], new Date(2026, 5, 10, 12).getTime())], 'PIONEER'));
+  // a date changed by hand is never verified either, same result
   assert.ok(!done(list, [edited(list[0], new Date(2026, 5, 10, 3, 0).getTime())], 'NIGHT_OWL'));
-  assert.ok(!done(list, [edited(list[0], new Date(2026, 7, 15, 13, 0).getTime())], 'FERRAGOSTO'));
-  assert.ok(!done(list, [edited(list[0], new Date(2026, 5, 10, 9).getTime()), visit(list[1], new Date(2026, 5, 10, 20).getTime())], 'DOUBLE'));
-  assert.ok(!done(list, [edited(list[0], new Date(2026, 5, 10, 12).getTime())], 'PIONEER'));
-  // the stamps that do not depend on the date still count it
-  assert.ok(done(list, [edited(list[0], new Date(2026, 5, 10, 12).getTime())], 'FIRST_STAMP'));
+  // the stamps that do not depend on the date still count either of these
+  assert.ok(done(list, [visit(list[0], new Date(2026, 5, 10, 12).getTime())], 'FIRST_STAMP'));
 });
 
 test('critico gastronomico: conta i ristoranti votati, non i timbri già ottenuti', () => {

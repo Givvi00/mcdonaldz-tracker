@@ -124,8 +124,9 @@ export function getAchievementProgress(mcdonalds: McDonald[], visits: Visit[]): 
   const visitedRegions = new Set(visitedMcs.map(mc => mc.region));
   const islands = (visitedRegions.has('Sicilia') ? 1 : 0) + (visitedRegions.has('Sardegna') ? 1 : 0);
 
-  // Stamps that depend on when you were there only count visits marked on the spot, not the ones whose date was edited
-  const live = visits.filter(v => !v.dateEdited);
+  // Stamps that depend on exactly when you were there only count visits the GPS itself confirmed, not ones you just
+  // said happened (whatever the time on them says, it could be edited or simply typed in later from the couch)
+  const live = visits.filter(v => v.verified);
   const pioneer = live.some(v => {
     const mc = byId.get(v.mcdonaldId);
     const added = mc?.addedAt ? Date.parse(mc.addedAt) : NaN;

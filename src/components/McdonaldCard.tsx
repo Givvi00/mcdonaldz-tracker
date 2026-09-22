@@ -96,16 +96,22 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{mc.address}</p>
           {visit && (
             <div className="mt-2 flex flex-wrap gap-1.5">
-              <button
-                onClick={e => {
-                  e.stopPropagation();
-                  setEditingDate(true);
-                }}
-                className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-[0.7rem] font-semibold text-green-800 active:scale-95 dark:bg-green-900/40 dark:text-green-300"
-              >
-                📅 Visitato il {formatVisitDate(visit.visitedAt)}
-                <span className="opacity-60">· Cambia</span>
-              </button>
+              {visit.verified ? (
+                <span className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2.5 py-1 text-[0.7rem] font-semibold text-blue-800 dark:bg-blue-950/40 dark:text-blue-300">
+                  📅 Visitato il {formatVisitDate(visit.visitedAt)}
+                </span>
+              ) : (
+                <button
+                  onClick={e => {
+                    e.stopPropagation();
+                    setEditingDate(true);
+                  }}
+                  className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-[0.7rem] font-semibold text-green-800 active:scale-95 dark:bg-green-900/40 dark:text-green-300"
+                >
+                  📅 Visitato il {formatVisitDate(visit.visitedAt)}
+                  <span className="opacity-60">· Cambia</span>
+                </button>
+              )}
               <button
                 onClick={e => {
                   e.stopPropagation();
@@ -125,7 +131,7 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
         <div className="flex flex-col items-end gap-2 flex-shrink-0">
           {visit?.verified ? (
             <div title="Visita verificata col GPS">
-              <VerifiedBadge size={34} />
+              <VerifiedBadge size={38} />
             </div>
           ) : (
             <div

@@ -91,6 +91,9 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 ## Rifiniture del 22/09/2026
 - [x] Il voto compare subito, insieme alla festa della visita appena segnata, non dopo: `AutoRatingPrompt.tsx` mostra la scheda nello stesso istante in cui parte la festa (store `pendingRatingFor`), sopra il velo di livelli/regioni/timbri (z-index più alto), così restano usabili insieme invece di aspettare che la festa grande finisca. Il pulsante "Vota"/"★ media" sulla card resta per cambiare il voto in un secondo momento
 - [x] Distintivo "verificato col GPS", seconda versione, più prezioso: alone blu sfumato dietro l'anello, riflesso lucido sulla spunta, due lucine che pulsano (`VerifiedBadge.tsx`, id univoci con `useId` per non confliggere quando ce ne sono tanti in lista). Anche sulla mappa (marker e popup) ha lo stesso sigillo a sfumatura, senza rotazione per restare leggero con tanti marker (`verifiedSealMarkup` in `mapMarkers.ts`)
+- [x] Terzo giro sul verificato: sigillo più pieno (anello ~35 px contro i 32 del cerchio verde, prima sembrava più piccolo); sulla mappa il sigillo **sostituisce** l'intero marker invece di stare in un angolo; nel popup una sola pillola blu "Visitato il …" col sigillo, senza "Cambia"
+- [x] Una visita verificata **non può cambiare data** (card, popup e anche lo store la rifiuta): la data è la prova del GPS
+- [x] I timbri a orario (Nottambulo, Ferragosto, Doppietta, Pioniere) valgono **solo con visite verificate col GPS**, non più con qualsiasi visita a data non modificata. Fortunello (77°) resta un semplice conteggio. Test aggiornati in `scripts/test-passport.ts`
 
 ## Account, community e onboarding (idea del 22/09/2026, da capire con calma)
 - [ ] **Utenze/account**: oggi non esistono, ogni telefono ha i propri dati locali senza login. Serve per: community tra amici, seguire altri utenti, classifiche/gare, vedere il livello degli amici. Grosso cambio di architettura, da progettare a parte
