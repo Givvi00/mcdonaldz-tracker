@@ -158,6 +158,14 @@ test('una visita con la data cambiata a mano non vale per i timbri a orario', ()
   assert.ok(done(list, [edited(list[0], new Date(2026, 5, 10, 12).getTime())], 'FIRST_STAMP'));
 });
 
+test('critico gastronomico: conta i ristoranti votati, non i timbri già ottenuti', () => {
+  const list = Array.from({ length: 12 }, () => mc());
+  const visits = list.map(m => visit(m));
+  const rated = (v: Visit): Visit => ({ ...v, rating: { cleanliness: 5, staff: 4, outdoorSpace: 3, speed: 5 } });
+  assert.ok(!done(list, visits.map((v, i) => (i < 9 ? rated(v) : v)), 'CRITIC'));
+  assert.ok(done(list, visits.map((v, i) => (i < 10 ? rated(v) : v)), 'CRITIC'));
+});
+
 test('regioni: completa quando ogni ristorante che conta è visitato; il chiuso mai visitato non blocca', () => {
   const a = mc({ region: 'Molise' });
   const b = mc({ region: 'Molise' });

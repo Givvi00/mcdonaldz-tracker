@@ -6,6 +6,7 @@ import { isNewlyAdded } from '@/utils/catalog';
 import { shortMcName } from '@/utils/format';
 import { restaurantKind } from '@/utils/foodTheme';
 import { VisitDateSheet, formatVisitDate } from '@/components/VisitDateSheet';
+import { VisitRatingSheet, averageRating } from '@/components/VisitRatingSheet';
 
 interface Props {
   mc: McDonald;
@@ -14,8 +15,9 @@ interface Props {
 }
 
 export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
-  const { isVisited, toggleVisit, focusOnMap, visits, changeVisitDate } = useMcdonaldStore();
+  const { isVisited, toggleVisit, focusOnMap, visits, changeVisitDate, rateVisit } = useMcdonaldStore();
   const [editingDate, setEditingDate] = useState(false);
+  const [editingRating, setEditingRating] = useState(false);
   const visited = isVisited(mc.id);
   const visit = visited ? visits.find(v => v.mcdonaldId === mc.id) : undefined;
   const kind = restaurantKind(mc);
@@ -92,16 +94,31 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
           <p className="text-xs text-gray-500 dark:text-gray-400">{mc.city}, {mc.region}</p>
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{mc.address}</p>
           {visit && (
-            <button
-              onClick={e => {
-                e.stopPropagation();
-                setEditingDate(true);
-              }}
-              className="mt-2 inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-[0.7rem] font-semibold text-green-800 active:scale-95 dark:bg-green-900/40 dark:text-green-300"
-            >
-              📅 Visitato il {formatVisitDate(visit.visitedAt)}
-              <span className="opacity-60">· Cambia</span>
-            </button>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                  setEditingDate(true);
+                }}
+                className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-[0.7rem] font-semibold text-green-800 active:scale-95 dark:bg-green-900/40 dark:text-green-300"
+              >
+                📅 Visitato il {formatVisitDate(visit.visitedAt)}
+                <span className="opacity-60">· Cambia</span>
+              </button>
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                  setEditingRating(true);
+                }}
+                className="inline-flex items-center gap-1 rounded-full bg-mc-yellow/25 px-2.5 py-1 text-[0.7rem] font-semibold text-yellow-800 active:scale-95 dark:bg-mc-yellow/15 dark:text-mc-yellow"
+              >
+                {visit.rating ? (
+                  <>★ {averageRating(visit.rating).toFixed(1)}</>
+                ) : (
+                  <>☆ Vota</>
+                )}
+              </button>
+            </div>
           )}
         </div>
         <div className="flex flex-col items-end gap-2 flex-shrink-0">
@@ -126,6 +143,14 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
         visitedAt={visit.visitedAt}
         onSave={ms => void changeVisitDate(mc.id, ms)}
         onClose={() => setEditingDate(false)}
+      />
+    )}
+    {editingRating && visit && (
+      <VisitRatingSheet
+        name={mc.name}
+        initial={visit.rating}
+        onSave={rating => void rateVisit(mc.id, rating)}
+        onClose={() => setEditingRating(false)}
       />
     )}
     </>

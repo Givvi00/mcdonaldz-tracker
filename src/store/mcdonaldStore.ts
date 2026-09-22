@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import type { McDonald, Visit, User } from '@shared/types';
+import type { McDonald, Visit, User, VisitRating } from '@shared/types';
 import { pickInitialCatalog, type CatalogInfo } from '@/services/catalogBoot';
-import { getOrCreateUser, getVisits, addVisit, removeVisit, setUserName, setVisitDate } from '@/services/db';
+import { getOrCreateUser, getVisits, addVisit, removeVisit, setUserName, setVisitDate, setVisitRating } from '@/services/db';
 import { checkAndUnlockAchievements } from '@/services/achievements';
 import { syncRegionCompletions } from '@/services/regions';
 import { distanceKm } from '@/utils/geo';
@@ -48,6 +48,8 @@ interface AppStore {
   toggleVisit: (mcdonaldId: string) => Promise<void>;
   /** Sets the day of an existing visit (a stamp is never lost by changing a date, so nothing is celebrated) */
   changeVisitDate: (mcdonaldId: string, visitedAt: number) => Promise<void>;
+  /** Sets your vote for a visited restaurant (can unlock the "Critico gastronomico" stamp) */
+  rateVisit: (mcdonaldId: string, rating: VisitRating) => Promise<void>;
   clearUnlocked: () => void;
   openAchievements: (types: string[]) => void;
   clearFocusedAchievement: () => void;
@@ -149,6 +151,16 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   changeVisitDate: async (mcdonaldId: string, visitedAt: number) => {
     await setVisitDate(mcdonaldId, visitedAt);
     set({ visits: await getVisits() });
+  },
+
+  rateVisit: async (mcdonaldId: string, rating: VisitRating) => {
+    const { user, mcdonalds } = get();
+    if (!user) return;
+    await setVisitRating(mcdonaldId, rating);
+    const updatedVisits = await getVisits();
+    set({ visits: updatedVisits });
+    const unlocked = await checkAndUnlockAchievements(user.id, mcdonalds, updatedVisits);
+    if (unlocked.length > 0) get().enqueueCelebrations([{ id: Date.now(), kind: 'stamp', stamps: unlocked }]);
   },
 
   enqueueCelebrations: (events) => {

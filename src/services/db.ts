@@ -1,5 +1,5 @@
 import { openDB, DBSchema, IDBPDatabase, IDBPTransaction, StoreNames } from 'idb';
-import type { Visit, User, Achievement } from '@shared/types';
+import type { Visit, User, Achievement, VisitRating } from '@shared/types';
 
 interface AppDB extends DBSchema {
   users: {
@@ -213,6 +213,14 @@ export async function setVisitDate(mcdonaldId: string, visitedAt: number): Promi
   const visit = await database.getFromIndex('visits', 'by-mcdonaldId', mcdonaldId);
   if (!visit) return;
   await database.put('visits', { ...visit, visitedAt, dateEdited: true });
+}
+
+/** Sets (or replaces) your vote for a visited restaurant */
+export async function setVisitRating(mcdonaldId: string, rating: VisitRating): Promise<void> {
+  const database = await initDB();
+  const visit = await database.getFromIndex('visits', 'by-mcdonaldId', mcdonaldId);
+  if (!visit) return;
+  await database.put('visits', { ...visit, rating });
 }
 
 export async function getVisits(): Promise<Visit[]> {

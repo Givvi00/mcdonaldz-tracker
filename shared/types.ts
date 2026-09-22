@@ -14,12 +14,21 @@ export interface McDonald {
   addedAt?: string;
 }
 
+/** Your own vote for a visited restaurant, 1 to 5 on each */
+export interface VisitRating {
+  cleanliness: number;
+  staff: number;
+  outdoorSpace: number;
+  speed: number;
+}
+
 export interface Visit {
   id: string;
   mcdonaldId: string;
   visitedAt: number;
   /** The date was changed by hand: the time of day is no longer reliable, so time-based stamps ignore this visit */
   dateEdited?: boolean;
+  rating?: VisitRating;
   notes?: string;
 }
 
