@@ -1,4 +1,5 @@
 import { FoodIcon } from '@/components/FoodIcon';
+import { VerifiedBadge } from '@/components/VerifiedBadge';
 
 interface Row {
   region: string;
@@ -17,6 +18,8 @@ interface Props {
 }
 
 const PAPER = '#FFFFFF';
+/** One number column: visited (green), verified (blue), total */
+const COL = 'inline-flex w-8 flex-shrink-0 justify-end tabular-nums';
 
 /** The visits as a till receipt: one line per region visited, a total, the level. The paper stays light in dark mode, like real paper. */
 export function Receipt({ name, rows, visited, total, verified = 0 }: Props) {
@@ -38,37 +41,34 @@ export function Receipt({ name, rows, visited, total, verified = 0 }: Props) {
             <p className="py-2 text-center text-gray-500">Nessun articolo. Ordina il primo! <FoodIcon name="fries" size={16} /></p>
           ) : (
             <ul className="space-y-1">
-              <li className="flex justify-between text-[0.65rem] font-bold tracking-wide text-gray-500">
-                <span>REGIONE</span>
-                <span>
-                  VISITATI <span className="inline-block w-8 text-right">VER.</span>
+              <li className="flex items-center gap-1 text-[0.65rem] font-bold tracking-wide text-gray-500">
+                <span className="flex-1">REGIONE</span>
+                <span className={COL} title="Visitati" aria-label="Visitati">
+                  <span className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-green-600 text-[0.55rem] text-white">✓</span>
                 </span>
+                <span className={COL} title="Verificati" aria-label="Verificati">
+                  <VerifiedBadge size={16} />
+                </span>
+                <span className={COL}>TOT</span>
               </li>
               {lines.map(r => (
                 <li key={r.region} className="flex items-baseline gap-1">
-                  <span className="truncate">{r.region}</span>
+                  <span className="min-w-0 truncate">{r.region}</span>
                   <span className="flex-1 border-b border-dotted border-gray-400 translate-y-[-3px]" />
-                  <span className="tabular-nums whitespace-nowrap">
-                    {r.visited} su {r.total}
-                    <span className="inline-block w-8 text-right text-blue-700">{r.verified ? r.verified : '·'}</span>
-                  </span>
+                  <span className={`${COL} text-green-700`}>{r.visited}</span>
+                  <span className={`${COL} text-blue-700`}>{r.verified || '·'}</span>
+                  <span className={COL}>{r.total}</span>
                 </li>
               ))}
             </ul>
           )}
           <div className="my-3 border-t-2 border-dashed border-gray-300" />
-          <p className="flex justify-between font-bold">
-            <span>TOTALE VISITATI</span>
-            <span className="tabular-nums whitespace-nowrap">
-              {visited} su {total}
-            </span>
+          <p className="flex items-baseline gap-1 font-bold">
+            <span className="flex-1">TOTALE</span>
+            <span className={`${COL} text-green-700`}>{visited}</span>
+            <span className={`${COL} text-blue-700`}>{verified || '·'}</span>
+            <span className={COL}>{total}</span>
           </p>
-          {verified > 0 && (
-            <p className="flex justify-between text-blue-700">
-              <span>DI CUI VERIFICATI</span>
-              <span className="tabular-nums">{verified}</span>
-            </p>
-          )}
           <p className="mt-4 text-center text-[0.7rem] text-gray-500">Grazie e a presto! <FoodIcon name="fries" size={14} /></p>
         </div>
         {/* Torn edge */}
