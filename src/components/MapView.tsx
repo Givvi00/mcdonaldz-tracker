@@ -102,26 +102,34 @@ export function MapView() {
 
     mcdonalds.forEach((mc) => {
       const visited = isVisited(mc.id);
+      const visit = visits.find(v => v.mcdonaldId === mc.id);
       // A closed restaurant only stays on the map if you visited it
       if (!mc.opened && !visited) return;
       if (statusFilter !== null && visited !== statusFilter) return;
       const icon = L.divIcon({
         html: `
-          <div style="
-            background: ${markerBackground(mc, visited)};
-            color: white;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-            border: 2px solid white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.35);
-            cursor: pointer;
-          ">
-            ${markerSymbol(mc, visited)}
+          <div style="position: relative; width: 30px; height: 30px;">
+            <div style="
+              background: ${markerBackground(mc, visited)};
+              color: white;
+              border-radius: 50%;
+              width: 30px;
+              height: 30px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 15px;
+              border: 2px solid white;
+              box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+              cursor: pointer;
+            ">
+              ${markerSymbol(mc, visited)}
+            </div>
+            ${
+              visit?.verified
+                ? `<span style="position: absolute; top: -3px; right: -3px; width: 14px; height: 14px; border-radius: 50%; background: #3b82f6; color: white; font-size: 9px; display: flex; align-items: center; justify-content: center; border: 2px solid white;">✓</span>`
+                : ''
+            }
           </div>
         `,
         iconSize: [30, 30],
@@ -129,7 +137,7 @@ export function MapView() {
       });
 
       const marker = L.marker([mc.lat, mc.lon], { icon, mcVisited: visited } as L.MarkerOptions);
-      marker.bindPopup(popupHtml(mc, visited, visits.find(v => v.mcdonaldId === mc.id)?.visitedAt));
+      marker.bindPopup(popupHtml(mc, visited, visit?.visitedAt, visit?.verified));
 
       marker.on('popupopen', () => {
         const btn = document.getElementById(`toggle-${mc.id}`);

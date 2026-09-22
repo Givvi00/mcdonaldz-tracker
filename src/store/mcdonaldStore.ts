@@ -9,6 +9,9 @@ import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds, visitedIdSet } from '@/utils/catalog';
 import type { Coords, GeoStatus } from '@/hooks/useGeolocation';
 
+/** How close the phone's own position must be to a restaurant, the moment you mark it, to earn the GPS-verified badge */
+export const GPS_VERIFY_RADIUS_KM = 0.2;
+
 /** Something worth a celebration. A visit with nothing special is a light shower; the rest have their own show. */
 export type Celebration =
   | { id: number; kind: 'visit' }
@@ -115,7 +118,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   },
 
   toggleVisit: async (mcdonaldId: string) => {
-    const { user, visits } = get();
+    const { user, visits, mcdonalds, userPosition, locationStatus } = get();
     if (!user) return;
 
     const isVisited = visits.some(v => v.mcdonaldId === mcdonaldId);
@@ -124,7 +127,14 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     if (isVisited) {
       await removeVisit(mcdonaldId, user.id);
     } else {
-      await addVisit(mcdonaldId, user.id);
+      // Marked while the phone's own position says you are really there: worth the GPS-verified badge
+      const mc = mcdonalds.find(m => m.id === mcdonaldId);
+      const verified =
+        locationStatus === 'granted' &&
+        !!userPosition &&
+        !!mc &&
+        distanceKm(userPosition.lat, userPosition.lon, mc.lat, mc.lon) <= GPS_VERIFY_RADIUS_KM;
+      await addVisit(mcdonaldId, user.id, verified);
     }
 
     const updatedVisits = await getVisits();

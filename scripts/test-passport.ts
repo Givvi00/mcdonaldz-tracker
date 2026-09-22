@@ -166,6 +166,16 @@ test('critico gastronomico: conta i ristoranti votati, non i timbri già ottenut
   assert.ok(done(list, visits.map((v, i) => (i < 10 ? rated(v) : v)), 'CRITIC'));
 });
 
+test('sul posto: conta le visite verificate col GPS, non tocca livelli né regioni', () => {
+  const list = Array.from({ length: 26 }, () => mc());
+  const visits = list.map(m => visit(m));
+  const gps = (v: Visit): Visit => ({ ...v, verified: true });
+  assert.ok(!done(list, visits.map((v, i) => (i < 24 ? gps(v) : v)), 'GPS_VERIFIED'));
+  assert.ok(done(list, visits.map((v, i) => (i < 25 ? gps(v) : v)), 'GPS_VERIFIED'));
+  // le visite non verificate contano comunque per il resto (nessun cambio di livello/regione)
+  assert.equal(getAchievementProgress(list, visits.map(v => ({ ...v, verified: false }))).FIRST_STAMP.current, 1);
+});
+
 test('regioni: completa quando ogni ristorante che conta è visitato; il chiuso mai visitato non blocca', () => {
   const a = mc({ region: 'Molise' });
   const b = mc({ region: 'Molise' });

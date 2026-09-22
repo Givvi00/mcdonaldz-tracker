@@ -44,6 +44,7 @@ export function Stats() {
   const lastMc = latest ? mcdonalds.find(m => m.id === latest.mcdonaldId) : undefined;
   const lastVisit = latest && lastMc ? { city: lastMc.city, visitedAt: latest.visitedAt } : null;
   const percentage = totalMcdonalds > 0 ? Math.round((visitedCount / totalMcdonalds) * 100) : 0;
+  const verifiedCount = visits.filter(v => v.verified).length;
   const progress = getAchievementProgress(mcdonalds, visits);
   const summaries = regionSummaries(mcdonalds, visits);
   const unlockedIds = new Set(achievements.map(a => a.type));
@@ -69,6 +70,9 @@ export function Stats() {
             <p className="mt-1 text-xs opacity-80">
               Ultimo Mc: {lastVisit.city} · {new Date(lastVisit.visitedAt).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}
             </p>
+          )}
+          {verifiedCount > 0 && (
+            <p className="mt-1 text-xs opacity-80">🔵 {verifiedCount} verificate col GPS</p>
           )}
           <p className="text-2xl font-display font-bold mt-3">{percentage}%</p>
           <FoodProgressBar percentage={percentage} />

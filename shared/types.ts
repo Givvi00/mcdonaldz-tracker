@@ -28,6 +28,8 @@ export interface Visit {
   visitedAt: number;
   /** The date was changed by hand: the time of day is no longer reliable, so time-based stamps ignore this visit */
   dateEdited?: boolean;
+  /** True when the phone's own position was within GPS_VERIFY_RADIUS_KM of the restaurant the moment it was marked visited */
+  verified?: boolean;
   rating?: VisitRating;
   notes?: string;
 }

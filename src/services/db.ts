@@ -169,12 +169,13 @@ export async function setUserName(userId: string, name: string): Promise<User | 
   return updated;
 }
 
-export async function addVisit(mcdonaldId: string, userId: string): Promise<Visit> {
+export async function addVisit(mcdonaldId: string, userId: string, verified = false): Promise<Visit> {
   const database = await initDB();
   const visit: Visit = {
     id: 'visit_' + Date.now(),
     mcdonaldId,
     visitedAt: Date.now(),
+    ...(verified ? { verified: true } : {}),
   };
 
   await database.add('visits', visit);

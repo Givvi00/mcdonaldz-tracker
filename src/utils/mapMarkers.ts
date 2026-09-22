@@ -30,10 +30,13 @@ export function markerSymbol(_mc: McDonald, visited: boolean): string {
 }
 
 /** Content of the map popup. A closed restaurant shows a "Chiuso" badge and no directions button. */
-export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number): string {
+export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number, verified?: boolean): string {
+  const verifiedBadge = verified
+    ? `<span style="display: inline-block; margin-top: 6px; margin-left: 4px; padding: 3px 9px; border-radius: 999px; background: #dbeafe; color: #1d4ed8; font-size: 11px; font-weight: 600;">🔵 Verificata col GPS</span>`
+    : '';
   const visitDate =
     visited && visitedAt
-      ? `<button id="date-${mc.id}" style="margin-top: 6px; padding: 3px 9px; border: none; border-radius: 999px; background: #dcfce7; color: #166534; font-size: 11px; font-weight: 600; cursor: pointer;">📅 Visitato il ${new Date(visitedAt).toLocaleDateString('it-IT', { dateStyle: 'medium' })} · Cambia</button><br/>`
+      ? `<button id="date-${mc.id}" style="margin-top: 6px; padding: 3px 9px; border: none; border-radius: 999px; background: #dcfce7; color: #166534; font-size: 11px; font-weight: 600; cursor: pointer;">📅 Visitato il ${new Date(visitedAt).toLocaleDateString('it-IT', { dateStyle: 'medium' })} · Cambia</button>${verifiedBadge}<br/>`
       : '';
   const closedBadge = mc.opened
     ? ''
