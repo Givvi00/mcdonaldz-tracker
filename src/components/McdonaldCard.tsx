@@ -60,7 +60,7 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
         <button onClick={() => requestToggle(mc.id)} className="text-left p-3 pb-2 active:scale-[0.97] transition-transform">
           <div className="flex h-8 items-center justify-between mb-1.5">
             {visit?.verified ? (
-              <span title="Visita verificata col GPS" className="-ml-1">
+              <span title="Visita verificata: eri lì" className="-ml-1">
                 <VerifiedBadge size={34} />
               </span>
             ) : (
@@ -154,7 +154,7 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
           </div>
           <div className="flex flex-col items-end gap-2 flex-shrink-0">
             {visit?.verified ? (
-              <div title="Visita verificata col GPS">
+              <div title="Visita verificata: eri lì">
                 <VerifiedBadge size={38} />
               </div>
             ) : (

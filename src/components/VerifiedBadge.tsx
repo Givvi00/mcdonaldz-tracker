@@ -51,7 +51,7 @@ export function VerifiedBadge({ size = 38 }: { size?: number }) {
       width={size}
       height={size}
       role="img"
-      aria-label="Visita verificata col GPS"
+      aria-label="Visita verificata"
       style={{ overflow: 'visible', filter: `drop-shadow(0 1px 3px rgba(15,52,122,.55)) drop-shadow(0 0 6px rgba(59,130,246,.55))` }}
     >
       <defs>

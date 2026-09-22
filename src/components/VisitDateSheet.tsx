@@ -53,8 +53,8 @@ export function VisitDateSheet({ name, visitedAt, onSave, onClose }: Props) {
           className="w-full rounded-xl border-2 border-mc-yellow bg-white px-3 py-3 text-base font-semibold text-gray-800 dark:bg-gray-900 dark:text-gray-100"
         />
         <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-          I timbri legati all'orario (Nottambulo, Ferragosto, Doppietta, Pioniere) valgono solo per le visite verificate col GPS:
-          se torni lì, usa «Verifica ora».
+          I timbri legati all'orario (Nottambulo, Ferragosto, Doppietta, Pioniere) valgono solo per le visite verificate, cioè
+          segnate mentre eri lì: se ci torni, usa «Verifica ora».
         </p>
         <button
           disabled={!valid}

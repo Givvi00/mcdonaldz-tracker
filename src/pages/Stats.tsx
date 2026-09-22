@@ -74,7 +74,7 @@ export function Stats() {
           )}
           {verifiedCount > 0 && (
             <p className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-white/15 py-0.5 pl-0.5 pr-2.5 text-xs font-semibold">
-              <VerifiedBadge size={20} /> {verifiedCount} {verifiedCount === 1 ? 'verificata' : 'verificate'} col GPS
+              <VerifiedBadge size={20} /> {verifiedCount} {verifiedCount === 1 ? 'verificata' : 'verificate'}
             </p>
           )}
           <p className="text-2xl font-display font-bold mt-3">{percentage}%</p>

@@ -10,7 +10,7 @@ export function UnmarkConfirm() {
   const mc = mcdonalds.find(m => m.id === unmarkRequest);
   const visit = visits.find(v => v.mcdonaldId === unmarkRequest);
   if (!mc || !visit) return null;
-  const lost = [visit.verified && 'il sigillo del GPS', visit.rating && 'il tuo voto'].filter(Boolean).join(' e ');
+  const lost = [visit.verified && 'la verifica', visit.rating && 'il tuo voto'].filter(Boolean).join(' e ');
 
   return (
     <ConfirmSheet
@@ -20,7 +20,7 @@ export function UnmarkConfirm() {
       body={
         <>
           {lost ? `Perderai anche ${lost}.` : 'Potrai segnarla di nuovo quando vuoi.'}
-          {visit.verified && ' Per riavere il sigillo dovrai tornare lì.'}
+          {visit.verified && ' Per verificarla di nuovo dovrai tornare lì.'}
         </>
       }
       confirmLabel="Togli"

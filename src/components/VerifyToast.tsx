@@ -10,14 +10,14 @@ const SHOW_MS = 4500;
 function message(outcome: VerifyOutcome, name: string): { title: string; hint?: string } {
   switch (outcome.result) {
     case 'ok':
-      return { title: 'Visita verificata col GPS', hint: name };
+      return { title: 'Visita verificata', hint: `Eri davvero da ${name}` };
     case 'far':
       return {
         title: `Sei a ${formatDistance(outcome.distanceM / 1000)} da ${name}`,
         hint: `Per verificarla devi essere entro ${GPS_VERIFY_RADIUS_KM * 1000} m`,
       };
     case 'imprecise':
-      return { title: 'Segnale GPS troppo debole', hint: `Precisione ±${outcome.accuracyM} m: riprova all'aperto, lontano dai muri` };
+      return { title: 'Non riesco a capire bene dove sei', hint: `Riprova all'aperto, lontano dai muri (margine di ${outcome.accuracyM} m)` };
     case 'unavailable':
       return { title: 'Posizione non disponibile', hint: 'Controlla che la posizione sia attiva e permessa per l’app' };
   }
