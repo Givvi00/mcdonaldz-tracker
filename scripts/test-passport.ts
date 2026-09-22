@@ -207,6 +207,23 @@ test('regioni: un ristorante nuovo la fa passare da oro ad argento, una chiusura
   assert.ok(regionSummaries([closedVisited], visits)[0].complete);
 });
 
+test('regione di diamante: completa e ogni Mc aperto verificato; i chiusi non la bloccano', () => {
+  const a = mc({ region: 'Molise' });
+  const b = mc({ region: 'Molise' });
+  const closed = mc({ region: 'Molise', opened: false });
+  const list = [a, b, closed];
+  // complete, one of the two open ones verified: gold
+  let s = regionSummaries(list, [verified(a), visit(b), visit(closed)])[0];
+  assert.deepEqual([s.verified, s.verifiable], [1, 2]);
+  assert.equal(regionTier(s, true), 'gold');
+  // both open ones verified, the closed one only visited: diamond
+  s = regionSummaries(list, [verified(a), verified(b), visit(closed)])[0];
+  assert.equal(regionTier(s, true), 'diamond');
+  // all verified but not complete (a new restaurant opened): not diamond, silver
+  s = regionSummaries([...list, mc({ region: 'Molise' })], [verified(a), verified(b), visit(closed)])[0];
+  assert.equal(regionTier(s, true), 'silver');
+});
+
 test('livelli: sono 12, con le soglie decise', () => {
   assert.deepEqual(
     LEVELS.map(l => l.min),

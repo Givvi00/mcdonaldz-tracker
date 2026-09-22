@@ -37,6 +37,9 @@ export function CelebrationLab() {
             <button className={button} onClick={() => play({ kind: 'region', region: 'Abruzzo', total: 18 })}>
               Regione
             </button>
+            <button className={button} onClick={() => play({ kind: 'region', region: 'Abruzzo', total: 18, diamond: true })}>
+              Diamante
+            </button>
             <button className={button} onClick={() => play({ kind: 'stamp', stamps: stamps.slice(0, 1) })}>
               1 timbro
             </button>

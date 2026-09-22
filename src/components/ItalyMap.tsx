@@ -2,6 +2,7 @@ import { ITALY_MAP, MAP_REGIONS } from '@/data/italyMap';
 import type { RegionTier } from '@/services/regions';
 
 export const TIER_FILL: Record<RegionTier, string> = {
+  diamond: '#8FD3FF',
   gold: '#F5C542',
   silver: '#C7CDD3',
   progress: '#F6E7B0',

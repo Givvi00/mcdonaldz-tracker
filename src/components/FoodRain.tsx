@@ -7,7 +7,8 @@ import { STAMP_INK, STAMP_SHAPES } from '@/components/stampArt';
 import { Stamp } from '@/components/Stamp';
 import { RegionSticker } from '@/components/RegionSticker';
 import { RegionFlight, FLIGHT_END } from '@/components/RegionFlight';
-import { regionSummaries, type RegionTier } from '@/services/regions';
+import { regionSummaries, regionTier, type RegionTier } from '@/services/regions';
+import { TIER_FILL } from '@/components/ItalyMap';
 
 const pick = <T,>(items: readonly T[]): T => items[Math.floor(Math.random() * items.length)];
 const between = (min: number, max: number) => min + Math.random() * (max - min);
@@ -149,7 +150,12 @@ export function FoodRain() {
   const celebration = useMcdonaldStore(state => state.celebration);
   const clearCelebration = useMcdonaldStore(state => state.clearCelebration);
 
-  const plan = useMemo(() => planFor(celebration?.kind === 'level' ? celebration.level : null), [celebration]);
+  const diamond = celebration?.kind === 'region' && !!celebration.diamond;
+  // A diamond region sparkles in ice colours instead of gold
+  const plan = useMemo(() => {
+    const base = planFor(celebration?.kind === 'level' ? celebration.level : null);
+    return diamond ? { ...base, colors: ICE } : base;
+  }, [celebration, diamond]);
 
   const show = useMemo(() => {
     if (!celebration || celebration.kind === 'stamp') return null;
@@ -366,30 +372,40 @@ export function FoodRain() {
           tiers={tiers}
           returnAt={(plan.time - plan.tail) / 1000}
           total={plan.time / 1000}
+          from={diamond ? TIER_FILL.gold : TIER_FILL.progress}
+          to={diamond ? TIER_FILL.diamond : TIER_FILL.gold}
         />
       )}
 
       {celebration.kind === 'region' && (
         <div
-          className="absolute w-[19rem] max-w-[86vw] overflow-hidden rounded-[2rem] border-[3px] border-[#3B2A22] bg-gradient-to-b from-[#FFF6CF] to-[#FFE27A] text-center text-[#3B2A22] shadow-2xl"
+          className={`absolute w-[19rem] max-w-[86vw] overflow-hidden rounded-[2rem] border-[3px] border-[#3B2A22] bg-gradient-to-b text-center text-[#3B2A22] shadow-2xl ${
+            diamond ? 'from-[#F2FBFF] to-[#BFE6FF]' : 'from-[#FFF6CF] to-[#FFE27A]'
+          }`}
           style={{
             left: '50%',
             top: '48%',
             animation: `level-pop ${plan.time - plan.tail - plan.levelAt * 1000}ms ease-out ${plan.levelAt}s both`,
           }}
         >
-          <div className="bg-mc-red px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-white">
-            Regione completata
+          <div className={`px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-white ${diamond ? 'bg-sky-600' : 'bg-mc-red'}`}>
+            {diamond ? 'Regione di diamante' : 'Regione completata'}
           </div>
           <div className="px-5 pb-4 pt-3">
             <div className="mx-auto w-40" style={{ animation: `region-sticker-in 1.1s cubic-bezier(0.2, 0.9, 0.3, 1.15) ${plan.levelAt + 0.1}s both` }}>
-              <RegionSticker summary={{ region: celebration.region, total: celebration.total, visited: celebration.total, complete: true }} tier="gold" completedAt={Date.now()} />
+              <RegionSticker
+                summary={{ region: celebration.region, total: celebration.total, visited: celebration.total, complete: true }}
+                tier={diamond ? 'diamond' : 'gold'}
+                completedAt={Date.now()}
+              />
             </div>
             <p className="mt-2 inline-block rounded-full bg-[#3B2A22] px-3 py-0.5 text-sm font-semibold text-mc-yellow">
-              Figurina d'oro
+              {diamond ? 'Figurina di diamante' : "Figurina d'oro"}
             </p>
             <p className="mt-2 text-sm font-semibold">
-              Hai visitato tutti i {celebration.total} ristoranti
+              {diamond
+                ? `Hai verificato tutti i ${celebration.total} ristoranti aperti`
+                : `Hai visitato tutti i ${celebration.total} ristoranti`}
             </p>
           </div>
         </div>
@@ -521,11 +537,14 @@ function StampShow({ stamps }: { stamps: string[] }) {
   );
 }
 
-/** Colour of every region on the map of the flight: gold if complete, light if started, grey if not */
+/** Colour of every region on the map of the flight: diamond, gold if complete, light if started, grey if not */
 function regionTiers(needed: boolean): Record<string, RegionTier> {
   if (!needed) return {};
   const { mcdonalds, visits } = useMcdonaldStore.getState();
   const tiers: Record<string, RegionTier> = {};
-  for (const r of regionSummaries(mcdonalds, visits)) tiers[r.region] = r.complete ? 'gold' : r.visited > 0 ? 'progress' : 'empty';
+  for (const r of regionSummaries(mcdonalds, visits)) tiers[r.region] = regionTier(r, false);
   return tiers;
 }
+
+/** Fireworks colours for a diamond region: ice blues, white and a touch of lilac */
+const ICE = ['#FFFFFF', '#BFE6FF', '#7CC6F0', '#FFFFFF', '#C4B5FF', '#3AA0DC'];

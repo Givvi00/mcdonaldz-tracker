@@ -4,6 +4,8 @@ interface Row {
   region: string;
   total: number;
   visited: number;
+  /** visits verified (you were really there) */
+  verified?: number;
 }
 
 interface Props {
@@ -11,12 +13,13 @@ interface Props {
   rows: Row[];
   visited: number;
   total: number;
+  verified?: number;
 }
 
 const PAPER = '#FFFFFF';
 
 /** The visits as a till receipt: one line per region visited, a total, the level. The paper stays light in dark mode, like real paper. */
-export function Receipt({ name, rows, visited, total }: Props) {
+export function Receipt({ name, rows, visited, total, verified = 0 }: Props) {
   const lines = rows.filter(r => r.visited > 0).sort((a, b) => b.visited - a.visited || a.region.localeCompare(b.region, 'it'));
   const today = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
@@ -37,7 +40,9 @@ export function Receipt({ name, rows, visited, total }: Props) {
             <ul className="space-y-1">
               <li className="flex justify-between text-[0.65rem] font-bold tracking-wide text-gray-500">
                 <span>REGIONE</span>
-                <span>VISITATI</span>
+                <span>
+                  VISITATI <span className="inline-block w-8 text-right">VER.</span>
+                </span>
               </li>
               {lines.map(r => (
                 <li key={r.region} className="flex items-baseline gap-1">
@@ -45,6 +50,7 @@ export function Receipt({ name, rows, visited, total }: Props) {
                   <span className="flex-1 border-b border-dotted border-gray-400 translate-y-[-3px]" />
                   <span className="tabular-nums whitespace-nowrap">
                     {r.visited} su {r.total}
+                    <span className="inline-block w-8 text-right text-blue-700">{r.verified ? r.verified : '·'}</span>
                   </span>
                 </li>
               ))}
@@ -57,6 +63,12 @@ export function Receipt({ name, rows, visited, total }: Props) {
               {visited} su {total}
             </span>
           </p>
+          {verified > 0 && (
+            <p className="flex justify-between text-blue-700">
+              <span>DI CUI VERIFICATI</span>
+              <span className="tabular-nums">{verified}</span>
+            </p>
+          )}
           <p className="mt-4 text-center text-[0.7rem] text-gray-500">Grazie e a presto! <FoodIcon name="fries" size={14} /></p>
         </div>
         {/* Torn edge */}

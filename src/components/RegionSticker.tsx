@@ -15,7 +15,9 @@ const CARD: Record<RegionTier, { card: string; frame: string; frameW: number; pa
   progress: { card: '#FFFFFF', frame: INK, frameW: 3, panel: '#FBF4E2', land: '#FFF7E0' },
   silver: { card: '#F4F6F8', frame: '#8E99A4', frameW: 5, panel: '#E8ECEF', land: 'silver' },
   gold: { card: '#FFF8DC', frame: '#E0A100', frameW: 5.5, panel: '#FFEBA0', land: 'gold' },
+  diamond: { card: '#EFFAFF', frame: '#3AA0DC', frameW: 5.5, panel: '#D6EFFF', land: 'diamond' },
 };
+const DIAMOND_INK = '#1D6FB8';
 
 /** Sine-like wave across `width`, at height `y`, closed downwards; `periods` full periods long */
 function wavePath(x0: number, y: number, period: number, periods: number, amp: number, bottom: number): string {
@@ -46,13 +48,13 @@ const GLITTER: Array<[number, number, number, number]> = [
 ];
 
 /** A four-pointed star that grows and shrinks, on its own timing */
-function Glint({ x, y, size, delay, still }: { x: number; y: number; size: number; delay: number; still: boolean }) {
+function Glint({ x, y, size, delay, still, icy }: { x: number; y: number; size: number; delay: number; still: boolean; icy?: boolean }) {
   return (
     <g transform={`translate(${x} ${y})`}>
       <path
         d="M0 -3 C.3 -.8 .8 -.3 3 0 C.8 .3 .3 .8 0 3 C-.3 .8 -.8 .3 -3 0 C-.8 -.3 -.3 -.8 0 -3Z"
-        fill="#FFF7C2"
-        stroke="#F2AE00"
+        fill={icy ? '#FFFFFF' : '#FFF7C2'}
+        stroke={icy ? '#3AA0DC' : '#F2AE00'}
         strokeWidth=".35"
         transform={`scale(${still ? size / 2 : 0})`}
       >
@@ -68,6 +70,8 @@ function Glint({ x, y, size, delay, still }: { x: number; y: number; size: numbe
  * One region as a sticker. In progress: the region fills with cola from the bottom, with a moving wave and rising
  * bubbles. Not started: a see-through card with a big question mark. Complete (gold) or complete-with-something-new
  * (silver): metallic colours, a dot per restaurant, a wide "COMPLETATA" / "1 NUOVO" stamp and a passing shine.
+ * Diamond (complete and every visit verified): icy card, an iridescent region, blue dots, a "DIAMANTE" stamp and more
+ * sparkle than gold.
  */
 export function RegionSticker({ summary, tier, completedAt }: { summary: RegionSummary; tier: RegionTier; /** when the region was completed (ms), shown on gold and silver */ completedAt?: number }) {
   const uid = useId().replace(/:/g, '');
@@ -75,7 +79,8 @@ export function RegionSticker({ summary, tier, completedAt }: { summary: RegionS
   const still = prefersReducedMotion();
   const st = CARD[tier];
   const empty = tier === 'empty';
-  const shiny = tier === 'gold' || tier === 'silver';
+  const diamond = tier === 'diamond';
+  const shiny = tier === 'gold' || tier === 'silver' || diamond;
   const pct = summary.total > 0 ? Math.max(summary.visited > 0 ? 1 : 0, Math.round((summary.visited / summary.total) * 100)) : 0;
 
   const scale = shape ? 72 / Math.max(shape.width, shape.height) : 1;
@@ -103,12 +108,12 @@ export function RegionSticker({ summary, tier, completedAt }: { summary: RegionS
   const nameSize = two ? (lines.some(l => l.length > 10) ? 8.8 : 9.6) : 11.5;
   // Room for a name before the percentage starts; a longer line is squeezed to fit
   const NAME_ROOM = 58;
-  const pctColor = empty ? '#6A5D52' : tier === 'progress' ? RED : tier === 'gold' ? '#B87F00' : '#5F6F7D';
+  const pctColor = empty ? '#6A5D52' : tier === 'progress' ? RED : tier === 'gold' ? '#B87F00' : diamond ? DIAMOND_INK : '#5F6F7D';
   const period = shape ? shape.width / 2.5 : 10;
   const amp = shape ? Math.max(0.8, shape.height * 0.018) : 1;
 
-  const stampInk = tier === 'gold' ? RED : '#5F6F7D';
-  const stampText = tier === 'gold' ? 'COMPLETATA' : '1 NUOVO';
+  const stampInk = tier === 'gold' ? RED : diamond ? DIAMOND_INK : '#5F6F7D';
+  const stampText = tier === 'gold' ? 'COMPLETATA' : diamond ? 'DIAMANTE' : '1 NUOVO';
 
   return (
     <div className="relative overflow-hidden rounded-[14px]">
@@ -123,6 +128,13 @@ export function RegionSticker({ summary, tier, completedAt }: { summary: RegionS
             <stop offset="0" stopColor="#F4F6F8" />
             <stop offset=".5" stopColor="#D5DBE0" />
             <stop offset="1" stopColor="#B3BCC4" />
+          </linearGradient>
+          <linearGradient id={`diamond${uid}`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#E6FAFF" />
+            <stop offset=".3" stopColor="#9FDCFF" />
+            <stop offset=".5" stopColor="#FFFFFF" />
+            <stop offset=".72" stopColor="#C4B5FF" />
+            <stop offset="1" stopColor="#6EC1F0" />
           </linearGradient>
           <linearGradient id={`cola${uid}`} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#7A3418" />
@@ -149,7 +161,7 @@ export function RegionSticker({ summary, tier, completedAt }: { summary: RegionS
             strokeDasharray={empty ? '6 4' : undefined}
           />
           {shiny && (
-            <rect x="7.5" y="7.5" width="105" height="135" rx="8" fill="none" stroke={tier === 'gold' ? '#FFD75E' : '#C7CED5'} strokeWidth="1.4" />
+            <rect x="7.5" y="7.5" width="105" height="135" rx="8" fill="none" stroke={tier === 'gold' ? '#FFD75E' : diamond ? '#9FDCFF' : '#C7CED5'} strokeWidth="1.4" />
           )}
           <rect x="11" y="11" width="98" height="92" rx="6" fill={st.panel} stroke={empty ? st.frame : INK} strokeWidth="1.4" />
 
@@ -158,7 +170,9 @@ export function RegionSticker({ summary, tier, completedAt }: { summary: RegionS
               <path d={shape.path} transform={`translate(${1 / scale} ${1.6 / scale})`} fill="rgba(59,42,34,.22)" />
               <path
                 d={shape.path}
-                fill={tier === 'gold' ? `url(#gold${uid})` : tier === 'silver' ? `url(#silver${uid})` : st.land}
+                fill={
+                  tier === 'gold' ? `url(#gold${uid})` : tier === 'silver' ? `url(#silver${uid})` : diamond ? `url(#diamond${uid})` : st.land
+                }
               />
               {tier === 'progress' && (
                 <g clipPath={`url(#clip${uid})`}>
@@ -180,7 +194,7 @@ export function RegionSticker({ summary, tier, completedAt }: { summary: RegionS
               )}
               <path d={shape.path} fill="none" stroke={INK} strokeWidth={1.7 / scale} strokeLinejoin="round" />
               {dots.map(([x, y], i) => (
-                <circle key={i} cx={x} cy={y} r={(1.9 * 1.4) / scale} fill="#DA291C" stroke="#fff" strokeWidth={(0.6 * 1.4) / scale} />
+                <circle key={i} cx={x} cy={y} r={(1.9 * 1.4) / scale} fill={diamond ? '#2563EB' : '#DA291C'} stroke="#fff" strokeWidth={(0.6 * 1.4) / scale} />
               ))}
             </g>
           )}
@@ -192,7 +206,7 @@ export function RegionSticker({ summary, tier, completedAt }: { summary: RegionS
           )}
 
           {shiny && completedAt && (
-            <text x="105" y="98.5" textAnchor="end" fontFamily="system-ui" fontWeight="700" fontSize="6.6" fill={tier === 'gold' ? '#8A5A00' : '#5F6F7D'}>
+            <text x="105" y="98.5" textAnchor="end" fontFamily="system-ui" fontWeight="700" fontSize="6.6" fill={tier === 'gold' ? '#8A5A00' : diamond ? DIAMOND_INK : '#5F6F7D'}>
               {new Date(completedAt).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' })}
             </text>
           )}
@@ -220,7 +234,10 @@ export function RegionSticker({ summary, tier, completedAt }: { summary: RegionS
           </text>
         </g>
 
-        {shiny && GLITTER.slice(0, tier === 'gold' ? GLITTER.length : 4).map(([x, y, size, delay], i) => <Glint key={i} x={x} y={y} size={size} delay={delay} still={still} />)}
+        {shiny &&
+          GLITTER.slice(0, tier === 'silver' ? 4 : GLITTER.length).map(([x, y, size, delay], i) => (
+            <Glint key={i} x={x} y={y} size={diamond ? size * 1.2 : size} delay={delay} still={still} icy={diamond} />
+          ))}
 
         {shiny && (
           <g transform="rotate(-16 60 58)" filter="url(#stamp-ink)" opacity=".92">
@@ -234,7 +251,7 @@ export function RegionSticker({ summary, tier, completedAt }: { summary: RegionS
               fontWeight="700"
               fontSize="12.5"
               fill={stampInk}
-              textLength={tier === 'gold' ? 74 : 60}
+              textLength={tier === 'gold' ? 74 : diamond ? 70 : 60}
               lengthAdjust="spacingAndGlyphs"
             >
               {stampText}
@@ -247,7 +264,8 @@ export function RegionSticker({ summary, tier, completedAt }: { summary: RegionS
           <i className={`fig-fx fig-sweep ${tier === 'gold' ? 'fig-sweep-gold' : ''}`} />
           <i className="fig-fx fig-spark" style={{ top: '12%', left: '12%' }} />
           <i className="fig-fx fig-spark" style={{ top: '52%', right: '10%', animationDelay: '0.8s' }} />
-          {tier === 'gold' && <i className="fig-fx fig-spark" style={{ top: '20%', right: '22%', animationDelay: '1.5s' }} />}
+          {(tier === 'gold' || diamond) && <i className="fig-fx fig-spark" style={{ top: '20%', right: '22%', animationDelay: '1.5s' }} />}
+          {diamond && <i className="fig-fx fig-spark" style={{ top: '70%', left: '20%', animationDelay: '0.4s' }} />}
         </>
       )}
     </div>

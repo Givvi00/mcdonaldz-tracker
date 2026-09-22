@@ -108,6 +108,13 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - [x] (22/09/2026) Nei testi niente più "GPS": si parla di visite **verificate** ("segnate mentre eri lì"), anche nei timbri e negli avvisi
 - [x] (22/09/2026) La posizione non si legge più solo all'apertura: di nuovo quando l'app torna in primo piano e ogni 2 minuti mentre è aperta (`useGeolocation.ts`). "Ti trovi qui?" si rivaluta a ogni nuova posizione (non più una volta sola), raggio ridotto da 2 km a 500 m, e per un Mc già segnato ma non verificato propone "Sei di nuovo qui? → Verifica". Non compare sopra feste, voto o conferme, né prima che le visite siano caricate
 
+## Verificato: filtro, diamante, Stats (22/09/2026)
+- [x] Filtro "Verificati" in Home e sulla mappa: Tutti / Da visitare / Visitati / Verificati (`StatusFilter.tsx`, regola unica `matchesStatus`)
+- [x] Regione di diamante: completa e ogni Mc **aperto** con visita verificata (i chiusi non contano, lì non si torna). Figurina azzurra iridescente con timbro "DIAMANTE", puntini blu, più luccichii; prima nell'album, contata a parte ("di diamante: N"); azzurra anche sulla mappa dell'Italia. Festa dedicata quando una regione diventa di diamante verificando l'ultimo Mc (volo da oro ad azzurro, fuochi color ghiaccio). Record `DIAMOND:<regione>` accanto a `REGION:`. Pulsante "Diamante" nel pannello di prova delle feste. Test in `scripts/test-passport.ts`
+- [x] Più spazio in Stats: "N verificate · X% delle visite" nella scheda rossa; nello scontrino colonna "VER." per regione e riga "DI CUI VERIFICATI"
+- [x] Emoji 📍 e 🔎 rimesse nei titoli della Home (stesso cerchio giallo degli altri)
+- [ ] Da guardare sul telefono: figurina di diamante, festa di diamante, filtro a 4 voci (larghezza su schermi stretti), scontrino
+
 ## Account, community e onboarding (idea del 22/09/2026, da capire con calma)
 - [ ] **Utenze/account**: oggi non esistono, ogni telefono ha i propri dati locali senza login. Serve per: community tra amici, seguire altri utenti, classifiche/gare, vedere il livello degli amici. Grosso cambio di architettura, da progettare a parte
 - [ ] **Salvataggio in remoto**: serve un server con hosting e database (oggi tutto vive solo nell'IndexedDB del dispositivo, vedi `src/services/db.ts`); da capire login, sincronizzazione tra dispositivi, costi e chi lo mantiene

@@ -15,7 +15,22 @@ const EASE = 'cubic-bezier(0.5, 0, 0.2, 1)';
  * popup takes over) and, when the popup is done, comes back gold to its place. The whole thing is one timeline of
  * `total` seconds; `returnAt` is when the region starts flying back. Only opacity and transforms are animated.
  */
-export function RegionFlight({ region, tiers, returnAt, total }: { region: string; tiers: Record<string, RegionTier>; returnAt: number; total: number }) {
+export function RegionFlight({
+  region,
+  tiers,
+  returnAt,
+  total,
+  from = TIER_FILL.progress,
+  to = GOLD,
+}: {
+  region: string;
+  tiers: Record<string, RegionTier>;
+  returnAt: number;
+  total: number;
+  /** colour of the region before (in progress; gold when it turns diamond) and after */
+  from?: string;
+  to?: string;
+}) {
   const shape = MAP_REGIONS[region];
   const css = useMemo(() => {
     if (!shape) return '';
@@ -26,15 +41,15 @@ export function RegionFlight({ region, tiers, returnAt, total }: { region: strin
     const R = returnAt;
     const away = `translate(${dx}px, ${dy}px) scale(${s.toFixed(2)})`;
     const home = 'translate(0px, 0px) scale(1)';
-    const start = TIER_FILL.progress;
+    const start = from;
     return `
 @keyframes rf-map { 0% { opacity: 0 } ${p(0.4)} { opacity: 1 } ${p(2)} { opacity: 1 } ${p(2.6)} { opacity: .25 } ${p(R - 0.4)} { opacity: .25 } ${p(R)} { opacity: 1 } ${p(R + FLIGHT_BACK + 0.1)} { opacity: 1 } 100% { opacity: 0 } }
 @keyframes rf-fly { 0% { transform: ${home} } ${p(1.0)} { transform: ${home}; animation-timing-function: ${EASE} } ${p(2)} { transform: ${away} } ${p(R)} { transform: ${away}; animation-timing-function: ${EASE} } ${p(R + FLIGHT_BACK)} { transform: ${home} } 100% { transform: ${home} } }
-@keyframes rf-fill { 0% { fill: ${start} } ${p(0.5)} { fill: ${start} } ${p(0.9)} { fill: ${GOLD} } 100% { fill: ${GOLD} } }
+@keyframes rf-fill { 0% { fill: ${start} } ${p(0.5)} { fill: ${start} } ${p(0.9)} { fill: ${to} } 100% { fill: ${to} } }
 @keyframes rf-inner { 0% { opacity: 1 } ${p(2.3)} { opacity: 1 } ${p(2.6)} { opacity: 0 } ${p(R - 0.05)} { opacity: 0 } ${p(R)} { opacity: 1 } 100% { opacity: 1 } }
-@keyframes rf-hole { 0% { fill: ${start} } ${p(1.0)} { fill: ${start} } ${p(1.3)} { fill: rgba(255,255,255,0) } ${p(R + FLIGHT_BACK - 0.2)} { fill: rgba(255,255,255,0) } ${p(R + FLIGHT_BACK)} { fill: ${GOLD} } 100% { fill: ${GOLD} } }
+@keyframes rf-hole { 0% { fill: ${start} } ${p(1.0)} { fill: ${start} } ${p(1.3)} { fill: rgba(255,255,255,0) } ${p(R + FLIGHT_BACK - 0.2)} { fill: rgba(255,255,255,0) } ${p(R + FLIGHT_BACK)} { fill: ${to} } 100% { fill: ${to} } }
 `;
-  }, [shape, returnAt, total]);
+  }, [shape, returnAt, total, from, to]);
 
   if (!shape) return null;
   const others = { ...tiers, [region]: 'progress' as RegionTier };

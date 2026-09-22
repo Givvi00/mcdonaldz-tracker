@@ -12,12 +12,13 @@ import {
   setVisitVerified,
 } from '@/services/db';
 import { checkAndUnlockAchievements } from '@/services/achievements';
-import { syncRegionCompletions } from '@/services/regions';
+import { syncDiamondRegions, syncRegionCompletions } from '@/services/regions';
 import { freshFix, judgeFix, type VerifyOutcome } from '@/services/gpsCheck';
 import { distanceKm } from '@/utils/geo';
 import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds, visitedIdSet } from '@/utils/catalog';
 import type { Coords, GeoStatus } from '@/hooks/useGeolocation';
+import { matchesStatus, type StatusValue } from '@/components/StatusFilter';
 
 /** The outcome of a GPS check, shown for a few seconds at the bottom of the screen */
 export interface VerifyNotice {
@@ -30,7 +31,8 @@ export interface VerifyNotice {
 export type Celebration =
   | { id: number; kind: 'visit' }
   | { id: number; kind: 'level'; level: number }
-  | { id: number; kind: 'region'; region: string; total: number }
+  /** `diamond`: the region was already complete and now every visit in it is verified */
+  | { id: number; kind: 'region'; region: string; total: number; diamond?: boolean }
   | { id: number; kind: 'stamp'; stamps: string[] };
 
 /** Pause between two celebrations that follow each other */
@@ -45,7 +47,7 @@ interface AppStore {
   selectedTab: 'home' | 'map' | 'stats' | 'profile';
   searchQuery: string;
   filterRegion: string | null;
-  filterVisited: boolean | null;
+  filterVisited: StatusValue;
   userPosition: Coords | null;
   locationStatus: GeoStatus;
   /** Stamps shown in the toast at the top */
@@ -95,7 +97,7 @@ interface AppStore {
   setSelectedTab: (tab: 'home' | 'map' | 'stats' | 'profile') => void;
   setSearchQuery: (query: string) => void;
   setFilterRegion: (region: string | null) => void;
-  setFilterVisited: (visited: boolean | null) => void;
+  setFilterVisited: (visited: StatusValue) => void;
   setUserPosition: (pos: Coords | null) => void;
   setLocationStatus: (status: GeoStatus) => void;
   focusOnMap: (mcdonaldId: string) => void;
@@ -144,6 +146,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     // Catch up silently on anything already earned from past sessions (no toast).
     await checkAndUnlockAchievements(user.id, get().mcdonalds, visits);
     await syncRegionCompletions(user.id, get().mcdonalds, visits);
+    await syncDiamondRegions(user.id, get().mcdonalds, visits);
   },
 
   renameUser: async (name: string) => {
@@ -250,7 +253,12 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
       const updatedVisits = await getVisits();
       set({ visits: updatedVisits });
       const unlocked = await checkAndUnlockAchievements(user.id, get().mcdonalds, updatedVisits);
-      if (unlocked.length > 0) get().enqueueCelebrations([{ id: Date.now(), kind: 'stamp', stamps: unlocked }]);
+      const diamond = await syncDiamondRegions(user.id, get().mcdonalds, updatedVisits, mc.region);
+      const now = Date.now();
+      const events: Celebration[] = [];
+      if (diamond) events.push({ id: now, kind: 'region', region: diamond.region, total: diamond.verifiable ?? diamond.total, diamond: true });
+      if (unlocked.length > 0) events.push({ id: now + 1, kind: 'stamp', stamps: unlocked });
+      if (events.length > 0) get().enqueueCelebrations(events);
     }
     set(state => ({ verifying: state.verifying.filter(id => id !== mcdonaldId) }));
     if (stillVisited && (!options.quiet || outcome.result === 'ok')) {
@@ -313,12 +321,8 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     }
 
     if (filterVisited !== null) {
-      const visitedIds = new Set(visits.map(v => v.mcdonaldId));
-      if (filterVisited) {
-        filtered = filtered.filter(mc => visitedIds.has(mc.id));
-      } else {
-        filtered = filtered.filter(mc => !visitedIds.has(mc.id));
-      }
+      const byId = new Map(visits.map(v => [v.mcdonaldId, v]));
+      filtered = filtered.filter(mc => matchesStatus(filterVisited, byId.get(mc.id)));
     }
 
     return filtered;

@@ -93,7 +93,7 @@ export function Home() {
       {/* Vicino a te */}
       <section className="px-4">
         <div className="flex items-center justify-between mb-3">
-          <SectionTitle icon="fries" className="">
+          <SectionTitle emoji="📍" className="">
             Vicino a te
           </SectionTitle>
           {locationStatus === 'granted' && nearest.length > 0 && (
@@ -124,7 +124,7 @@ export function Home() {
 
       {/* Esplora tutti */}
       <section ref={listRef} className="px-4">
-        <SectionTitle icon="burger">Esplora tutti</SectionTitle>
+        <SectionTitle emoji="🔎">Esplora tutti</SectionTitle>
 
         {/* Stato: visitati / da visitare */}
         <StatusFilter value={filterVisited} onChange={setFilterVisited} className="mb-3" />

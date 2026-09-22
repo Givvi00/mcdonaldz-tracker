@@ -46,11 +46,23 @@ export function Stats() {
   const lastVisit = latest && lastMc ? { city: lastMc.city, visitedAt: latest.visitedAt } : null;
   const percentage = totalMcdonalds > 0 ? Math.round((visitedCount / totalMcdonalds) * 100) : 0;
   const verifiedCount = visits.filter(v => v.verified).length;
+  const verifiedShare = visitedCount > 0 ? Math.round((verifiedCount / visitedCount) * 100) : 0;
+  // Verified visits per region, for the receipt
+  const regionOf = new Map(mcdonalds.map(m => [m.id, m.region]));
+  const verifiedByRegion = new Map<string, number>();
+  for (const v of visits) {
+    const region = v.verified ? regionOf.get(v.mcdonaldId) : undefined;
+    if (region) verifiedByRegion.set(region, (verifiedByRegion.get(region) ?? 0) + 1);
+  }
+  const receiptRows = regionStats.map(r => ({ ...r, verified: verifiedByRegion.get(r.region) ?? 0 }));
   const progress = getAchievementProgress(mcdonalds, visits);
   const summaries = regionSummaries(mcdonalds, visits);
   const unlockedIds = new Set(achievements.map(a => a.type));
   const completedAt = Object.fromEntries(
     achievements.filter(a => a.type.startsWith('REGION:')).map(a => [a.type.slice('REGION:'.length), a.unlockedAt]),
+  );
+  const diamondAt = Object.fromEntries(
+    achievements.filter(a => a.type.startsWith('DIAMOND:')).map(a => [a.type.slice('DIAMOND:'.length), a.unlockedAt]),
   );
   const unlockedAt = Object.fromEntries(achievements.map(a => [a.type, a.unlockedAt]));
   const wasComplete = new Set(summaries.map(r => r.region).filter(r => unlockedIds.has(regionRecordType(r))));
@@ -74,7 +86,7 @@ export function Stats() {
           )}
           {verifiedCount > 0 && (
             <p className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-white/15 py-0.5 pl-0.5 pr-2.5 text-xs font-semibold">
-              <VerifiedBadge size={20} /> {verifiedCount} {verifiedCount === 1 ? 'verificata' : 'verificate'}
+              <VerifiedBadge size={20} /> {verifiedCount} {verifiedCount === 1 ? 'verificata' : 'verificate'} · {verifiedShare}% delle visite
             </p>
           )}
           <p className="text-2xl font-display font-bold mt-3">{percentage}%</p>
@@ -86,9 +98,9 @@ export function Stats() {
 
       <Section icon="mcflurry" title="Regioni">
         <ItalyMap tiers={tiers} className="mx-auto mb-5 w-full max-w-[15rem]" />
-        <RegionAlbum summaries={summaries} wasComplete={wasComplete} completedAt={completedAt} />
+        <RegionAlbum summaries={summaries} wasComplete={wasComplete} completedAt={completedAt} diamondAt={diamondAt} />
         <div className="mt-5">
-          <Receipt name={user?.name} rows={regionStats} visited={visitedCount} total={totalMcdonalds} />
+          <Receipt name={user?.name} rows={receiptRows} visited={visitedCount} total={totalMcdonalds} verified={verifiedCount} />
         </div>
       </Section>
     </div>

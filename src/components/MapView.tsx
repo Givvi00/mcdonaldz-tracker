@@ -5,7 +5,7 @@ import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
-import { StatusFilter } from '@/components/StatusFilter';
+import { StatusFilter, matchesStatus, type StatusValue } from '@/components/StatusFilter';
 import { FoodIcon } from '@/components/FoodIcon';
 import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds } from '@/utils/catalog';
@@ -58,7 +58,7 @@ export function MapView() {
   const { mcdonalds, visits, isVisited, requestToggle, verifyVisit, changeVisitDate, mapFocusId, clearMapFocus, userPosition, setSelectedTab, getVisitedCount } = useMcdonaldStore();
   const [query, setQuery] = useState('');
   const [dateFor, setDateFor] = useState<string | null>(null);
-  const [statusFilter, setStatusFilter] = useState<boolean | null>(null);
+  const [statusFilter, setStatusFilter] = useState<StatusValue>(null);
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
 
   const results = useMemo<McDonald[]>(() => {
@@ -108,7 +108,7 @@ export function MapView() {
       const visit = visits.find(v => v.mcdonaldId === mc.id);
       // A closed restaurant only stays on the map if you visited it
       if (!mc.opened && !visited) return;
-      if (statusFilter !== null && visited !== statusFilter) return;
+      if (!matchesStatus(statusFilter, visit)) return;
       // A verified visit gets its own marker (the seal), not a plain circle with a badge stuck on the side. The seal's
       // teeth end inside its box, so the box is bigger than the 30 px circles for the seal to look a touch larger
       const icon = L.divIcon({
