@@ -45,11 +45,14 @@ jobs:
         if: steps.check.outputs.findings == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          OWNER: ${{ github.repository_owner }}
+        # Assigned to the owner and mentioning them: that notification arrives even without watching the repository
         run: |
           gh label create osm-check --color 0E8A16 --description "Controllo settimanale con OpenStreetMap" 2>/dev/null || true
           num=$(gh issue list --label osm-check --state open --json number --jq '.[0].number')
           if [ -n "$num" ]; then
-            gh issue comment "$num" --body-file osm-report.md
+            { echo "@$OWNER nuovo controllo:"; echo; cat osm-report.md; } > comment.md
+            gh issue comment "$num" --body-file comment.md
           else
-            gh issue create --title "Elenco McDonald's: novità da OpenStreetMap" --label osm-check --body-file osm-report.md
+            gh issue create --title "Elenco McDonald's: novità da OpenStreetMap" --label osm-check --assignee "$OWNER" --body-file osm-report.md
           fi
