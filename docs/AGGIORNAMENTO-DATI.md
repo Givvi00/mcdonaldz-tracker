@@ -42,6 +42,26 @@ Ogni pubblicazione espone `data/mcdonalds.json` (versione = impronta del contenu
 
 Il file `data/mcdonalds.json` esiste solo nel sito pubblicato (lo genera la build); l'elenco incluso nell'app è `shared/data/mcdonalds.json`.
 
+## Controllo settimanale con OpenStreetMap (automatico, solo segnalazioni)
+
+Ogni lunedì mattina GitHub esegue `.github/workflows/osm-check.yml`: confronta l'elenco con i punti McDonald's di
+OpenStreetMap e, **solo se trova qualcosa**, apre una segnalazione (issue con l'etichetta `osm-check`) o aggiunge un
+commento a quella già aperta. **Non modifica mai l'elenco.** Si può lanciare anche a mano da GitHub → Actions →
+"Controllo elenco con OpenStreetMap" → Run workflow, oppure in locale con `npm run osm-check`.
+
+OpenStreetMap non è completo (circa 1 ristorante su 10 dei nostri lì non c'è), quindi le regole sono prudenti:
+- **possibile chiuso**: solo un ristorante che OpenStreetMap aveva e che manca da **2 controlli di fila**; chi su
+  OpenStreetMap non c'è mai stato non viene mai segnalato;
+- **possibile nuovo**: un punto lontano più di 150 m da tutti i nostri, presente **2 controlli di fila**;
+- **possibile riapertura**: un punto dove c'è un nostro ristorante segnato come chiuso;
+- il **primo controllo** impara soltanto chi c'è, e non segnala niente;
+- se la risposta di OpenStreetMap sembra incompleta (meno di 500 punti), non salva niente.
+
+Quello che ha imparato sta in `shared/data/osm-state.json` (lo aggiorna il controllo stesso, con un commit che non
+ripubblica il sito). **Quando arriva una segnalazione:** controlla i casi sul sito McDonald's e, se sono veri, fai la
+procedura qui sopra con una raccolta completa (per i nuovi OpenStreetMap spesso non ha città e via). Poi chiudi la
+segnalazione: la prossima volta ne verrà aperta una nuova. Dati © OpenStreetMap contributors, licenza ODbL.
+
 ## Da non fare
 
 - Non ricreare l'elenco con altri strumenti né modificare a mano gli ID: le visite finirebbero attaccate ai ristoranti sbagliati.

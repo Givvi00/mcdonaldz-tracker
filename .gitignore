@@ -9,3 +9,4 @@ dist
 # Claude Code: personal, machine-specific files
 .claude/settings.local.json
 .claude/worktrees/
+osm-report.md
