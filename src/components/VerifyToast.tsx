@@ -28,6 +28,9 @@ export function VerifyToast() {
   const notice = useMcdonaldStore(state => state.verifyNotice);
   const clear = useMcdonaldStore(state => state.clearVerifyNotice);
   const mcdonalds = useMcdonaldStore(state => state.mcdonalds);
+  // The stamp toast sits in the same place: when a verification unlocks a stamp, that one matters more (and the seal on
+  // the card already says the visit is verified), so this one steps aside instead of lying under it
+  const stampToast = useMcdonaldStore(state => state.newlyUnlocked.length > 0 && state.celebration?.kind !== 'stamp');
 
   useEffect(() => {
     if (!notice) return;
@@ -35,7 +38,11 @@ export function VerifyToast() {
     return () => clearTimeout(t);
   }, [notice, clear]);
 
-  if (!notice) return null;
+  useEffect(() => {
+    if (notice && stampToast) clear();
+  }, [notice, stampToast, clear]);
+
+  if (!notice || stampToast) return null;
   const mc = mcdonalds.find(m => m.id === notice.mcdonaldId);
   const ok = notice.outcome.result === 'ok';
   const { title, hint } = message(notice.outcome, mc ? shortMcName(mc.name) : 'il ristorante');
