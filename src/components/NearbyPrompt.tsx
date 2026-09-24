@@ -35,13 +35,13 @@ type Suggestion = { mc: McDonald; km: number; kind: 'new' | 'again' };
  * again every time the position is refreshed; each restaurant is asked about at most once per session.
  */
 export function NearbyPrompt() {
-  const { user, mcdonalds, visits, userPosition, locationStatus, toggleVisit, verifyVisit, celebration, pendingRatingFor, unmarkRequest } =
+  const { user, mcdonalds, visits, userPosition, locationStatus, toggleVisit, verifyVisit, celebration, pendingRatingFor, unmarkRequest, onboarding } =
     useMcdonaldStore();
   const [suggestion, setSuggestion] = useState<Suggestion | null>(null);
 
   useEffect(() => {
     // Never on top of something else going on (a celebration, the rating sheet, a confirmation)
-    if (suggestion || celebration || pendingRatingFor || unmarkRequest) return;
+    if (suggestion || celebration || pendingRatingFor || unmarkRequest || onboarding !== 'done') return;
     // `user` is there once your visits are loaded: before that every restaurant would look new
     if (!user || locationStatus !== 'granted' || !userPosition || mcdonalds.length === 0) return;
 
@@ -55,7 +55,7 @@ export function NearbyPrompt() {
     if (nearest && nearest.km <= NEARBY_RADIUS_KM) {
       setSuggestion({ ...nearest, kind: byId.has(nearest.mc.id) ? 'again' : 'new' });
     }
-  }, [user, locationStatus, userPosition, mcdonalds, visits, suggestion, celebration, pendingRatingFor, unmarkRequest]);
+  }, [user, locationStatus, userPosition, mcdonalds, visits, suggestion, celebration, pendingRatingFor, unmarkRequest, onboarding]);
 
   const dismiss = () => {
     if (suggestion) markDismissed(suggestion.mc.id);

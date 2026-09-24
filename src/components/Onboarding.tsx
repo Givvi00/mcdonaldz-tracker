@@ -1,0 +1,178 @@
+import { useRef, useState } from 'react';
+import { useMcdonaldStore } from '@/store/mcdonaldStore';
+import { FoodPattern } from '@/components/FoodPattern';
+import { VerifiedBadge } from '@/components/VerifiedBadge';
+import { Stamp } from '@/components/Stamp';
+import { RegionSticker } from '@/components/RegionSticker';
+import { ACHIEVEMENTS } from '@/services/achievements';
+
+/** A restaurant card as it looks once visited, drawn for the guide (not a real, tappable one) */
+function SampleCard() {
+  return (
+    <div className="w-64 rounded-2xl border border-green-300 bg-green-50 p-4 text-left shadow-lg">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="truncate text-sm font-bold text-gray-800">McDonald's Chieti</p>
+          <p className="text-xs text-gray-500">Chieti, Abruzzo</p>
+          <div className="mt-2 flex gap-1.5">
+            <span className="rounded-full bg-green-100 px-2 py-0.5 text-[0.65rem] font-semibold text-green-800">📅 Visitato oggi</span>
+            <span className="rounded-full bg-mc-yellow/30 px-2 py-0.5 text-[0.65rem] font-semibold text-yellow-800">★ 4.5</span>
+          </div>
+        </div>
+        <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600 font-bold text-white ring-2 ring-white">
+          ✓
+        </span>
+      </div>
+    </div>
+  );
+}
+
+interface Slide {
+  title: string;
+  text: string;
+  art: React.ReactNode;
+}
+
+/**
+ * The guide to the app: on a first launch (before the browser asks for the position, which it explains), or again
+ * from the Profile. A few slides over the red card background, swiped or stepped with the buttons; the last one asks
+ * for a name (optional).
+ */
+export function Onboarding() {
+  const { onboarding, finishOnboarding, mcdonalds, user, renameUser } = useMcdonaldStore();
+  const [index, setIndex] = useState(0);
+  const [name, setName] = useState<string | null>(null);
+  const touchX = useRef<number | null>(null);
+
+  if (onboarding !== 'first' && onboarding !== 'again') return null;
+  const openCount = mcdonalds.filter(m => m.opened).length;
+
+  const slides: Slide[] = [
+    {
+      title: 'Benvenuto su McDonaldz',
+      text: `Tutti i ${openCount} McDonald's d'Italia, da collezionare uno per uno.`,
+      art: (
+        <img
+          src={`${import.meta.env.BASE_URL}icons/icon-192.png`}
+          alt=""
+          width={120}
+          height={120}
+          className="rounded-[28px] border-4 border-white/80 shadow-2xl"
+        />
+      ),
+    },
+    {
+      title: 'Segna i Mc che visiti',
+      text: 'Tocca un ristorante, vicino a te, nella lista o sulla mappa: diventa verde. Poi puoi votarlo e, se serve, cambiarne la data.',
+      art: <SampleCard />,
+    },
+    {
+      title: 'Se sei lì, vale di più',
+      text: 'Segna la visita mentre sei al ristorante: il telefono controlla dove sei e la visita diventa verificata, con il sigillo blu. Alcuni timbri valgono solo così.',
+      art: <VerifiedBadge size={110} />,
+    },
+    {
+      title: 'Timbri, regioni e livelli',
+      text: "Ogni visita ti fa salire di livello e riempie il passaporto di timbri. Completa una regione per la figurina d'oro, verificala tutta per quella di diamante.",
+      art: (
+        <div className="flex items-end gap-3">
+          <div className="rounded-2xl bg-[#FBF4E2] p-2 shadow-lg">
+            <Stamp def={ACHIEVEMENTS.FIRST_STAMP} state="got" size={64} />
+          </div>
+          <div className="w-20 -rotate-6 drop-shadow-lg">
+            <RegionSticker summary={{ region: 'Abruzzo', total: 18, visited: 18, complete: true }} tier="gold" />
+          </div>
+          <div className="w-20 rotate-6 drop-shadow-lg">
+            <RegionSticker summary={{ region: 'Molise', total: 4, visited: 4, complete: true }} tier="diamond" />
+          </div>
+        </div>
+      ),
+    },
+  ];
+  const last = slides.length; // the name, after the slides
+  const total = slides.length + 1;
+  const shownName = name ?? user?.name ?? '';
+
+  const go = (to: number) => setIndex(Math.max(0, Math.min(last, to)));
+  const finish = async () => {
+    if (shownName.trim() && shownName.trim() !== (user?.name ?? '')) await renameUser(shownName);
+    setIndex(0);
+    setName(null);
+    finishOnboarding();
+  };
+
+  return (
+    <div
+      role="dialog"
+      aria-label="Guida a McDonaldz"
+      className="fixed inset-0 z-[2900] flex flex-col overflow-hidden bg-gradient-to-br from-mc-red to-red-800 text-white"
+      style={{ paddingTop: 'var(--safe-top)', paddingBottom: 'var(--safe-bottom)' }}
+      onTouchStart={e => (touchX.current = e.touches[0].clientX)}
+      onTouchEnd={e => {
+        if (touchX.current === null) return;
+        const dx = e.changedTouches[0].clientX - touchX.current;
+        touchX.current = null;
+        if (Math.abs(dx) > 50) go(index + (dx < 0 ? 1 : -1));
+      }}
+    >
+      <FoodPattern opacity={0.16} />
+
+      <div className="relative flex h-14 items-center justify-end px-4">
+        {index < last && (
+          <button onClick={() => go(last)} className="rounded-full px-3 py-1.5 text-sm font-semibold text-white/80 active:scale-95">
+            Salta
+          </button>
+        )}
+      </div>
+
+      <div key={index} className="relative mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center px-8 text-center animate-[toast-in_0.35s_ease-out]">
+        {index < last ? (
+          <>
+            <div className="flex min-h-[150px] items-center justify-center">{slides[index].art}</div>
+            <h2 className="mt-8 font-display text-2xl font-bold">{slides[index].title}</h2>
+            <p className="mt-3 text-base leading-relaxed text-white/90">{slides[index].text}</p>
+          </>
+        ) : (
+          <>
+            <h2 className="font-display text-2xl font-bold">{onboarding === 'first' ? 'Ultima cosa' : 'Il tuo nome'}</h2>
+            <p className="mt-3 text-base text-white/90">Come ti chiami? Compare in alto, sopra il livello. Puoi anche saltarlo.</p>
+            <input
+              value={shownName}
+              onChange={e => setName(e.target.value)}
+              maxLength={16}
+              placeholder="Il tuo nome"
+              className="mt-5 w-full rounded-2xl border-2 border-white/40 bg-white px-4 py-3 text-center text-lg font-semibold text-gray-800 outline-none focus:border-mc-yellow"
+            />
+            {onboarding === 'first' && (
+              <p className="mt-6 rounded-2xl bg-black/20 px-4 py-3 text-sm leading-relaxed text-white/90">
+                📍 Subito dopo il telefono ti chiederà la posizione: serve per mostrarti i Mc vicini e per verificare le visite.
+                Resta sul tuo telefono.
+              </p>
+            )}
+          </>
+        )}
+      </div>
+
+      <div className="relative mx-auto w-full max-w-md px-6 pb-6">
+        <div className="mb-5 flex justify-center gap-2" aria-label={`Pagina ${index + 1} di ${total}`}>
+          {Array.from({ length: total }, (_, i) => (
+            <span key={i} className={`h-2 rounded-full transition-all ${i === index ? 'w-6 bg-mc-yellow' : 'w-2 bg-white/40'}`} />
+          ))}
+        </div>
+        <div className="flex gap-3">
+          {index > 0 && (
+            <button onClick={() => go(index - 1)} className="flex-1 rounded-2xl bg-white/15 py-3.5 font-bold active:scale-[0.98]">
+              Indietro
+            </button>
+          )}
+          <button
+            onClick={() => (index < last ? go(index + 1) : void finish())}
+            className="flex-[2] rounded-2xl bg-mc-yellow py-3.5 font-bold text-gray-800 shadow-lg active:scale-[0.98]"
+          >
+            {index < last ? 'Avanti' : onboarding === 'first' ? 'Inizia' : 'Fatto'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

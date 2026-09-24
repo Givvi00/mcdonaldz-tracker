@@ -189,12 +189,24 @@ async function closeDB(): Promise<void> {
   if (pending) (await pending.catch(() => null))?.close();
 }
 
-export async function getOrCreateUser(): Promise<User> {
+// Two calls at the same moment (the app starting twice in development, or any future overlap) must not both find no
+// user and create one each: the stamps are stored per user, and those of the second one would never be seen again.
+let userPromise: Promise<User> | null = null;
+
+export function getOrCreateUser(): Promise<User> {
+  userPromise ??= loadOrCreateUser().finally(() => {
+    userPromise = null;
+  });
+  return userPromise;
+}
+
+async function loadOrCreateUser(): Promise<User> {
   const database = await initDB();
   const allUsers = await database.getAll('users');
 
   if (allUsers.length > 0) {
-    return allUsers[0];
+    // The oldest one, always the same (ids grow with time)
+    return allUsers.sort((a, b) => a.createdAt - b.createdAt)[0];
   }
 
   const newUser: User = {

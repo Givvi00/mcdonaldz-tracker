@@ -15,6 +15,7 @@ import { FoodRain } from '@/components/FoodRain';
 import { AutoRatingPrompt } from '@/components/AutoRatingPrompt';
 import { VerifyToast } from '@/components/VerifyToast';
 import { UnmarkConfirm } from '@/components/UnmarkConfirm';
+import { Onboarding } from '@/components/Onboarding';
 import { CelebrationLab } from '@/components/CelebrationLab';
 import { FoodIconSprite } from '@/components/FoodIcon';
 import { startUpdateChecks } from '@/services/updates';
@@ -23,10 +24,11 @@ import { requestPersistentStorage } from '@/services/storagePersist';
 import './App.css';
 
 function App() {
-  const { selectedTab, setSelectedTab, initApp, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile } =
+  const { selectedTab, setSelectedTab, initApp, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile, onboarding } =
     useMcdonaldStore();
   useTheme();
-  const { status: geoStatus, coords } = useGeolocation();
+  // On a first launch the browser asks for the position only after the guide has said what it is for
+  const { status: geoStatus, coords } = useGeolocation(onboarding === 'done' || onboarding === 'again');
 
   useEffect(() => {
     initApp();
@@ -60,6 +62,7 @@ function App() {
       <AutoRatingPrompt />
       <VerifyToast />
       <UnmarkConfirm />
+      <Onboarding />
       {import.meta.env.DEV && <CelebrationLab />}
 
       {/* Wordmark header */}

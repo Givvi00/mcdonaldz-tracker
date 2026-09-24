@@ -14,6 +14,7 @@ import {
 import { checkAndUnlockAchievements } from '@/services/achievements';
 import { syncDiamondRegions, syncRegionCompletions } from '@/services/regions';
 import { freshFix, judgeFix, type VerifyOutcome } from '@/services/gpsCheck';
+import { isOnboarded, markOnboarded } from '@/services/onboarding';
 import { distanceKm } from '@/utils/geo';
 import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds, visitedIdSet } from '@/utils/catalog';
@@ -68,6 +69,11 @@ interface AppStore {
   verifyNotice: VerifyNotice | null;
   /** A visit you asked to remove, waiting for you to confirm (a tap by mistake must not lose it, least of all a verified one) */
   unmarkRequest: string | null;
+  /**
+   * The guide: 'unknown' until the visits are loaded, 'first' on a first launch (the position is asked only after it),
+   * 'again' when opened from the Profile, 'done' otherwise.
+   */
+  onboarding: 'unknown' | 'first' | 'again' | 'done';
 
   initApp: () => Promise<void>;
   renameUser: (name: string) => Promise<void>;
@@ -94,6 +100,8 @@ interface AppStore {
   enqueueCelebrations: (events: Celebration[]) => void;
   clearCelebration: () => void;
   clearPendingRating: () => void;
+  openOnboarding: () => void;
+  finishOnboarding: () => void;
   setSelectedTab: (tab: 'home' | 'map' | 'stats' | 'profile') => void;
   setSearchQuery: (query: string) => void;
   setFilterRegion: (region: string | null) => void;
@@ -138,11 +146,15 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   verifying: [],
   verifyNotice: null,
   unmarkRequest: null,
+  onboarding: 'unknown',
 
   initApp: async () => {
     const user = await getOrCreateUser();
     const visits = await getVisits();
-    set({ user, visits });
+    // The guide is for a first launch only: an install that already has visits has been in use for a while
+    const first = !isOnboarded() && visits.length === 0;
+    if (!first) markOnboarded();
+    set({ user, visits, onboarding: first ? 'first' : 'done' });
     // Catch up silently on anything already earned from past sessions (no toast).
     await checkAndUnlockAchievements(user.id, get().mcdonalds, visits);
     await syncRegionCompletions(user.id, get().mcdonalds, visits);
@@ -226,6 +238,13 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   },
 
   clearPendingRating: () => set({ pendingRatingFor: null }),
+
+  openOnboarding: () => set({ onboarding: 'again' }),
+
+  finishOnboarding: () => {
+    markOnboarded();
+    set({ onboarding: 'done' });
+  },
 
   requestToggle: (mcdonaldId: string) => {
     if (get().visits.some(v => v.mcdonaldId === mcdonaldId)) set({ unmarkRequest: mcdonaldId });

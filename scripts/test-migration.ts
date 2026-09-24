@@ -8,6 +8,7 @@ import {
   DB_NAME,
   MIGRATIONS,
   backupVersion,
+  getOrCreateUser,
   getPreMigrationBackup,
   getVisits,
   initDB,
@@ -162,6 +163,15 @@ await test('many callers at startup share one connection, and "Cancella tutto" r
   assert.ok(!names.includes(DB_NAME), 'the database is still there');
   // and the app can start again from scratch afterwards
   assert.equal((await getVisits()).length, 0);
+});
+
+await reset();
+await test('the app starting twice at once creates a single user', async () => {
+  const [a, b] = await Promise.all([getOrCreateUser(), getOrCreateUser()]);
+  assert.equal(a.id, b.id);
+  const database = await initDB();
+  assert.equal((await database.getAll('users')).length, 1);
+  await wipeAllData();
 });
 
 console.log(`\n${passed} migration checks passed`);

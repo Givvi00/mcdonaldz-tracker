@@ -25,7 +25,7 @@ const THEME_OPTIONS: Array<{ value: ThemeMode; label: string; icon: string }> = 
 ];
 
 export function Profile() {
-  const { user, getVisitedCount, mcdonalds, catalogInfo, renameUser, profileFocus, clearProfileFocus, initApp } = useMcdonaldStore();
+  const { user, getVisitedCount, mcdonalds, catalogInfo, renameUser, profileFocus, clearProfileFocus, initApp, openOnboarding } = useMcdonaldStore();
   const [dataMessage, setDataMessage] = useState<{ ok: boolean; text: string } | null>(null);
   const [confirmWipe, setConfirmWipe] = useState(false);
   const nameInput = useRef<HTMLInputElement>(null);
@@ -287,6 +287,12 @@ export function Profile() {
           className="mt-3 px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 text-xs font-bold active:scale-[0.97] transition-transform disabled:opacity-60"
         >
           🔄 Controlla aggiornamenti
+        </button>
+        <button
+          onClick={openOnboarding}
+          className="mt-3 ml-2 px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 text-xs font-bold active:scale-[0.97] transition-transform"
+        >
+          📖 Rivedi la guida
         </button>
         {updateCheck && (
           <p className="text-xs mt-2 font-semibold" role="status">

@@ -118,7 +118,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 ## Account, community e onboarding (idea del 22/09/2026, da capire con calma)
 - [ ] **Utenze/account**: oggi non esistono, ogni telefono ha i propri dati locali senza login. Serve per: community tra amici, seguire altri utenti, classifiche/gare, vedere il livello degli amici. Grosso cambio di architettura, da progettare a parte
 - [ ] **Salvataggio in remoto**: serve un server con hosting e database (oggi tutto vive solo nell'IndexedDB del dispositivo, vedi `src/services/db.ts`); da capire login, sincronizzazione tra dispositivi, costi e chi lo mantiene
-- [ ] **Onboarding/tutorial alla prima apertura**: una guida rapida per chi installa l'app per la prima volta, prima ancora di aprire un account
+- [x] **Onboarding alla prima apertura** (24/09/2026): Onboarding.tsx, 5 schermate sullo sfondo rosso (benvenuto, segnare le visite, visite verificate, timbri/regioni/livelli, nome facoltativo), avanti/indietro/salta e scorrimento col dito. Solo alla prima apertura senza visite (chi ha già dati non la vede); la posizione si chiede solo dopo la guida, che spiega a cosa serve; riapribile da Profilo → "Rivedi la guida". Trovato e corretto nel frattempo: all’avvio si potevano creare due utenti insieme (timbri e nome finivano su quello sbagliato), ora uno solo (test in scripts/test-migration.ts). Da guardare sul telefono
 - Nota: queste tre cose sono collegate (l'account serve sia per la community sia per il salvataggio remoto) ma vanno affrontate con una sessione dedicata, non di corsa
 
 ## Festa della regione "che esce dall'Italia" (21/09/2026, fatta)

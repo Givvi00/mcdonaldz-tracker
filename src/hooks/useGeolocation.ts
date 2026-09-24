@@ -14,12 +14,14 @@ const REFRESH_MS = 2 * 60 * 1000;
  * Where you are, kept up to date: read when the app opens, again whenever it comes back on screen (a web app stays
  * open in the background: opened at home, it is brought back at the restaurant) and every couple of minutes while
  * in use. A reading that fails later keeps the last good one, unless the permission itself was taken away.
+ * `enabled`: false until the position may be asked (after the first-launch guide, which says what it is for).
  */
-export function useGeolocation() {
+export function useGeolocation(enabled = true) {
   const [status, setStatus] = useState<GeoStatus>('idle');
   const [coords, setCoords] = useState<Coords | null>(null);
 
   useEffect(() => {
+    if (!enabled) return;
     if (!('geolocation' in navigator)) {
       setStatus('unsupported');
       return;
@@ -59,7 +61,7 @@ export function useGeolocation() {
       document.removeEventListener('visibilitychange', onVisible);
       clearInterval(timer);
     };
-  }, []);
+  }, [enabled]);
 
   return { status, coords };
 }
