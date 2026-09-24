@@ -6,7 +6,6 @@ import { ConfirmSheet } from '@/components/ConfirmSheet';
 /**
  * Your account in the Profile: the email you sign in with, your username (unique among everyone), signing out and
  * deleting the account.
- * Saving online happens by itself and is never mentioned: there is nothing to do about it.
  */
 export function AccountSection() {
   const { account, user, renameUser, signOut, deleteAccount, profileFocus, clearProfileFocus } = useMcdonaldStore();
@@ -123,7 +122,7 @@ export function AccountSection() {
       {confirm === 'signout' && (
         <ConfirmSheet
           title="Uscire dall'account?"
-          body="Da questo telefono spariscono visite e timbri, ma restano nel tuo account: rientrando con la tua email ritrovi tutto."
+          body="Per rientrare ti basterà la tua email."
           confirmLabel="Esci"
           onCancel={() => setConfirm(null)}
           onConfirm={() => {
@@ -139,7 +138,7 @@ export function AccountSection() {
       {confirm === 'delete' && (
         <ConfirmSheet
           title="Eliminare l'account?"
-          body="Perdi tutto, per sempre: visite, voti, timbri, regioni e username, su ogni telefono. Non si può annullare."
+          body="Perdi tutto, per sempre: visite, voti, timbri, regioni e username. Non si può annullare."
           confirmLabel="Elimina account"
           onCancel={() => setConfirm(null)}
           onConfirm={() => {

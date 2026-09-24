@@ -417,7 +417,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   signOut: async () => {
     await get().syncNow();
     if (Object.keys(readOutbox()).length > 0) {
-      throw new Error('Alcune modifiche non sono ancora salvate: collegati a internet e riprova.');
+      throw new Error('Sei offline: collegati a internet e riprova.');
     }
     await signOutOnline().catch(() => {}); // the session is removed from the phone below anyway
     await wipeAllData();

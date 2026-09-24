@@ -156,9 +156,13 @@ export function Onboarding() {
           </>
         ) : current === accountStep ? (
           <>
-            <div className="text-6xl" aria-hidden>
-              ☁️
-            </div>
+            <img
+              src={`${import.meta.env.BASE_URL}icons/icon-192.png`}
+              alt=""
+              width={88}
+              height={88}
+              className="rounded-[22px] border-4 border-white/80 shadow-2xl"
+            />
             <h2 className="mt-6 font-display text-2xl font-bold">{onboarding === 'signin' ? 'Entra in McDonaldz' : 'Il tuo account'}</h2>
             {signedIn ? (
               <p className="mt-3 rounded-2xl bg-black/20 px-4 py-3 text-base text-white/90">
@@ -168,8 +172,8 @@ export function Onboarding() {
               <>
                 <p className="mt-3 mb-5 text-base leading-relaxed text-white/90">
                   {onboarding === 'signin'
-                    ? 'Entra con la tua email per continuare: le visite che hai su questo telefono restano tue.'
-                    : 'Ti mandiamo un codice via email. Con il tuo account ritrovi visite e timbri su qualsiasi telefono. Per ora solo su invito.'}
+                    ? 'Scrivi la tua email: ti mandiamo un codice per entrare.'
+                    : 'Scrivi la tua email: ti mandiamo un codice per entrare. Per ora solo su invito.'}
                 </p>
                 <SignInForm variant="onRed" onSignedIn={() => setIndex(last)} />
               </>
