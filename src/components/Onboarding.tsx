@@ -169,14 +169,9 @@ export function Onboarding() {
                 ✓ Sei dentro come <span className="font-semibold">{signedIn.email}</span>
               </p>
             ) : (
-              <>
-                <p className="mt-3 mb-5 text-base leading-relaxed text-white/90">
-                  {onboarding === 'signin'
-                    ? 'Scrivi la tua email: ti mandiamo un codice per entrare.'
-                    : 'Scrivi la tua email: ti mandiamo un codice per entrare. Per ora solo su invito.'}
-                </p>
-                <SignInForm variant="onRed" onSignedIn={() => setIndex(last)} />
-              </>
+              <div className="mt-3 w-full">
+                <SignInForm onSignedIn={() => setIndex(last)} />
+              </div>
             )}
           </>
         ) : (
