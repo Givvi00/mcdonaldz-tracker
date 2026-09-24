@@ -88,15 +88,6 @@ export function syncedAccount(): string | null {
   }
 }
 
-/** After deleting the account: whatever signs in next here starts with a full send */
-export function forgetSyncedAccount(): void {
-  try {
-    localStorage.removeItem(ACCOUNT_KEY);
-  } catch {
-    // storage unavailable: nothing to forget
-  }
-}
-
 function rememberAccount(accountId: string): void {
   try {
     localStorage.setItem(ACCOUNT_KEY, accountId);

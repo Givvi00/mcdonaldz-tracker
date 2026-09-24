@@ -1,126 +1,122 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { SectionTitle } from '@/components/SectionTitle';
 import { ConfirmSheet } from '@/components/ConfirmSheet';
-import { SignInForm } from '@/components/SignInForm';
-
-function syncLabel(at?: number): string {
-  if (!at) return '';
-  const minutes = Math.round((Date.now() - at) / 60000);
-  if (minutes < 1) return 'Salvato online adesso';
-  const time = new Date(at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-  const sameDay = new Date(at).toDateString() === new Date().toDateString();
-  return `Salvato online ${sameDay ? `alle ${time}` : new Date(at).toLocaleDateString('it-IT', { dateStyle: 'medium' })}`;
-}
 
 /**
- * The online account in the Profile: sign in with a code sent by email; once in, the visits are saved online by
- * themselves and come back on any phone you sign in on.
+ * Your account in the Profile: the email you sign in with, your username (unique among everyone) and the way out.
+ * Saving online happens by itself and is never mentioned: there is nothing to do about it.
  */
 export function AccountSection() {
-  const { account, syncNow, signOutAccount, deleteAccount } = useMcdonaldStore();
-  const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
-  const [confirm, setConfirm] = useState<'signout' | 'delete' | null>(null);
+  const { account, user, renameUser, deleteAccount, profileFocus, clearProfileFocus } = useMcdonaldStore();
+  const [draft, setDraft] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const input = useRef<HTMLInputElement>(null);
 
-  const run = async (work: () => Promise<void>) => {
-    setMessage(null);
+  // Arrived from "Ciao! Come ti chiami?": bring the field into view and start typing
+  useEffect(() => {
+    if (profileFocus !== 'name') return;
+    const t = setTimeout(() => {
+      input.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      input.current?.focus({ preventScroll: true });
+      clearProfileFocus();
+    }, 250);
+    return () => clearTimeout(t);
+  }, [profileFocus, clearProfileFocus]);
+
+  const signedIn = account && account.status !== 'signed-out' ? account : null;
+  const shown = draft ?? user?.name ?? '';
+  const problem = nameError ?? (signedIn?.nameTaken ? `«${signedIn.nameTaken}» è già di un altro: scegline un altro` : null);
+
+  const save = async () => {
+    setSaving(true);
     try {
-      await work();
+      await renameUser(shown);
+      setDraft(null);
+      setNameError(null);
     } catch (error) {
-      setMessage({ ok: false, text: (error as Error).message });
+      setNameError((error as Error).message);
+    } finally {
+      setSaving(false);
     }
   };
 
-  const signedIn = account && account.status !== 'signed-out' ? account : null;
-
   return (
     <div>
-      <SectionTitle emoji="☁️" className="mb-1">
-        Salvataggio online
-      </SectionTitle>
-
-      {account === null && <p className="text-xs text-gray-500 dark:text-gray-400">Non raggiungibile adesso: sei offline?</p>}
-
-      {account?.status === 'signed-out' && (
-        <>
-          <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
-            Entra con la tua email: visite, voti e timbri si salvano online da soli e li ritrovi su qualsiasi telefono. Per ora solo su
-            invito.
-          </p>
-          <SignInForm />
-        </>
-      )}
-
-      {signedIn && (
-        <div className="rounded-2xl border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-gray-900">
-          <p className="truncate text-sm font-semibold text-gray-800 dark:text-gray-100">{signedIn.account.email}</p>
-          <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-            {signedIn.status === 'syncing' && 'Salvataggio in corso…'}
-            {signedIn.status === 'synced' && (syncLabel(signedIn.lastSyncAt) || 'Collegato')}
-            {signedIn.status === 'offline' && 'Sei offline: salvo online appena torna la connessione'}
-            {signedIn.status === 'error' && 'Salvataggio online non riuscito: riprovo da solo, oppure tocca «Salva ora»'}
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <button
-              onClick={() => void syncNow()}
-              disabled={signedIn.status === 'syncing'}
-              className="rounded-xl bg-mc-yellow px-3 py-2 text-xs font-bold text-gray-800 active:scale-95 disabled:opacity-50"
-            >
-              ☁️ Salva ora
-            </button>
-            <button
-              onClick={() => setConfirm('signout')}
-              className="rounded-xl bg-gray-100 px-3 py-2 text-xs font-bold text-gray-800 active:scale-95 dark:bg-gray-800 dark:text-gray-100"
-            >
-              Esci
-            </button>
-            <button onClick={() => setConfirm('delete')} className="px-2 py-2 text-xs font-semibold text-red-600 underline dark:text-red-400">
-              Elimina account
-            </button>
+      <SectionTitle icon="cup">Il tuo account</SectionTitle>
+      <div className="space-y-3 rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+        {signedIn && (
+          <div>
+            <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">Email</p>
+            <p className="truncate text-sm font-semibold text-gray-800 dark:text-gray-100">{signedIn.account.email}</p>
           </div>
+        )}
+        <div>
+          <label htmlFor="username" className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+            Username
+          </label>
+          <form
+            className="mt-1 flex gap-2"
+            onSubmit={e => {
+              e.preventDefault();
+              void save();
+            }}
+          >
+            <input
+              id="username"
+              ref={input}
+              value={shown}
+              onChange={e => {
+                setDraft(e.target.value);
+                setNameError(null);
+              }}
+              maxLength={16}
+              placeholder="Il tuo username"
+              className="min-w-0 flex-1 rounded-xl border-2 border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold text-gray-800 outline-none focus:border-mc-red dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+            />
+            <button
+              type="submit"
+              disabled={draft === null || saving || !shown.trim()}
+              className="rounded-xl bg-mc-red px-4 py-2.5 text-sm font-bold text-white transition-transform active:scale-95 disabled:opacity-40"
+            >
+              {saving ? '…' : 'Salva'}
+            </button>
+          </form>
+          {problem && (
+            <p role="status" className="mt-2 rounded-xl bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 dark:bg-red-950/40 dark:text-red-300">
+              {problem}
+            </p>
+          )}
         </div>
-      )}
+      </div>
 
-      {message && (
-        <p
-          role="status"
-          className={`mt-2 rounded-xl px-3 py-2 text-xs font-semibold ${
-            message.ok ? 'bg-green-50 text-green-800 dark:bg-green-950/40 dark:text-green-300' : 'bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300'
-          }`}
-        >
-          {message.ok ? '✓ ' : ''}
-          {message.text}
+      <button
+        onClick={() => {
+          setDeleteError(null);
+          setConfirmDelete(true);
+        }}
+        className="mt-3 w-full py-2 text-center text-xs font-semibold text-red-600 underline dark:text-red-400"
+      >
+        Elimina account
+      </button>
+      {deleteError && (
+        <p role="status" className="rounded-xl bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 dark:bg-red-950/40 dark:text-red-300">
+          {deleteError}
         </p>
       )}
 
-      <p className="mt-2 text-[0.7rem] leading-snug text-gray-400 dark:text-gray-500">
-        Online vanno solo email, nome, i Mc visitati con data, voti e timbri. La tua posizione resta sempre sul telefono.
-      </p>
-
-      {confirm === 'signout' && (
-        <ConfirmSheet
-          title="Uscire dall'account?"
-          body="Le visite restano su questo telefono e online. Da qui non si salvano più online finché non rientri."
-          confirmLabel="Esci"
-          onCancel={() => setConfirm(null)}
-          onConfirm={() => {
-            setConfirm(null);
-            void run(signOutAccount);
-          }}
-        />
-      )}
-      {confirm === 'delete' && (
+      {confirmDelete && (
         <ConfirmSheet
           title="Eliminare l'account?"
-          body="Si cancellano l'account e tutta la copia online: visite, voti, timbri e nome. Su questo telefono restano. Non si può annullare."
+          body="Perdi tutto, per sempre: visite, voti, timbri, regioni e username, su ogni telefono. Non si può annullare."
           confirmLabel="Elimina account"
-          onCancel={() => setConfirm(null)}
+          onCancel={() => setConfirmDelete(false)}
           onConfirm={() => {
-            setConfirm(null);
-            void run(async () => {
-              await deleteAccount();
-              setMessage({ ok: true, text: 'Account eliminato. I dati su questo telefono sono ancora qui.' });
-            });
+            setConfirmDelete(false);
+            void deleteAccount().catch(error => setDeleteError((error as Error).message));
           }}
         />
       )}

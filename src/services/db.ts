@@ -1,6 +1,6 @@
 import { openDB, DBSchema, IDBPDatabase, IDBPTransaction, StoreNames } from 'idb';
 import type { Visit, User, Achievement, VisitRating } from '@shared/types';
-import { NAME_ENTRY, changing, markChanged } from './syncOutbox';
+import { NAME_ENTRY, changing } from './syncOutbox';
 
 interface AppDB extends DBSchema {
   users: {
@@ -26,7 +26,6 @@ let db: IDBPDatabase<AppDB> | null = null;
 //   1. raise DB_VERSION by one;
 //   2. add MIGRATIONS[<new version>]: it receives the database of the previous version and changes it (create a store,
 //      add an index, rewrite the records with the new field...). Never edit a step that has already been published;
-//   3. if backups change shape, add BACKUP_MIGRATIONS[<new version>] to bring an older backup up to date.
 // Before any upgrade the data is copied to localStorage (see snapshotBeforeUpgrade), as a last resort.
 export const DB_NAME = 'mcdonaldz-tracker';
 export const DB_VERSION = 1;
@@ -34,7 +33,7 @@ const SAFETY_KEY = 'mcdonaldz-pre-migration-backup';
 
 type Upgrading = IDBPTransaction<AppDB, StoreNames<AppDB>[], 'versionchange'>;
 export type Migration = (db: IDBPDatabase<AppDB>, tx: Upgrading) => void | Promise<void>;
-export type BackupData = { schemaVersion?: number; users?: User[]; visits?: Visit[]; achievements?: Achievement[] };
+type SavedData = { schemaVersion?: number; users?: User[]; visits?: Visit[]; achievements?: Achievement[] };
 
 export const MIGRATIONS: Record<number, Migration> = {
   1: db => {
@@ -52,9 +51,6 @@ export const MIGRATIONS: Record<number, Migration> = {
   },
 };
 
-/** Steps that bring the content of an older backup file up to date, one version at a time */
-export const BACKUP_MIGRATIONS: Record<number, (data: BackupData) => BackupData> = {};
-
 /** Runs every step between the version found on the device and the current one (a new install runs them all) */
 export async function runMigrations(
   database: IDBPDatabase<AppDB>,
@@ -70,7 +66,7 @@ export async function runMigrations(
   }
 }
 
-async function readAll(database: IDBPDatabase<AppDB>): Promise<BackupData> {
+async function readAll(database: IDBPDatabase<AppDB>): Promise<SavedData> {
   return {
     users: await database.getAll('users'),
     visits: await database.getAll('visits'),
@@ -110,7 +106,7 @@ export async function snapshotBeforeUpgrade(version = DB_VERSION): Promise<boole
   }
 }
 
-/** The copy made before the last upgrade, if any (same format as a backup file) */
+/** The copy made before the last upgrade, if any (kept as a last resort, read by hand if ever needed) */
 export function getPreMigrationBackup(): { savedAt: number; json: string } | null {
   try {
     const raw = typeof localStorage === 'undefined' ? null : localStorage.getItem(SAFETY_KEY);
@@ -363,44 +359,6 @@ export async function addMissingAchievements(
     added += 1;
   }
   return added;
-}
-
-export async function exportData(): Promise<string> {
-  const database = await initDB();
-  return JSON.stringify({ schemaVersion: DB_VERSION, ...(await readAll(database)) }, null, 2);
-}
-
-/** Version of a backup file: the files made before the versions existed are version 1 */
-export function backupVersion(data: BackupData): number {
-  return typeof data.schemaVersion === 'number' ? data.schemaVersion : 1;
-}
-
-/** Throws a readable error for a backup made by a newer version of the app; otherwise brings it up to date */
-export function upgradeBackup(data: BackupData, steps: Record<number, (d: BackupData) => BackupData> = BACKUP_MIGRATIONS, to = DB_VERSION): BackupData {
-  const from = backupVersion(data);
-  if (from > to) throw new Error("Il backup è stato fatto con una versione più recente dell'app: aggiorna l'app e riprova");
-  let current = data;
-  for (let version = from + 1; version <= to; version++) {
-    const step = steps[version];
-    if (step) current = step(current);
-  }
-  return current;
-}
-
-export async function importData(jsonData: string): Promise<void> {
-  const database = await initDB();
-  const data = upgradeBackup(JSON.parse(jsonData));
-
-  for (const user of data.users || []) {
-    await database.put('users', user);
-  }
-  for (const visit of data.visits || []) {
-    await changing(visit.mcdonaldId, () => database.put('visits', visit));
-  }
-  if (data.users?.some(u => u.name)) markChanged(NAME_ENTRY);
-  for (const achievement of data.achievements || []) {
-    await database.put('achievements', achievement);
-  }
 }
 
 /** For the tests: forget the open connection, as a phone that starts again would */

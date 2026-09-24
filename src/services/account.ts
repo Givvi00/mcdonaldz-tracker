@@ -87,13 +87,7 @@ export async function isNameAvailable(name: string): Promise<boolean> {
   return data === true;
 }
 
-/** Leaves the account on this phone; the data stays here and online */
-export async function signOut(): Promise<void> {
-  const client = await getClient();
-  await client.auth.signOut({ scope: 'local' });
-}
-
-/** Deletes the account and everything online (the data on this phone stays) */
+/** Deletes the account and everything online (the app then clears this phone too, see the store) */
 export async function deleteAccount(): Promise<void> {
   const client = await getClient();
   const { error } = await client.rpc('delete_my_account');

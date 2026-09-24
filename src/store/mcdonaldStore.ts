@@ -14,16 +14,16 @@ import {
   getAchievements,
   addMissingAchievements,
   setUserNameFromServer,
+  wipeAllData,
 } from '@/services/db';
 import { onOutboxChange } from '@/services/syncOutbox';
-import { NameTakenError, forgetSyncedAccount, syncOnce, type Local } from '@/services/sync';
+import { NameTakenError, syncOnce, type Local } from '@/services/sync';
 import {
   currentAccount,
   deleteAccount as deleteOnlineAccount,
   getClient,
   hasStoredSession,
   isNameAvailable,
-  signOut as signOutOnline,
   supabaseRemote,
   type Account,
 } from '@/services/account';
@@ -108,9 +108,10 @@ interface AppStore {
   unmarkRequest: string | null;
   /**
    * The guide: 'unknown' until the visits are loaded, 'first' on a first launch (the position is asked only after it),
-   * 'again' when opened from the Profile, 'done' otherwise.
+   * 'again' when opened from the Profile, 'signin' when only signing in is missing (the app needs an account), 'done'
+   * otherwise.
    */
-  onboarding: 'unknown' | 'first' | 'again' | 'done';
+  onboarding: 'unknown' | 'first' | 'again' | 'signin' | 'done';
   account: AccountState | null;
 
   initApp: () => Promise<void>;
@@ -142,6 +143,8 @@ interface AppStore {
   initAccountState: () => Promise<void>;
   /** After a sync brought something from another phone: read the data again, record stamps and regions, no fanfare */
   reloadQuietly: () => Promise<void>;
+  /** The session is gone (expired, or the account deleted elsewhere): back to the sign-in screen */
+  requireSignIn: () => void;
   openOnboarding: () => void;
   /** Reads the account signed in on this phone (if any), syncs, and from then on keeps syncing after every change */
   initAccount: () => Promise<void>;
@@ -149,7 +152,7 @@ interface AppStore {
   accountSignedIn: (account: Account) => Promise<void>;
   /** Sends and receives now (after a change, when the app comes back on screen, when the connection returns) */
   syncNow: () => Promise<void>;
-  signOutAccount: () => Promise<void>;
+  /** Deletes the account and everything with it, online and on this phone; the app starts again from the guide */
   deleteAccount: () => Promise<void>;
   finishOnboarding: () => void;
   setSelectedTab: (tab: 'home' | 'map' | 'stats' | 'profile') => void;
@@ -205,7 +208,8 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     // The guide is for a first launch only: an install that already has visits has been in use for a while
     const first = !isOnboarded() && visits.length === 0;
     if (!first) markOnboarded();
-    set({ user, visits, onboarding: first ? 'first' : 'done' });
+    // Nobody signed in on this phone: straight to signing in (read without waiting for the account library)
+    set({ user, visits, onboarding: first ? 'first' : hasStoredSession() ? 'done' : 'signin' });
     // Catch up silently on anything already earned from past sessions (no toast).
     await checkAndUnlockAchievements(user.id, get().mcdonalds, visits);
     await syncRegionCompletions(user.id, get().mcdonalds, visits);
@@ -301,10 +305,15 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     try {
       const account = await currentAccount();
       set({ account: account ? { status: 'synced', account } : { status: 'signed-out' } });
+      if (!account) get().requireSignIn();
     } catch {
       // Offline and the library not downloaded yet: the next sync (when the connection comes back) tries again
       set({ account: null });
     }
+  },
+
+  requireSignIn: () => {
+    if (get().onboarding === 'done') set({ onboarding: 'signin' });
   },
 
   reloadQuietly: async () => {
@@ -385,6 +394,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
           const message = (error as Error).message ?? '';
           // The session is no longer valid (account deleted, or signed out everywhere)
           const expired = /jwt|refresh token|not authenticated|401/i.test(message);
+          if (expired) get().requireSignIn();
           set({
             account: expired
               ? { status: 'signed-out' }
@@ -398,17 +408,10 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     return syncRunning;
   },
 
-  signOutAccount: async () => {
-    // Anything not sent yet goes out first, so the next phone finds it
-    await get().syncNow();
-    await signOutOnline();
-    set({ account: { status: 'signed-out' } });
-  },
-
   deleteAccount: async () => {
     await deleteOnlineAccount();
-    forgetSyncedAccount();
-    set({ account: { status: 'signed-out' } });
+    await wipeAllData();
+    window.location.reload();
   },
 
   finishOnboarding: () => {

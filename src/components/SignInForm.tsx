@@ -24,7 +24,7 @@ const STYLES = {
 
 /**
  * Sign in with a code sent by email: the email, then the code. Once in, the sync starts by itself (visits, votes,
- * stamps and name from other phones arrive).
+ * stamps and username from other phones arrive).
  */
 export function SignInForm({ variant = 'card', onSignedIn }: { variant?: keyof typeof STYLES; onSignedIn?: () => void }) {
   const { accountSignedIn } = useMcdonaldStore();
@@ -84,7 +84,6 @@ export function SignInForm({ variant = 'card', onSignedIn }: { variant?: keyof t
               const signed = await confirmCode(email, code);
               setCode('');
               setStep('email');
-              setMessage({ ok: true, text: 'Fatto: le tue visite ora sono salvate online' });
               await accountSignedIn(signed);
               onSignedIn?.();
             });

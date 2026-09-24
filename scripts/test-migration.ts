@@ -7,7 +7,6 @@ import { openDB } from 'idb';
 import {
   DB_NAME,
   MIGRATIONS,
-  backupVersion,
   getOrCreateUser,
   getPreMigrationBackup,
   getVisits,
@@ -15,7 +14,6 @@ import {
   openAppDB,
   wipeAllData,
   snapshotBeforeUpgrade,
-  upgradeBackup,
   type Migration,
 } from '../src/services/db';
 
@@ -137,17 +135,6 @@ await test('with no database the check does not create an empty one', async () =
   const database = await openAppDB();
   assert.equal(database.objectStoreNames.length, 3);
   database.close();
-});
-
-await test('backups: old files count as version 1, newer ones are refused', () => {
-  assert.equal(backupVersion({}), 1);
-  assert.equal(backupVersion({ schemaVersion: 3 }), 3);
-  assert.throws(() => upgradeBackup({ schemaVersion: 99 }), /più recente/);
-  const data = { visits: [{ id: 'v', mcdonaldId: 'a', visitedAt: 1 }] };
-  assert.deepEqual(upgradeBackup(data), data);
-  const steps = { 2: (d: typeof data) => ({ ...d, visits: d.visits.map(v => ({ ...v, verified: false })) }) };
-  const up = upgradeBackup(data, steps as never, 2) as unknown as { visits: { verified: boolean }[] };
-  assert.equal(up.visits[0].verified, false);
 });
 
 await reset();

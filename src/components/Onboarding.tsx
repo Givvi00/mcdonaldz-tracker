@@ -36,8 +36,9 @@ interface Slide {
 
 /**
  * The guide to the app: on a first launch (before the browser asks for the position, which it explains), or again
- * from the Profile. A few slides over the red card background, swiped or stepped with the buttons; then signing in to
- * the online copy (optional: on a new phone it brings everything back) and a name (optional).
+ * from the Profile. A few slides over the red card background, swiped or stepped with the buttons; then signing in
+ * (required: the app keeps everything in the account) and a username. When only signing in is missing (an install
+ * from before accounts, or a session gone) it opens straight on that step.
  */
 export function Onboarding() {
   const { onboarding, finishOnboarding, mcdonalds, user, renameUser, account } = useMcdonaldStore();
@@ -47,7 +48,7 @@ export function Onboarding() {
   const [saving, setSaving] = useState(false);
   const touchX = useRef<number | null>(null);
 
-  if (onboarding !== 'first' && onboarding !== 'again') return null;
+  if (onboarding !== 'first' && onboarding !== 'again' && onboarding !== 'signin') return null;
   const openCount = mcdonalds.filter(m => m.opened).length;
 
   const slides: Slide[] = [
@@ -92,13 +93,17 @@ export function Onboarding() {
       ),
     },
   ];
-  const accountStep = slides.length; // after the slides: the online copy
-  const last = slides.length + 1; // then the name
-  const total = slides.length + 2;
+  const accountStep = slides.length; // after the slides: signing in
+  const last = slides.length + 1; // then the username
+  const first = onboarding === 'signin' ? accountStep : 0;
+  const total = last + 1 - first;
+  const current = Math.max(index, first);
   const shownName = name ?? user?.name ?? '';
   const signedIn = account && account.status !== 'signed-out' ? account.account : null;
+  // Forward only once signed in, and with a username
+  const blocked = (current === accountStep && !signedIn) || (current === last && (!shownName.trim() || saving));
 
-  const go = (to: number) => setIndex(Math.max(0, Math.min(last, to)));
+  const go = (to: number) => setIndex(Math.max(first, Math.min(signedIn ? last : accountStep, to)));
   const finish = async () => {
     if (shownName.trim() && shownName.trim() !== (user?.name ?? '')) {
       setSaving(true);
@@ -129,50 +134,51 @@ export function Onboarding() {
         if (touchX.current === null) return;
         const dx = e.changedTouches[0].clientX - touchX.current;
         touchX.current = null;
-        if (Math.abs(dx) > 50) go(index + (dx < 0 ? 1 : -1));
+        if (Math.abs(dx) > 50 && !(dx < 0 && blocked)) go(current + (dx < 0 ? 1 : -1));
       }}
     >
       <FoodPattern opacity={0.16} />
 
       <div className="relative flex h-14 items-center justify-end px-4">
-        {index < accountStep && (
+        {current < accountStep && (
           <button onClick={() => go(accountStep)} className="rounded-full px-3 py-1.5 text-sm font-semibold text-white/80 active:scale-95">
             Salta
           </button>
         )}
       </div>
 
-      <div key={index} className="relative mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center px-8 text-center animate-[toast-in_0.35s_ease-out]">
-        {index < accountStep ? (
+      <div key={current} className="relative mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center px-8 text-center animate-[toast-in_0.35s_ease-out]">
+        {current < accountStep ? (
           <>
-            <div className="flex min-h-[150px] items-center justify-center">{slides[index].art}</div>
-            <h2 className="mt-8 font-display text-2xl font-bold">{slides[index].title}</h2>
-            <p className="mt-3 text-base leading-relaxed text-white/90">{slides[index].text}</p>
+            <div className="flex min-h-[150px] items-center justify-center">{slides[current].art}</div>
+            <h2 className="mt-8 font-display text-2xl font-bold">{slides[current].title}</h2>
+            <p className="mt-3 text-base leading-relaxed text-white/90">{slides[current].text}</p>
           </>
-        ) : index === accountStep ? (
+        ) : current === accountStep ? (
           <>
             <div className="text-6xl" aria-hidden>
               ☁️
             </div>
-            <h2 className="mt-6 font-display text-2xl font-bold">Salva le tue visite online</h2>
+            <h2 className="mt-6 font-display text-2xl font-bold">{onboarding === 'signin' ? 'Entra in McDonaldz' : 'Il tuo account'}</h2>
             {signedIn ? (
               <p className="mt-3 rounded-2xl bg-black/20 px-4 py-3 text-base text-white/90">
-                ✓ Sei dentro come <span className="font-semibold">{signedIn.email}</span>: le visite si salvano online da sole.
+                ✓ Sei dentro come <span className="font-semibold">{signedIn.email}</span>
               </p>
             ) : (
               <>
                 <p className="mt-3 mb-5 text-base leading-relaxed text-white/90">
-                  Entra con la tua email: le visite non si perdono se cambi telefono, e se hai già usato l'app altrove ritrovi tutto. Per
-                  ora solo su invito, puoi farlo anche dopo dal Profilo.
+                  {onboarding === 'signin'
+                    ? 'Entra con la tua email per continuare: le visite che hai su questo telefono restano tue.'
+                    : 'Ti mandiamo un codice via email. Con il tuo account ritrovi visite e timbri su qualsiasi telefono. Per ora solo su invito.'}
                 </p>
-                <SignInForm variant="onRed" onSignedIn={() => go(last)} />
+                <SignInForm variant="onRed" onSignedIn={() => setIndex(last)} />
               </>
             )}
           </>
         ) : (
           <>
-            <h2 className="font-display text-2xl font-bold">{onboarding === 'first' ? 'Ultima cosa' : 'Il tuo nome'}</h2>
-            <p className="mt-3 text-base text-white/90">Come ti chiami? Compare in alto, sopra il livello. Puoi anche saltarlo.</p>
+            <h2 className="font-display text-2xl font-bold">{onboarding === 'again' ? 'Il tuo username' : 'Ultima cosa'}</h2>
+            <p className="mt-3 text-base text-white/90">Scegli il tuo username: è solo tuo, è così che ti vedranno gli amici.</p>
             <input
               value={shownName}
               onChange={e => {
@@ -180,7 +186,7 @@ export function Onboarding() {
                 setNameError(null);
               }}
               maxLength={16}
-              placeholder="Il tuo nome"
+              placeholder="Il tuo username"
               className="mt-5 w-full rounded-2xl border-2 border-white/40 bg-white px-4 py-3 text-center text-lg font-semibold text-gray-800 outline-none focus:border-mc-yellow"
             />
             {nameError && <p className="mt-3 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-red-700">{nameError}</p>}
@@ -195,23 +201,23 @@ export function Onboarding() {
       </div>
 
       <div className="relative mx-auto w-full max-w-md px-6 pb-6">
-        <div className="mb-5 flex justify-center gap-2" aria-label={`Pagina ${index + 1} di ${total}`}>
+        <div className="mb-5 flex justify-center gap-2" aria-label={`Pagina ${current - first + 1} di ${total}`}>
           {Array.from({ length: total }, (_, i) => (
-            <span key={i} className={`h-2 rounded-full transition-all ${i === index ? 'w-6 bg-mc-yellow' : 'w-2 bg-white/40'}`} />
+            <span key={i} className={`h-2 rounded-full transition-all ${i === current - first ? 'w-6 bg-mc-yellow' : 'w-2 bg-white/40'}`} />
           ))}
         </div>
         <div className="flex gap-3">
-          {index > 0 && (
-            <button onClick={() => go(index - 1)} className="flex-1 rounded-2xl bg-white/15 py-3.5 font-bold active:scale-[0.98]">
+          {current > first && (
+            <button onClick={() => go(current - 1)} className="flex-1 rounded-2xl bg-white/15 py-3.5 font-bold active:scale-[0.98]">
               Indietro
             </button>
           )}
           <button
-            onClick={() => (index < last ? go(index + 1) : void finish())}
-            disabled={saving}
-            className="flex-[2] rounded-2xl bg-mc-yellow py-3.5 font-bold text-gray-800 shadow-lg active:scale-[0.98]"
+            onClick={() => (current < last ? go(current + 1) : void finish())}
+            disabled={blocked}
+            className="flex-[2] rounded-2xl bg-mc-yellow py-3.5 font-bold text-gray-800 shadow-lg active:scale-[0.98] disabled:opacity-40"
           >
-            {index === accountStep && !signedIn ? 'Più tardi' : index < last ? 'Avanti' : onboarding === 'first' ? 'Inizia' : 'Fatto'}
+            {current < last ? 'Avanti' : onboarding === 'again' ? 'Fatto' : 'Inizia'}
           </button>
         </div>
       </div>
