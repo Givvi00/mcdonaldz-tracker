@@ -27,11 +27,17 @@ Deno.serve(async req => {
   const admin = adminClient();
 
   const { data: exists, error: existsError } = await admin.rpc('account_exists', { candidate: email });
-  if (existsError) return json({ error: 'server' }, 500);
+  if (existsError) {
+    console.error('account_exists', existsError.message);
+    return json({ error: 'server' }, 500);
+  }
   if (exists) return json({ status: 'exists' });
 
   const { data: open, error: openError } = await admin.from('access_requests').select('email').eq('status', 'pending');
-  if (openError) return json({ error: 'server' }, 500);
+  if (openError) {
+    console.error('access_requests', openError.message);
+    return json({ error: 'server' }, 500);
+  }
   if (open.some(r => r.email.toLowerCase() === email)) return json({ status: 'pending' });
   if (open.length >= MAX_PENDING) return json({ status: 'busy' });
 
