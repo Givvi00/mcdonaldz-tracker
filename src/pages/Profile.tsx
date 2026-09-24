@@ -6,6 +6,7 @@ import { InstallSection } from '@/components/InstallPrompt';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { exportData, getPreMigrationBackup, importData, wipeAllData } from '@/services/db';
 import { ConfirmSheet } from '@/components/ConfirmSheet';
+import { AccountSection } from '@/components/AccountSection';
 import { SectionTitle } from '@/components/SectionTitle';
 import { backupFilename, readBackupSummary, saveBackup } from '@/services/backup';
 import { persistState, requestPersistentStorage, type PersistState } from '@/services/storagePersist';
@@ -25,7 +26,9 @@ const THEME_OPTIONS: Array<{ value: ThemeMode; label: string; icon: string }> = 
 ];
 
 export function Profile() {
-  const { user, getVisitedCount, mcdonalds, catalogInfo, renameUser, profileFocus, clearProfileFocus, initApp, openOnboarding } = useMcdonaldStore();
+  const { user, getVisitedCount, mcdonalds, catalogInfo, renameUser, profileFocus, clearProfileFocus, initApp, openOnboarding, account } =
+    useMcdonaldStore();
+  const online = account !== null && account.status !== 'signed-out';
   const [dataMessage, setDataMessage] = useState<{ ok: boolean; text: string } | null>(null);
   const [confirmWipe, setConfirmWipe] = useState(false);
   const nameInput = useRef<HTMLInputElement>(null);
@@ -118,7 +121,7 @@ export function Profile() {
         <p className="relative mt-1 text-xs opacity-75">{getVisitedCount()} McDonald's visitati</p>
       </div>
 
-      {backupNudge(getVisitedCount()) && (
+      {!online && backupNudge(getVisitedCount()) && (
         <div className="rounded-2xl border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-200">
           <p className="font-semibold">
             {lastBackupAt() ? 'È passato un po\' di tempo dall\'ultimo backup.' : 'Non hai ancora fatto un backup.'}
@@ -161,7 +164,7 @@ export function Profile() {
             Salva
           </button>
         </div>
-        <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Compare in alto a destra, sopra il livello. Resta solo su questo telefono.</p>
+        <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Compare in alto a destra, sopra il livello.{online ? '' : ' Resta solo su questo telefono.'}</p>
       </div>
 
       {/* Theme */}
@@ -214,6 +217,8 @@ export function Profile() {
       )}
 
       <InstallSection />
+
+      <AccountSection />
 
       {/* Data Management */}
       <div>
@@ -324,7 +329,8 @@ export function Profile() {
       {/* Clear Warning */}
       <div className="bg-red-50 dark:bg-red-950/30 p-4 rounded-2xl text-center text-sm text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900">
         <p className="font-display font-semibold">⚠️ Cancella tutti i dati</p>
-        <p className="text-xs mt-1 opacity-75">Visite, timbri, voti e impostazioni di questo telefono. Prima salva un backup.</p>
+        <p className="text-xs mt-1 opacity-75">Visite, timbri, voti e impostazioni di questo telefono.{' '}
+          {online ? 'La copia online resta: rientrando, torna tutto.' : 'Prima salva un backup.'}</p>
         <button
           onClick={() => setConfirmWipe(true)}
           className="mt-3 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl text-xs transition-all active:scale-[0.97] shadow-sm"

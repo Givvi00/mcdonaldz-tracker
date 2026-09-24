@@ -10,7 +10,22 @@ import {
   setVisitDate,
   setVisitRating,
   setVisitVerified,
+  replaceVisits,
+  getAchievements,
+  addMissingAchievements,
+  setUserNameFromServer,
 } from '@/services/db';
+import { onOutboxChange } from '@/services/syncOutbox';
+import { forgetSyncedAccount, syncOnce, type Local } from '@/services/sync';
+import {
+  currentAccount,
+  deleteAccount as deleteOnlineAccount,
+  getClient,
+  hasStoredSession,
+  signOut as signOutOnline,
+  supabaseRemote,
+  type Account,
+} from '@/services/account';
 import { checkAndUnlockAchievements } from '@/services/achievements';
 import { syncDiamondRegions, syncRegionCompletions } from '@/services/regions';
 import { freshFix, judgeFix, type VerifyOutcome } from '@/services/gpsCheck';
@@ -35,6 +50,25 @@ export type Celebration =
   /** `diamond`: the region was already complete and now every visit in it is verified */
   | { id: number; kind: 'region'; region: string; total: number; diamond?: boolean }
   | { id: number; kind: 'stamp'; stamps: string[] };
+
+/** The online account on this phone. null: not known yet (the app is still starting) */
+export type AccountState =
+  | { status: 'signed-out' }
+  | {
+      status: 'syncing' | 'synced' | 'offline' | 'error';
+      account: Account;
+      /** Last time everything was sent and received */
+      lastSyncAt?: number;
+      error?: string;
+    };
+
+/** After a change, wait this long before sending it (several taps in a row go out together) */
+const SYNC_DELAY_MS = 3000;
+let syncTimer: ReturnType<typeof setTimeout> | undefined;
+let syncRunning: Promise<void> | null = null;
+let syncAgain = false;
+/** initAccount runs once (in development React starts the app twice) */
+let accountStarted = false;
 
 /** Pause between two celebrations that follow each other */
 const GAP_MS = 700;
@@ -74,6 +108,7 @@ interface AppStore {
    * 'again' when opened from the Profile, 'done' otherwise.
    */
   onboarding: 'unknown' | 'first' | 'again' | 'done';
+  account: AccountState | null;
 
   initApp: () => Promise<void>;
   renameUser: (name: string) => Promise<void>;
@@ -100,7 +135,19 @@ interface AppStore {
   enqueueCelebrations: (events: Celebration[]) => void;
   clearCelebration: () => void;
   clearPendingRating: () => void;
+  /** Reads the account from the stored session (used by initAccount and by a sync that starts offline) */
+  initAccountState: () => Promise<void>;
+  /** After a sync brought something from another phone: read the data again, record stamps and regions, no fanfare */
+  reloadQuietly: () => Promise<void>;
   openOnboarding: () => void;
+  /** Reads the account signed in on this phone (if any), syncs, and from then on keeps syncing after every change */
+  initAccount: () => Promise<void>;
+  /** Right after signing in with the code */
+  accountSignedIn: (account: Account) => Promise<void>;
+  /** Sends and receives now (after a change, when the app comes back on screen, when the connection returns) */
+  syncNow: () => Promise<void>;
+  signOutAccount: () => Promise<void>;
+  deleteAccount: () => Promise<void>;
   finishOnboarding: () => void;
   setSelectedTab: (tab: 'home' | 'map' | 'stats' | 'profile') => void;
   setSearchQuery: (query: string) => void;
@@ -147,6 +194,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   verifyNotice: null,
   unmarkRequest: null,
   onboarding: 'unknown',
+  account: null,
 
   initApp: async () => {
     const user = await getOrCreateUser();
@@ -239,7 +287,114 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
 
   clearPendingRating: () => set({ pendingRatingFor: null }),
 
+  initAccountState: async () => {
+    try {
+      const account = await currentAccount();
+      set({ account: account ? { status: 'synced', account } : { status: 'signed-out' } });
+    } catch {
+      // Offline and the library not downloaded yet: the next sync (when the connection comes back) tries again
+      set({ account: null });
+    }
+  },
+
+  reloadQuietly: async () => {
+    const user = await getOrCreateUser();
+    const visits = await getVisits();
+    set({ user, visits });
+    const { mcdonalds } = get();
+    await checkAndUnlockAchievements(user.id, mcdonalds, visits);
+    await syncRegionCompletions(user.id, mcdonalds, visits);
+    await syncDiamondRegions(user.id, mcdonalds, visits);
+  },
+
   openOnboarding: () => set({ onboarding: 'again' }),
+
+  initAccount: async () => {
+    if (accountStarted) return;
+    accountStarted = true;
+    // Nobody ever signed in here: nothing to load (the library is downloaded only when it is needed)
+    if (hasStoredSession()) await get().initAccountState();
+    else set({ account: { status: 'signed-out' } });
+    onOutboxChange(() => {
+      if (get().account?.status === 'signed-out') return;
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(() => void get().syncNow(), SYNC_DELAY_MS);
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') void get().syncNow();
+    });
+    window.addEventListener('online', () => void get().syncNow());
+    await get().syncNow();
+  },
+
+  accountSignedIn: async (account) => {
+    set({ account: { status: 'synced', account } });
+    await get().syncNow();
+  },
+
+  syncNow: async () => {
+    if (syncRunning) {
+      syncAgain = true;
+      return syncRunning;
+    }
+    syncRunning = (async () => {
+      do {
+        syncAgain = false;
+        let state = get().account;
+        const { user } = get();
+        if (state === null && hasStoredSession()) {
+          // Could not read the account at startup (offline): try now
+          await get().initAccountState();
+          state = get().account;
+        }
+        if (!state || state.status === 'signed-out' || !user) return;
+        if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+          set({ account: { ...state, status: 'offline' } });
+          return;
+        }
+        set({ account: { ...state, status: 'syncing', error: undefined } });
+        try {
+          const client = await getClient();
+          const local: Local = {
+            getVisits,
+            replaceVisits,
+            getAchievements: () => getAchievements(user.id),
+            addMissingAchievements: earned => addMissingAchievements(user.id, earned),
+            getName: async () => get().user?.name,
+            setNameFromServer: name => setUserNameFromServer(user.id, name),
+          };
+          const result = await syncOnce(supabaseRemote(client, state.account.id), local, state.account.id);
+          if (result.changedHere) await get().reloadQuietly();
+          set({ account: { status: 'synced', account: state.account, lastSyncAt: Date.now() } });
+        } catch (error) {
+          const message = (error as Error).message ?? '';
+          // The session is no longer valid (account deleted, or signed out everywhere)
+          const expired = /jwt|refresh token|not authenticated|401/i.test(message);
+          set({
+            account: expired
+              ? { status: 'signed-out' }
+              : { status: navigator.onLine === false ? 'offline' : 'error', account: state.account, lastSyncAt: state.lastSyncAt, error: message },
+          });
+        }
+      } while (syncAgain);
+    })().finally(() => {
+      syncRunning = null;
+    });
+    return syncRunning;
+  },
+
+  signOutAccount: async () => {
+    // Anything not sent yet goes out first, so the next phone finds it
+    await get().syncNow();
+    await signOutOnline();
+    set({ account: { status: 'signed-out' } });
+  },
+
+  deleteAccount: async () => {
+    await deleteOnlineAccount();
+    forgetSyncedAccount();
+    set({ account: { status: 'signed-out' } });
+  },
 
   finishOnboarding: () => {
     markOnboarded();

@@ -1,5 +1,6 @@
 import { openDB, DBSchema, IDBPDatabase, IDBPTransaction, StoreNames } from 'idb';
 import type { Visit, User, Achievement, VisitRating } from '@shared/types';
+import { NAME_ENTRY, changing, markChanged } from './syncOutbox';
 
 interface AppDB extends DBSchema {
   users: {
@@ -225,19 +226,27 @@ export async function setUserName(userId: string, name: string): Promise<User | 
   const user = await database.get('users', userId);
   if (!user) return null;
   const updated: User = { ...user, name: name.trim().slice(0, 16) || undefined };
-  await database.put('users', updated);
+  await changing(NAME_ENTRY, () => database.put('users', updated));
   return updated;
+}
+
+/** The name as it arrived from the online copy (not a change made here: nothing to send back) */
+export async function setUserNameFromServer(userId: string, name: string | undefined): Promise<void> {
+  const database = await initDB();
+  const user = await database.get('users', userId);
+  if (!user || user.name === name) return;
+  await database.put('users', { ...user, name });
 }
 
 export async function addVisit(mcdonaldId: string, userId: string): Promise<Visit> {
   const database = await initDB();
   const visit: Visit = {
-    id: 'visit_' + Date.now(),
+    id: `visit_${Date.now()}_${mcdonaldId}`,
     mcdonaldId,
     visitedAt: Date.now(),
   };
 
-  await database.add('visits', visit);
+  await changing(mcdonaldId, () => database.add('visits', visit));
 
   // Update user
   const user = await database.get('users', userId);
@@ -255,7 +264,7 @@ export async function removeVisit(mcdonaldId: string, userId: string): Promise<v
   const index = await database.getFromIndex('visits', 'by-mcdonaldId', mcdonaldId);
 
   if (index) {
-    await database.delete('visits', index.id);
+    await changing(mcdonaldId, () => database.delete('visits', index.id));
 
     // Update user
     const user = await database.get('users', userId);
@@ -272,7 +281,7 @@ export async function setVisitDate(mcdonaldId: string, visitedAt: number): Promi
   const database = await initDB();
   const visit = await database.getFromIndex('visits', 'by-mcdonaldId', mcdonaldId);
   if (!visit) return;
-  await database.put('visits', { ...visit, visitedAt, dateEdited: true });
+  await changing(mcdonaldId, () => database.put('visits', { ...visit, visitedAt, dateEdited: true }));
 }
 
 /** Marks a visit as confirmed by the GPS at `verifiedAt` (the date of the visit itself does not change) */
@@ -280,7 +289,7 @@ export async function setVisitVerified(mcdonaldId: string, verifiedAt: number): 
   const database = await initDB();
   const visit = await database.getFromIndex('visits', 'by-mcdonaldId', mcdonaldId);
   if (!visit || visit.verified) return;
-  await database.put('visits', { ...visit, verified: true, verifiedAt });
+  await changing(mcdonaldId, () => database.put('visits', { ...visit, verified: true, verifiedAt }));
 }
 
 /** Sets (or replaces) your vote for a visited restaurant */
@@ -288,12 +297,40 @@ export async function setVisitRating(mcdonaldId: string, rating: VisitRating): P
   const database = await initDB();
   const visit = await database.getFromIndex('visits', 'by-mcdonaldId', mcdonaldId);
   if (!visit) return;
-  await database.put('visits', { ...visit, rating });
+  await changing(mcdonaldId, () => database.put('visits', { ...visit, rating }));
 }
 
 export async function getVisits(): Promise<Visit[]> {
   const database = await initDB();
   return database.getAll('visits');
+}
+
+/**
+ * Brings the visits on this phone in line with the online copy, in one go: every restaurant takes the online version
+ * (or disappears, if it is not online), except those changed here and not sent yet (`keepLocal`, read at the last
+ * moment inside the transaction). Returns true if anything changed.
+ */
+export async function replaceVisits(online: Visit[], keepLocal: () => Set<string>): Promise<boolean> {
+  const database = await initDB();
+  const tx = database.transaction('visits', 'readwrite');
+  const current = await tx.store.getAll();
+  const keep = keepLocal();
+  const localById = new Map(current.map(v => [v.mcdonaldId, v]));
+  const next: Visit[] = current.filter(v => keep.has(v.mcdonaldId));
+  for (const visit of online) {
+    if (keep.has(visit.mcdonaldId)) continue;
+    // The same record id as before, so nothing else about it looks new
+    next.push({ ...visit, id: localById.get(visit.mcdonaldId)?.id ?? visit.id });
+  }
+  const key = (list: Visit[]) => JSON.stringify([...list].sort((a, b) => a.mcdonaldId.localeCompare(b.mcdonaldId)));
+  if (key(next) === key(current)) {
+    await tx.done;
+    return false;
+  }
+  await tx.store.clear();
+  for (const visit of next) await tx.store.put(visit);
+  await tx.done;
+  return true;
 }
 
 export async function getVisitsByMcdonaldId(mcdonaldId: string): Promise<Visit[]> {
@@ -309,6 +346,23 @@ export async function addAchievement(achievement: Achievement): Promise<void> {
 export async function getAchievements(userId: string): Promise<Achievement[]> {
   const database = await initDB();
   return database.getAllFromIndex('achievements', 'by-userId', userId);
+}
+
+/** Adds the stamps earned on another phone that this one does not have yet. Returns how many were added. */
+export async function addMissingAchievements(
+  userId: string,
+  earned: Array<Pick<Achievement, 'type' | 'unlockedAt' | 'value'>>,
+): Promise<number> {
+  const database = await initDB();
+  const known = new Set((await database.getAllFromIndex('achievements', 'by-userId', userId)).map(a => a.type));
+  let added = 0;
+  for (const a of earned) {
+    if (known.has(a.type)) continue;
+    await database.put('achievements', { id: `ach_online_${a.type}`, userId, type: a.type, unlockedAt: a.unlockedAt, value: a.value });
+    known.add(a.type);
+    added += 1;
+  }
+  return added;
 }
 
 export async function exportData(): Promise<string> {
@@ -341,9 +395,13 @@ export async function importData(jsonData: string): Promise<void> {
     await database.put('users', user);
   }
   for (const visit of data.visits || []) {
-    await database.put('visits', visit);
+    await changing(visit.mcdonaldId, () => database.put('visits', visit));
   }
+  if (data.users?.some(u => u.name)) markChanged(NAME_ENTRY);
   for (const achievement of data.achievements || []) {
     await database.put('achievements', achievement);
   }
 }
+
+/** For the tests: forget the open connection, as a phone that starts again would */
+export const closeDBForTests = closeDB;

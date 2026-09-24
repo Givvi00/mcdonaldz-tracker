@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "fetch-data": "tsx scripts/fetch-mcdonalds.ts",
     "osm-check": "tsx scripts/osm-check.ts",
-    "test:data": "tsx scripts/test-merge.ts && tsx scripts/test-catalog.ts && tsx scripts/test-catalog-update.ts && tsx scripts/test-install.ts && tsx scripts/test-directions.ts && tsx scripts/test-food.ts && tsx scripts/test-passport.ts && tsx scripts/test-migration.ts && tsx scripts/test-gps.ts && tsx scripts/test-osm.ts"
+    "test:data": "tsx scripts/test-merge.ts && tsx scripts/test-catalog.ts && tsx scripts/test-catalog-update.ts && tsx scripts/test-install.ts && tsx scripts/test-directions.ts && tsx scripts/test-food.ts && tsx scripts/test-passport.ts && tsx scripts/test-migration.ts && tsx scripts/test-gps.ts && tsx scripts/test-osm.ts && tsx scripts/test-sync.ts"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.2",
@@ -18,6 +18,7 @@
     "@capacitor/core": "^8.5.2",
     "@capacitor/filesystem": "^8.1.3",
     "@capacitor/share": "^8.0.2",
+    "@supabase/supabase-js": "^2.117.1",
     "idb": "^8.0.0",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",

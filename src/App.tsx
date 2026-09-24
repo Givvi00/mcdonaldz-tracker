@@ -24,14 +24,15 @@ import { requestPersistentStorage } from '@/services/storagePersist';
 import './App.css';
 
 function App() {
-  const { selectedTab, setSelectedTab, initApp, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile, onboarding } =
+  const { selectedTab, setSelectedTab, initApp, initAccount, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile, onboarding } =
     useMcdonaldStore();
   useTheme();
   // On a first launch the browser asks for the position only after the guide has said what it is for
   const { status: geoStatus, coords } = useGeolocation(onboarding === 'done' || onboarding === 'again');
 
   useEffect(() => {
-    initApp();
+    // The account after the local data: a sync needs the user of this phone
+    void initApp().then(initAccount);
   }, []);
 
   useEffect(() => startUpdateChecks(), []);
