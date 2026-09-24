@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
-import { confirmCode, sendCode } from '@/services/account';
+import { NotInvitedError, confirmCode, requestAccess, sendCode } from '@/services/account';
 
 const STYLES = {
   /** In the Profile */
@@ -24,13 +24,15 @@ const STYLES = {
 
 /**
  * Sign in with a code sent by email: the email, then the code. Once in, the sync starts by itself (visits, votes,
- * stamps and username from other phones arrive).
+ * stamps and username from other phones arrive). An email with no account can ask to join: the owner accepts from
+ * their email, and the code then arrives by itself.
  */
 export function SignInForm({ variant = 'card', onSignedIn }: { variant?: keyof typeof STYLES; onSignedIn?: () => void }) {
   const { accountSignedIn } = useMcdonaldStore();
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
-  const [step, setStep] = useState<'email' | 'code'>('email');
+  const [step, setStep] = useState<'email' | 'request' | 'code'>('email');
+  const [name, setName] = useState('');
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
   const style = STYLES[variant];
@@ -55,7 +57,15 @@ export function SignInForm({ variant = 'card', onSignedIn }: { variant?: keyof t
           onSubmit={e => {
             e.preventDefault();
             void run(async () => {
-              await sendCode(email);
+              try {
+                await sendCode(email);
+              } catch (error) {
+                if (error instanceof NotInvitedError) {
+                  setStep('request');
+                  return;
+                }
+                throw error;
+              }
               setStep('code');
               setMessage({ ok: true, text: `Codice inviato a ${email.trim()}. Controlla anche lo spam.` });
             });
@@ -73,6 +83,60 @@ export function SignInForm({ variant = 'card', onSignedIn }: { variant?: keyof t
           />
           <button type="submit" disabled={busy || !email.includes('@')} className={`${style.button} transition-transform active:scale-95 disabled:opacity-40`}>
             {busy ? '…' : 'Invia codice'}
+          </button>
+        </form>
+      ) : step === 'request' ? (
+        <form
+          className="space-y-2"
+          onSubmit={e => {
+            e.preventDefault();
+            void run(async () => {
+              const result = await requestAccess(email, name);
+              if (result === 'exists') {
+                // Accepted in the meantime: just sign in
+                await sendCode(email);
+                setStep('code');
+                setMessage({ ok: true, text: `Codice inviato a ${email.trim()}. Controlla anche lo spam.` });
+                return;
+              }
+              if (result === 'busy') throw new Error('Troppe richieste in attesa: riprova più tardi.');
+              setStep('code');
+              setMessage({
+                ok: true,
+                text:
+                  result === 'pending'
+                    ? 'Hai già chiesto di entrare: appena la richiesta viene accettata ti arriva il codice via email.'
+                    : 'Richiesta inviata! Appena viene accettata ti arriva il codice via email: scrivilo qui.',
+              });
+            });
+          }}
+        >
+          <p className={`rounded-xl px-3 py-2 text-sm ${style.ok}`}>
+            <span className="font-semibold">{email.trim()}</span> non è ancora dentro. Chiedi di entrare: dicci come ti chiami.
+          </p>
+          <div className="flex gap-2">
+            <input
+              autoComplete="name"
+              required
+              value={name}
+              onChange={e => setName(e.target.value)}
+              maxLength={40}
+              placeholder="Nome e cognome"
+              className={`${style.input} min-w-0 flex-1`}
+            />
+            <button type="submit" disabled={busy || !name.trim()} className={`${style.button} transition-transform active:scale-95 disabled:opacity-40`}>
+              {busy ? '…' : 'Chiedi di entrare'}
+            </button>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setStep('email');
+              setMessage(null);
+            }}
+            className={style.link}
+          >
+            Cambia email
           </button>
         </form>
       ) : (

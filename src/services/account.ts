@@ -47,11 +47,18 @@ export async function currentAccount(): Promise<Account | null> {
   return user ? { id: user.id, email: user.email ?? '' } : null;
 }
 
+/** The email has no account: the person can ask to join (see requestAccess) */
+export class NotInvitedError extends Error {
+  constructor() {
+    super('Questa email non è ancora dentro McDonaldz.');
+  }
+}
+
 /** Readable Italian for what can go wrong while signing in */
 function explain(error: { message?: string; status?: number; code?: string }): Error {
   const text = `${error.code ?? ''} ${error.message ?? ''}`.toLowerCase();
   if (text.includes('signup') || text.includes('not allowed') || text.includes('user_not_found')) {
-    return new Error('Questa email non è stata invitata. Chiedi a chi gestisce l\'app di aggiungerti.');
+    return new NotInvitedError();
   }
   if (text.includes('rate') || error.status === 429) {
     return new Error('Troppi tentativi: aspetta qualche minuto e riprova.');
@@ -77,6 +84,45 @@ export async function confirmCode(email: string, code: string): Promise<Account>
   const { data, error } = await client.auth.verifyOtp({ email: email.trim(), token: code.replace(/\s/g, ''), type: 'email' });
   if (error || !data.user) throw explain(error ?? {});
   return { id: data.user.id, email: data.user.email ?? email };
+}
+
+/** Calls one of the server functions in supabase/functions (public: they check everything themselves) */
+async function callFunction<T>(name: string, body: unknown): Promise<T> {
+  let response: Response;
+  try {
+    response = await fetch(`${SUPABASE_URL}/functions/v1/${name}`, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+  } catch {
+    throw new Error('Non riesco a collegarmi: sei offline?');
+  }
+  const data = (await response.json().catch(() => ({}))) as T & { error?: string };
+  if (!response.ok) throw new Error(data.error === 'not-found' ? 'Richiesta non trovata o link non valido.' : 'Qualcosa è andato storto, riprova.');
+  return data;
+}
+
+export type AccessRequestResult = 'sent' | 'pending' | 'exists' | 'busy';
+
+/** Asks the owner to let this email in: they get an email and accept or refuse */
+export async function requestAccess(email: string, name: string): Promise<AccessRequestResult> {
+  const { status } = await callFunction<{ status: AccessRequestResult }>('request-access', { email: email.trim(), name: name.trim() });
+  return status;
+}
+
+export interface AccessRequest {
+  email: string;
+  name: string | null;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: string;
+  /** After approving: whether the code left for the person */
+  codeSent?: boolean;
+}
+
+/** The owner's side, from the link in the email: see the request, accept or refuse it */
+export function reviewAccess(id: string, token: string, action: 'view' | 'approve' | 'reject'): Promise<AccessRequest> {
+  return callFunction<AccessRequest>('review-access', { id, token, action });
 }
 
 /** Whether nobody else has this name online (yours counts as free) */

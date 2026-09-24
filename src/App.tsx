@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { useTheme } from '@/hooks/useTheme';
 import { useGeolocation } from '@/hooks/useGeolocation';
@@ -21,9 +21,12 @@ import { FoodIconSprite } from '@/components/FoodIcon';
 import { startUpdateChecks } from '@/services/updates';
 import { startCatalogRefresh } from '@/services/catalogRefresh';
 import { requestPersistentStorage } from '@/services/storagePersist';
+import { AccessReview, reviewLink } from '@/components/AccessReview';
 import './App.css';
 
 function App() {
+  // Opened from the link in a "vuole entrare" email: the answer comes before anything else
+  const [review, setReview] = useState(reviewLink);
   const { selectedTab, setSelectedTab, initApp, initAccount, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile, onboarding } =
     useMcdonaldStore();
   useTheme();
@@ -54,6 +57,16 @@ function App() {
 
   return (
     <div className="fixed inset-0 bg-gray-50 dark:bg-gray-950 flex flex-col transition-colors">
+      {review && (
+        <AccessReview
+          id={review.id}
+          token={review.token}
+          onClose={() => {
+            window.history.replaceState(null, '', window.location.pathname);
+            setReview(null);
+          }}
+        />
+      )}
       <AchievementToast />
       <NearbyPrompt />
       <UpdateBanner />
