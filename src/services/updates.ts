@@ -26,24 +26,51 @@ export async function checkForUpdate(): Promise<UpdateCheck> {
   }
 }
 
-/** Checks now, when the app comes back to the foreground or the network returns, and every 30 minutes. */
+const UPDATED_KEY = 'mcdz-updated-from';
+
+/**
+ * Checks now, when the app comes back to the foreground or the network returns, and every 30 minutes. A newer build is
+ * applied on its own the moment the app goes to the background: nobody is looking, so nothing is interrupted, and on
+ * the way back the new version is already there. Not while a position check is running (it would be lost).
+ */
 export function startUpdateChecks(): () => void {
   const check = () => void checkForUpdate();
-  const onVisible = () => {
-    if (document.visibilityState === 'visible') check();
+  const onVisibility = () => {
+    if (document.visibilityState === 'visible') {
+      check();
+      return;
+    }
+    const { updateAvailable, verifying } = useMcdonaldStore.getState();
+    if (updateAvailable && verifying.length === 0) applyUpdate();
   };
   check();
-  document.addEventListener('visibilitychange', onVisible);
+  document.addEventListener('visibilitychange', onVisibility);
   window.addEventListener('online', check);
   const timer = window.setInterval(check, CHECK_EVERY_MS);
   return () => {
-    document.removeEventListener('visibilitychange', onVisible);
+    document.removeEventListener('visibilitychange', onVisibility);
     window.removeEventListener('online', check);
     window.clearInterval(timer);
   };
 }
 
-/** Reloads the page: pages are fetched network-first, so this loads the new build. */
+/** Reloads the page: pages are fetched network-first, so this loads the new build. Remembers it, to say so after. */
 export function applyUpdate() {
+  try {
+    sessionStorage.setItem(UPDATED_KEY, __BUILD_ID__);
+  } catch {
+    // storage unavailable: the update still happens, just without the "updated" notice
+  }
   window.location.reload();
+}
+
+/** True once, right after an update was applied (the build changed across the reload) */
+export function justUpdated(): boolean {
+  try {
+    const from = sessionStorage.getItem(UPDATED_KEY);
+    sessionStorage.removeItem(UPDATED_KEY);
+    return !!from && from !== __BUILD_ID__;
+  } catch {
+    return false;
+  }
 }

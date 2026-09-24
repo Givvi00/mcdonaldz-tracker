@@ -1,34 +1,33 @@
-import { useState } from 'react';
-import { useMcdonaldStore } from '@/store/mcdonaldStore';
-import { applyUpdate } from '@/services/updates';
+import { useEffect, useState } from 'react';
+import { justUpdated } from '@/services/updates';
 
-/** "New version available" strip, shown above the bottom navigation. Dismissed until the next launch. */
+const SHOW_MS = 3500;
+// Read once when the app loads (reading it clears it)
+const UPDATED_NOW = justUpdated();
+
+/**
+ * "App aggiornata": for a few seconds right after a new version was applied. Updates install themselves when the app
+ * goes to the background (see services/updates), so there is nothing to tap: this only says that it happened.
+ */
 export function UpdateBanner() {
-  const updateAvailable = useMcdonaldStore(state => state.updateAvailable);
-  const [dismissed, setDismissed] = useState(false);
+  const [shown, setShown] = useState(UPDATED_NOW);
 
-  if (!updateAvailable || dismissed) return null;
+  useEffect(() => {
+    if (!shown) return;
+    const t = setTimeout(() => setShown(false), SHOW_MS);
+    return () => clearTimeout(t);
+  }, [shown]);
+
+  if (!shown) return null;
 
   return (
     <div
-      className="fixed inset-x-3 z-[1500] flex items-center gap-2 rounded-2xl bg-mc-yellow text-gray-800 pl-4 pr-2 py-2 shadow-lg shadow-black/20 animate-[toast-in_0.35s_ease-out]"
+      className="fixed inset-x-3 z-[1500] mx-auto flex max-w-md items-center justify-center rounded-2xl bg-mc-yellow px-4 py-2.5 text-gray-800 shadow-lg shadow-black/20 animate-[toast-in_0.35s_ease-out]"
       style={{ bottom: 'calc(5rem + var(--safe-bottom) + 0.75rem)' }}
       role="status"
+      onClick={() => setShown(false)}
     >
-      <span className="flex-1 text-sm font-display font-semibold">✨ Nuova versione disponibile</span>
-      <button
-        onClick={applyUpdate}
-        className="rounded-full bg-mc-red text-white text-xs font-bold px-4 py-2 active:scale-95 transition-transform"
-      >
-        Aggiorna
-      </button>
-      <button
-        onClick={() => setDismissed(true)}
-        aria-label="Nascondi"
-        className="w-8 h-8 rounded-full text-gray-600 text-sm active:scale-95 transition-transform"
-      >
-        ✕
-      </button>
+      <span className="text-sm font-display font-semibold">✨ App aggiornata alla nuova versione</span>
     </div>
   );
 }
