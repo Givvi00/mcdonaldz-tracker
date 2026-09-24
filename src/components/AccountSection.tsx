@@ -4,16 +4,18 @@ import { SectionTitle } from '@/components/SectionTitle';
 import { ConfirmSheet } from '@/components/ConfirmSheet';
 
 /**
- * Your account in the Profile: the email you sign in with, your username (unique among everyone) and the way out.
+ * Your account in the Profile: the email you sign in with, your username (unique among everyone), signing out and
+ * deleting the account.
  * Saving online happens by itself and is never mentioned: there is nothing to do about it.
  */
 export function AccountSection() {
-  const { account, user, renameUser, deleteAccount, profileFocus, clearProfileFocus } = useMcdonaldStore();
+  const { account, user, renameUser, signOut, deleteAccount, profileFocus, clearProfileFocus } = useMcdonaldStore();
   const [draft, setDraft] = useState<string | null>(null);
   const [nameError, setNameError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [confirm, setConfirm] = useState<'signout' | 'delete' | null>(null);
+  const [leaving, setLeaving] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
   const input = useRef<HTMLInputElement>(null);
 
   // Arrived from "Ciao! Come ti chiami?": bring the field into view and start typing
@@ -95,28 +97,54 @@ export function AccountSection() {
 
       <button
         onClick={() => {
-          setDeleteError(null);
-          setConfirmDelete(true);
+          setActionError(null);
+          setConfirm('signout');
         }}
-        className="mt-3 w-full py-2 text-center text-xs font-semibold text-red-600 underline dark:text-red-400"
+        disabled={leaving}
+        className="mt-3 w-full rounded-xl border-2 border-gray-200 bg-white py-2.5 text-sm font-bold text-gray-800 transition-transform active:scale-[0.98] disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+      >
+        {leaving ? 'Un momento…' : 'Esci'}
+      </button>
+      <button
+        onClick={() => {
+          setActionError(null);
+          setConfirm('delete');
+        }}
+        className="mt-1 w-full py-2 text-center text-xs font-semibold text-red-600 underline dark:text-red-400"
       >
         Elimina account
       </button>
-      {deleteError && (
+      {actionError && (
         <p role="status" className="rounded-xl bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 dark:bg-red-950/40 dark:text-red-300">
-          {deleteError}
+          {actionError}
         </p>
       )}
 
-      {confirmDelete && (
+      {confirm === 'signout' && (
+        <ConfirmSheet
+          title="Uscire dall'account?"
+          body="Da questo telefono spariscono visite e timbri, ma restano nel tuo account: rientrando con la tua email ritrovi tutto."
+          confirmLabel="Esci"
+          onCancel={() => setConfirm(null)}
+          onConfirm={() => {
+            setConfirm(null);
+            setLeaving(true);
+            void signOut().catch(error => {
+              setLeaving(false);
+              setActionError((error as Error).message);
+            });
+          }}
+        />
+      )}
+      {confirm === 'delete' && (
         <ConfirmSheet
           title="Eliminare l'account?"
           body="Perdi tutto, per sempre: visite, voti, timbri, regioni e username, su ogni telefono. Non si può annullare."
           confirmLabel="Elimina account"
-          onCancel={() => setConfirmDelete(false)}
+          onCancel={() => setConfirm(null)}
           onConfirm={() => {
-            setConfirmDelete(false);
-            void deleteAccount().catch(error => setDeleteError((error as Error).message));
+            setConfirm(null);
+            void deleteAccount().catch(error => setActionError((error as Error).message));
           }}
         />
       )}

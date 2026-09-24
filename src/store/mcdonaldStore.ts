@@ -16,7 +16,7 @@ import {
   setUserNameFromServer,
   wipeAllData,
 } from '@/services/db';
-import { onOutboxChange } from '@/services/syncOutbox';
+import { onOutboxChange, readOutbox } from '@/services/syncOutbox';
 import { NameTakenError, syncOnce, type Local } from '@/services/sync';
 import {
   currentAccount,
@@ -24,6 +24,7 @@ import {
   getClient,
   hasStoredSession,
   isNameAvailable,
+  signOut as signOutOnline,
   supabaseRemote,
   type Account,
 } from '@/services/account';
@@ -152,6 +153,11 @@ interface AppStore {
   accountSignedIn: (account: Account) => Promise<void>;
   /** Sends and receives now (after a change, when the app comes back on screen, when the connection returns) */
   syncNow: () => Promise<void>;
+  /**
+   * Leaves the account: the last changes go online first (refused, with a readable error, if they cannot), then the
+   * data leaves this phone and the sign-in screen comes back. Signing in again brings everything back.
+   */
+  signOut: () => Promise<void>;
   /** Deletes the account and everything with it, online and on this phone; the app starts again from the guide */
   deleteAccount: () => Promise<void>;
   finishOnboarding: () => void;
@@ -406,6 +412,17 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
       syncRunning = null;
     });
     return syncRunning;
+  },
+
+  signOut: async () => {
+    await get().syncNow();
+    if (Object.keys(readOutbox()).length > 0) {
+      throw new Error('Alcune modifiche non sono ancora salvate: collegati a internet e riprova.');
+    }
+    await signOutOnline().catch(() => {}); // the session is removed from the phone below anyway
+    await wipeAllData();
+    markOnboarded(); // back to signing in, not to the whole guide
+    window.location.reload();
   },
 
   deleteAccount: async () => {
