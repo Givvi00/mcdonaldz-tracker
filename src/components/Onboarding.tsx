@@ -5,6 +5,7 @@ import { VerifiedBadge } from '@/components/VerifiedBadge';
 import { Stamp } from '@/components/Stamp';
 import { RegionSticker } from '@/components/RegionSticker';
 import { ACHIEVEMENTS } from '@/services/achievements';
+import { SignInForm } from '@/components/SignInForm';
 
 /** A restaurant card as it looks once visited, drawn for the guide (not a real, tappable one) */
 function SampleCard() {
@@ -35,13 +36,15 @@ interface Slide {
 
 /**
  * The guide to the app: on a first launch (before the browser asks for the position, which it explains), or again
- * from the Profile. A few slides over the red card background, swiped or stepped with the buttons; the last one asks
- * for a name (optional).
+ * from the Profile. A few slides over the red card background, swiped or stepped with the buttons; then signing in to
+ * the online copy (optional: on a new phone it brings everything back) and a name (optional).
  */
 export function Onboarding() {
-  const { onboarding, finishOnboarding, mcdonalds, user, renameUser } = useMcdonaldStore();
+  const { onboarding, finishOnboarding, mcdonalds, user, renameUser, account } = useMcdonaldStore();
   const [index, setIndex] = useState(0);
   const [name, setName] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
   const touchX = useRef<number | null>(null);
 
   if (onboarding !== 'first' && onboarding !== 'again') return null;
@@ -89,15 +92,29 @@ export function Onboarding() {
       ),
     },
   ];
-  const last = slides.length; // the name, after the slides
-  const total = slides.length + 1;
+  const accountStep = slides.length; // after the slides: the online copy
+  const last = slides.length + 1; // then the name
+  const total = slides.length + 2;
   const shownName = name ?? user?.name ?? '';
+  const signedIn = account && account.status !== 'signed-out' ? account.account : null;
 
   const go = (to: number) => setIndex(Math.max(0, Math.min(last, to)));
   const finish = async () => {
-    if (shownName.trim() && shownName.trim() !== (user?.name ?? '')) await renameUser(shownName);
+    if (shownName.trim() && shownName.trim() !== (user?.name ?? '')) {
+      setSaving(true);
+      try {
+        await renameUser(shownName);
+      } catch (error) {
+        // With an account the name must be free
+        setNameError((error as Error).message);
+        return;
+      } finally {
+        setSaving(false);
+      }
+    }
     setIndex(0);
     setName(null);
+    setNameError(null);
     finishOnboarding();
   };
 
@@ -118,19 +135,39 @@ export function Onboarding() {
       <FoodPattern opacity={0.16} />
 
       <div className="relative flex h-14 items-center justify-end px-4">
-        {index < last && (
-          <button onClick={() => go(last)} className="rounded-full px-3 py-1.5 text-sm font-semibold text-white/80 active:scale-95">
+        {index < accountStep && (
+          <button onClick={() => go(accountStep)} className="rounded-full px-3 py-1.5 text-sm font-semibold text-white/80 active:scale-95">
             Salta
           </button>
         )}
       </div>
 
       <div key={index} className="relative mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center px-8 text-center animate-[toast-in_0.35s_ease-out]">
-        {index < last ? (
+        {index < accountStep ? (
           <>
             <div className="flex min-h-[150px] items-center justify-center">{slides[index].art}</div>
             <h2 className="mt-8 font-display text-2xl font-bold">{slides[index].title}</h2>
             <p className="mt-3 text-base leading-relaxed text-white/90">{slides[index].text}</p>
+          </>
+        ) : index === accountStep ? (
+          <>
+            <div className="text-6xl" aria-hidden>
+              ☁️
+            </div>
+            <h2 className="mt-6 font-display text-2xl font-bold">Salva le tue visite online</h2>
+            {signedIn ? (
+              <p className="mt-3 rounded-2xl bg-black/20 px-4 py-3 text-base text-white/90">
+                ✓ Sei dentro come <span className="font-semibold">{signedIn.email}</span>: le visite si salvano online da sole.
+              </p>
+            ) : (
+              <>
+                <p className="mt-3 mb-5 text-base leading-relaxed text-white/90">
+                  Entra con la tua email: le visite non si perdono se cambi telefono, e se hai già usato l'app altrove ritrovi tutto. Per
+                  ora solo su invito, puoi farlo anche dopo dal Profilo.
+                </p>
+                <SignInForm variant="onRed" onSignedIn={() => go(last)} />
+              </>
+            )}
           </>
         ) : (
           <>
@@ -138,11 +175,15 @@ export function Onboarding() {
             <p className="mt-3 text-base text-white/90">Come ti chiami? Compare in alto, sopra il livello. Puoi anche saltarlo.</p>
             <input
               value={shownName}
-              onChange={e => setName(e.target.value)}
+              onChange={e => {
+                setName(e.target.value);
+                setNameError(null);
+              }}
               maxLength={16}
               placeholder="Il tuo nome"
               className="mt-5 w-full rounded-2xl border-2 border-white/40 bg-white px-4 py-3 text-center text-lg font-semibold text-gray-800 outline-none focus:border-mc-yellow"
             />
+            {nameError && <p className="mt-3 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-red-700">{nameError}</p>}
             {onboarding === 'first' && (
               <p className="mt-6 rounded-2xl bg-black/20 px-4 py-3 text-sm leading-relaxed text-white/90">
                 📍 Subito dopo il telefono ti chiederà la posizione: serve per mostrarti i Mc vicini e per verificare le visite.
@@ -167,9 +208,10 @@ export function Onboarding() {
           )}
           <button
             onClick={() => (index < last ? go(index + 1) : void finish())}
+            disabled={saving}
             className="flex-[2] rounded-2xl bg-mc-yellow py-3.5 font-bold text-gray-800 shadow-lg active:scale-[0.98]"
           >
-            {index < last ? 'Avanti' : onboarding === 'first' ? 'Inizia' : 'Fatto'}
+            {index === accountStep && !signedIn ? 'Più tardi' : index < last ? 'Avanti' : onboarding === 'first' ? 'Inizia' : 'Fatto'}
           </button>
         </div>
       </div>

@@ -18,7 +18,7 @@ import {
   setVisitRating,
   setVisitVerified,
 } from '../src/services/db';
-import { syncOnce, type Local, type Remote, type RemoteAchievement, type RemoteVisit } from '../src/services/sync';
+import { NameTakenError, syncOnce, type Local, type Remote, type RemoteAchievement, type RemoteVisit } from '../src/services/sync';
 import { readOutbox } from '../src/services/syncOutbox';
 
 const store = new Map<string, string>();
@@ -46,6 +46,8 @@ class FakeRemote implements Remote {
   stamps = new Map<string, RemoteAchievement>();
   name: string | null | undefined = undefined;
   failNext = false;
+  /** Names of other accounts */
+  others = new Set<string>();
   /** Runs in the middle of a sync, to simulate a tap on the phone at that moment */
   duringList: (() => Promise<void>) | null = null;
 
@@ -81,6 +83,7 @@ class FakeRemote implements Remote {
     return this.name;
   }
   async setName(name: string | null) {
+    if (name && this.others.has(name.toLowerCase())) throw new NameTakenError(name);
     this.name = name;
   }
 }
@@ -211,6 +214,19 @@ await test('a new name from another phone arrives', async () => {
 await test('a sync with nothing new changes nothing', async () => {
   const result = await syncOnce(online, await local(), ACCOUNT);
   assert.equal(result.changedHere, false);
+});
+
+await test('a name another account already has is refused, the rest of the sync goes through', async () => {
+  const user = await getOrCreateUser();
+  online.others.add('mario');
+  await setUserName(user.id, 'Mario');
+  await addVisit('g', user.id);
+  const result = await syncOnce(online, await local(), ACCOUNT);
+  assert.equal(result.nameTaken, 'Mario');
+  assert.equal(online.name, 'Gabriele', 'the online name did not change');
+  assert.equal((await getOrCreateUser()).name, 'Gabriele', 'the phone went back to it');
+  assert.ok(online.visits.has('g'), 'the visits went out anyway');
+  assert.deepEqual(readOutbox(), {});
 });
 
 console.log(`\n${passed} sync checks passed`);

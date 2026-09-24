@@ -51,6 +51,8 @@ export function Profile() {
     void requestPersistentStorage().then(setPersist);
   }, []);
   const [nameDraft, setNameDraft] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const nameTaken = account && account.status !== 'signed-out' ? account.nameTaken : undefined;
   const nameShown = nameDraft ?? user?.name ?? '';
   const { mode, setMode } = useTheme();
   const level = levelInfo(getVisitedCount());
@@ -148,15 +150,22 @@ export function Profile() {
           <input
             ref={nameInput}
             value={nameShown}
-            onChange={e => setNameDraft(e.target.value)}
+            onChange={e => {
+              setNameDraft(e.target.value);
+              setNameError(null);
+            }}
             maxLength={16}
             placeholder="Ospite"
             className="min-w-0 flex-1 rounded-xl border-2 border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold text-gray-800 outline-none focus:border-mc-red dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
           />
           <button
             onClick={async () => {
-              await renameUser(nameShown);
-              setNameDraft(null);
+              try {
+                await renameUser(nameShown);
+                setNameDraft(null);
+              } catch (error) {
+                setNameError((error as Error).message);
+              }
             }}
             disabled={nameDraft === null}
             className="rounded-xl bg-mc-red px-4 py-2.5 text-sm font-bold text-white transition-transform active:scale-95 disabled:opacity-40"
@@ -164,7 +173,12 @@ export function Profile() {
             Salva
           </button>
         </div>
-        <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Compare in alto a destra, sopra il livello.{online ? '' : ' Resta solo su questo telefono.'}</p>
+        {(nameError || nameTaken) && (
+          <p role="status" className="mt-1.5 rounded-xl bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 dark:bg-red-950/40 dark:text-red-300">
+            {nameError ?? `«${nameTaken}» è già di un altro account: scegline un altro`}
+          </p>
+        )}
+        <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Compare in alto a destra, sopra il livello.{online ? ' Online è solo tuo: nessun altro può usarlo.' : ' Resta solo su questo telefono.'}</p>
       </div>
 
       {/* Theme */}

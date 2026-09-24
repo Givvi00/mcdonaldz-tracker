@@ -2,7 +2,7 @@
 // The Supabase library is loaded only when needed (someone signed in on this phone, or opening the sign-in), so the
 // app stays as light as before for everyone else.
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Remote, RemoteAchievement, RemoteVisit } from './sync';
+import { NameTakenError, type Remote, type RemoteAchievement, type RemoteVisit } from './sync';
 
 // Public by design: what protects the data are the rules in supabase/migrations (each account sees only its own rows)
 const SUPABASE_URL = 'https://krfhynrhictmtolqkpas.supabase.co';
@@ -79,6 +79,14 @@ export async function confirmCode(email: string, code: string): Promise<Account>
   return { id: data.user.id, email: data.user.email ?? email };
 }
 
+/** Whether nobody else has this name online (yours counts as free) */
+export async function isNameAvailable(name: string): Promise<boolean> {
+  const client = await getClient();
+  const { data, error } = await client.rpc('name_available', { candidate: name.trim() });
+  if (error) throw explain(error);
+  return data === true;
+}
+
 /** Leaves the account on this phone; the data stays here and online */
 export async function signOut(): Promise<void> {
   const client = await getClient();
@@ -125,7 +133,10 @@ export function supabaseRemote(client: SupabaseClient, accountId: string): Remot
       return row ? row.name : undefined;
     },
     async setName(name) {
-      check(await client.from('profiles').upsert({ id: accountId, name }, { onConflict: 'id' }));
+      const result = await client.from('profiles').upsert({ id: accountId, name }, { onConflict: 'id' });
+      // 23505: the unique index on the name (supabase/migrations/0002_unique_names.sql)
+      if (result.error?.code === '23505' && name) throw new NameTakenError(name);
+      check(result);
     },
   };
 }

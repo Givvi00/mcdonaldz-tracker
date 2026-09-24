@@ -2,10 +2,7 @@ import { useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { SectionTitle } from '@/components/SectionTitle';
 import { ConfirmSheet } from '@/components/ConfirmSheet';
-import { confirmCode, sendCode } from '@/services/account';
-
-const INPUT =
-  'w-full rounded-xl border-2 border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold text-gray-800 outline-none focus:border-mc-red dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100';
+import { SignInForm } from '@/components/SignInForm';
 
 function syncLabel(at?: number): string {
   if (!at) return '';
@@ -21,23 +18,16 @@ function syncLabel(at?: number): string {
  * themselves and come back on any phone you sign in on.
  */
 export function AccountSection() {
-  const { account, accountSignedIn, syncNow, signOutAccount, deleteAccount } = useMcdonaldStore();
-  const [email, setEmail] = useState('');
-  const [code, setCode] = useState('');
-  const [step, setStep] = useState<'email' | 'code'>('email');
-  const [busy, setBusy] = useState(false);
+  const { account, syncNow, signOutAccount, deleteAccount } = useMcdonaldStore();
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
   const [confirm, setConfirm] = useState<'signout' | 'delete' | null>(null);
 
   const run = async (work: () => Promise<void>) => {
-    setBusy(true);
     setMessage(null);
     try {
       await work();
     } catch (error) {
       setMessage({ ok: false, text: (error as Error).message });
-    } finally {
-      setBusy(false);
     }
   };
 
@@ -57,81 +47,7 @@ export function AccountSection() {
             Entra con la tua email: visite, voti e timbri si salvano online da soli e li ritrovi su qualsiasi telefono. Per ora solo su
             invito.
           </p>
-          {step === 'email' ? (
-            <form
-              className="flex gap-2"
-              onSubmit={e => {
-                e.preventDefault();
-                void run(async () => {
-                  await sendCode(email);
-                  setStep('code');
-                  setMessage({ ok: true, text: `Codice inviato a ${email.trim()}. Controlla anche lo spam.` });
-                });
-              }}
-            >
-              <input
-                type="email"
-                inputMode="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="La tua email"
-                className={`${INPUT} min-w-0 flex-1`}
-              />
-              <button
-                type="submit"
-                disabled={busy || !email.includes('@')}
-                className="rounded-xl bg-mc-red px-4 py-2.5 text-sm font-bold text-white transition-transform active:scale-95 disabled:opacity-40"
-              >
-                {busy ? '…' : 'Invia codice'}
-              </button>
-            </form>
-          ) : (
-            <form
-              className="space-y-2"
-              onSubmit={e => {
-                e.preventDefault();
-                void run(async () => {
-                  const signed = await confirmCode(email, code);
-                  setCode('');
-                  setStep('email');
-                  await accountSignedIn(signed);
-                  setMessage({ ok: true, text: 'Fatto: le tue visite ora sono salvate online' });
-                });
-              }}
-            >
-              <div className="flex gap-2">
-                <input
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  required
-                  value={code}
-                  onChange={e => setCode(e.target.value.replace(/\D/g, '').slice(0, 8))}
-                  placeholder="Codice dall'email"
-                  className={`${INPUT} min-w-0 flex-1 text-center tracking-[0.3em]`}
-                />
-                <button
-                  type="submit"
-                  disabled={busy || code.length < 6}
-                  className="rounded-xl bg-mc-red px-4 py-2.5 text-sm font-bold text-white transition-transform active:scale-95 disabled:opacity-40"
-                >
-                  {busy ? '…' : 'Entra'}
-                </button>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setStep('email');
-                  setCode('');
-                  setMessage(null);
-                }}
-                className="text-xs font-semibold text-gray-500 underline dark:text-gray-400"
-              >
-                Cambia email o richiedi un nuovo codice
-              </button>
-            </form>
-          )}
+          <SignInForm />
         </>
       )}
 

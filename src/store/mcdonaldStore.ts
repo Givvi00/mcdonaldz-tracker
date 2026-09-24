@@ -16,12 +16,13 @@ import {
   setUserNameFromServer,
 } from '@/services/db';
 import { onOutboxChange } from '@/services/syncOutbox';
-import { forgetSyncedAccount, syncOnce, type Local } from '@/services/sync';
+import { NameTakenError, forgetSyncedAccount, syncOnce, type Local } from '@/services/sync';
 import {
   currentAccount,
   deleteAccount as deleteOnlineAccount,
   getClient,
   hasStoredSession,
+  isNameAvailable,
   signOut as signOutOnline,
   supabaseRemote,
   type Account,
@@ -60,6 +61,8 @@ export type AccountState =
       /** Last time everything was sent and received */
       lastSyncAt?: number;
       error?: string;
+      /** Your name could not go online because another account has it: the Profile asks for another one */
+      nameTaken?: string;
     };
 
 /** After a change, wait this long before sending it (several taps in a row go out together) */
@@ -210,10 +213,17 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   },
 
   renameUser: async (name: string) => {
-    const { user } = get();
+    const { user, account } = get();
     if (!user) return;
+    // With an account, a name belongs to one person only. Offline it cannot be checked now: the sync checks it later.
+    const signedIn = account !== null && account.status !== 'signed-out';
+    if (signedIn && name.trim() && navigator.onLine !== false) {
+      if (!(await isNameAvailable(name))) throw new NameTakenError(name.trim());
+    }
     const updated = await setUserName(user.id, name);
     if (updated) set({ user: updated });
+    const now = get().account;
+    if (now && now.status !== 'signed-out' && now.nameTaken) set({ account: { ...now, nameTaken: undefined } });
   },
 
   toggleVisit: async (mcdonaldId: string) => {
@@ -365,7 +375,12 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
           };
           const result = await syncOnce(supabaseRemote(client, state.account.id), local, state.account.id);
           if (result.changedHere) await get().reloadQuietly();
-          set({ account: { status: 'synced', account: state.account, lastSyncAt: Date.now() } });
+          // A name refused online stays to be fixed until you choose a new one
+          const before = get().account;
+          const stillTaken = before && before.status !== 'signed-out' && !get().user?.name ? before.nameTaken : undefined;
+          set({
+            account: { status: 'synced', account: state.account, lastSyncAt: Date.now(), nameTaken: result.nameTaken ?? stillTaken },
+          });
         } catch (error) {
           const message = (error as Error).message ?? '';
           // The session is no longer valid (account deleted, or signed out everywhere)
@@ -373,7 +388,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
           set({
             account: expired
               ? { status: 'signed-out' }
-              : { status: navigator.onLine === false ? 'offline' : 'error', account: state.account, lastSyncAt: state.lastSyncAt, error: message },
+              : { status: navigator.onLine === false ? 'offline' : 'error', account: state.account, lastSyncAt: state.lastSyncAt, error: message, nameTaken: state.nameTaken },
           });
         }
       } while (syncAgain);

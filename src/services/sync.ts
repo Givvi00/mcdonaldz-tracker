@@ -19,6 +19,13 @@ export interface RemoteVisit {
   rating: VisitRating | null;
 }
 
+/** The name is already used by another account (names are unique online) */
+export class NameTakenError extends Error {
+  constructor(public readonly taken: string) {
+    super(`«${taken}» è già preso: scegline un altro`);
+  }
+}
+
 export interface RemoteAchievement {
   type: string;
   unlocked_at: number;
@@ -35,6 +42,7 @@ export interface Remote {
   addAchievements(rows: RemoteAchievement[]): Promise<void>;
   /** undefined: no profile yet */
   getName(): Promise<string | null | undefined>;
+  /** Throws NameTakenError if another account has it */
   setName(name: string | null): Promise<void>;
 }
 
@@ -102,6 +110,8 @@ export interface SyncResult {
   changedHere: boolean;
   /** Stamps that arrived from another phone */
   stampsArrived: number;
+  /** The name on this phone could not go online: another account has it */
+  nameTaken?: string;
 }
 
 export async function syncOnce(remote: Remote, local: Local, accountId: string): Promise<SyncResult> {
@@ -127,13 +137,27 @@ export async function syncOnce(remote: Remote, local: Local, accountId: string):
   const onlineName = await remote.getName();
   const localName = await local.getName();
   let changedHere = false;
+  let nameTaken: string | undefined;
+  const sendName = async () => {
+    try {
+      await remote.setName(localName ?? null);
+    } catch (error) {
+      if (!(error instanceof NameTakenError)) throw error;
+      // The rest of the sync goes on. The phone goes back to the online name (none, the first time), and the app
+      // asks for another one
+      nameTaken = error.taken;
+      if (onlineName === undefined) await remote.setName(null);
+      await local.setNameFromServer(onlineName ?? undefined);
+      changedHere = true;
+    }
+  };
   if (outbox[NAME_ENTRY] !== undefined || (first && !onlineName && localName)) {
-    await remote.setName(localName ?? null);
+    await sendName();
   } else if (onlineName !== undefined && (onlineName ?? undefined) !== localName) {
     await local.setNameFromServer(onlineName ?? undefined);
     changedHere = true;
   } else if (onlineName === undefined) {
-    await remote.setName(localName ?? null);
+    await sendName();
   }
 
   // What was sent can leave the outbox (unless it changed again meanwhile)
@@ -155,5 +179,5 @@ export async function syncOnce(remote: Remote, local: Local, accountId: string):
   const visitsChanged = await local.replaceVisits(onlineVisits, () => new Set(Object.keys(readOutbox())));
 
   rememberAccount(accountId);
-  return { changedHere: changedHere || visitsChanged || stampsArrived > 0, stampsArrived };
+  return { changedHere: changedHere || visitsChanged || stampsArrived > 0, stampsArrived, nameTaken };
 }
