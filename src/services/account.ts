@@ -54,11 +54,19 @@ export class NotInvitedError extends Error {
   }
 }
 
-/** Readable Italian for what can go wrong while signing in */
-function explain(error: { message?: string; status?: number; code?: string }): Error {
+/** Readable Italian for what can go wrong while signing in (exported for the tests) */
+export function explain(error: { message?: string; status?: number; code?: string }): Error {
   const text = `${error.code ?? ''} ${error.message ?? ''}`.toLowerCase();
   if (text.includes('signup') || text.includes('not allowed') || text.includes('user_not_found')) {
     return new NotInvitedError();
+  }
+  // A new code for the same email is allowed once a minute: "...you can only request this after 42 seconds"
+  const wait = /after (\d+) seconds?/.exec(text);
+  if (wait) {
+    return new Error(`Hai appena chiesto un codice: aspetta ${wait[1]} secondi e riprova.`);
+  }
+  if (text.includes('email_address_invalid') || (text.includes('email') && text.includes('invalid') && !text.includes('token'))) {
+    return new Error('Email non valida: controlla di averla scritta bene.');
   }
   if (text.includes('rate') || error.status === 429) {
     return new Error('Troppi tentativi: aspetta qualche minuto e riprova.');
