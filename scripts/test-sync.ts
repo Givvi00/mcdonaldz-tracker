@@ -15,6 +15,7 @@ import {
   replaceVisits,
   setUserName,
   setUserNameFromServer,
+  setVisitDiary,
   setVisitRating,
   setVisitVerified,
 } from '../src/services/db';
@@ -124,12 +125,16 @@ await test('first sign-in sends every visit, the name and the stamps already on 
   await setVisitVerified('b', 1234);
   await setVisitRating('a', { cleanliness: 5, staff: 4, outdoorSpace: 3, speed: 2 });
   await setUserName(user.id, 'Gabri');
+  await setVisitDiary('b', { ate: ['bigmac', 'fries'], notes: 'Con Marco dopo la partita' });
   await addMissingAchievements(user.id, [{ type: 'FIRST_STAMP', unlockedAt: 99 }]);
   const result = await syncOnce(online, await local(), ACCOUNT);
   assert.deepEqual([...online.visits.keys()].sort(), ['a', 'b']);
   assert.equal(online.visits.get('b')?.verified, true);
   assert.equal(online.visits.get('b')?.verified_at, 1234);
   assert.equal(online.visits.get('a')?.rating?.cleanliness, 5);
+  assert.deepEqual(online.visits.get('b')?.ate, ['bigmac', 'fries']);
+  assert.equal(online.visits.get('b')?.notes, 'Con Marco dopo la partita');
+  assert.equal(online.visits.get('a')?.notes, null, 'no diary: nothing sent');
   assert.equal(online.name, 'Gabri');
   assert.ok(online.stamps.has('FIRST_STAMP'));
   assert.deepEqual(readOutbox(), {}, 'everything was sent');
@@ -159,7 +164,7 @@ await test('removing a visit here removes it online; one removed elsewhere disap
 
 await test('a visit made elsewhere arrives, a visit made here goes out, in the same sync', async () => {
   const user = await getOrCreateUser();
-  online.visits.set('c', { mcdonald_id: 'c', visited_at: 5, date_edited: false, verified: false, verified_at: null, rating: null });
+  online.visits.set('c', { mcdonald_id: 'c', visited_at: 5, date_edited: false, verified: false, verified_at: null, rating: null, notes: null, ate: null });
   await addVisit('d', user.id);
   await syncOnce(online, await local(), ACCOUNT);
   assert.deepEqual(await ids(), ['c', 'd']);
@@ -209,6 +214,20 @@ await test('a new name from another phone arrives', async () => {
   assert.equal(result.changedHere, true);
   assert.equal((await getOrCreateUser()).name, 'Gabriele');
   assert.deepEqual(readOutbox(), {}, 'receiving it is not a change to send back');
+});
+
+await test('clearing the diary removes it here and online', async () => {
+  const user = await getOrCreateUser();
+  await addVisit('h', user.id);
+  await setVisitDiary('h', { ate: ['mcflurry'], notes: 'buono' });
+  await syncOnce(online, await local(), ACCOUNT);
+  assert.deepEqual(online.visits.get('h')?.ate, ['mcflurry']);
+  await setVisitDiary('h', { ate: [], notes: '   ' });
+  await syncOnce(online, await local(), ACCOUNT);
+  assert.equal(online.visits.get('h')?.ate, null);
+  assert.equal(online.visits.get('h')?.notes, null);
+  const h = (await getVisits()).find(v => v.mcdonaldId === 'h');
+  assert.ok(h && !('ate' in h) && !('notes' in h), 'no empty fields left on the phone');
 });
 
 await test('a sync with nothing new changes nothing', async () => {

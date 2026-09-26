@@ -17,6 +17,8 @@ export interface RemoteVisit {
   verified: boolean;
   verified_at: number | null;
   rating: VisitRating | null;
+  notes: string | null;
+  ate: string[] | null;
 }
 
 /** The name is already used by another account (names are unique online) */
@@ -64,6 +66,8 @@ export function toRemote(visit: Visit): RemoteVisit {
     verified: visit.verified === true,
     verified_at: visit.verifiedAt ?? null,
     rating: visit.rating ?? null,
+    notes: visit.notes ?? null,
+    ate: visit.ate?.length ? visit.ate : null,
   };
 }
 
@@ -74,6 +78,8 @@ export function fromRemote(row: RemoteVisit): Visit {
   if (row.verified) visit.verified = true;
   if (row.verified_at != null) visit.verifiedAt = Number(row.verified_at);
   if (row.rating) visit.rating = row.rating;
+  if (row.notes) visit.notes = row.notes;
+  if (row.ate?.length) visit.ate = row.ate;
   return visit;
 }
 

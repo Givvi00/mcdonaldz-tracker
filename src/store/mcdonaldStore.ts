@@ -10,6 +10,7 @@ import {
   setVisitDate,
   setVisitRating,
   setVisitVerified,
+  setVisitDiary,
   replaceVisits,
   getAchievements,
   addMissingAchievements,
@@ -125,6 +126,8 @@ interface AppStore {
   changeVisitDate: (mcdonaldId: string, visitedAt: number) => Promise<void>;
   /** Sets your vote for a visited restaurant (can unlock the "Critico gastronomico" stamp) */
   rateVisit: (mcdonaldId: string, rating: VisitRating) => Promise<void>;
+  /** Sets the diary of a visit: what you ate and a note */
+  saveDiary: (mcdonaldId: string, diary: { ate: string[]; notes: string }) => Promise<void>;
   /**
    * Reads a fresh, precise position and, if it proves you are at the restaurant, marks its visit as verified (and
    * checks the stamps that need it). `quiet`: only a success is announced (the automatic check after marking a
@@ -289,6 +292,11 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     if (get().pendingRatingFor === mcdonaldId) set({ pendingRatingFor: null });
     const unlocked = await checkAndUnlockAchievements(user.id, mcdonalds, updatedVisits);
     if (unlocked.length > 0) get().enqueueCelebrations([{ id: Date.now(), kind: 'stamp', stamps: unlocked }]);
+  },
+
+  saveDiary: async (mcdonaldId, diary) => {
+    await setVisitDiary(mcdonaldId, diary);
+    set({ visits: await getVisits() });
   },
 
   enqueueCelebrations: (events) => {

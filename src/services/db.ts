@@ -296,6 +296,20 @@ export async function setVisitRating(mcdonaldId: string, rating: VisitRating): P
   await changing(mcdonaldId, () => database.put('visits', { ...visit, rating }));
 }
 
+/** The diary of a visit: what you ate and a note. Empty ones are removed, not stored as blanks. */
+export async function setVisitDiary(mcdonaldId: string, diary: { ate: string[]; notes: string }): Promise<void> {
+  const database = await initDB();
+  const visit = await database.getFromIndex('visits', 'by-mcdonaldId', mcdonaldId);
+  if (!visit) return;
+  const next: Visit = { ...visit };
+  const notes = diary.notes.trim().slice(0, 280);
+  if (notes) next.notes = notes;
+  else delete next.notes;
+  if (diary.ate.length > 0) next.ate = [...new Set(diary.ate)].slice(0, 20);
+  else delete next.ate;
+  await changing(mcdonaldId, () => database.put('visits', next));
+}
+
 export async function getVisits(): Promise<Visit[]> {
   const database = await initDB();
   return database.getAll('visits');

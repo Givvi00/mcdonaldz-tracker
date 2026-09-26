@@ -8,6 +8,8 @@ import { restaurantKind } from '@/utils/foodTheme';
 import { canOfferVerify } from '@/services/gpsCheck';
 import { VisitDateSheet, formatVisitDate } from '@/components/VisitDateSheet';
 import { VisitRatingSheet, averageRating } from '@/components/VisitRatingSheet';
+import { VisitDiarySheet } from '@/components/VisitDiarySheet';
+import { menuItems } from '@/utils/menu';
 import { VerifiedBadge } from '@/components/VerifiedBadge';
 
 interface Props {
@@ -24,10 +26,11 @@ const CARD_TONE = {
 };
 
 export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
-  const { isVisited, requestToggle, focusOnMap, visits, changeVisitDate, rateVisit, userPosition, verifying, verifyVisit } =
+  const { isVisited, requestToggle, focusOnMap, visits, changeVisitDate, rateVisit, saveDiary, userPosition, verifying, verifyVisit } =
     useMcdonaldStore();
   const [editingDate, setEditingDate] = useState(false);
   const [editingRating, setEditingRating] = useState(false);
+  const [editingDiary, setEditingDiary] = useState(false);
   const visited = isVisited(mc.id);
   const visit = visited ? visits.find(v => v.mcdonaldId === mc.id) : undefined;
   const kind = restaurantKind(mc);
@@ -148,8 +151,35 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
                 >
                   {visit.rating ? <>★ {averageRating(visit.rating).toFixed(1)}</> : <>☆ Vota</>}
                 </button>
+                <button
+                  onClick={e => {
+                    e.stopPropagation();
+                    setEditingDiary(true);
+                  }}
+                  className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-[0.7rem] font-semibold text-orange-800 active:scale-95 dark:bg-orange-900/40 dark:text-orange-200"
+                >
+                  📓 {visit.ate?.length || visit.notes ? 'Diario' : 'Scrivi il diario'}
+                </button>
                 {offerVerify && verifyButton('inline-flex px-2.5 py-1 text-[0.7rem]')}
               </div>
+            )}
+            {visit && (menuItems(visit.ate).length > 0 || visit.notes) && (
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                  setEditingDiary(true);
+                }}
+                className="mt-2 block w-full rounded-xl bg-white/70 px-3 py-2 text-left text-xs text-gray-700 active:scale-[0.99] dark:bg-black/20 dark:text-gray-200"
+              >
+                {menuItems(visit.ate).length > 0 && (
+                  <span className="block">
+                    {menuItems(visit.ate)
+                      .map(item => `${item.emoji} ${item.label}`)
+                      .join(' · ')}
+                  </span>
+                )}
+                {visit.notes && <span className="mt-0.5 block italic text-gray-600 line-clamp-2 dark:text-gray-300">“{visit.notes}”</span>}
+              </button>
             )}
           </div>
           <div className="flex flex-col items-end gap-2 flex-shrink-0">
@@ -180,6 +210,15 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
           visitedAt={visit.visitedAt}
           onSave={ms => void changeVisitDate(mc.id, ms)}
           onClose={() => setEditingDate(false)}
+        />
+      )}
+      {editingDiary && visit && (
+        <VisitDiarySheet
+          name={mc.name}
+          initialAte={visit.ate}
+          initialNotes={visit.notes}
+          onSave={diary => void saveDiary(mc.id, diary)}
+          onClose={() => setEditingDiary(false)}
         />
       )}
       {editingRating && visit && (

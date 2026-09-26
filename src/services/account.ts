@@ -164,7 +164,7 @@ function check<T>(result: { data: T; error: { message: string } | null }): T {
 export function supabaseRemote(client: SupabaseClient, accountId: string): Remote {
   return {
     async listVisits() {
-      return check(await client.from('visits').select('mcdonald_id, visited_at, date_edited, verified, verified_at, rating')) as RemoteVisit[];
+      return check(await client.from('visits').select('mcdonald_id, visited_at, date_edited, verified, verified_at, rating, notes, ate')) as RemoteVisit[];
     },
     async upsertVisits(rows) {
       check(await client.from('visits').upsert(rows.map(r => ({ ...r, user_id: accountId })), { onConflict: 'user_id,mcdonald_id' }));

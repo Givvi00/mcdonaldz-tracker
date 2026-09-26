@@ -34,7 +34,10 @@ export interface Visit {
    *  Absent on the first verified visits (September 2026), which were confirmed at `visitedAt`. */
   verifiedAt?: number;
   rating?: VisitRating;
+  /** The diary: a free note (up to 280 characters)… */
   notes?: string;
+  /** …and what you ate, as ids from the menu in src/utils/menu.ts */
+  ate?: string[];
 }
 
 export interface User {
