@@ -75,7 +75,6 @@ export function Stats() {
 
   const share = async () => {
     const level = levelInfo(visitedCount);
-    const tierCount = (tier: RegionTier) => Object.values(tiers).filter(t => t === tier).length;
     setSharing(true);
     try {
       await shareCard({
@@ -85,10 +84,8 @@ export function Stats() {
         verified: verifiedCount,
         level: level.number,
         levelName: level.level.name,
-        goldRegions: tierCount('gold'),
-        diamondRegions: tierCount('diamond'),
         stamps: achievements.filter(a => !a.type.startsWith('REGION:') && !a.type.startsWith('DIAMOND:')).length,
-        tiers,
+        regions: receiptRows.map(r => ({ region: r.region, visited: r.visited, verified: r.verified, total: r.total, tier: tiers[r.region] ?? 'empty' })),
       });
     } catch {
       // nothing to tell: the share sheet could not open, the button can be tapped again
