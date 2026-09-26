@@ -85,6 +85,45 @@ function paperPath(ctx: CanvasRenderingContext2D, height: number) {
   ctx.closePath();
 }
 
+/** The two column heads, drawn as in the app: a green tick for visited, the blue seal for verified */
+function drawTick(ctx: CanvasRenderingContext2D, x: number, y: number, r: number) {
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fillStyle = '#16A34A';
+  ctx.fill();
+  checkMark(ctx, x, y, r);
+}
+
+function drawSeal(ctx: CanvasRenderingContext2D, x: number, y: number, r: number) {
+  ctx.beginPath();
+  for (let i = 0; i < 24; i++) {
+    const a = (i / 24) * Math.PI * 2;
+    const rr = i % 2 === 0 ? r : r * 0.86;
+    ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr);
+  }
+  ctx.closePath();
+  const g = ctx.createLinearGradient(x - r, y - r, x + r, y + r);
+  g.addColorStop(0, '#4FB3FF');
+  g.addColorStop(1, '#1570D8');
+  ctx.fillStyle = g;
+  ctx.fill();
+  checkMark(ctx, x, y, r);
+}
+
+function checkMark(ctx: CanvasRenderingContext2D, x: number, y: number, r: number) {
+  ctx.save();
+  ctx.strokeStyle = '#FFFFFF';
+  ctx.lineWidth = r * 0.22;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x - r * 0.4, y + r * 0.02);
+  ctx.lineTo(x - r * 0.1, y + r * 0.32);
+  ctx.lineTo(x + r * 0.42, y - r * 0.28);
+  ctx.stroke();
+  ctx.restore();
+}
+
 function dashed(ctx: CanvasRenderingContext2D, y: number) {
   ctx.save();
   ctx.strokeStyle = '#CFC6BC';
@@ -205,10 +244,9 @@ export async function drawShareCard(data: CardData): Promise<Blob> {
   ctx.fillStyle = FADED;
   ctx.fillText('REGIONE', PAD, y);
   ctx.textAlign = 'right';
-  ctx.fillStyle = GREEN;
-  ctx.fillText('VIS', COLS[0], y);
-  ctx.fillStyle = BLUE;
-  ctx.fillText('VER', COLS[1], y);
+  // Centred over the right-aligned numbers (about two digits wide)
+  drawTick(ctx, COLS[0] - 17, y - 8, 14);
+  drawSeal(ctx, COLS[1] - 17, y - 8, 16);
   ctx.fillStyle = FADED;
   ctx.fillText('TOT', COLS[2], y);
   y += LINE;

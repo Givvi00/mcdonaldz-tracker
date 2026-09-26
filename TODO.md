@@ -19,7 +19,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 1. **Tappa 2, amici** (bozza con le scelte da fare in `docs/PIANO-AMICI.md`): cercare un amico per username e seguirlo; vedere il suo livello, i timbri e le regioni (gli amici vedono solo il riepilogo, mai le date delle visite)
 2. **Tappa 3, gare**: classifiche tra amici (visite, verificate, regioni), sfide a tempo. Da decidere se la "verificata" decisa dal telefono basta tra amici
 3. **Prove sul telefono**: stesso account su due dispositivi (visita segnata su uno che compare sull'altro), visita segnata offline che arriva dopo, Esci e rientro, figurina e festa di diamante, filtro a 4 voci, scontrino, tema chiaro/scuro, verifica vera sul posto, iPhone
-4. **Idee medie**: card da condividere come immagine; diario delle visite (nota, cosa hai mangiato, foto)
+4. **Idee medie**: (card da condividere fatta il 26/09, a scontrino) diario delle visite (nota, cosa hai mangiato, foto)
 5. **Dati**: primo aggiornamento vero dell'elenco da mcdonalds.it (dal browser)
 6. **Rifiniture**: durata della coda di feste, icona del livello 12, disegni delle figurine per regione
 7. **Più avanti, se serve**: dominio proprio per le email (niente più spam), invito dall'app con codice
