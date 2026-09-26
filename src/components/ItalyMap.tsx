@@ -1,13 +1,8 @@
 import { ITALY_MAP, MAP_REGIONS } from '@/data/italyMap';
 import type { RegionTier } from '@/services/regions';
+import { TIER_FILL } from '@/utils/regionColors';
 
-export const TIER_FILL: Record<RegionTier, string> = {
-  diamond: '#8FD3FF',
-  gold: '#F5C542',
-  silver: '#C7CDD3',
-  progress: '#F6E7B0',
-  empty: '#D9D3CA',
-};
+export { TIER_FILL };
 
 /** Italy with every region in place; each one is coloured by its tier (gold, silver, in progress, not started) */
 export function ItalyMap({

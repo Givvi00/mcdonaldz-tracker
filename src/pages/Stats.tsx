@@ -13,11 +13,14 @@ import { FoodProgressBar } from '@/components/FoodProgressBar';
 import { Receipt } from '@/components/Receipt';
 import { SectionTitle } from '@/components/SectionTitle';
 import type { Achievement } from '@shared/types';
+import { levelInfo } from '@/utils/foodTheme';
+import { shareCard } from '@/services/shareCard';
 
 export function Stats() {
   const { user, visits, getVisitedCount, getCountedTotal, getRegionStats, mcdonalds, focusedAchievements, clearFocusedAchievement } =
     useMcdonaldStore();
   const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [sharing, setSharing] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -70,11 +73,46 @@ export function Stats() {
   const tiers: Record<string, RegionTier> = {};
   for (const r of summaries) tiers[r.region] = regionTier(r, wasComplete.has(r.region));
 
+  const share = async () => {
+    const level = levelInfo(visitedCount);
+    const tierCount = (tier: RegionTier) => Object.values(tiers).filter(t => t === tier).length;
+    setSharing(true);
+    try {
+      await shareCard({
+        username: user?.name,
+        visited: visitedCount,
+        total: totalMcdonalds,
+        verified: verifiedCount,
+        level: level.number,
+        levelName: level.level.name,
+        goldRegions: tierCount('gold'),
+        diamondRegions: tierCount('diamond'),
+        stamps: achievements.filter(a => !a.type.startsWith('REGION:') && !a.type.startsWith('DIAMOND:')).length,
+        tiers,
+      });
+    } catch {
+      // nothing to tell: the share sheet could not open, the button can be tapped again
+    } finally {
+      setSharing(false);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6 px-4 pt-4 pb-8">
       {/* Big Counter */}
       <div className="relative bg-gradient-to-br from-mc-red to-red-700 text-white rounded-3xl p-6 text-center shadow-lg shadow-red-900/20 overflow-hidden">
         <FoodPattern />
+        <button
+          onClick={() => void share()}
+          disabled={sharing}
+          aria-label="Condividi i tuoi numeri"
+          className="absolute right-3 top-3 z-10 flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1.5 text-xs font-bold backdrop-blur-sm transition-transform active:scale-95 disabled:opacity-60"
+        >
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13" />
+          </svg>
+          {sharing ? '…' : 'Condividi'}
+        </button>
         <div className="relative">
           <p className="text-sm opacity-90 font-display font-semibold">Totale McDonald's Visitati</p>
           <p className="text-6xl font-display font-bold mt-2">{visitedCount}</p>
