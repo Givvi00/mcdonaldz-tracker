@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { useTheme } from '@/hooks/useTheme';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { Home } from '@/pages/Home';
-import { MapView } from '@/components/MapView';
-import { Stats } from '@/pages/Stats';
+// The map (Leaflet is about half of the app) and Stats are loaded apart, so Home appears sooner. They are fetched
+// anyway right after startup (see below): opening them is then immediate, and they are cached for offline use.
+const loadMap = () => import('@/components/MapView');
+const loadStats = () => import('@/pages/Stats');
+const MapView = lazy(() => loadMap().then(m => ({ default: m.MapView })));
+const Stats = lazy(() => loadStats().then(m => ({ default: m.Stats })));
 import { Profile } from '@/pages/Profile';
 import { AchievementToast } from '@/components/AchievementToast';
 import { NearbyPrompt } from '@/components/NearbyPrompt';
@@ -36,6 +40,14 @@ function App() {
   useEffect(() => {
     // The account after the local data: a sync needs the user of this phone
     void initApp().then(initAccount);
+  }, []);
+
+  useEffect(() => {
+    const preload = () => void Promise.all([loadMap(), loadStats()]).catch(() => {
+      // offline before they were ever fetched: they load when opened
+    });
+    const idle = window.requestIdleCallback ?? ((fn: () => void) => window.setTimeout(fn, 1500));
+    idle(preload);
   }, []);
 
   useEffect(() => startUpdateChecks(), []);
@@ -105,8 +117,10 @@ function App() {
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto overscroll-contain">
         {selectedTab === 'home' && <Home />}
-        {selectedTab === 'map' && <MapView />}
-        {selectedTab === 'stats' && <Stats />}
+        <Suspense fallback={<div className="flex h-full items-center justify-center text-sm text-gray-400">Un attimo…</div>}>
+          {selectedTab === 'map' && <MapView />}
+          {selectedTab === 'stats' && <Stats />}
+        </Suspense>
         {selectedTab === 'profile' && <Profile />}
       </div>
 
