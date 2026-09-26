@@ -104,6 +104,17 @@ export function Onboarding() {
   const blocked = (current === accountStep && !signedIn) || (current === last && (!shownName.trim() || saving));
 
   const go = (to: number) => setIndex(Math.max(first, Math.min(signedIn ? last : accountStep, to)));
+  // Back on an account that already has a username (it has just arrived with the rest): nothing left to ask
+  const afterSignIn = () => {
+    if (useMcdonaldStore.getState().user?.name) {
+      setIndex(0);
+      setName(null);
+      finishOnboarding();
+    } else {
+      setIndex(last);
+    }
+  };
+
   const finish = async () => {
     if (shownName.trim() && shownName.trim() !== (user?.name ?? '')) {
       setSaving(true);
@@ -170,7 +181,7 @@ export function Onboarding() {
               </p>
             ) : (
               <div className="mt-3 w-full">
-                <SignInForm onSignedIn={() => setIndex(last)} />
+                <SignInForm onSignedIn={afterSignIn} />
               </div>
             )}
           </>
