@@ -229,4 +229,58 @@ await test('a name another account already has is refused, the rest of the sync 
   assert.deepEqual(readOutbox(), {});
 });
 
+await test('removed and marked again while offline: it goes out as a visit, not as a removal', async () => {
+  const user = await getOrCreateUser();
+  await removeVisit('c', user.id);
+  await addVisit('c', user.id);
+  await syncOnce(online, await local(), ACCOUNT);
+  assert.ok(online.visits.has('c'));
+});
+
+await test('a verification and a vote made on another phone arrive on a visit not touched here', async () => {
+  online.visits.set('d', { ...online.visits.get('d')!, verified: true, verified_at: 777, rating: { cleanliness: 4, staff: 4, outdoorSpace: 4, speed: 4 } });
+  await syncOnce(online, await local(), ACCOUNT);
+  const d = (await getVisits()).find(v => v.mcdonaldId === 'd');
+  assert.equal(d?.verified, true);
+  assert.equal(d?.verifiedAt, 777);
+  assert.equal(d?.rating?.speed, 4);
+});
+
+await test('stamps that arrived from another phone are not sent back, and none is ever lost', async () => {
+  online.stamps.set('LUCKY_77', { type: 'LUCKY_77', unlocked_at: 5, value: null });
+  const added: string[] = [];
+  const original = online.addAchievements.bind(online);
+  online.addAchievements = async rows => {
+    added.push(...rows.map(r => r.type));
+    return original(rows);
+  };
+  await syncOnce(online, await local(), ACCOUNT);
+  await syncOnce(online, await local(), ACCOUNT);
+  assert.ok(!added.includes('LUCKY_77'), 'sent back');
+  const here = (await getAchievements((await getOrCreateUser()).id)).map(a => a.type);
+  assert.ok(here.includes('LUCKY_77') && here.includes('FIRST_STAMP'));
+  online.addAchievements = original;
+});
+
+await test('the first sign-in on a phone never deletes online what that phone does not have', async () => {
+  await newPhone();
+  const user = await getOrCreateUser();
+  // A removal still marked from before signing in, for a restaurant visited on another phone
+  await addVisit('c', user.id);
+  await removeVisit('c', user.id);
+  const before = [...online.visits.keys()].sort();
+  await syncOnce(online, await local(), ACCOUNT);
+  assert.deepEqual([...online.visits.keys()].sort(), before);
+  assert.deepEqual(await ids(), before, 'the phone received everything');
+});
+
+await test('two phones change the same visit: the one that syncs last wins, nothing breaks', async () => {
+  await setVisitRating('e', { cleanliness: 1, staff: 1, outdoorSpace: 1, speed: 1 });
+  // Meanwhile another phone had sent a different vote
+  online.visits.set('e', { ...online.visits.get('e')!, rating: { cleanliness: 5, staff: 5, outdoorSpace: 5, speed: 5 } });
+  await syncOnce(online, await local(), ACCOUNT);
+  assert.equal(online.visits.get('e')?.rating?.cleanliness, 1);
+  assert.equal((await getVisits()).find(v => v.mcdonaldId === 'e')?.rating?.cleanliness, 1);
+});
+
 console.log(`\n${passed} sync checks passed`);
