@@ -29,9 +29,10 @@ import {
   type Account,
 } from '@/services/account';
 import { checkAndUnlockAchievements } from '@/services/achievements';
-import { syncDiamondRegions, syncRegionCompletions } from '@/services/regions';
+import { diamondRecordType, regionRecordType, syncDiamondRegions, syncRegionCompletions } from '@/services/regions';
 import { freshFix, judgeFix, type VerifyOutcome } from '@/services/gpsCheck';
 import { isOnboarded, markOnboarded } from '@/services/onboarding';
+import { readUnseen, withUnseen, writeUnseen } from '@/services/unseen';
 import { distanceKm } from '@/utils/geo';
 import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds, visitedIdSet } from '@/utils/catalog';
@@ -91,8 +92,10 @@ interface AppStore {
   locationStatus: GeoStatus;
   /** Stamps shown in the toast at the top */
   newlyUnlocked: string[];
-  /** Stamps to show in the passport after tapping the toast (all of them, when there are several) */
+  /** Stamps and regions to show in Stats (after tapping the toast or the dot on Stats), all highlighted */
   focusedAchievements: string[];
+  /** Earned and not looked at yet: the dot on Stats (see services/unseen) */
+  unseen: string[];
   mapFocusId: string | null;
   /** What to jump to when the profile opens ("name": the name field) */
   profileFocus: 'name' | null;
@@ -134,6 +137,8 @@ interface AppStore {
   clearVerifyNotice: () => void;
   clearUnlocked: () => void;
   openAchievements: (types: string[]) => void;
+  /** The Stats tab: straight to what is new, if anything is */
+  openStats: () => void;
   clearFocusedAchievement: () => void;
   openProfile: (focus?: 'name') => void;
   clearProfileFocus: () => void;
@@ -196,6 +201,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   locationStatus: 'idle',
   newlyUnlocked: [],
   focusedAchievements: [],
+  unseen: readUnseen(),
   mapFocusId: null,
   profileFocus: null,
   updateAvailable: false,
@@ -292,6 +298,15 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   },
 
   enqueueCelebrations: (events) => {
+    // Everything celebrated is also new in Stats until you look at it
+    const earned = events.flatMap(e =>
+      e.kind === 'stamp' ? e.stamps : e.kind === 'region' ? [e.diamond ? diamondRecordType(e.region) : regionRecordType(e.region)] : [],
+    );
+    if (earned.length > 0) {
+      const unseen = withUnseen(get().unseen, earned);
+      writeUnseen(unseen);
+      set({ unseen });
+    }
     const { celebration } = get();
     if (celebration) {
       set(state => ({ celebrationQueue: [...state.celebrationQueue, ...events] }));
@@ -495,7 +510,17 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
 
   clearUnlocked: () => set({ newlyUnlocked: [] }),
 
-  openAchievements: (types) => set({ newlyUnlocked: [], celebration: null, selectedTab: 'stats', focusedAchievements: types }),
+  openAchievements: (types) => {
+    const unseen = get().unseen.filter(t => !types.includes(t));
+    writeUnseen(unseen);
+    set({ newlyUnlocked: [], celebration: null, selectedTab: 'stats', focusedAchievements: types, unseen });
+  },
+
+  openStats: () => {
+    const { unseen } = get();
+    if (unseen.length > 0) get().openAchievements(unseen);
+    else set({ selectedTab: 'stats' });
+  },
 
   clearFocusedAchievement: () => set({ focusedAchievements: [] }),
 

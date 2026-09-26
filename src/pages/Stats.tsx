@@ -32,9 +32,13 @@ export function Stats() {
   useEffect(() => {
     if (focusedAchievements.length === 0) return;
     const scroll = setTimeout(() => {
-      document.getElementById(`ach-${focusedAchievements[0]}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // A region goes to its sticker; a stamp to the passport, which then leafs through to it
+      const first = focusedAchievements[0];
+      const region = /^(REGION|DIAMOND):(.+)$/.exec(first)?.[2];
+      document.getElementById(region ? `region-${region}` : 'passport')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 400);
-    const clear = setTimeout(clearFocusedAchievement, 5000);
+    // Long enough for the passport to reach the last page
+    const clear = setTimeout(clearFocusedAchievement, 9000);
     return () => {
       clearTimeout(scroll);
       clearTimeout(clear);
@@ -133,7 +137,13 @@ export function Stats() {
 
       <Section icon="mcflurry" title="Regioni">
         <ItalyMap tiers={tiers} className="mx-auto mb-5 w-full max-w-[15rem]" />
-        <RegionAlbum summaries={summaries} wasComplete={wasComplete} completedAt={completedAt} diamondAt={diamondAt} />
+        <RegionAlbum
+          summaries={summaries}
+          wasComplete={wasComplete}
+          completedAt={completedAt}
+          diamondAt={diamondAt}
+          focused={focusedAchievements}
+        />
         <div className="mt-5">
           <Receipt name={user?.name} rows={receiptRows} visited={visitedCount} total={totalMcdonalds} verified={verifiedCount} />
         </div>

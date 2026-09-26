@@ -31,7 +31,7 @@ import './App.css';
 function App() {
   // Opened from the link in a "vuole entrare" email: the answer comes before anything else
   const [review, setReview] = useState(reviewLink);
-  const { selectedTab, setSelectedTab, initApp, initAccount, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile, onboarding } =
+  const { selectedTab, setSelectedTab, openStats, unseen, initApp, initAccount, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile, onboarding } =
     useMcdonaldStore();
   useTheme();
   // On a first launch the browser asks for the position only after the guide has said what it is for
@@ -134,7 +134,8 @@ function App() {
           return (
             <button
               key={tab}
-              onClick={() => setSelectedTab(tab)}
+              onClick={() => (tab === 'stats' ? openStats() : setSelectedTab(tab))}
+              aria-label={tab === 'stats' && unseen.length > 0 ? `${label}: ${unseen.length} novità da vedere` : undefined}
               className="relative flex flex-col items-center justify-center gap-1 flex-1 py-3"
             >
               <span
@@ -151,9 +152,9 @@ function App() {
               >
                 {label}
               </span>
-              {tab === 'stats' && getVisitedCount() > 0 && (
+              {tab === 'stats' && unseen.length > 0 && (
                 <span className="absolute top-1 right-1/2 translate-x-3 bg-mc-red text-white text-xs font-black w-5 h-5 rounded-full flex items-center justify-center text-[0.6rem] ring-2 ring-white dark:ring-gray-900">
-                  {getVisitedCount()}
+                  {unseen.length}
                 </span>
               )}
             </button>

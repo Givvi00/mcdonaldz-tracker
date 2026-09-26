@@ -16,6 +16,8 @@ const H = 452;
 const PAGES = FAMILIES.length + 1; // the cover, then one page per family
 const MAX_ANGLE = 180;
 const SETTLE_MS = 480;
+/** A page turned by itself on the way to a new stamp: quicker, several may follow each other */
+const AUTO_TURN_MS = 300;
 // Room to the left of the book: the pages already turned lie there and go off the edge of the screen
 const PAD = 10;
 // The sheet is a stack of thin rounded layers, so its thickness follows the rounded corners of the page
@@ -234,19 +236,29 @@ export function Passport({ unlocked, unlockedAt, progress, focused }: Props) {
   const got = ACHIEVEMENT_LIST.filter(a => unlocked.has(a.id)).length;
   pageRef.current = page;
 
-  // Arriving from a stamp toast: open the passport at the page of the first stamp
+  // Arriving from a stamp toast or the dot on Stats: the passport leafs through by itself to the page of the first new
+  // stamp (once the page has scrolled to it), then shows it
+  const [target, setTarget] = useState<{ page: number; stamp: string } | null>(null);
   useEffect(() => {
-    if (focused.length === 0) return;
-    const def = ACHIEVEMENT_LIST.find(a => a.id === focused[0]);
+    const stamp = focused.find(id => ACHIEVEMENT_LIST.some(a => a.id === id));
+    const def = ACHIEVEMENT_LIST.find(a => a.id === stamp);
     const index = def ? FAMILIES.findIndex(f => f.id === def.family) + 1 : 0;
-    if (index > 0) {
-      if (frame.current) cancelAnimationFrame(frame.current);
-      busy.current = false;
-      setTurnDir(null);
-      setPage(index);
-      setSelected(focused[0]);
-    }
+    if (!stamp || index <= 0) return;
+    const start = setTimeout(() => setTarget({ page: index, stamp }), 650);
+    return () => clearTimeout(start);
   }, [focused]);
+
+  useEffect(() => {
+    if (!target || turnDir !== null || busy.current) return;
+    if (page === target.page) {
+      setSelected(target.stamp);
+      setTarget(null);
+      return;
+    }
+    const next = setTimeout(() => turnBy(page < target.page ? 'next' : 'prev', AUTO_TURN_MS), 60);
+    return () => clearTimeout(next);
+    // turnBy is recreated at every render with the current page: the page is what matters here
+  }, [target, page, turnDir]);
 
   useEffect(
     () => () => {
@@ -271,12 +283,12 @@ export function Passport({ unlocked, unlockedAt, progress, focused }: Props) {
   };
 
   /** Let go of a page: it finishes turning or falls back */
-  const settle = (dir: Dir, complete: boolean, from: number) => {
+  const settle = (dir: Dir, complete: boolean, from: number, ms = SETTLE_MS) => {
     busy.current = true;
     const to = complete ? 1 : 0;
     const start = performance.now();
     const step = (now: number) => {
-      const t = Math.min(1, (now - start) / SETTLE_MS);
+      const t = Math.min(1, (now - start) / ms);
       applyTurn(dir, from + (to - from) * (1 - Math.pow(1 - t, 3)));
       if (t < 1) {
         frame.current = requestAnimationFrame(step);
@@ -289,7 +301,7 @@ export function Passport({ unlocked, unlockedAt, progress, focused }: Props) {
     frame.current = requestAnimationFrame(step);
   };
 
-  const turnBy = (dir: Dir) => {
+  const turnBy = (dir: Dir, ms = SETTLE_MS) => {
     if (busy.current || !canGo(dir)) return;
     if (prefersReducedMotion()) {
       setPage(p => p + (dir === 'next' ? 1 : -1));
@@ -297,7 +309,7 @@ export function Passport({ unlocked, unlockedAt, progress, focused }: Props) {
     }
     busy.current = true;
     setTurnDir(dir);
-    settle(dir, true, 0);
+    settle(dir, true, 0, ms);
   };
 
   const onPointerDown = (e: React.PointerEvent) => {
@@ -337,7 +349,7 @@ export function Passport({ unlocked, unlockedAt, progress, focused }: Props) {
   const turning = turnDir ? (turnDir === 'next' ? page : page - 1) : null;
 
   return (
-    <div>
+    <div id="passport">
       {/* wider than the column, so the pages that go off to the left are cut by the edge of the screen and not by the column */}
       <div className="-mx-4 overflow-x-clip px-4">
         <div ref={box} className="flex justify-center">

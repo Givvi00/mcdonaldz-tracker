@@ -10,6 +10,8 @@ interface Props {
   completedAt: Record<string, number>;
   /** When each region first became diamond (ms), by region name */
   diamondAt: Record<string, number>;
+  /** Just earned and opened from the toast or the dot on Stats ("REGION:<name>", "DIAMOND:<name>"): highlighted */
+  focused?: string[];
 }
 
 const TIER_ORDER: Record<RegionTier, number> = { diamond: 0, gold: 1, silver: 2, progress: 3, empty: 4 };
@@ -18,7 +20,7 @@ const TIER_ORDER: Record<RegionTier, number> = { diamond: 0, gold: 1, silver: 2,
  * The regions as a sticker album: diamond when complete and all verified, gold when complete, silver when a new
  * restaurant opened after you completed it.
  */
-export function RegionAlbum({ summaries, wasComplete, completedAt, diamondAt }: Props) {
+export function RegionAlbum({ summaries, wasComplete, completedAt, diamondAt, focused = [] }: Props) {
   const tiles = summaries
     .map(s => ({ s, tier: regionTier(s, wasComplete.has(s.region)) }))
     .sort((a, b) => TIER_ORDER[a.tier] - TIER_ORDER[b.tier] || b.s.visited / b.s.total - a.s.visited / a.s.total || a.s.region.localeCompare(b.s.region));
@@ -40,14 +42,22 @@ export function RegionAlbum({ summaries, wasComplete, completedAt, diamondAt }: 
         )}
       </p>
       <div className="grid grid-cols-3 gap-3">
-        {shown.map(({ s, tier }) => (
-          <RegionSticker
-            key={s.region}
-            summary={s}
-            tier={tier}
-            completedAt={tier === 'diamond' ? (diamondAt[s.region] ?? completedAt[s.region]) : completedAt[s.region]}
-          />
-        ))}
+        {shown.map(({ s, tier }) => {
+          const isNew = focused.includes(`REGION:${s.region}`) || focused.includes(`DIAMOND:${s.region}`);
+          return (
+            <div
+              key={s.region}
+              id={`region-${s.region}`}
+              className={`rounded-2xl transition-shadow ${isNew ? 'animate-pulse ring-2 ring-mc-red ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-950' : ''}`}
+            >
+              <RegionSticker
+                summary={s}
+                tier={tier}
+                completedAt={tier === 'diamond' ? (diamondAt[s.region] ?? completedAt[s.region]) : completedAt[s.region]}
+              />
+            </div>
+          );
+        })}
       </div>
       {unstarted > 0 && (
         <button
