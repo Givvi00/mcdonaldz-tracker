@@ -17,6 +17,9 @@ export function MapAppChooser() {
   return (
     <div className="fixed inset-0 z-[2000] flex items-end bg-black/50" onClick={() => setDest(null)}>
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Con quale app vuoi andarci?"
         className="w-full rounded-t-3xl bg-white dark:bg-gray-900 p-5 shadow-xl"
         style={{ paddingBottom: 'calc(1.25rem + var(--safe-bottom))' }}
         onClick={e => e.stopPropagation()}

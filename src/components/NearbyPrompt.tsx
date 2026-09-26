@@ -85,6 +85,7 @@ export function NearbyPrompt() {
     >
       <div
         role="dialog"
+        aria-modal="true"
         aria-label={again ? 'Sei di nuovo qui?' : 'Ti trovi qui?'}
         className="w-full max-w-sm bg-white dark:bg-gray-900 rounded-3xl p-5 shadow-2xl border border-gray-200 dark:border-gray-800 animate-[toast-in_0.35s_ease-out]"
         onClick={e => e.stopPropagation()}

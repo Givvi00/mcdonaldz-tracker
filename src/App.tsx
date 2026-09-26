@@ -117,7 +117,7 @@ function App() {
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto overscroll-contain">
         {selectedTab === 'home' && <Home />}
-        <Suspense fallback={<div className="flex h-full items-center justify-center text-sm text-gray-400">Un attimo…</div>}>
+        <Suspense fallback={<div className="flex h-full items-center justify-center text-sm text-gray-500 dark:text-gray-400">Un attimo…</div>}>
           {selectedTab === 'map' && <MapView />}
           {selectedTab === 'stats' && <Stats />}
         </Suspense>

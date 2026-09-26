@@ -120,7 +120,7 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
               )}
             </h3>
             <p className="text-xs text-gray-500 dark:text-gray-400">{mc.city}, {mc.region}</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{mc.address}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{mc.address}</p>
             {visit && (
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {visit.verified ? (

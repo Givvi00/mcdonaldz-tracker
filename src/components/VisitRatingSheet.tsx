@@ -51,6 +51,9 @@ export function VisitRatingSheet({ name, initial, onSave, onClose, aboveCelebrat
       onClick={onClose}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Come ti sei trovato?"
         className="w-full max-w-lg bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl border-t border-gray-200 dark:border-gray-800 animate-[toast-in_0.25s_ease-out] px-5 pt-4 pb-6"
         style={{ paddingBottom: 'calc(1.5rem + var(--safe-bottom))' }}
         onClick={e => e.stopPropagation()}

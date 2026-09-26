@@ -40,6 +40,7 @@ export function AccessReview({ id, token, onClose }: { id: string; token: string
   return (
     <div
       role="dialog"
+        aria-modal="true"
       aria-label="Richiesta di entrare"
       className="fixed inset-0 z-[3100] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-mc-red to-red-800 px-8 text-center text-white"
       style={{ paddingTop: 'var(--safe-top)', paddingBottom: 'var(--safe-bottom)' }}
@@ -65,7 +66,7 @@ export function AccessReview({ id, token, onClose }: { id: string; token: string
               {request.status === 'rejected' && `Richiesta di ${who} rifiutata`}
             </h2>
             {request.name && <p className="mt-2 text-white/80">{request.email}</p>}
-            <p className="mt-1 text-sm text-white/60">
+            <p className="mt-1 text-sm text-white/80">
               Chiesto il {new Date(request.createdAt).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })}
             </p>
             {request.status === 'approved' && (

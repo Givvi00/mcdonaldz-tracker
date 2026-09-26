@@ -15,6 +15,7 @@ export function ConfirmSheet({ title, subtitle, body, confirmLabel, onConfirm, o
     <div className="fixed inset-0 z-[2100] flex items-end justify-center bg-black/40" onClick={onCancel}>
       <div
         role="alertdialog"
+        aria-modal="true"
         aria-label={title}
         className="w-full max-w-lg rounded-t-3xl border-t border-gray-200 bg-white px-5 pb-6 pt-5 shadow-2xl animate-[toast-in_0.25s_ease-out] dark:border-gray-800 dark:bg-gray-900"
         style={{ paddingBottom: 'calc(1.5rem + var(--safe-bottom))' }}

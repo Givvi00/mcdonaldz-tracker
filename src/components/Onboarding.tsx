@@ -137,6 +137,7 @@ export function Onboarding() {
   return (
     <div
       role="dialog"
+        aria-modal="true"
       aria-label="Guida a McDonaldz"
       className="fixed inset-0 z-[2900] flex flex-col overflow-hidden bg-gradient-to-br from-mc-red to-red-800 text-white"
       style={{ paddingTop: 'var(--safe-top)', paddingBottom: 'var(--safe-bottom)' }}

@@ -23,6 +23,9 @@ export function RegionSheet({ open, regions, selected, onSelect, onClose }: Prop
   return (
     <div className="fixed inset-0 z-[2100] flex items-end justify-center bg-black/40" onClick={onClose}>
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Scegli una regione"
         className="w-full max-w-lg max-h-[75vh] flex flex-col bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl border-t border-gray-200 dark:border-gray-800 animate-[toast-in_0.25s_ease-out]"
         onClick={(e) => e.stopPropagation()}
       >
