@@ -14,12 +14,17 @@ export interface McDonald {
   addedAt?: string;
 }
 
-/** Your own vote for a visited restaurant, 1 to 5 on each */
+/**
+ * Your own vote for a visited restaurant, 1 to 5 on each. Inside: cleanliness, staff, outdoor space, speed. Only the
+ * McDrive (drive: true): staff, speed and whether the order was right, since the rest was never seen
+ */
 export interface VisitRating {
-  cleanliness: number;
+  cleanliness?: number;
   staff: number;
-  outdoorSpace: number;
+  outdoorSpace?: number;
   speed: number;
+  order?: number;
+  drive?: boolean;
 }
 
 export interface Visit {

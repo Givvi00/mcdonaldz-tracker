@@ -6,7 +6,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { StatusFilter, matchesStatus, type StatusValue } from '@/components/StatusFilter';
-import { countedMcdonalds } from '@/utils/catalog';
+import { countedMcdonalds, isNewlyAdded } from '@/utils/catalog';
 import { markerBackground, markerSymbol, popupHtml, verifiedSealMarkup } from '@/utils/mapMarkers';
 import { VisitDateSheet } from '@/components/VisitDateSheet';
 import { openDirections } from '@/utils/navigation';
@@ -22,6 +22,8 @@ function clusterIcon(cluster: L.MarkerCluster): L.DivIcon {
   const children = cluster.getAllChildMarkers();
   const count = children.length;
   const anyVisited = children.some(m => (m.options as { mcVisited?: boolean }).mcVisited);
+  // A new restaurant inside: a yellow star on the corner, so it is found before zooming in
+  const anyNew = children.some(m => (m.options as { mcNew?: boolean }).mcNew);
   const size = count < 10 ? 38 : count < 50 ? 46 : 56;
 
   return L.divIcon({
@@ -40,7 +42,7 @@ function clusterIcon(cluster: L.MarkerCluster): L.DivIcon {
         font-size: ${count < 50 ? '13px' : '15px'};
         border: 3px solid ${anyVisited ? '#22c55e' : 'white'};
         box-shadow: 0 3px 10px rgba(0,0,0,0.35);
-      ">${count}</div>
+      ">${count}</div>${anyNew ? '<span class="mc-new-star">★</span>' : ''}
     `,
     className: '',
     iconSize: L.point(size, size),
@@ -57,7 +59,11 @@ export function MapView() {
   const [query, setQuery] = useState('');
   const [dateFor, setDateFor] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<StatusValue>(null);
+  const [newIndex, setNewIndex] = useState(-1);
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+
+  // Just added to the list (the "Nuovo" label), north to south: the button on the map visits them one after the other
+  const newOnes = useMemo(() => mcdonalds.filter(mc => isNewlyAdded(mc)).sort((a, b) => b.lat - a.lat), [mcdonalds]);
 
   const results = useMemo<McDonald[]>(() => {
     const q = query.trim().toLowerCase();
@@ -107,13 +113,15 @@ export function MapView() {
       // A closed restaurant only stays on the map if you visited it
       if (!mc.opened && !visited) return;
       if (!matchesStatus(statusFilter, visit)) return;
+      const fresh = isNewlyAdded(mc) && !visited;
       // A verified visit gets its own marker (the seal), not a plain circle with a badge stuck on the side. The seal's
       // teeth end inside its box, so the box is bigger than the 30 px circles for the seal to look a touch larger
       const icon = L.divIcon({
         html: visit?.verified
           ? `<div style="width: ${SEAL_BOX}px; height: ${SEAL_BOX}px; cursor: pointer; filter: drop-shadow(0 2px 4px rgba(0,0,0,.4));">${verifiedSealMarkup(mc.id, SEAL_BOX)}</div>`
           : `
-          <div style="
+          <div class="${fresh ? 'mc-new-marker' : ''}" style="
+            position: relative;
             background: ${markerBackground(mc, visited)};
             color: white;
             border-radius: 50%;
@@ -127,14 +135,14 @@ export function MapView() {
             box-shadow: 0 2px 6px rgba(0,0,0,0.35);
             cursor: pointer;
           ">
-            ${markerSymbol(mc, visited)}
+            ${markerSymbol(mc, visited)}${fresh ? '<span class="mc-new-star">★</span>' : ''}
           </div>
         `,
         iconSize: visit?.verified ? [SEAL_BOX, SEAL_BOX] : [30, 30],
         className: '',
       });
 
-      const marker = L.marker([mc.lat, mc.lon], { icon, mcVisited: visited } as L.MarkerOptions);
+      const marker = L.marker([mc.lat, mc.lon], { icon, mcVisited: visited, mcNew: fresh, zIndexOffset: fresh ? 500 : 0 } as L.MarkerOptions);
       marker.bindPopup(popupHtml(mc, visited, visit?.visitedAt, visit?.verified, canOfferVerify(visit, mc, userPosition)));
 
       marker.on('popupopen', () => {
@@ -237,6 +245,12 @@ export function MapView() {
     });
   };
 
+  const showNext = () => {
+    const next = (newIndex + 1) % newOnes.length;
+    setNewIndex(next);
+    selectResult(newOnes[next]);
+  };
+
   const selectResult = (mc: McDonald) => {
     setQuery('');
     const marker = markers.current.get(mc.id);
@@ -276,6 +290,17 @@ export function MapView() {
           />
         </div>
         <StatusFilter value={statusFilter} onChange={setStatusFilter} className="mt-2 shadow-md" />
+        {newOnes.length > 0 && !query && (
+          <button
+            onClick={showNext}
+            className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-mc-yellow px-3.5 py-1.5 text-sm font-bold text-gray-800 shadow-md active:scale-95 transition-transform"
+          >
+            <span className="mc-new-sparkle">✨</span>
+            {newIndex < 0
+              ? `${newOnes.length === 1 ? '1 Mc nuovo' : `${newOnes.length} Mc nuovi`}: vai`
+              : `Nuovo ${newIndex + 1} di ${newOnes.length} · prossimo`}
+          </button>
+        )}
         {results.length > 0 && (
           <div className="mt-1.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md overflow-hidden">
             {results.map(mc => (

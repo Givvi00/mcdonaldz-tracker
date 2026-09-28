@@ -1,5 +1,6 @@
 import type { McDonald } from '@shared/types';
 import { foodIconSvg, restaurantKind } from '@/utils/foodTheme';
+import { isNewlyAdded } from '@/utils/catalog';
 import { RING_PATH } from '@/components/VerifiedBadge';
 
 /** A small "verified" seal, still (no spin, to stay light with many markers on screen), for the map pin and popup */
@@ -63,6 +64,9 @@ export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number, ve
   const closedBadge = mc.opened
     ? ''
     : `<span style="display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 999px; background: #78716c; color: white; font-size: 11px; font-weight: 600;">Chiuso${mc.closedAt ? ` dal ${escapeHtml(mc.closedAt)}` : ''}</span>`;
+  const newBadge = isNewlyAdded(mc)
+    ? '<span style="display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 999px; background: #FFC72C; color: #2f2522; font-size: 11px; font-weight: 700;">✨ Nuovo</span><br/>'
+    : '';
   const kind = restaurantKind(mc);
   const kindBadge = kind ? `${kind.emoji} ` : '';
   const directions = mc.opened
@@ -76,6 +80,7 @@ export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number, ve
           <strong style="font-family: 'Fredoka', sans-serif; font-size: 14px;">${kindBadge}${escapeHtml(mc.name)}</strong><br/>
           <span style="color: #6b7280;">${escapeHtml(mc.city)}, ${escapeHtml(mc.region)}</span><br/>
           ${closedBadge}
+          ${newBadge}
           ${visitDate}
           ${
             canVerify

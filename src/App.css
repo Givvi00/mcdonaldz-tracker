@@ -515,3 +515,47 @@ input, textarea, button {
     opacity: 1;
   }
 }
+
+/* Restaurants just added to the list, on the map: a yellow ring that keeps pulsing and a star on the corner */
+.mc-new-marker::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 3px solid #ffc72c;
+  animation: mc-new-pulse 1.6s ease-out infinite;
+  pointer-events: none;
+}
+.mc-new-star {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  width: 17px;
+  height: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #ffc72c;
+  color: #2f2522;
+  font-size: 11px;
+  line-height: 1;
+  border: 1.5px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+.mc-new-sparkle {
+  display: inline-block;
+  animation: mc-new-twinkle 1.6s ease-in-out infinite;
+}
+@keyframes mc-new-pulse {
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+@keyframes mc-new-twinkle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.25) rotate(15deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mc-new-marker::before, .mc-new-sparkle { animation: none; }
+}

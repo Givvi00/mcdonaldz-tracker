@@ -1,15 +1,28 @@
 import { useState } from 'react';
 import type { VisitRating } from '@shared/types';
 
-const CATEGORIES: { key: keyof VisitRating; label: string; icon: string }[] = [
+type Category = { key: 'cleanliness' | 'staff' | 'outdoorSpace' | 'speed' | 'order'; label: string; icon: string };
+
+const INSIDE: Category[] = [
   { key: 'cleanliness', label: 'Pulizia', icon: '🧼' },
   { key: 'staff', label: 'Personale', icon: '🙂' },
   { key: 'outdoorSpace', label: 'Spazi esterni', icon: '🌳' },
   { key: 'speed', label: 'Velocità', icon: '⚡' },
 ];
+/** Only the McDrive: what you can judge from the car window */
+const DRIVE: Category[] = [
+  { key: 'staff', label: 'Personale', icon: '🙂' },
+  { key: 'speed', label: 'Velocità', icon: '⚡' },
+  { key: 'order', label: 'Ordine giusto', icon: '🧾' },
+];
 
-/** The single number shown on the card: the mean of the four categories */
-export const averageRating = (r: VisitRating): number => (r.cleanliness + r.staff + r.outdoorSpace + r.speed) / 4;
+const categoriesOf = (drive: boolean | undefined) => (drive ? DRIVE : INSIDE);
+
+/** The single number shown on the card: the mean of the categories voted (four inside, three at the McDrive) */
+export const averageRating = (r: VisitRating): number => {
+  const values = categoriesOf(r.drive).map(c => r[c.key] ?? 0);
+  return values.reduce((sum, v) => sum + v, 0) / values.length;
+};
 
 function StarRow({ value, onChange, label }: { value: number; onChange: (v: number) => void; label: string }) {
   return (
@@ -40,10 +53,19 @@ interface Props {
   aboveCelebration?: boolean;
 }
 
-/** Bottom sheet to vote a visited restaurant on four quick categories, 1 to 5 stars each */
+/** Bottom sheet to vote a visited restaurant, 1 to 5 stars on a few quick categories: inside, or only the McDrive */
 export function VisitRatingSheet({ name, initial, onSave, onClose, aboveCelebration }: Props) {
-  const [rating, setRating] = useState<VisitRating>(initial ?? { cleanliness: 0, staff: 0, outdoorSpace: 0, speed: 0 });
-  const valid = CATEGORIES.every(c => rating[c.key] > 0);
+  // Both sets of stars are kept while switching, so going back and forth loses nothing; only the shown set is saved
+  const [stars, setStars] = useState<Partial<Record<Category['key'], number>>>(() => ({ ...initial }));
+  const [drive, setDrive] = useState(initial?.drive ?? false);
+  const categories = categoriesOf(drive);
+  const valid = categories.every(c => (stars[c.key] ?? 0) > 0);
+  const save = () => {
+    const rating = { staff: stars.staff!, speed: stars.speed! } as VisitRating;
+    for (const c of categories) rating[c.key] = stars[c.key]!;
+    if (drive) rating.drive = true;
+    onSave(rating);
+  };
 
   return (
     <div
@@ -70,13 +92,33 @@ export function VisitRatingSheet({ name, initial, onSave, onClose, aboveCelebrat
         </div>
         <p className="mb-4 truncate text-sm text-gray-500 dark:text-gray-400">{name}</p>
 
+        <div className="mb-4 flex gap-0.5 rounded-2xl bg-gray-100 p-1 dark:bg-gray-800" role="radiogroup" aria-label="Com'era la visita">
+          {[
+            { value: false, label: '🪑 Dentro' },
+            { value: true, label: '🚗 Solo McDrive' },
+          ].map(option => (
+            <button
+              key={option.label}
+              type="button"
+              role="radio"
+              aria-checked={drive === option.value}
+              onClick={() => setDrive(option.value)}
+              className={`flex-1 rounded-xl py-1.5 text-sm font-semibold transition-all ${
+                drive === option.value ? 'bg-white text-gray-800 shadow-sm dark:bg-gray-600 dark:text-white' : 'text-gray-500 dark:text-gray-400'
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+
         <div className="space-y-3.5">
-          {CATEGORIES.map(c => (
+          {categories.map(c => (
             <div key={c.key} className="flex items-center justify-between gap-3">
               <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">
                 {c.icon} {c.label}
               </span>
-              <StarRow value={rating[c.key]} label={c.label} onChange={v => setRating(r => ({ ...r, [c.key]: v }))} />
+              <StarRow value={stars[c.key] ?? 0} label={c.label} onChange={v => setStars(s => ({ ...s, [c.key]: v }))} />
             </div>
           ))}
         </div>
@@ -84,7 +126,7 @@ export function VisitRatingSheet({ name, initial, onSave, onClose, aboveCelebrat
         <button
           disabled={!valid}
           onClick={() => {
-            onSave(rating);
+            save();
             onClose();
           }}
           className="mt-5 w-full rounded-xl bg-mc-yellow py-3 font-bold text-gray-800 shadow-sm transition-all active:scale-[0.98] disabled:opacity-40"

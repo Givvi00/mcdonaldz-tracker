@@ -146,7 +146,7 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
                   }}
                   className="inline-flex items-center gap-1 rounded-full bg-mc-yellow/25 px-2.5 py-1 text-[0.7rem] font-semibold text-yellow-800 active:scale-95 dark:bg-mc-yellow/15 dark:text-mc-yellow"
                 >
-                  {visit.rating ? <>★ {averageRating(visit.rating).toFixed(1)}</> : <>☆ Vota</>}
+                  {visit.rating ? <>{visit.rating.drive && '🚗 '}★ {averageRating(visit.rating).toFixed(1)}</> : <>☆ Vota</>}
                 </button>
                 {offerVerify && verifyButton('inline-flex px-2.5 py-1 text-[0.7rem]')}
               </div>
