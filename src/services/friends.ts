@@ -114,3 +114,59 @@ export async function loadFriends(client: SupabaseClient): Promise<Friend[]> {
     updatedAt: row.updated_at,
   }));
 }
+
+// ---- What changed on the leaderboard since you last looked at it (the dot on Amici, "Hai superato…") ----
+
+interface SeenPerson {
+  name: string;
+  visited: number;
+  verified: number;
+}
+
+/** The leaderboard as it was the last time you opened Amici */
+export interface BoardSnapshot {
+  account: string;
+  people: Record<string, SeenPerson>;
+}
+
+export type FriendNews =
+  | { kind: 'joined'; userId: string; name: string }
+  /** was behind you, now ahead */
+  | { kind: 'passedYou'; userId: string; name: string }
+  /** was ahead of you, now behind */
+  | { kind: 'youPassed'; userId: string; name: string };
+
+/** Ahead on the leaderboard: more restaurants, then more verified */
+const ahead = (a: SeenPerson, b: SeenPerson) => a.visited > b.visited || (a.visited === b.visited && a.verified > b.verified);
+
+export function snapshotOf(friends: Friend[], account: string): BoardSnapshot {
+  return { account, people: Object.fromEntries(friends.map(f => [f.userId, { name: f.name, visited: f.visited, verified: f.verified }])) };
+}
+
+/** Nothing the first time (no snapshot, or another account): there is nothing to compare with */
+export function boardNews(previous: BoardSnapshot | null, friends: Friend[], account: string): FriendNews[] {
+  if (!previous || previous.account !== account) return [];
+  const meBefore = previous.people[account];
+  const meNow = friends.find(f => f.userId === account);
+  const news: FriendNews[] = [];
+  for (const f of friends) {
+    if (f.userId === account) continue;
+    const before = previous.people[f.userId];
+    if (!before) {
+      news.push({ kind: 'joined', userId: f.userId, name: f.name });
+      continue;
+    }
+    if (!meBefore || !meNow) continue;
+    const wasAhead = ahead(before, meBefore);
+    const isAhead = ahead(f, meNow);
+    if (!wasAhead && isAhead) news.push({ kind: 'passedYou', userId: f.userId, name: f.name });
+    if (wasAhead && !isAhead) news.push({ kind: 'youPassed', userId: f.userId, name: f.name });
+  }
+  return news;
+}
+
+/** Your place by restaurants visited (1 = first) */
+export function placeOf(friends: Friend[], account: string): number {
+  const me = friends.find(f => f.userId === account);
+  return me ? friends.filter(f => f.userId !== account && ahead(f, me)).length + 1 : 0;
+}

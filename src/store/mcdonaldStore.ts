@@ -33,7 +33,17 @@ import { diamondRecordType, regionRecordType, syncDiamondRegions, syncRegionComp
 import { freshFix, judgeFix, type VerifyOutcome } from '@/services/gpsCheck';
 import { isOnboarded, markOnboarded } from '@/services/onboarding';
 import { readUnseen, withUnseen, writeUnseen } from '@/services/unseen';
-import { buildPublicStats, publishStats } from '@/services/friends';
+import {
+  boardNews,
+  buildPublicStats,
+  loadFriends,
+  placeOf,
+  publishStats,
+  snapshotOf,
+  type BoardSnapshot,
+  type Friend,
+  type FriendNews,
+} from '@/services/friends';
 import { distanceKm } from '@/utils/geo';
 import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds, visitedIdSet } from '@/utils/catalog';
@@ -97,6 +107,17 @@ interface AppStore {
   focusedAchievements: string[];
   /** Earned and not looked at yet: the dot on Stats (see services/unseen) */
   unseen: string[];
+  /** The leaderboard as last loaded (null: not yet) */
+  friendsBoard: Friend[] | null;
+  /** What changed on it since you last opened Amici: the dot on Amici */
+  friendNews: FriendNews[];
+  /** "Hai superato Marco!", shown once at the top of the screen */
+  friendToast: { name: string; place: number } | null;
+  /** Loads the leaderboard and works out what is new; returns the news (throws when it cannot load) */
+  checkFriends: () => Promise<FriendNews[]>;
+  /** Amici was opened: what is on screen now counts as seen */
+  markFriendsSeen: () => void;
+  clearFriendToast: () => void;
   mapFocusId: string | null;
   /** What to jump to when the profile opens ("name": the name field) */
   profileFocus: 'name' | null;
@@ -189,6 +210,40 @@ interface AppStore {
 
 const initialCatalog = pickInitialCatalog();
 
+// The leaderboard as you last saw it, and who you were already told you passed (kept on this phone)
+const SEEN_KEY = 'mcdz-friends-seen';
+const TOLD_KEY = 'mcdz-friends-told';
+function readFriendsSeen(): BoardSnapshot | null {
+  try {
+    const raw = localStorage.getItem(SEEN_KEY);
+    return raw ? (JSON.parse(raw) as BoardSnapshot) : null;
+  } catch {
+    return null;
+  }
+}
+function writeFriendsSeen(snapshot: BoardSnapshot): void {
+  try {
+    localStorage.setItem(SEEN_KEY, JSON.stringify(snapshot));
+  } catch {
+    // storage unavailable: the news are worked out again next time
+  }
+}
+function readFriendsTold(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem(TOLD_KEY) ?? '[]') as string[];
+  } catch {
+    return [];
+  }
+}
+function writeFriendsTold(ids: string[]): void {
+  try {
+    if (ids.length === 0) localStorage.removeItem(TOLD_KEY);
+    else localStorage.setItem(TOLD_KEY, JSON.stringify(ids));
+  } catch {
+    // at worst the same news is told twice
+  }
+}
+
 export const useMcdonaldStore = create<AppStore>((set, get) => ({
   mcdonalds: initialCatalog.restaurants,
   catalogInfo: initialCatalog.info,
@@ -203,6 +258,9 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   newlyUnlocked: [],
   focusedAchievements: [],
   unseen: readUnseen(),
+  friendsBoard: null,
+  friendNews: [],
+  friendToast: null,
   mapFocusId: null,
   profileFocus: null,
   updateAvailable: false,
@@ -415,6 +473,8 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
           // What the friends see of you: after the visits, and never in the way of the sync itself
           const achievements = await getAchievements(user.id);
           await publishStats(client, state.account.id, buildPublicStats(get().mcdonalds, get().visits, achievements)).catch(() => {});
+          // Then the others: someone new, someone who passed you, someone you passed
+          void get().checkFriends().catch(() => {});
         } catch (error) {
           const message = (error as Error).message ?? '';
           // The session is no longer valid (account deleted, or signed out everywhere)
@@ -497,6 +557,39 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   },
 
   clearVerifyNotice: () => set({ verifyNotice: null }),
+
+  checkFriends: async () => {
+    const state = get().account;
+    if (!state || state.status === 'signed-out') return [];
+    const me = state.account.id;
+    const board = await loadFriends(await getClient());
+    // A snapshot of another account (signed out and in as someone else) does not count
+    const seen = readFriendsSeen();
+    const mine = seen?.account === me ? seen : null;
+    const news = boardNews(mine, board, me);
+    // Each "you passed" is announced once, until Amici is opened
+    const told = readFriendsTold();
+    const fresh = news.find(n => n.kind === 'youPassed' && !told.includes(n.userId));
+    if (fresh && get().selectedTab !== 'friends') {
+      writeFriendsTold([...told, fresh.userId]);
+      set({ friendToast: { name: fresh.name, place: placeOf(board, me) } });
+    }
+    // The first time, what is there now becomes the starting point
+    if (!mine) writeFriendsSeen(snapshotOf(board, me));
+    set({ friendsBoard: board, friendNews: news });
+    return news;
+  },
+
+  markFriendsSeen: () => {
+    const state = get().account;
+    const board = get().friendsBoard;
+    if (!state || state.status === 'signed-out' || !board) return;
+    writeFriendsSeen(snapshotOf(board, state.account.id));
+    writeFriendsTold([]);
+    set({ friendNews: [], friendToast: null });
+  },
+
+  clearFriendToast: () => set({ friendToast: null }),
 
   clearCelebration: () => {
     set({ celebration: null });

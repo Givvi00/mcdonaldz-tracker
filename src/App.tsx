@@ -20,6 +20,7 @@ import { MapAppChooser } from '@/components/MapAppChooser';
 import { FoodRain } from '@/components/FoodRain';
 import { AutoRatingPrompt } from '@/components/AutoRatingPrompt';
 import { VerifyToast } from '@/components/VerifyToast';
+import { FriendToast } from '@/components/FriendToast';
 import { UnmarkConfirm } from '@/components/UnmarkConfirm';
 import { Onboarding } from '@/components/Onboarding';
 import { CelebrationLab } from '@/components/CelebrationLab';
@@ -33,7 +34,7 @@ import './App.css';
 function App() {
   // Opened from the link in a "vuole entrare" email: the answer comes before anything else
   const [review, setReview] = useState(reviewLink);
-  const { selectedTab, setSelectedTab, openStats, unseen, initApp, initAccount, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile, onboarding } =
+  const { selectedTab, setSelectedTab, openStats, unseen, friendNews, initApp, initAccount, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile, onboarding } =
     useMcdonaldStore();
   useTheme();
   // On a first launch the browser asks for the position only after the guide has said what it is for
@@ -90,6 +91,7 @@ function App() {
       <FoodRain />
       <AutoRatingPrompt />
       <VerifyToast />
+      <FriendToast />
       <UnmarkConfirm />
       <Onboarding />
       {import.meta.env.DEV && <CelebrationLab />}
@@ -135,11 +137,13 @@ function App() {
       >
         {NAV_ITEMS.map(({ tab, icon, label }) => {
           const active = selectedTab === tab;
+          // The dot: stamps and regions not seen yet on Stats, leaderboard news on Amici (not while you are looking)
+          const dot = tab === 'stats' ? unseen.length : tab === 'friends' && !active ? friendNews.length : 0;
           return (
             <button
               key={tab}
               onClick={() => (tab === 'stats' ? openStats() : setSelectedTab(tab))}
-              aria-label={tab === 'stats' && unseen.length > 0 ? `${label}: ${unseen.length} novità da vedere` : undefined}
+              aria-label={dot > 0 ? `${label}: ${dot} novità da vedere` : undefined}
               className="relative flex flex-col items-center justify-center gap-1 flex-1 py-3"
             >
               <span
@@ -156,9 +160,9 @@ function App() {
               >
                 {label}
               </span>
-              {tab === 'stats' && unseen.length > 0 && (
+              {dot > 0 && (
                 <span className="absolute top-1 right-1/2 translate-x-3 bg-mc-red text-white text-xs font-black w-5 h-5 rounded-full flex items-center justify-center text-[0.6rem] ring-2 ring-white dark:ring-gray-900">
-                  {unseen.length}
+                  {dot}
                 </span>
               )}
             </button>

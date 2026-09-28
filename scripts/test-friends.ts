@@ -3,7 +3,7 @@
 import 'fake-indexeddb/auto';
 import assert from 'node:assert/strict';
 import type { McDonald, Visit } from '../shared/types';
-import { buildPublicStats, doneRegions, friendRegions } from '../src/services/friends';
+import { boardNews, buildPublicStats, doneRegions, friendRegions, placeOf, snapshotOf, type Friend } from '../src/services/friends';
 
 let passed = 0;
 function test(name: string, fn: () => void) {
@@ -45,6 +45,26 @@ test('gold and diamond regions of a friend', () => {
 test('a friend with nothing yet: every region empty', () => {
   const { tiers } = friendRegions({ regions: {} }, list);
   assert.deepEqual(Object.values(tiers), ['empty', 'empty', 'empty']);
+});
+
+const person = (userId: string, visited: number, verified = 0): Friend =>
+  ({ userId, name: userId, visited, verified, level: 1, regions: {}, stamps: [], last_visit: null, updatedAt: '' });
+
+test('leaderboard news: nothing the first time, then who joined, who passed you, who you passed', () => {
+  const before = [person('me', 10), person('marco', 12), person('giulia', 8)];
+  assert.deepEqual(boardNews(null, before, 'me'), []);
+  const seen = snapshotOf(before, 'me');
+  assert.deepEqual(boardNews(seen, before, 'me'), [], 'nothing changed');
+  const after = [person('me', 13), person('marco', 12), person('giulia', 14), person('luca', 1)];
+  const news = boardNews(seen, after, 'me');
+  assert.deepEqual(news.map(n => `${n.kind}:${n.userId}`).sort(), ['joined:luca', 'passedYou:giulia', 'youPassed:marco']);
+  assert.equal(placeOf(after, 'me'), 2);
+});
+
+test('same visits: the verified ones decide; a snapshot of another account says nothing', () => {
+  const seen = snapshotOf([person('me', 5, 1), person('marco', 5, 2)], 'me');
+  assert.deepEqual(boardNews(seen, [person('me', 5, 3), person('marco', 5, 2)], 'me').map(n => n.kind), ['youPassed']);
+  assert.deepEqual(boardNews(seen, [person('other', 50), person('marco', 5, 2)], 'other'), []);
 });
 
 console.log(`\n${passed} friends checks passed`);

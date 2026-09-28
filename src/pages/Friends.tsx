@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
-import { getClient } from '@/services/account';
-import { doneRegions, friendRegions, loadFriends, type Friend } from '@/services/friends';
+import { doneRegions, friendRegions, type Friend, type FriendNews } from '@/services/friends';
 import { FoodIcon } from '@/components/FoodIcon';
 import { RegionAlbum } from '@/components/RegionAlbum';
 import { ItalyMap } from '@/components/ItalyMap';
@@ -49,9 +48,10 @@ const unit = (order: Order, n: number) =>
   order === 'visited' ? 'Mc' : order === 'verified' ? (n === 1 ? 'verificato' : 'verificati') : n === 1 ? 'regione' : 'regioni';
 
 export function Friends() {
-  const { account, mcdonalds } = useMcdonaldStore();
+  const { account, mcdonalds, friendsBoard: friends, checkFriends, markFriendsSeen } = useMcdonaldStore();
   const myId = account && account.status !== 'signed-out' ? account.account.id : null;
-  const [friends, setFriends] = useState<Friend[] | null>(null);
+  // What was new when you opened the page: marked on the rows for as long as you stay here
+  const [news, setNews] = useState<FriendNews[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [order, setOrder] = useState<Order>('visited');
   const [open, setOpen] = useState<Friend | null>(null);
@@ -62,12 +62,14 @@ export function Friends() {
       return;
     }
     try {
-      setFriends(await loadFriends(await getClient()));
+      const fresh = await checkFriends();
+      setNews(before => [...before.filter(n => !fresh.some(f => f.userId === n.userId)), ...fresh]);
+      markFriendsSeen();
       setError(null);
     } catch {
       setError('Non riesco a caricare gli amici. Riprova tra poco.');
     }
-  }, []);
+  }, [checkFriends, markFriendsSeen]);
 
   useEffect(() => {
     void load();
@@ -125,11 +127,12 @@ export function Friends() {
           const level = levelOf(f.level);
           const { gold, diamond } = doneRegions(f);
           const value = order === 'verified' ? f.verified : order === 'regions' ? gold + diamond : f.visited;
+          const what = news.find(n => n.userId === f.userId)?.kind;
           return (
             <li key={f.userId}>
               <button
                 onClick={() => setOpen(f)}
-                className={`flex w-full items-center gap-3 rounded-2xl border p-3 text-left shadow-sm transition-transform active:scale-[0.98] ${
+                className={`flex w-full items-center gap-3 rounded-2xl border p-3 text-left shadow-sm transition-transform active:scale-[0.98] ${what ? 'ring-2 ring-mc-red ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-950' : ''} ${
                   me
                     ? 'border-mc-yellow bg-mc-yellow/15 dark:border-mc-yellow/60 dark:bg-mc-yellow/10'
                     : 'border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900'
@@ -145,6 +148,11 @@ export function Friends() {
                   <span className="flex items-center gap-1.5">
                     <span className="truncate font-display font-bold text-gray-800 dark:text-gray-100">{f.name}</span>
                     {me && <span className="rounded-full bg-mc-yellow px-1.5 py-0.5 text-[0.6rem] font-bold uppercase text-gray-800">Tu</span>}
+                    {what && (
+                      <span className="flex-none rounded-full bg-mc-red px-1.5 py-0.5 text-[0.6rem] font-bold uppercase text-white">
+                        {what === 'joined' ? 'Nuovo' : what === 'passedYou' ? 'Ti ha superato' : 'Superato!'}
+                      </span>
+                    )}
                   </span>
                 </span>
                 {/* One number only, the one the list is ordered by: the rest is in the sheet */}
