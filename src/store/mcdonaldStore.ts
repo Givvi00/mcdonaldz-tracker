@@ -33,6 +33,7 @@ import { diamondRecordType, regionRecordType, syncDiamondRegions, syncRegionComp
 import { freshFix, judgeFix, type VerifyOutcome } from '@/services/gpsCheck';
 import { isOnboarded, markOnboarded } from '@/services/onboarding';
 import { readUnseen, withUnseen, writeUnseen } from '@/services/unseen';
+import { buildPublicStats, publishStats } from '@/services/friends';
 import { distanceKm } from '@/utils/geo';
 import { levelInfo } from '@/utils/foodTheme';
 import { countedMcdonalds, visitedIdSet } from '@/utils/catalog';
@@ -84,7 +85,7 @@ interface AppStore {
   catalogInfo: CatalogInfo;
   visits: Visit[];
   user: User | null;
-  selectedTab: 'home' | 'map' | 'stats' | 'profile';
+  selectedTab: 'home' | 'map' | 'stats' | 'friends' | 'profile';
   searchQuery: string;
   filterRegion: string | null;
   filterVisited: StatusValue;
@@ -166,7 +167,7 @@ interface AppStore {
   /** Deletes the account and everything with it, online and on this phone; the app starts again from the guide */
   deleteAccount: () => Promise<void>;
   finishOnboarding: () => void;
-  setSelectedTab: (tab: 'home' | 'map' | 'stats' | 'profile') => void;
+  setSelectedTab: (tab: 'home' | 'map' | 'stats' | 'friends' | 'profile') => void;
   setSearchQuery: (query: string) => void;
   setFilterRegion: (region: string | null) => void;
   setFilterVisited: (visited: StatusValue) => void;
@@ -411,6 +412,9 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
           set({
             account: { status: 'synced', account: state.account, lastSyncAt: Date.now(), nameTaken: result.nameTaken ?? stillTaken },
           });
+          // What the friends see of you: after the visits, and never in the way of the sync itself
+          const achievements = await getAchievements(user.id);
+          await publishStats(client, state.account.id, buildPublicStats(get().mcdonalds, get().visits, achievements)).catch(() => {});
         } catch (error) {
           const message = (error as Error).message ?? '';
           // The session is no longer valid (account deleted, or signed out everywhere)

@@ -1,7 +1,12 @@
-# Tappa 2: gli amici (bozza da decidere insieme)
+# Tappa 2: gli amici
 
-Bozza del 25/09/2026. **Niente di questo è ancora nell'app**: le scelte segnate con ❓ sono da fare insieme prima di
-scrivere codice. La tappa 1 (account, accesso, richiesta di entrare, username unico) è fatta.
+Bozza del 25/09/2026, **decisa il 28/09/2026** e fatta (voce "Amici", classifica, scheda dell'amico). Scelte:
+- **tutti vedono tutti** (A);
+- degli altri si vedono **quali** regioni (figurine e mappa) e **quali** timbri (il loro passaporto, senza date);
+- si vede anche l'**ultimo Mc visitato** (nome, città, giorno);
+- voce **"Amici"** nella barra in basso.
+
+Da fare dopo: la festa "Hai superato Marco!" e le gare (tappa 3). Il testo sotto è la bozza originale.
 
 ## Cosa vogliamo
 

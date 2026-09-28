@@ -9,6 +9,8 @@ const loadMap = () => import('@/components/MapView');
 const loadStats = () => import('@/pages/Stats');
 const MapView = lazy(() => loadMap().then(m => ({ default: m.MapView })));
 const Stats = lazy(() => loadStats().then(m => ({ default: m.Stats })));
+const loadFriendsPage = () => import('@/pages/Friends');
+const Friends = lazy(() => loadFriendsPage().then(m => ({ default: m.Friends })));
 import { Profile } from '@/pages/Profile';
 import { AchievementToast } from '@/components/AchievementToast';
 import { NearbyPrompt } from '@/components/NearbyPrompt';
@@ -65,6 +67,7 @@ function App() {
     { tab: 'home' as const, icon: '🏠', label: 'Home' },
     { tab: 'map' as const, icon: '🗺️', label: 'Mappa' },
     { tab: 'stats' as const, icon: '📊', label: 'Stats' },
+    { tab: 'friends' as const, icon: '👥', label: 'Amici' },
   ];
 
   return (
@@ -120,6 +123,7 @@ function App() {
         <Suspense fallback={<div className="flex h-full items-center justify-center text-sm text-gray-500 dark:text-gray-400">Un attimo…</div>}>
           {selectedTab === 'map' && <MapView />}
           {selectedTab === 'stats' && <Stats />}
+          {selectedTab === 'friends' && <Friends />}
         </Suspense>
         {selectedTab === 'profile' && <Profile />}
       </div>
