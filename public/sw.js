@@ -10,7 +10,19 @@ const BUILD = new URL(self.location.href).searchParams.get('v') || 'dev';
 const PREFIX = 'mcdz-';
 const CACHE = PREFIX + BUILD;
 
-self.addEventListener('install', () => self.skipWaiting());
+// Kept from the start, not only once shown: the sign-in screen can appear offline (e.g. after Esci) and its logo
+// would otherwise be missing
+const ESSENTIALS = ['./', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'icons/icon.svg'];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches
+      .open(CACHE)
+      .then((cache) => cache.addAll(ESSENTIALS))
+      .catch(() => {}) // offline while installing: they are cached as they are used, as before
+      .then(() => self.skipWaiting())
+  );
+});
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(

@@ -431,7 +431,8 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
 
   signOut: async () => {
     await get().syncNow();
-    if (Object.keys(readOutbox()).length > 0) {
+    // Only right after a sync that went through: offline you could not sign back in until the connection returns
+    if (get().account?.status !== 'synced' || Object.keys(readOutbox()).length > 0) {
       throw new Error('Sei offline: collegati a internet e riprova.');
     }
     await signOutOnline().catch(() => {}); // the session is removed from the phone below anyway
