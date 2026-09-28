@@ -10,6 +10,8 @@ import { compareWithOsm, hasFindings, parseOverpass, reportMarkdown, type OsmSta
 const ROOT = path.resolve(import.meta.dirname, '..');
 const CATALOG = path.join(ROOT, 'shared/data/mcdonalds.json');
 const STATE = path.join(ROOT, 'shared/data/osm-state.json');
+/** OSM points looked up on the McDonald's site and not there, with a note: they are not reported again */
+const CHECKED = path.join(ROOT, 'shared/data/osm-checked.json');
 const REPORT = path.join(ROOT, 'osm-report.md');
 
 // McDonald's by its brand code, or by its exact name: a "contains" search over all of Italy is too slow for the servers
@@ -70,7 +72,8 @@ async function main() {
   const previous: OsmState = existsSync(STATE) ? JSON.parse(readFileSync(STATE, 'utf8')) : { seen: {}, unknown: {} };
   const today = new Date().toISOString().slice(0, 10);
 
-  const { state, report } = compareWithOsm(catalog, places, previous, today);
+  const checked = new Set(existsSync(CHECKED) ? Object.keys(JSON.parse(readFileSync(CHECKED, 'utf8'))) : []);
+  const { state, report } = compareWithOsm(catalog, places, previous, today, checked);
   writeFileSync(STATE, JSON.stringify(state, null, 1) + '\n');
   const text = reportMarkdown(report, today);
   writeFileSync(REPORT, text + '\n');

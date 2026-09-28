@@ -107,6 +107,8 @@ export function compareWithOsm(
   places: OsmPlace[],
   previous: OsmState,
   today: string,
+  /** OSM points already looked up on the McDonald's site and not there (shared/data/osm-checked.json): never reported */
+  checked: ReadonlySet<string> = new Set(),
 ): { state: OsmState; report: OsmReport } {
   const firstRun = !previous.lastRun;
   const open = catalog.filter(mc => mc.opened);
@@ -157,7 +159,7 @@ export function compareWithOsm(
     const streak = firstRun ? 1 : (before?.streak ?? 0) + 1;
     const entry = { place, firstSeen: before?.firstSeen ?? today, streak };
     state.unknown[place.osmId] = entry;
-    if (!firstRun && streak >= STREAK_TO_REPORT) {
+    if (!firstRun && streak >= STREAK_TO_REPORT && !checked.has(place.osmId)) {
       // Where it is, in words: the closest restaurant we know
       let nearest: { name: string; distanceM: number } | undefined;
       for (const mc of catalog) {

@@ -20,7 +20,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 2. **Tappa 3, gare**: classifiche tra amici (visite, verificate, regioni), sfide a tempo. Da decidere se la "verificata" decisa dal telefono basta tra amici
 3. **Prove sul telefono**: stesso account su due dispositivi (visita segnata su uno che compare sull'altro), visita segnata offline che arriva dopo, Esci e rientro, figurina e festa di diamante, filtro a 4 voci, scontrino, tema chiaro/scuro, verifica vera sul posto, iPhone
 4. **Idee medie**: card da condividere fatta il 26/09 (a scontrino). Diario delle visite: prototipo sul ramo `diario`, scartato il 26/09 (non piace), non pubblicare
-5. **Dati**: primo aggiornamento vero dell'elenco da mcdonalds.it (dal browser)
+5. **Dati**: fatto il 28/09 il primo aggiornamento vero (6 nuovi, 834 in tutto). Prossimi: quando arriva una segnalazione OSM (vedi `docs/AGGIORNAMENTO-DATI.md`)
 6. **Rifiniture**: durata della coda di feste, icona del livello 12, disegni delle figurine per regione
 7. **Più avanti, se serve**: dominio proprio per le email (niente più spam), invito dall'app con codice
 8. **In pausa**: app native e notifiche di prossimità

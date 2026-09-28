@@ -82,6 +82,12 @@ test('nuovo solo se lontano da tutti i nostri e presente due controlli di fila',
   assert.equal(run5.report.possiblyNew.length, 0);
 });
 
+test('un punto già controllato sul sito McDonald\'s non viene più segnalato', () => {
+  const run1 = compareWithOsm(list, [place(1, 41.9), place(7, 44)], empty, 'd1');
+  const run2 = compareWithOsm(list, [place(1, 41.9), place(7, 44)], run1.state, 'd2', new Set(['node/7']));
+  assert.equal(run2.report.possiblyNew.length, 0);
+});
+
 test('doppioni dello stesso ristorante (edificio + punto, area giochi, centro commerciale): mai nuovi', () => {
   const twice = [place(1, 41.9), place(8, 41.9 + 0.001), place(9, 41.9 + 0.0025), place(2, 42.0)]; // ~111 m and ~280 m from A
   const run1 = compareWithOsm(list, twice, empty, 'd1');

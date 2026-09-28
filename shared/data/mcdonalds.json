@@ -8278,5 +8278,71 @@
     "city": "Vicenza",
     "address": "Strada Padana verso Verona, 81, Vicenza",
     "opened": true
+  },
+  {
+    "id": "mc0829",
+    "name": "McDonald's Marghera Arduino",
+    "lat": 45.460812,
+    "lon": 12.211781,
+    "region": "Veneto",
+    "city": "Venezia",
+    "address": "Via Arduino, Venezia",
+    "opened": true,
+    "addedAt": "2026-09-28"
+  },
+  {
+    "id": "mc0830",
+    "name": "McDonald's Noicattaro",
+    "lat": 41.077529,
+    "lon": 16.994106,
+    "region": "Puglia",
+    "city": "Bari",
+    "address": "SP 57 - Località Parchitello, Bari",
+    "opened": true,
+    "addedAt": "2026-09-28"
+  },
+  {
+    "id": "mc0831",
+    "name": "McDonald's Pontedera",
+    "lat": 43.653303,
+    "lon": 10.628733,
+    "region": "Toscana",
+    "city": "Pisa",
+    "address": "Viale Europa, Pisa",
+    "opened": true,
+    "addedAt": "2026-09-28"
+  },
+  {
+    "id": "mc0832",
+    "name": "McDonald's Russi Gallignani",
+    "lat": 44.3855,
+    "lon": 12.0441,
+    "region": "Emilia-Romagna",
+    "city": "Ravenna",
+    "address": "Via Augusto Gallignani, Ravenna",
+    "opened": true,
+    "addedAt": "2026-09-28"
+  },
+  {
+    "id": "mc0833",
+    "name": "McDonald's Surano",
+    "lat": 40.02342,
+    "lon": 18.192295,
+    "region": "Puglia",
+    "city": "Lecce",
+    "address": "SS 275, Lecce",
+    "opened": true,
+    "addedAt": "2026-09-28"
+  },
+  {
+    "id": "mc0834",
+    "name": "McDonald's Verucchio Casetti",
+    "lat": 43.994344,
+    "lon": 12.418758,
+    "region": "Emilia-Romagna",
+    "city": "Rimini",
+    "address": "Via Casetti - fraz. Villa Verucchio, Rimini",
+    "opened": true,
+    "addedAt": "2026-09-28"
   }
 ]
