@@ -18,7 +18,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 ### Cosa resta, in ordine
 1. **Tappa 2, amici** (bozza con le scelte da fare in `docs/PIANO-AMICI.md`): cercare un amico per username e seguirlo; vedere il suo livello, i timbri e le regioni (gli amici vedono solo il riepilogo, mai le date delle visite)
 2. **Tappa 3, gare**: classifiche tra amici (visite, verificate, regioni), sfide a tempo. Da decidere se la "verificata" decisa dal telefono basta tra amici
-3. **Prove sul telefono**: stesso account su due dispositivi (visita segnata su uno che compare sull'altro), visita segnata offline che arriva dopo, Esci e rientro, figurina e festa di diamante, filtro a 4 voci, scontrino, tema chiaro/scuro, verifica vera sul posto, iPhone
+3. **Prove sul telefono**: fatte il 28/09 (due dispositivi, offline, Esci e rientro, card, tema): ok. Restano il pallino di Stats alla prossima visita vera e l'iPhone. Elenco di partenza: stesso account su due dispositivi (visita segnata su uno che compare sull'altro), visita segnata offline che arriva dopo, Esci e rientro, figurina e festa di diamante, filtro a 4 voci, scontrino, tema chiaro/scuro, verifica vera sul posto, iPhone
 4. **Idee medie**: card da condividere fatta il 26/09 (a scontrino). Diario delle visite: prototipo sul ramo `diario`, scartato il 26/09 (non piace), non pubblicare
 5. **Dati**: fatto il 28/09 il primo aggiornamento vero (6 nuovi, 834 in tutto). Prossimi: quando arriva una segnalazione OSM (vedi `docs/AGGIORNAMENTO-DATI.md`)
 6. **Rifiniture**: durata della coda di feste, icona del livello 12, disegni delle figurine per regione
