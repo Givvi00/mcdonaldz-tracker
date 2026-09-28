@@ -14,7 +14,7 @@ type Order = 'visited' | 'verified' | 'regions';
 const ORDERS: Array<{ value: Order; label: string }> = [
   { value: 'visited', label: 'Visitati' },
   { value: 'verified', label: 'Verificati' },
-  { value: 'regions', label: 'Regioni' },
+  { value: 'regions', label: 'Regioni finite' },
 ];
 
 const levelOf = (n: number) => LEVELS[Math.min(LEVELS.length, Math.max(1, n)) - 1];
@@ -44,6 +44,9 @@ function compare(a: Friend, b: Friend, order: Order): number {
 }
 
 const MEDALS = ['🥇', '🥈', '🥉'];
+
+const unit = (order: Order, n: number) =>
+  order === 'visited' ? 'Mc' : order === 'verified' ? (n === 1 ? 'verificato' : 'verificati') : n === 1 ? 'regione' : 'regioni';
 
 export function Friends() {
   const { account, mcdonalds } = useMcdonaldStore();
@@ -121,6 +124,7 @@ export function Friends() {
           const me = f.userId === myId;
           const level = levelOf(f.level);
           const { gold, diamond } = doneRegions(f);
+          const value = order === 'verified' ? f.verified : order === 'regions' ? gold + diamond : f.visited;
           return (
             <li key={f.userId}>
               <button
@@ -142,22 +146,11 @@ export function Friends() {
                     <span className="truncate font-display font-bold text-gray-800 dark:text-gray-100">{f.name}</span>
                     {me && <span className="rounded-full bg-mc-yellow px-1.5 py-0.5 text-[0.6rem] font-bold uppercase text-gray-800">Tu</span>}
                   </span>
-                  <span className="block truncate text-xs text-gray-500 dark:text-gray-400">
-                    Livello {f.level} · {level.name}
-                  </span>
-                  {f.last_visit && (
-                    <span className="block truncate text-xs text-gray-500 dark:text-gray-400">
-                      Ultimo: {f.last_visit.name.replace("McDonald's ", '')}, {ago(f.last_visit.at)}
-                    </span>
-                  )}
                 </span>
+                {/* One number only, the one the list is ordered by: the rest is in the sheet */}
                 <span className="flex-none text-right">
-                  <span className="block font-display text-xl font-bold leading-tight text-gray-800 dark:text-gray-100">
-                    {order === 'verified' ? f.verified : order === 'regions' ? gold + diamond : f.visited}
-                  </span>
-                  <span className="block text-[0.7rem] text-gray-500 dark:text-gray-400">
-                    {order === 'verified' ? 'verificati' : order === 'regions' ? `regioni${diamond ? ` · ${diamond} 💎` : ''}` : `Mc · ${f.verified} ✓`}
-                  </span>
+                  <span className="block font-display text-2xl font-bold leading-tight text-gray-800 dark:text-gray-100">{value}</span>
+                  <span className="block text-[0.7rem] text-gray-500 dark:text-gray-400">{unit(order, value)}</span>
                 </span>
               </button>
             </li>
