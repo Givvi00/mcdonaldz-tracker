@@ -16,7 +16,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - **Funzioni server**: `npx supabase functions deploy <nome> --project-ref krfhynrhictmtolqkpas --no-verify-jwt --use-api` (serve `npx supabase login` fatto da PowerShell, non dal terminale di Claude)
 
 ### Cosa resta, in ordine
-1. **Tappa 2, amici**: fatta il 28/09 (voce Amici: classifica per visitati/verificati/regioni, scheda con passaporto e figurine, ultimo Mc). Serve eseguire `supabase/migrations/0005_public_stats.sql`. Resta: festa "Hai superato…"
+1. **Tappa 2, amici**: fatta il 28/09 e provata con un amico vero (ci si vede a vicenda) (voce Amici: classifica per visitati/verificati/regioni, scheda con passaporto e figurine, ultimo Mc). SQL 0005 eseguito. Pallino su Amici e "Hai superato…" fatti, da vedere al primo sorpasso vero
 2. **Tappa 3, gare**: classifiche tra amici (visite, verificate, regioni), sfide a tempo. Da decidere se la "verificata" decisa dal telefono basta tra amici
 3. **Prove sul telefono**: fatte il 28/09 (due dispositivi, offline, Esci e rientro, card, tema): ok. Restano il pallino di Stats alla prossima visita vera e l'iPhone. Elenco di partenza: stesso account su due dispositivi (visita segnata su uno che compare sull'altro), visita segnata offline che arriva dopo, Esci e rientro, figurina e festa di diamante, filtro a 4 voci, scontrino, tema chiaro/scuro, verifica vera sul posto, iPhone
 4. **Idee medie**: card da condividere fatta il 26/09 (a scontrino). Diario delle visite: prototipo sul ramo `diario`, scartato il 26/09 (non piace), non pubblicare
