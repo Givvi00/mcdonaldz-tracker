@@ -28,7 +28,7 @@ test('who sees the popup', () => {
   assert.deepEqual(unseenChanges(null, false), [], 'a new install: the guide explains the app');
   assert.deepEqual(unseenChanges(null, true).map(e => e.version), [CHANGELOG[0].version], 'used before versions were counted');
   assert.deepEqual(unseenChanges(CHANGELOG[0].version, true), [], 'already seen');
-  assert.ok(unseenChanges('0.1', true).length >= 1);
+  assert.equal(unseenChanges('0.1', true).length, CHANGELOG.length, 'several versions skipped: all of them, none left out');
 });
 
 console.log(`\n${passed} changelog checks passed`);

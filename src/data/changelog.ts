@@ -48,13 +48,13 @@ export function newerThan(a: string, b: string): boolean {
 }
 
 /**
- * The versions to tell about at this opening (newest first, at most three), or none.
+ * The versions to tell about at this opening (newest first), or none: every version between the one you had and this one, however many were skipped.
  * A brand-new install hears nothing (the guide explains the app). Someone who already used the app before versions were
  * counted hears about the current one.
  */
 export function unseenChanges(seen: string | null, alreadyUsing: boolean): ChangelogEntry[] {
   if (seen === null) return alreadyUsing ? CHANGELOG.slice(0, 1) : [];
-  return CHANGELOG.filter(e => newerThan(e.version, seen)).slice(0, 3);
+  return CHANGELOG.filter(e => newerThan(e.version, seen));
 }
 
 export function readSeenVersion(): string | null {
