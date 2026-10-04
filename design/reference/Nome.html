@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Scegli il tuo nome</title>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#150F0F}
+::-webkit-scrollbar{display:none}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #FFC72C;outline-offset:2px}
+</style>
+</helmet>
+<div style="width:390px;height:844px;box-sizing:border-box;background:#150F0F;color:#FBF3EA;font-family:'DM Sans',system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden;position:relative">
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,#D42A1C 0%,#A81C14 100%)"></div><svg width="390" height="844" aria-hidden="true" style="position:absolute;left:0;top:0"><defs><pattern id="fp" width="104" height="104" patternUnits="userSpaceOnUse"><g fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity=".15"><g transform="translate(8 10) rotate(-14 12 12) scale(1.15)"><path d="M4 11a8 6 0 0 1 16 0z"/><path d="M3.5 14h17"/><path d="M5 17h14a2.5 2.5 0 0 1-2.5 3h-9A2.5 2.5 0 0 1 5 17z"/></g><g transform="translate(62 8) rotate(10 12 12) scale(1.15)"><path d="M6.5 11h11l-1.4 9H7.9z"/><path d="M8.5 11V5.5M11 11V4M13.5 11V5M16 11V6.5"/></g><g transform="translate(14 60) rotate(12 12 12) scale(1.15)"><path d="M7 9h10l-1.2 11H8.2z"/><path d="M7.5 13h9M12 9V4l3-1"/></g><g transform="translate(64 62) rotate(-10 12 12) scale(1.15)"><path d="M7 12h10l-2 8h-6z"/><path d="M6 12a6 6 0 0 1 12 0"/><path d="M12 6V3.5"/></g><g transform="translate(38 34) rotate(6 12 12) scale(1.15)"><circle cx="8" cy="15" r="3.8"/><circle cx="16.5" cy="15" r="3.8"/><circle cx="12" cy="8.5" r="3.8"/></g></g></pattern></defs><rect width="390" height="844" fill="url(#fp)"/></svg><div style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column"><div style="padding:52px 24px 0;display:flex;flex-direction:column;gap:10px"><span style="font-size:13px;font-weight:700;letter-spacing:.1em;color:#FFE9E4">PASSO 1 DI 2</span><div style="display:flex;gap:8px"><span style="flex:1;height:6px;border-radius:99px;background:#FFC72C"></span><span style="flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.35)"></span></div></div>
+<div style="flex:1;min-height:0;padding:36px 24px 0;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:10px"><h1 style="margin:0;font-family:'Fredoka',system-ui,sans-serif;font-weight:700;font-size:34px;line-height:1.1;color:#fff">Come ti chiamiamo?</h1><p style="margin:0;font-size:17px;line-height:1.45;color:#FFEDE8">Gli amici ti vedranno in classifica con questo nome. Potrai cambiarlo quando vuoi dal profilo.</p></div>
+<div style="display:flex;flex-direction:column;gap:8px"><label for="nm" style="font-size:14px;font-weight:700;color:#fff">Nome utente</label><div style="position:relative;display:flex"><input id="nm" type="text" placeholder="Il tuo nome" value="Givvi00" style="flex:1;min-width:0;height:56px;box-sizing:border-box;border:0;border-radius:16px;padding:0 18px 0 18px;font-size:17px;color:#2A1D1B;background:#fff;font-family:'DM Sans',system-ui,sans-serif"></div></div>
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:14px;font-weight:700;color:#fff">Così ti vedono</span>
+<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:22px;background:#221918"><span style="flex:none;width:48px;height:48px;border-radius:50%;background:#4A1D18;display:flex;align-items:center;justify-content:center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFC2B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M7 9h10l-1.2 11H8.2z"/><path d="M7.5 13h9M12 9V4l3-1"/></svg></span><span style="flex:1;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;font-size:19px">Givvi00</span><span style="font-size:13px;font-weight:700;color:#C4B0A7">Livello 1</span></div></div></div>
+<div style="padding:0 24px 34px"><a href="Password.dc.html" style="min-height:56px;border-radius:18px;background:#FFC72C;color:#2A1A00;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:17px;box-shadow:0 6px 0 #B8860B">Continua</a></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
