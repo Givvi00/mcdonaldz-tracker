@@ -19,7 +19,6 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
         icon: '🔁',
         text: "Contatore delle visite: se apri l'app in un Mc dove sei già stato, conta da solo un'altra visita (al massimo una ogni 4 ore). Lo vedi sulla card del ristorante e in Stats.",
       },
-      { icon: '🔑', text: 'Puoi entrare con il tuo account Google, con un tocco.' },
       { icon: '🔒', text: 'Nel profilo puoi scegliere una password: poi entri con email e password, senza aspettare il codice.' },
     ],
   },
