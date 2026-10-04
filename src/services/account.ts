@@ -120,7 +120,11 @@ export async function signInWithPassword(email: string, password: string): Promi
     }
     throw explain(error ?? {});
   }
-  return toAccount(data.user, email);
+  // In with a password, so there is one: a password chosen before the mark existed (version 1.1) gets it now
+  if (data.user.user_metadata?.has_password !== true) {
+    await client.auth.updateUser({ data: { has_password: true } }).catch(() => undefined);
+  }
+  return { ...toAccount(data.user, email), hasPassword: true };
 }
 
 /** Sets or changes the password of the account you are signed in to (at least 8 characters) */
@@ -129,7 +133,12 @@ export async function setPassword(password: string): Promise<void> {
   const { error } = await client.auth.updateUser({ password, data: { has_password: true } });
   if (error) {
     if (/weak|short|characters/i.test(error.message)) throw new Error('Password troppo debole: usane una più lunga, con lettere e numeri.');
-    if (/same|different/i.test(error.message)) throw new Error('È già la tua password.');
+    // Already your password (chosen before the mark existed): nothing to change, only the mark is missing
+    if (/same|different/i.test(error.message)) {
+      const marked = await client.auth.updateUser({ data: { has_password: true } });
+      if (marked.error) throw explain(marked.error);
+      return;
+    }
     throw explain(error);
   }
 }
