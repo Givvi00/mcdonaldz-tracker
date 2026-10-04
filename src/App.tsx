@@ -33,6 +33,8 @@ import { startCatalogRefresh } from '@/services/catalogRefresh';
 import { requestPersistentStorage } from '@/services/storagePersist';
 import { AccessReview, reviewLink } from '@/components/AccessReview';
 import { forgetInvite } from '@/services/inviteLink';
+import { Icon, type IconName } from '@/components/ui/Icon';
+import { LevelGlyph } from '@/components/ui/LevelIcon';
 import './App.css';
 
 function App() {
@@ -79,15 +81,16 @@ function App() {
     if (coords && user) void autoCheckin();
   }, [coords, user, visits.length, onboarding, autoCheckin]);
 
-  const NAV_ITEMS = [
-    { tab: 'home' as const, icon: '🏠', label: 'Home' },
-    { tab: 'map' as const, icon: '🗺️', label: 'Mappa' },
-    { tab: 'stats' as const, icon: '📊', label: 'Stats' },
-    { tab: 'friends' as const, icon: '👥', label: 'Amici' },
+  const NAV_ITEMS: Array<{ tab: 'home' | 'map' | 'stats' | 'friends'; icon: IconName; label: string }> = [
+    { tab: 'home', icon: 'home', label: 'Home' },
+    { tab: 'map', icon: 'map', label: 'Mappa' },
+    { tab: 'stats', icon: 'stats', label: 'Stats' },
+    { tab: 'friends', icon: 'users', label: 'Amici' },
   ];
+  const level = levelInfo(getVisitedCount());
 
   return (
-    <div className="fixed inset-0 bg-gray-50 dark:bg-gray-950 flex flex-col transition-colors">
+    <div className="fixed inset-0 flex flex-col bg-mz-bg text-mz-text transition-colors">
       {review && (
         <AccessReview
           id={review.id}
@@ -114,25 +117,30 @@ function App() {
       <PasswordGate />
       {import.meta.env.DEV && <CelebrationLab />}
 
-      {/* Wordmark header */}
+      {/* Wordmark header: red, with the way to the profile (who you are, your level) */}
       {selectedTab !== 'map' && (
         <header
-          className="flex items-center justify-between gap-3 px-4 pb-4 bg-gradient-to-b from-mc-red to-mc-red-dark text-white shadow-md shadow-red-900/20"
-          style={{ paddingTop: 'calc(1rem + var(--safe-top))' }}
+          className="flex flex-none items-center justify-between gap-3 bg-mz-red px-5 pb-3.5 text-white"
+          style={{ paddingTop: 'max(var(--safe-top), 16px)' }}
         >
-          <div>
-            <p className="font-display font-bold text-2xl leading-tight">
-              McDonaldz<span className="text-mc-yellow">.</span>
-            </p>
-            <p className="text-[0.65rem] uppercase tracking-wider text-white/75 -mt-0.5">Tracker</p>
+          <div className="flex flex-col gap-[5px]">
+            <span className="font-display text-2xl font-bold leading-none tracking-[-0.01em]">
+              McDonaldz<span className="text-mz-yellow">.</span>
+            </span>
+            <span className="text-[11px] font-bold tracking-[0.16em] text-[#FFE9E4]">TRACKER</span>
           </div>
           <button
             onClick={() => openProfile(user?.name ? undefined : 'name')}
-            aria-label="Apri il profilo"
-            className="min-w-0 max-w-[55%] rounded-2xl bg-black/25 px-3.5 py-1.5 text-right transition-transform active:scale-95"
+            aria-label={user?.name ? `Profilo di ${user.name}, Livello ${level.number}` : 'Apri il profilo e scegli il tuo nome'}
+            className="flex min-h-[44px] min-w-0 max-w-[60%] items-center gap-2.5 rounded-3xl bg-black/30 py-1 pl-1.5 pr-4 transition-transform active:scale-95"
           >
-            <p className="truncate text-xs leading-tight text-white/80">{user?.name ? `Ciao, ${user.name}` : 'Ciao! Come ti chiami?'}</p>
-            <p className="font-display text-base font-bold leading-tight">Livello {levelInfo(getVisitedCount()).number}</p>
+            <span className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full bg-mz-yellow text-[#4A2B00]">
+              <LevelGlyph index={level.index} size={20} />
+            </span>
+            <span className="flex min-w-0 flex-col text-left leading-[1.15]">
+              <span className="truncate text-xs text-[#FFE9E4]">{user?.name ?? 'Come ti chiami?'}</span>
+              <span className="font-display text-base font-semibold">Livello {level.number}</span>
+            </span>
           </button>
         </header>
       )}
@@ -148,10 +156,11 @@ function App() {
         {selectedTab === 'profile' && <Profile />}
       </div>
 
-      {/* Bottom Navigation */}
-      <div
-        className="flex-none relative z-10 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex justify-around items-center transition-colors"
-        style={{ height: 'calc(5rem + var(--safe-bottom))', paddingBottom: 'var(--safe-bottom)' }}
+      {/* Bottom navigation: four places, the current one a raised pill with yellow icon and label */}
+      <nav
+        aria-label="Navigazione principale"
+        className="relative z-10 flex flex-none gap-1.5 border-t border-mz-line bg-mz-nav px-2.5 pt-2 transition-colors"
+        style={{ paddingBottom: 'max(var(--safe-bottom), 10px)' }}
       >
         {NAV_ITEMS.map(({ tab, icon, label }) => {
           const active = selectedTab === tab;
@@ -161,32 +170,23 @@ function App() {
             <button
               key={tab}
               onClick={() => (tab === 'stats' ? openStats() : setSelectedTab(tab))}
+              aria-current={active ? 'page' : undefined}
               aria-label={dot > 0 ? `${label}: ${dot} novità da vedere` : undefined}
-              className="relative flex flex-col items-center justify-center gap-1 flex-1 py-3"
+              className={`relative flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1 rounded-[18px] text-xs font-bold transition-colors ${
+                active ? 'bg-mz-surface-2 text-mz-chosen' : 'text-mz-muted'
+              }`}
             >
-              <span
-                className={`flex items-center justify-center w-10 h-7 rounded-full transition-all ${
-                  active ? 'bg-mc-yellow/40 dark:bg-mc-yellow/20' : ''
-                }`}
-              >
-                <span className="text-xl">{icon}</span>
-              </span>
-              <span
-                className={`text-xs font-display font-medium transition-colors ${
-                  active ? 'text-mc-red' : 'text-gray-500 dark:text-gray-400'
-                }`}
-              >
-                {label}
-              </span>
+              <Icon name={icon} stroke={2.1} />
+              <span>{label}</span>
               {dot > 0 && (
-                <span className="absolute top-1 right-1/2 translate-x-3 bg-mc-red text-white text-xs font-black w-5 h-5 rounded-full flex items-center justify-center text-[0.6rem] ring-2 ring-white dark:ring-gray-900">
+                <span className="absolute right-1/2 top-1 flex h-5 min-w-5 translate-x-5 items-center justify-center rounded-full bg-mz-red px-1 text-[0.65rem] font-bold text-white ring-2 ring-mz-nav">
                   {dot}
                 </span>
               )}
             </button>
           );
         })}
-      </div>
+      </nav>
     </div>
   );
 }

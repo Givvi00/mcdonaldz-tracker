@@ -8,6 +8,47 @@
   --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px));
 }
 
+/* Redesign colours (DESIGN.md, "Token"), as R G B for Tailwind's mz-* colours. Dark is the reference; light is
+   derived from the app's cream palette until it gets its own design. */
+:root {
+  --mz-bg: 255 249 240;
+  --mz-surface: 255 255 255;
+  --mz-nav: 255 255 255;
+  --mz-surface-2: 248 239 227;
+  --mz-active: 235 223 208;
+  --mz-line: 235 223 208;
+  --mz-text: 42 29 27;
+  --mz-muted: 112 98 88;
+  --mz-red: 204 35 24;
+  --mz-red-deep: 168 28 20;
+  --mz-red-light: 184 30 20;
+  --mz-yellow: 255 199 44;
+  --mz-on-yellow: 42 26 0;
+  --mz-green: 30 142 78;
+  --mz-blue: 47 107 224;
+  /* What is chosen (nav, toggles): yellow on dark, red on cream where yellow would not read */
+  --mz-chosen: 204 35 24;
+}
+
+.dark {
+  --mz-bg: 21 15 15;
+  --mz-surface: 34 25 24;
+  --mz-nav: 27 19 19;
+  --mz-surface-2: 45 34 32;
+  --mz-active: 74 56 52;
+  --mz-line: 61 46 43;
+  --mz-text: 251 243 234;
+  --mz-muted: 196 176 167;
+  --mz-red: 204 35 24;
+  --mz-red-deep: 168 28 20;
+  --mz-red-light: 255 138 122;
+  --mz-yellow: 255 199 44;
+  --mz-on-yellow: 42 26 0;
+  --mz-green: 76 214 139;
+  --mz-blue: 91 155 255;
+  --mz-chosen: 255 199 44;
+}
+
 /* Outline of the hand-drawn food icons (see components/foodSprite.ts). --sw is the outline thickness. */
 :root {
   --sw: 2;
@@ -39,7 +80,13 @@ body {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'DM Sans', system-ui, sans-serif;
+}
+
+/* Keyboard focus, everywhere: a yellow ring (DESIGN.md) */
+:focus-visible {
+  outline: 2px solid #ffc72c;
+  outline-offset: 2px;
 }
 
 input, textarea, button {
