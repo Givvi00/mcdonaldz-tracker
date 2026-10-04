@@ -12,6 +12,11 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    version: '1.3',
+    date: '2026-10-04',
+    items: [{ icon: '🔑', text: 'Puoi entrare con il tuo account Google: un tocco e sei dentro, senza password.' }],
+  },
+  {
     version: '1.2',
     date: '2026-10-04',
     items: [
