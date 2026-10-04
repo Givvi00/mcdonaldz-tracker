@@ -124,7 +124,7 @@ export function AccountSection() {
       {confirm === 'signout' && (
         <ConfirmSheet
           title="Uscire dall'account?"
-          body="Per rientrare ti basterà la tua email (o il tuo account Google)."
+          body="Per rientrare ti basteranno la tua email e la password."
           confirmLabel="Esci"
           onCancel={() => setConfirm(null)}
           onConfirm={() => {
@@ -155,6 +155,7 @@ export function AccountSection() {
 
 /** Optional: with a password you can sign in with email and password instead of waiting for the code */
 function PasswordField() {
+  const passwordChosen = useMcdonaldStore(state => state.passwordChosen);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
   const [busy, setBusy] = useState(false);
@@ -165,9 +166,8 @@ function PasswordField() {
       <div>
         <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">Password</p>
         <button onClick={() => setOpen(true)} className="mt-1 text-sm font-bold text-mc-red underline">
-          Scegli una password
+          Cambia password
         </button>
-        <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">Facoltativa: per entrare con email e password, senza aspettare il codice.</p>
         {message?.ok && <p role="status" className="mt-2 text-xs font-semibold text-green-700 dark:text-green-400">{message.text}</p>}
       </div>
     );
@@ -186,9 +186,10 @@ function PasswordField() {
           setMessage(null);
           setPassword(value)
             .then(() => {
+              passwordChosen();
               setValue('');
               setOpen(false);
-              setMessage({ ok: true, text: '✓ Password salvata: ora puoi entrare anche con email e password.' });
+              setMessage({ ok: true, text: '✓ Password cambiata.' });
             })
             .catch(error => setMessage({ ok: false, text: (error as Error).message }))
             .finally(() => setBusy(false));

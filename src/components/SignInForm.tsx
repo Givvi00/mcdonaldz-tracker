@@ -19,10 +19,10 @@ const BUTTON =
 const LINK = 'text-sm font-semibold text-white/80 underline';
 
 type Step =
-  /** Google, or your email */
-  | 'email'
-  /** Your email, with the password set in the Profile */
+  /** Email and password (or Google): how you sign in */
   | 'password'
+  /** Your email, for a code: the first time, or a forgotten password */
+  | 'email'
   /** Back from Google: finishing */
   | 'google'
   /** The email has no account yet: your name, to ask to join */
@@ -33,8 +33,8 @@ type Step =
   | 'code';
 
 /**
- * Signing in, on the red background of the guide: with Google, or with the email and then the code sent to it (or the
- * password, for whoever set one in the Profile). An email with no account can
+ * Signing in, on the red background of the guide: email and password (or Google). The code sent by email is only for
+ * the first time and for a forgotten password; after it the app asks for a password (PasswordGate). An email with no account can
  * ask to join: the owner accepts from their email, and only then the code arrives. Each step says in its own words
  * what is happening and what comes next. Once in, the sync starts by itself.
  */
@@ -45,7 +45,7 @@ export function SignInForm({ onSignedIn }: { onSignedIn?: () => void }) {
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [google, setGoogle] = useState(false);
-  const [step, setStep] = useState<Step>(GOOGLE_RETURN ? 'google' : 'email');
+  const [step, setStep] = useState<Step>(GOOGLE_RETURN ? 'google' : 'password');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const shownEmail = email.trim();
@@ -133,7 +133,7 @@ export function SignInForm({ onSignedIn }: { onSignedIn?: () => void }) {
     <div className="w-full">
       {step === 'google' && <p className="py-6 text-base font-semibold text-white/90">Sto entrando con Google…</p>}
 
-      {step === 'email' && (
+      {step === 'password' && (
         <>
           {google && (
             <>
@@ -148,42 +148,11 @@ export function SignInForm({ onSignedIn }: { onSignedIn?: () => void }) {
               </button>
               <div className="my-5 flex items-center gap-3 text-sm text-white/70">
                 <span className="h-px flex-1 bg-white/30" />
-                oppure con la tua email
+                oppure
                 <span className="h-px flex-1 bg-white/30" />
               </div>
             </>
           )}
-          <p className="mb-3 text-base leading-relaxed text-white/90">Scrivi la tua email: ti mandiamo un codice per entrare.</p>
-          <form
-            className="flex gap-2"
-            onSubmit={e => {
-              e.preventDefault();
-              void run(sendTheCode);
-            }}
-          >
-            <input
-              type="email"
-              inputMode="email"
-              autoComplete="email"
-              required
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="La tua email"
-              className={`${INPUT} min-w-0 flex-1`}
-            />
-            <button type="submit" disabled={busy || !email.includes('@')} className={BUTTON}>
-              {busy ? '…' : 'Avanti'}
-            </button>
-          </form>
-          <button type="button" onClick={() => setStep('password')} className={`${LINK} mt-4`}>
-            Ho una password
-          </button>
-        </>
-      )}
-
-      {step === 'password' && (
-        <>
-          <p className="mb-5 text-base leading-relaxed text-white/90">Entra con la tua email e la password che hai scelto nel profilo.</p>
           <form
             className="space-y-3"
             onSubmit={e => {
@@ -218,8 +187,40 @@ export function SignInForm({ onSignedIn }: { onSignedIn?: () => void }) {
               {busy ? '…' : 'Entra'}
             </button>
           </form>
-          <button type="button" onClick={restart} className={`${LINK} mt-4`}>
-            Password dimenticata? Entra con il codice
+          <button type="button" onClick={restart} className={`${LINK} mt-5`}>
+            Prima volta o password dimenticata? Ricevi un codice
+          </button>
+        </>
+      )}
+
+      {step === 'email' && (
+        <>
+          <p className="mb-5 text-base leading-relaxed text-white/90">
+            Scrivi la tua email: ti mandiamo un codice per entrare. Poi sceglierai una password per le prossime volte.
+          </p>
+          <form
+            className="flex gap-2"
+            onSubmit={e => {
+              e.preventDefault();
+              void run(sendTheCode);
+            }}
+          >
+            <input
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="La tua email"
+              className={`${INPUT} min-w-0 flex-1`}
+            />
+            <button type="submit" disabled={busy || !email.includes('@')} className={BUTTON}>
+              {busy ? '…' : 'Avanti'}
+            </button>
+          </form>
+          <button type="button" onClick={() => setStep('password')} className={`${LINK} mt-4`}>
+            Ho già una password
           </button>
         </>
       )}

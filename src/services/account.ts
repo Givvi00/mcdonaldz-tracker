@@ -39,13 +39,27 @@ export function hasStoredSession(): boolean {
 export interface Account {
   id: string;
   email: string;
+  /** Signs in with a password (chosen in the app) or with Google: false means the app asks for a password */
+  hasPassword?: boolean;
+}
+
+type AuthUser = { id: string; email?: string; user_metadata?: Record<string, unknown>; app_metadata?: Record<string, unknown> };
+
+function toAccount(user: AuthUser, fallbackEmail = ''): Account {
+  const providers = (user.app_metadata?.providers as string[] | undefined) ?? [];
+  return {
+    id: user.id,
+    email: user.email ?? fallbackEmail,
+    // The password is not readable: the app writes a mark next to it when you choose one (setPassword)
+    hasPassword: user.user_metadata?.has_password === true || providers.includes('google'),
+  };
 }
 
 export async function currentAccount(): Promise<Account | null> {
   const client = await getClient();
   const { data } = await client.auth.getSession();
   const user = data.session?.user;
-  return user ? { id: user.id, email: user.email ?? '' } : null;
+  return user ? toAccount(user) : null;
 }
 
 /** The email has no account: the person can ask to join (see requestAccess) */
@@ -92,7 +106,7 @@ export async function confirmCode(email: string, code: string): Promise<Account>
   const client = await getClient();
   const { data, error } = await client.auth.verifyOtp({ email: email.trim(), token: code.replace(/\s/g, ''), type: 'email' });
   if (error || !data.user) throw explain(error ?? {});
-  return { id: data.user.id, email: data.user.email ?? email };
+  return toAccount(data.user, email);
 }
 
 /** With a password set from the Profile (see setPassword): the alternative to the code */
@@ -102,17 +116,17 @@ export async function signInWithPassword(email: string, password: string): Promi
   if (error || !data.user) {
     const text = `${error?.code ?? ''} ${error?.message ?? ''}`.toLowerCase();
     if (text.includes('invalid') && text.includes('credentials')) {
-      throw new Error('Email o password sbagliate. Se non hai ancora una password, entra con il codice.');
+      throw new Error('Email o password sbagliate. Prima volta qui o password dimenticata? Ricevi un codice qui sotto.');
     }
     throw explain(error ?? {});
   }
-  return { id: data.user.id, email: data.user.email ?? email };
+  return toAccount(data.user, email);
 }
 
 /** Sets or changes the password of the account you are signed in to (at least 8 characters) */
 export async function setPassword(password: string): Promise<void> {
   const client = await getClient();
-  const { error } = await client.auth.updateUser({ password });
+  const { error } = await client.auth.updateUser({ password, data: { has_password: true } });
   if (error) {
     if (/weak|short|characters/i.test(error.message)) throw new Error('Password troppo debole: usane una più lunga, con lettere e numeri.');
     if (/same|different/i.test(error.message)) throw new Error('È già la tua password.');
@@ -169,7 +183,7 @@ export async function finishGoogle(): Promise<Account> {
   const client = await getClient();
   const { data, error } = await client.auth.exchangeCodeForSession(GOOGLE_RETURN.code);
   if (error || !data.user) throw new Error('Accesso con Google non riuscito, riprova.');
-  return { id: data.user.id, email: data.user.email ?? '' };
+  return toAccount(data.user);
 }
 
 /** Calls one of the server functions in supabase/functions (public: they check everything themselves) */

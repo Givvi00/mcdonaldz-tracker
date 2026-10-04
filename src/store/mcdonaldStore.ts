@@ -179,6 +179,8 @@ interface AppStore {
   clearPendingRating: () => void;
   /** Reads the account from the stored session (used by initAccount and by a sync that starts offline) */
   initAccountState: () => Promise<void>;
+  /** A password was just chosen: the app stops asking for one */
+  passwordChosen: () => void;
   /** After a sync brought something from another phone: read the data again, record stamps and regions, no fanfare */
   reloadQuietly: () => Promise<void>;
   /** The session is gone (expired, or the account deleted elsewhere): back to the sign-in screen */
@@ -408,6 +410,11 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
       // Offline and the library not downloaded yet: the next sync (when the connection comes back) tries again
       set({ account: null });
     }
+  },
+
+  passwordChosen: () => {
+    const state = get().account;
+    if (state && state.status !== 'signed-out') set({ account: { ...state, account: { ...state.account, hasPassword: true } } });
   },
 
   requireSignIn: () => {

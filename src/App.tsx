@@ -23,6 +23,7 @@ import { VerifyToast } from '@/components/VerifyToast';
 import { FriendToast } from '@/components/FriendToast';
 import { WhatsNew } from '@/components/WhatsNew';
 import { CheckinToast } from '@/components/CheckinToast';
+import { PasswordGate } from '@/components/PasswordGate';
 import { UnmarkConfirm } from '@/components/UnmarkConfirm';
 import { Onboarding } from '@/components/Onboarding';
 import { CelebrationLab } from '@/components/CelebrationLab';
@@ -103,6 +104,7 @@ function App() {
       <CheckinToast />
       <UnmarkConfirm />
       <Onboarding />
+      <PasswordGate />
       {import.meta.env.DEV && <CelebrationLab />}
 
       {/* Wordmark header */}

@@ -12,6 +12,16 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    version: '1.2',
+    date: '2026-10-04',
+    items: [
+      {
+        icon: '🔒',
+        text: "Si entra con email e password. Se non l'hai ancora scelta, l'app te la chiede una volta. Il codice via email serve solo la prima volta o se dimentichi la password.",
+      },
+    ],
+  },
+  {
     version: '1.1',
     date: '2026-10-04',
     items: [
