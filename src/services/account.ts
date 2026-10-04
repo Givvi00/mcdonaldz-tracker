@@ -87,7 +87,7 @@ export function explain(error: { message?: string; status?: number; code?: strin
     return new Error('Troppi tentativi: aspetta qualche minuto e riprova.');
   }
   if (text.includes('expired') || text.includes('invalid') || text.includes('otp')) {
-    return new Error('Codice sbagliato o scaduto. Controlla l\'ultima email o chiedine uno nuovo.');
+    return new Error("Codice sbagliato o scaduto. Controlla l'ultima email o chiedine uno nuovo.");
   }
   if (text.includes('fetch') || text.includes('network')) {
     return new Error('Non riesco a collegarmi: sei offline?');
@@ -154,6 +154,99 @@ export async function googleEnabled(): Promise<boolean> {
   }
 }
 
+// "Accedi con Google" with Google's own button, inside the page: Google hands the app a signed proof of who you are and
+// Supabase turns it into a session. The app never leaves, and Google's screen names this site, not Supabase's address.
+// The redirect below (signInWithGoogle) stays as the fallback when Google's button cannot load.
+
+/** Public by design, like the Supabase key: the web client of Google Cloud project McDonaldz */
+const GOOGLE_CLIENT_ID = '819536678680-v5mvbnoq3nvvgug8g93a4lbo7c1nova1.apps.googleusercontent.com';
+
+type GoogleCredential = { credential: string };
+type GoogleIdentity = {
+  accounts: {
+    id: {
+      initialize(options: object): void;
+      renderButton(container: HTMLElement, options: object): void;
+    };
+  };
+};
+
+let identityPromise: Promise<GoogleIdentity> | null = null;
+
+function loadGoogleIdentity(): Promise<GoogleIdentity> {
+  identityPromise ??= new Promise<GoogleIdentity>((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.onload = () => {
+      const google = (window as { google?: GoogleIdentity }).google;
+      if (google?.accounts?.id) resolve(google);
+      else reject(new Error('Google non disponibile'));
+    };
+    script.onerror = () => reject(new Error('Google non disponibile'));
+    document.head.appendChild(script);
+  }).catch(error => {
+    identityPromise = null; // offline or blocked: try again next time
+    throw error;
+  });
+  return identityPromise;
+}
+
+async function sha256Hex(text: string): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function randomNonce(): string {
+  return Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * Draws Google's button in the container. Choosing an account signs in here (onSignedIn) or says why not (onError).
+ * Rejects when Google's button cannot load: the caller then offers the redirect instead.
+ */
+export async function showGoogleButton(
+  container: HTMLElement,
+  onSignedIn: (account: Account) => void,
+  onError: (error: Error) => void,
+): Promise<void> {
+  const google = await loadGoogleIdentity();
+  // A fresh random value in every proof, so one cannot be reused: Google gets it hashed, Supabase checks it against this one
+  const nonce = randomNonce();
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    nonce: await sha256Hex(nonce),
+    ux_mode: 'popup',
+    itp_support: true,
+    callback: ({ credential }: GoogleCredential) => {
+      void getClient()
+        .then(client => client.auth.signInWithIdToken({ provider: 'google', token: credential, nonce }))
+        .then(({ data, error }) => {
+          if (error || !data.user) {
+            // The Google account has no account here (sign-ups are closed: invite only)
+            if (error && /signup|not allowed/i.test(`${error.code ?? ''} ${error.message}`)) throw new NotInvitedError();
+            throw new Error('Accesso con Google non riuscito, riprova.');
+          }
+          onSignedIn(toAccount(data.user));
+        })
+        .catch((error: Error) =>
+          onError(error instanceof NotInvitedError ? error : new Error('Accesso con Google non riuscito, riprova.')),
+        );
+    },
+  });
+  container.replaceChildren();
+  google.accounts.id.renderButton(container, {
+    type: 'standard',
+    theme: 'outline',
+    size: 'large',
+    shape: 'pill',
+    text: 'signin_with',
+    logo_alignment: 'center',
+    locale: 'it',
+    width: Math.max(200, Math.min(400, Math.floor(container.clientWidth))),
+  });
+}
+
 /** The page we come back to after Google: the app itself */
 const appUrl = () => `${window.location.origin}${import.meta.env.BASE_URL}`;
 
@@ -208,7 +301,8 @@ async function callFunction<T>(name: string, body: unknown): Promise<T> {
     throw new Error('Non riesco a collegarmi: sei offline?');
   }
   const data = (await response.json().catch(() => ({}))) as T & { error?: string };
-  if (!response.ok) throw new Error(data.error === 'not-found' ? 'Richiesta non trovata o link non valido.' : 'Qualcosa è andato storto, riprova.');
+  if (!response.ok)
+    throw new Error(data.error === 'not-found' ? 'Richiesta non trovata o link non valido.' : 'Qualcosa è andato storto, riprova.');
   return data;
 }
 
@@ -265,10 +359,17 @@ function check<T>(result: { data: T; error: { message: string } | null }): T {
 export function supabaseRemote(client: SupabaseClient, accountId: string): Remote {
   return {
     async listVisits() {
-      return check(await client.from('visits').select('mcdonald_id, visited_at, date_edited, verified, verified_at, rating, checkins')) as RemoteVisit[];
+      return check(
+        await client.from('visits').select('mcdonald_id, visited_at, date_edited, verified, verified_at, rating, checkins'),
+      ) as RemoteVisit[];
     },
     async upsertVisits(rows) {
-      check(await client.from('visits').upsert(rows.map(r => ({ ...r, user_id: accountId })), { onConflict: 'user_id,mcdonald_id' }));
+      check(
+        await client.from('visits').upsert(
+          rows.map(r => ({ ...r, user_id: accountId })),
+          { onConflict: 'user_id,mcdonald_id' },
+        ),
+      );
     },
     async deleteVisits(ids) {
       check(await client.from('visits').delete().eq('user_id', accountId).in('mcdonald_id', ids));
@@ -278,9 +379,10 @@ export function supabaseRemote(client: SupabaseClient, accountId: string): Remot
     },
     async addAchievements(rows) {
       check(
-        await client
-          .from('achievements')
-          .upsert(rows.map(r => ({ ...r, user_id: accountId })), { onConflict: 'user_id,type', ignoreDuplicates: true }),
+        await client.from('achievements').upsert(
+          rows.map(r => ({ ...r, user_id: accountId })),
+          { onConflict: 'user_id,type', ignoreDuplicates: true },
+        ),
       );
     },
     async getName() {

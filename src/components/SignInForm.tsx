@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import {
   GOOGLE_RETURN,
@@ -8,6 +8,7 @@ import {
   googleEnabled,
   requestAccess,
   sendCode,
+  showGoogleButton,
   signInWithGoogle,
   signInWithPassword,
 } from '@/services/account';
@@ -17,6 +18,7 @@ const INPUT =
 const BUTTON =
   'rounded-2xl bg-mc-yellow px-4 py-3 text-base font-bold text-gray-800 shadow-lg transition-transform active:scale-95 disabled:opacity-40';
 const LINK = 'text-sm font-semibold text-white/80 underline';
+const NOT_IN_WITH_GOOGLE = 'Questo account Google non è ancora dentro McDonaldz. Scrivi qui la tua email e chiedi di entrare.';
 
 type Step =
   /** Email and password (or Google): how you sign in */
@@ -45,6 +47,9 @@ export function SignInForm({ onSignedIn }: { onSignedIn?: () => void }) {
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [google, setGoogle] = useState(false);
+  /** Google's own button could not load: our button, which leaves for Google and comes back */
+  const [googleRedirect, setGoogleRedirect] = useState(false);
+  const googleBox = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<Step>(GOOGLE_RETURN ? 'google' : 'password');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,6 +71,26 @@ export function SignInForm({ onSignedIn }: { onSignedIn?: () => void }) {
     void googleEnabled().then(setGoogle);
   }, []);
 
+  // Google's button, drawn by Google in its box (again whenever the sign-in step comes back)
+  useEffect(() => {
+    if (!google || step !== 'password' || !googleBox.current) return;
+    showGoogleButton(
+      googleBox.current,
+      signed =>
+        void run(async () => {
+          await accountSignedIn(signed);
+          onSignedIn?.();
+        }),
+      e => {
+        if (e instanceof NotInvitedError) {
+          setStep('email');
+          setError(NOT_IN_WITH_GOOGLE);
+        } else setError(e.message);
+      },
+    ).catch(() => setGoogleRedirect(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [google, step]);
+
   // Opened again by Google: finish there, or say why not
   useEffect(() => {
     if (step !== 'google') return;
@@ -76,11 +101,7 @@ export function SignInForm({ onSignedIn }: { onSignedIn?: () => void }) {
       })
       .catch(e => {
         setStep('email');
-        setError(
-          e instanceof NotInvitedError
-            ? 'Questo account Google non è ancora dentro McDonaldz. Scrivi qui la tua email e chiedi di entrare.'
-            : (e as Error).message,
-        );
+        setError(e instanceof NotInvitedError ? NOT_IN_WITH_GOOGLE : (e as Error).message);
       });
     // once, on the way back
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,15 +158,18 @@ export function SignInForm({ onSignedIn }: { onSignedIn?: () => void }) {
         <>
           {google && (
             <>
-              <button
-                type="button"
-                disabled={busy}
-                onClick={() => void run(signInWithGoogle)}
-                className="flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-4 py-3 text-base font-bold text-gray-800 shadow-lg transition-transform active:scale-95 disabled:opacity-60"
-              >
-                <GoogleLogo />
-                Accedi con Google
-              </button>
+              {!googleRedirect && <div ref={googleBox} className="flex min-h-[44px] w-full justify-center" />}
+              {googleRedirect && (
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => void run(signInWithGoogle)}
+                  className="flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-4 py-3 text-base font-bold text-gray-800 shadow-lg transition-transform active:scale-95 disabled:opacity-60"
+                >
+                  <GoogleLogo />
+                  Accedi con Google
+                </button>
+              )}
               <div className="my-5 flex items-center gap-3 text-sm text-white/70">
                 <span className="h-px flex-1 bg-white/30" />
                 oppure
