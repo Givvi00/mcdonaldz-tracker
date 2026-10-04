@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
+import { forgetInvite, pendingInvite } from '@/services/inviteLink';
 import {
   GOOGLE_RETURN,
+  acceptInvite,
+  viewInvite,
+  type InviteInfo,
   NotInvitedError,
   confirmCode,
   finishGoogle,
@@ -21,6 +25,8 @@ const LINK = 'text-sm font-semibold text-white/80 underline';
 const NOT_IN_WITH_GOOGLE = 'Questo account Google non è ancora dentro McDonaldz. Scrivi qui la tua email e chiedi di entrare.';
 
 type Step =
+  /** Opened from a friend's invite: your email, and you are in */
+  | 'invite'
   /** Email and password (or Google): how you sign in */
   | 'password'
   /** Your email, for a code: the first time, or a forgotten password */
@@ -50,7 +56,8 @@ export function SignInForm({ onSignedIn }: { onSignedIn?: () => void }) {
   /** Google's own button could not load: our button, which leaves for Google and comes back */
   const [googleRedirect, setGoogleRedirect] = useState(false);
   const googleBox = useRef<HTMLDivElement>(null);
-  const [step, setStep] = useState<Step>(GOOGLE_RETURN ? 'google' : 'password');
+  const [step, setStep] = useState<Step>(GOOGLE_RETURN ? 'google' : pendingInvite() ? 'invite' : 'password');
+  const [invite, setInvite] = useState<InviteInfo | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const shownEmail = email.trim();
@@ -90,6 +97,45 @@ export function SignInForm({ onSignedIn }: { onSignedIn?: () => void }) {
     ).catch(() => setGoogleRedirect(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [google, step]);
+
+  // Who sent the invite; one that can no longer be used is forgotten, and signing in goes on as usual
+  useEffect(() => {
+    const link = pendingInvite();
+    if (step !== 'invite' || !link) return;
+    viewInvite(link.id, link.token)
+      .then(info => {
+        if (info.status === 'open') return setInvite(info);
+        forgetInvite();
+        setStep('password');
+        setError(
+          info.status === 'used'
+            ? "L'invito che hai aperto è già stato usato: entra con il tuo account o chiedine uno nuovo."
+            : "L'invito che hai aperto è scaduto: chiedine uno nuovo a chi te l'ha mandato.",
+        );
+      })
+      .catch(e => {
+        forgetInvite();
+        setStep('password');
+        setError((e as Error).message);
+      });
+    // once, when the guide reaches signing in
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const joinWithInvite = async () => {
+    const link = pendingInvite();
+    if (!link) return setStep('password');
+    const result = await acceptInvite(link.id, link.token, email);
+    if (result === 'exists') {
+      // Already in: the invite stays unused, signing in is enough
+      forgetInvite();
+      setStep('password');
+      setError('Hai già un account con questa email: entra con la tua password, o ricevi un codice.');
+      return;
+    }
+    forgetInvite();
+    setStep('code');
+  };
 
   // Opened again by Google: finish there, or say why not
   useEffect(() => {
@@ -152,6 +198,45 @@ export function SignInForm({ onSignedIn }: { onSignedIn?: () => void }) {
 
   return (
     <div className="w-full">
+      {step === 'invite' && (
+        <>
+          {invite ? (
+            <>
+              <p className="mb-1 text-lg font-bold">🎉 {invite.inviter ?? 'Un amico'} ti ha invitato!</p>
+              <p className="mb-5 text-base leading-relaxed text-white/90">
+                Scrivi la tua email: ti mandiamo un codice e sei dentro. Poi sceglierai una password per le prossime volte.
+              </p>
+              <form
+                className="flex gap-2"
+                onSubmit={e => {
+                  e.preventDefault();
+                  void run(joinWithInvite);
+                }}
+              >
+                <input
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="La tua email"
+                  className={`${INPUT} min-w-0 flex-1`}
+                />
+                <button type="submit" disabled={busy || !email.includes('@')} className={BUTTON}>
+                  {busy ? '…' : 'Entra'}
+                </button>
+              </form>
+              <button type="button" onClick={() => setStep('password')} className={`${LINK} mt-4`}>
+                Ho già un account
+              </button>
+            </>
+          ) : (
+            !error && <p className="py-6 text-base font-semibold text-white/90">Apro l'invito…</p>
+          )}
+        </>
+      )}
+
       {step === 'google' && <p className="py-6 text-base font-semibold text-white/90">Sto entrando con Google…</p>}
 
       {step === 'password' && (

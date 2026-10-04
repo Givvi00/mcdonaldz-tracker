@@ -288,21 +288,28 @@ export async function finishGoogle(): Promise<Account> {
   return toAccount(data.user);
 }
 
-/** Calls one of the server functions in supabase/functions (public: they check everything themselves) */
-async function callFunction<T>(name: string, body: unknown): Promise<T> {
+/**
+ * Calls one of the server functions in supabase/functions (public: they check everything themselves). `errors` turns
+ * the function's error codes into what to tell; `token` is the session, for the functions that need to know who you are.
+ */
+async function callFunction<T>(
+  name: string,
+  body: unknown,
+  errors: Record<string, string> = { 'not-found': 'Richiesta non trovata o link non valido.' },
+  token?: string,
+): Promise<T> {
   let response: Response;
   try {
     response = await fetch(`${SUPABASE_URL}/functions/v1/${name}`, {
       method: 'POST',
-      headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
+      headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
       body: JSON.stringify(body),
     });
   } catch {
     throw new Error('Non riesco a collegarmi: sei offline?');
   }
   const data = (await response.json().catch(() => ({}))) as T & { error?: string };
-  if (!response.ok)
-    throw new Error(data.error === 'not-found' ? 'Richiesta non trovata o link non valido.' : 'Qualcosa è andato storto, riprova.');
+  if (!response.ok) throw new Error((data.error && errors[data.error]) || 'Qualcosa è andato storto, riprova.');
   return data;
 }
 
@@ -326,6 +333,44 @@ export interface AccessRequest {
 /** The owner's side, from the link in the email: see the request, accept or refuse it */
 export function reviewAccess(id: string, token: string, action: 'view' | 'approve' | 'reject'): Promise<AccessRequest> {
   return callFunction<AccessRequest>('review-access', { id, token, action });
+}
+
+const INVITE_ERRORS: Record<string, string> = {
+  'not-found': 'Questo invito non esiste: controlla di aver aperto il link giusto.',
+  used: "Questo invito è già stato usato: chiedine uno nuovo a chi te l'ha mandato.",
+  expired: "Questo invito è scaduto: chiedine uno nuovo a chi te l'ha mandato.",
+  email: 'Email non valida: controlla di averla scritta bene.',
+  'too-many': 'Hai già 10 inviti in attesa: aspetta che qualcuno li usi o che scadano (dopo 7 giorni).',
+  'signed-out': 'Per invitare devi essere dentro con il tuo account.',
+};
+
+/** A link for a friend: whoever opens it can join with their email. One person per link, valid 7 days */
+export async function createInvite(): Promise<string> {
+  const client = await getClient();
+  const { data } = await client.auth.getSession();
+  if (!data.session) throw new Error(INVITE_ERRORS['signed-out']);
+  const { link } = await callFunction<{ link: string }>('invite', { action: 'create' }, INVITE_ERRORS, data.session.access_token);
+  return link;
+}
+
+export interface InviteInfo {
+  inviter: string | null;
+  status: 'open' | 'used' | 'expired';
+}
+
+/** Who sent the invite, and whether it can still be used */
+export function viewInvite(id: string, token: string): Promise<InviteInfo> {
+  return callFunction<InviteInfo>('invite', { action: 'view', id, token }, INVITE_ERRORS);
+}
+
+/** Joins with the invite: 'sent' means the account is there and the code is on its way; 'exists', that the email already has one */
+export async function acceptInvite(id: string, token: string, email: string): Promise<'sent' | 'exists'> {
+  const { status } = await callFunction<{ status: 'sent' | 'exists' }>(
+    'invite',
+    { action: 'accept', id, token, email: email.trim() },
+    INVITE_ERRORS,
+  );
+  return status;
 }
 
 /** Whether nobody else has this name online (yours counts as free) */

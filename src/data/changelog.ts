@@ -12,6 +12,16 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    version: '1.4',
+    date: '2026-10-04',
+    items: [
+      {
+        icon: '➕',
+        text: 'Invita i tuoi amici: nella voce Amici premi "Invita un amico" e mandagli il link. Lo apre, scrive la sua email ed è dentro, in classifica con te.',
+      },
+    ],
+  },
+  {
     version: '1.3',
     date: '2026-10-04',
     items: [{ icon: '🔑', text: 'Puoi entrare con il tuo account Google: un tocco e sei dentro, senza password.' }],

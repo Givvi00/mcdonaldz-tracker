@@ -32,12 +32,13 @@ import { startUpdateChecks } from '@/services/updates';
 import { startCatalogRefresh } from '@/services/catalogRefresh';
 import { requestPersistentStorage } from '@/services/storagePersist';
 import { AccessReview, reviewLink } from '@/components/AccessReview';
+import { forgetInvite } from '@/services/inviteLink';
 import './App.css';
 
 function App() {
   // Opened from the link in a "vuole entrare" email: the answer comes before anything else
   const [review, setReview] = useState(reviewLink);
-  const { selectedTab, setSelectedTab, openStats, unseen, friendNews, initApp, initAccount, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile, onboarding, autoCheckin, visits } =
+  const { selectedTab, setSelectedTab, openStats, unseen, friendNews, initApp, initAccount, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile, onboarding, autoCheckin, visits, account } =
     useMcdonaldStore();
   useTheme();
   // On a first launch the browser asks for the position only after the guide has said what it is for
@@ -66,6 +67,12 @@ function App() {
     setLocationStatus(geoStatus);
     setUserPosition(coords);
   }, [geoStatus, coords, setLocationStatus, setUserPosition]);
+
+  // Signed in: an invite opened on this phone is no longer needed
+  const signedIn = account?.status !== undefined && account.status !== 'signed-out';
+  useEffect(() => {
+    if (signedIn) forgetInvite();
+  }, [signedIn]);
 
   // Back at a restaurant you already visited: counted by itself (at most once every 4 hours, see utils/checkins)
   useEffect(() => {

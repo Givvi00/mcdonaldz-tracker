@@ -10,7 +10,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 - Aggiornamenti silenziosi dell'app; controllo settimanale dell'elenco con OpenStreetMap (issue su GitHub il lunedì)
 
 ### Come si gestisce (promemoria per il proprietario)
-- **Invitare un amico**: niente da fare in anticipo. Lui apre l'app, scrive l'email, "Chiedi di entrare" con il nome; a te arriva l'email da `onboarding@resend.dev` (filtro Gmail "non mandare mai in spam" da creare, finivano nello spam), premi Accetta e a lui arriva il codice. In alternativa: Supabase → Authentication → Users → Add user → Create new user, con "Auto Confirm User"
+- **Invitare un amico** (dalla 1.4): voce Amici → "Invita un amico" → link da mandare (vale per una persona, 7 giorni; massimo 10 in attesa a testa). Chi lo apre scrive l'email ed entra subito (funzione `invite`, tabella `invites`, SQL 0007). Senza link resta la richiesta: niente da fare in anticipo. Lui apre l'app, scrive l'email, "Chiedi di entrare" con il nome; a te arriva l'email da `onboarding@resend.dev` (filtro Gmail "non mandare mai in spam" da creare, finivano nello spam), premi Accetta e a lui arriva il codice. In alternativa: Supabase → Authentication → Users → Add user → Create new user, con "Auto Confirm User"
 - **Servizi**: Supabase (progetto `mcdonaldz`, ref `krfhynrhictmtolqkpas`, Frankfurt, gratuito; iscrizioni chiuse; email dei codici dal Gmail via SMTP), Resend (email di notifica delle richieste, solo verso l'indirizzo dell'account Resend), GitHub Actions (deploy, controllo OSM del lunedì, `keepalive.yml` lunedì e giovedì per non far andare in pausa Supabase)
 - **Database**: gli script SQL in `supabase/migrations/` (0001–0004) si eseguono a mano nel SQL Editor, uno alla volta e mai modificati dopo. Le tabelle nuove non sono esposte in automatico: vanno date esplicitamente ad `authenticated` e/o `service_role` (vedi 0004)
 - **Funzioni server**: `npx supabase functions deploy <nome> --project-ref krfhynrhictmtolqkpas --no-verify-jwt --use-api` (serve `npx supabase login` fatto da PowerShell, non dal terminale di Claude)
@@ -22,7 +22,7 @@ L'app si apre poche volte: deve aiutare l'utente a trovare/ricordare i Mc, non f
 4. **Idee medie**: card da condividere fatta il 26/09 (a scontrino). Diario delle visite: prototipo sul ramo `diario`, scartato il 26/09 (non piace), non pubblicare
 5. **Dati**: fatto il 28/09 il primo aggiornamento vero (6 nuovi, 834 in tutto). Prossimi: quando arriva una segnalazione OSM (vedi `docs/AGGIORNAMENTO-DATI.md`)
 6. **Rifiniture**: durata della coda di feste, icona del livello 12, disegni delle figurine per regione
-7. **Più avanti, se serve**: dominio proprio per le email (niente più spam), invito dall'app con codice
+7. **Più avanti, se serve**: dominio proprio per le email (niente più spam). Invito dall'app: fatto il 04/10 (1.4)
 8. **In pausa**: app native e notifiche di prossimità
 
 ## Distribuzione (decisa il 19/09/2026)

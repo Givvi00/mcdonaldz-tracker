@@ -7,6 +7,7 @@ import { ItalyMap } from '@/components/ItalyMap';
 import { Passport } from '@/components/Passport';
 import { SectionTitle } from '@/components/SectionTitle';
 import { LEVELS } from '@/utils/foodTheme';
+import { createInvite } from '@/services/account';
 
 type Order = 'visited' | 'verified' | 'regions';
 
@@ -86,7 +87,9 @@ export function Friends() {
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-8">
-      <SectionTitle emoji="🏆" className="">Classifica</SectionTitle>
+      <SectionTitle emoji="🏆" className="">
+        Classifica
+      </SectionTitle>
 
       <div className="flex gap-0.5 rounded-2xl bg-gray-100 p-1 dark:bg-gray-800" role="radiogroup" aria-label="Ordina per">
         {ORDERS.map(o => (
@@ -117,7 +120,7 @@ export function Friends() {
 
       {!error && friends !== null && ranked.length <= 1 && (
         <p className="rounded-2xl bg-mc-yellow/20 p-4 text-center text-sm text-gray-700 dark:text-gray-200">
-          Per ora ci sei solo tu. Quando entrano i tuoi amici li trovi qui, in classifica con te.
+          Per ora ci sei solo tu. Invita i tuoi amici qui sotto: li trovi in classifica con te.
         </p>
       )}
 
@@ -147,7 +150,9 @@ export function Friends() {
                 <span className="min-w-0 flex-1">
                   <span className="flex items-center gap-1.5">
                     <span className="truncate font-display font-bold text-gray-800 dark:text-gray-100">{f.name}</span>
-                    {me && <span className="rounded-full bg-mc-yellow px-1.5 py-0.5 text-[0.6rem] font-bold uppercase text-gray-800">Tu</span>}
+                    {me && (
+                      <span className="rounded-full bg-mc-yellow px-1.5 py-0.5 text-[0.6rem] font-bold uppercase text-gray-800">Tu</span>
+                    )}
                     {what && (
                       <span className="flex-none rounded-full bg-mc-red px-1.5 py-0.5 text-[0.6rem] font-bold uppercase text-white">
                         {what === 'joined' ? 'Nuovo' : what === 'passedYou' ? 'Ti ha superato' : 'Superato!'}
@@ -166,12 +171,88 @@ export function Friends() {
         })}
       </ol>
 
+      {myId && <InviteButton />}
+
       {open && <FriendSheet friend={open} me={open.userId === myId} mcdonalds={mcdonalds} onClose={() => setOpen(null)} />}
     </div>
   );
 }
 
-function FriendSheet({ friend, me, mcdonalds, onClose }: { friend: Friend; me: boolean; mcdonalds: Parameters<typeof friendRegions>[1]; onClose: () => void }) {
+/**
+ * A link for one friend, sent with the phone's share sheet (WhatsApp, Messaggi…): whoever opens it writes their email
+ * and is in. Where the share sheet is missing (a computer) the link is copied, or shown to copy by hand.
+ */
+function InviteButton() {
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState<string | null>(null);
+  const [manual, setManual] = useState<string | null>(null);
+
+  const invite = async () => {
+    setBusy(true);
+    setNote(null);
+    setManual(null);
+    try {
+      const link = await createInvite();
+      const text = 'Entra in McDonaldz con me! 🍟 Apri il link, scrivi la tua email e sei dentro.';
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: 'McDonaldz', text, url: link });
+          setNote('Invito pronto: il link vale per una persona e scade tra 7 giorni.');
+        } catch (e) {
+          // Closed without sending: the link stays unused and expires by itself
+          if ((e as Error).name !== 'AbortError') setManual(link);
+        }
+      } else {
+        try {
+          await navigator.clipboard.writeText(`${text} ${link}`);
+          setNote('Link copiato: incollalo nella chat con il tuo amico. Vale per una persona e scade tra 7 giorni.');
+        } catch {
+          setManual(link);
+        }
+      }
+    } catch (e) {
+      setNote((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="rounded-2xl border border-dashed border-mc-red/40 bg-white p-4 text-center dark:border-mc-red/50 dark:bg-gray-900">
+      <button
+        onClick={() => void invite()}
+        disabled={busy}
+        className="w-full rounded-xl bg-mc-red px-4 py-3 font-display text-base font-bold text-white shadow-sm transition-transform active:scale-95 disabled:opacity-60"
+      >
+        {busy ? '…' : '➕ Invita un amico'}
+      </button>
+      <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        {note ?? 'Gli mandi un link: lo apre, scrive la sua email ed è dentro, in classifica con te.'}
+      </p>
+      {manual && (
+        <input
+          readOnly
+          value={manual}
+          onFocus={e => e.currentTarget.select()}
+          aria-label="Link dell'invito"
+          className="mt-2 w-full rounded-lg border border-gray-300 bg-gray-50 px-2 py-1.5 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+        />
+      )}
+    </div>
+  );
+}
+
+function FriendSheet({
+  friend,
+  me,
+  mcdonalds,
+  onClose,
+}: {
+  friend: Friend;
+  me: boolean;
+  mcdonalds: Parameters<typeof friendRegions>[1];
+  onClose: () => void;
+}) {
   const level = levelOf(friend.level);
   const { summaries, wasComplete, tiers } = useMemo(() => friendRegions(friend, mcdonalds), [friend, mcdonalds]);
   const unlocked = useMemo(() => new Set(friend.stamps), [friend.stamps]);
@@ -229,8 +310,8 @@ function FriendSheet({ friend, me, mcdonalds, onClose }: { friend: Friend; me: b
           )}
           {friend.last_visit && (
             <p className="mt-3 text-sm text-white/90">
-              🍟 Ultimo Mc: <span className="font-semibold">{friend.last_visit.name.replace("McDonald's ", '')}</span> ({friend.last_visit.city}),{' '}
-              {ago(friend.last_visit.at)}
+              🍟 Ultimo Mc: <span className="font-semibold">{friend.last_visit.name.replace("McDonald's ", '')}</span> (
+              {friend.last_visit.city}), {ago(friend.last_visit.at)}
             </p>
           )}
         </div>
