@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { justUpdated } from '@/services/updates';
+import { hasWhatsNew } from '@/components/WhatsNew';
 
 const SHOW_MS = 3500;
 // Read once when the app loads (reading it clears it)
-const UPDATED_NOW = justUpdated();
+// When the "what's new" popup appears, it already says so
+const UPDATED_NOW = justUpdated() && !hasWhatsNew();
 
 /**
  * "App aggiornata": for a few seconds right after a new version was applied. Updates install themselves when the app

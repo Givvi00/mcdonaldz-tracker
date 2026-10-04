@@ -6,6 +6,7 @@ import { Stamp } from '@/components/Stamp';
 import { RegionSticker } from '@/components/RegionSticker';
 import { ACHIEVEMENTS } from '@/services/achievements';
 import { SignInForm } from '@/components/SignInForm';
+import { GOOGLE_RETURN } from '@/services/account';
 
 /** A restaurant card as it looks once visited, drawn for the guide (not a real, tappable one) */
 function SampleCard() {
@@ -95,7 +96,8 @@ export function Onboarding() {
   ];
   const accountStep = slides.length; // after the slides: signing in
   const last = slides.length + 1; // then the username
-  const first = onboarding === 'signin' ? accountStep : 0;
+  // Back from Google in the middle of the guide: straight to signing in, where it finishes
+  const first = onboarding === 'signin' || GOOGLE_RETURN ? accountStep : 0;
   const total = last + 1 - first;
   const current = Math.max(index, first);
   const shownName = name ?? user?.name ?? '';

@@ -9,6 +9,7 @@ import { canOfferVerify } from '@/services/gpsCheck';
 import { VisitDateSheet, formatVisitDate } from '@/components/VisitDateSheet';
 import { VisitRatingSheet, averageRating } from '@/components/VisitRatingSheet';
 import { VerifiedBadge } from '@/components/VerifiedBadge';
+import { visitCount } from '@/utils/checkins';
 
 interface Props {
   mc: McDonald;
@@ -148,6 +149,11 @@ export function McdonaldCard({ mc, distanceKm, variant = 'list' }: Props) {
                 >
                   {visit.rating ? <>{visit.rating.drive && '🚗 '}★ {averageRating(visit.rating).toFixed(1)}</> : <>☆ Vota</>}
                 </button>
+                {visitCount(visit) > 1 && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-[0.7rem] font-semibold text-orange-800 dark:bg-orange-900/40 dark:text-orange-200">
+                    🔁 {visitCount(visit)} volte
+                  </span>
+                )}
                 {offerVerify && verifyButton('inline-flex px-2.5 py-1 text-[0.7rem]')}
               </div>
             )}

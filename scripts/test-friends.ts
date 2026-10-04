@@ -48,7 +48,7 @@ test('a friend with nothing yet: every region empty', () => {
 });
 
 const person = (userId: string, visited: number, verified = 0): Friend =>
-  ({ userId, name: userId, visited, verified, level: 1, regions: {}, stamps: [], last_visit: null, updatedAt: '' });
+  ({ userId, name: userId, visited, visits_total: visited, verified, level: 1, regions: {}, stamps: [], last_visit: null, updatedAt: '' });
 
 test('leaderboard news: nothing the first time, then who joined, who passed you, who you passed', () => {
   const before = [person('me', 10), person('marco', 12), person('giulia', 8)];

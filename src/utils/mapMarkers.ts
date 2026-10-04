@@ -52,7 +52,7 @@ export function markerSymbol(_mc: McDonald, visited: boolean): string {
 }
 
 /** Content of the map popup. A closed restaurant shows a "Chiuso" badge and no directions button. */
-export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number, verified?: boolean, canVerify = false): string {
+export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number, verified?: boolean, canVerify = false, times = 1): string {
   const formattedDate = visitedAt ? new Date(visitedAt).toLocaleDateString('it-IT', { dateStyle: 'medium' }) : '';
   // A verified visit is locked (no "Cambia"): the date is the phone's own proof of when you were there
   const visitDate =
@@ -64,6 +64,10 @@ export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number, ve
   const closedBadge = mc.opened
     ? ''
     : `<span style="display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 999px; background: #78716c; color: white; font-size: 11px; font-weight: 600;">Chiuso${mc.closedAt ? ` dal ${escapeHtml(mc.closedAt)}` : ''}</span>`;
+  const timesBadge =
+    visited && times > 1
+      ? `<span style="display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 999px; background: #ffedd5; color: #9a3412; font-size: 11px; font-weight: 600;">🔁 ${times} volte</span><br/>`
+      : '';
   const newBadge = isNewlyAdded(mc)
     ? '<span style="display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 999px; background: #FFC72C; color: #2f2522; font-size: 11px; font-weight: 700;">✨ Nuovo</span><br/>'
     : '';
@@ -82,6 +86,7 @@ export function popupHtml(mc: McDonald, visited: boolean, visitedAt?: number, ve
           ${closedBadge}
           ${newBadge}
           ${visitDate}
+          ${timesBadge}
           ${
             canVerify
               ? `<button id="verify-${mc.id}" style="margin-top: 6px; padding: 3px 10px; border: 1px solid #60a5fa; border-radius: 999px; background: white; color: #1d4ed8; font-size: 11px; font-weight: 600; cursor: pointer;">📍 Verifica ora</button><br/>`

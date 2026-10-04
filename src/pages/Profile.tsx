@@ -13,6 +13,8 @@ import { levelInfo } from '@/utils/foodTheme';
 import { LevelRoadmap } from '@/components/LevelRoadmap';
 import { choosesMapApp, getSavedMapApp, saveMapApp } from '@/utils/navigation';
 import { MAP_APPS, type MapApp } from '@/utils/directions';
+import { ChangelogSheet } from '@/components/WhatsNew';
+import { CHANGELOG } from '@/data/changelog';
 
 const THEME_OPTIONS: Array<{ value: ThemeMode; label: string; icon: string }> = [
   { value: 'system', label: 'Sistema', icon: '⚙️' },
@@ -25,6 +27,7 @@ export function Profile() {
   const { mode, setMode } = useTheme();
   const level = levelInfo(getVisitedCount());
   const [mapApp, setMapApp] = useState<MapApp | null>(getSavedMapApp);
+  const [changelogOpen, setChangelogOpen] = useState(false);
   const [updateCheck, setUpdateCheck] = useState<UpdateCheck | 'checking' | null>(null);
   const [catalogCheck, setCatalogCheck] = useState<CatalogRefresh | null>(null);
 
@@ -116,7 +119,7 @@ export function Profile() {
 
       {/* About */}
       <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl text-center text-sm text-gray-600 dark:text-gray-400">
-        <p className="font-display font-semibold mb-1">McDonaldz Tracker v{__APP_VERSION__}</p>
+        <p className="font-display font-semibold mb-1">McDonaldz Tracker · versione {CHANGELOG[0].version}</p>
         <p className="text-xs opacity-75">Build {buildLabel}</p>
         <p className="text-xs opacity-75 mt-1">
           Elenco: {openCount} aperti su {mcdonalds.length} · {catalogInfo.source === 'downloaded' ? 'aggiornato il' : 'incluso nell\'app,'} {catalogDate}
@@ -134,6 +137,13 @@ export function Profile() {
         >
           📖 Rivedi la guida
         </button>
+        <button
+          onClick={() => setChangelogOpen(true)}
+          className="mt-3 ml-2 px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 text-xs font-bold active:scale-[0.97] transition-transform"
+        >
+          ✨ Novità
+        </button>
+        {changelogOpen && <ChangelogSheet entries={CHANGELOG} title="Tutte le novità" onClose={() => setChangelogOpen(false)} />}
         {updateCheck && (
           <p className="text-xs mt-2 font-semibold" role="status">
             {updateCheck === 'checking' && 'Controllo in corso…'}

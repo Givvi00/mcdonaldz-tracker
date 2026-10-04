@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { SectionTitle } from '@/components/SectionTitle';
 import { ConfirmSheet } from '@/components/ConfirmSheet';
+import { setPassword } from '@/services/account';
 
 /**
- * Your account in the Profile: the email you sign in with, your username (unique among everyone), signing out and
- * deleting the account.
+ * Your account in the Profile: the email you sign in with, your username (unique among everyone), an optional password
+ * (to sign in without the code), signing out and deleting the account.
  */
 export function AccountSection() {
   const { account, user, renameUser, signOut, deleteAccount, profileFocus, clearProfileFocus } = useMcdonaldStore();
@@ -92,6 +93,7 @@ export function AccountSection() {
             </p>
           )}
         </div>
+        {signedIn && <PasswordField />}
       </div>
 
       <button
@@ -122,7 +124,7 @@ export function AccountSection() {
       {confirm === 'signout' && (
         <ConfirmSheet
           title="Uscire dall'account?"
-          body="Per rientrare ti basterà la tua email."
+          body="Per rientrare ti basterà la tua email (o il tuo account Google)."
           confirmLabel="Esci"
           onCancel={() => setConfirm(null)}
           onConfirm={() => {
@@ -146,6 +148,75 @@ export function AccountSection() {
             void deleteAccount().catch(error => setActionError((error as Error).message));
           }}
         />
+      )}
+    </div>
+  );
+}
+
+/** Optional: with a password you can sign in with email and password instead of waiting for the code */
+function PasswordField() {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
+
+  if (!open) {
+    return (
+      <div>
+        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">Password</p>
+        <button onClick={() => setOpen(true)} className="mt-1 text-sm font-bold text-mc-red underline">
+          Scegli una password
+        </button>
+        <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">Facoltativa: per entrare con email e password, senza aspettare il codice.</p>
+        {message?.ok && <p role="status" className="mt-2 text-xs font-semibold text-green-700 dark:text-green-400">{message.text}</p>}
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <label htmlFor="new-password" className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+        Nuova password
+      </label>
+      <form
+        className="mt-1 flex gap-2"
+        onSubmit={e => {
+          e.preventDefault();
+          setBusy(true);
+          setMessage(null);
+          setPassword(value)
+            .then(() => {
+              setValue('');
+              setOpen(false);
+              setMessage({ ok: true, text: '✓ Password salvata: ora puoi entrare anche con email e password.' });
+            })
+            .catch(error => setMessage({ ok: false, text: (error as Error).message }))
+            .finally(() => setBusy(false));
+        }}
+      >
+        <input
+          id="new-password"
+          type="password"
+          autoComplete="new-password"
+          minLength={8}
+          required
+          value={value}
+          onChange={e => setValue(e.target.value)}
+          placeholder="Almeno 8 caratteri"
+          className="min-w-0 flex-1 rounded-xl border-2 border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold text-gray-800 outline-none focus:border-mc-red dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+        />
+        <button
+          type="submit"
+          disabled={busy || value.length < 8}
+          className="rounded-xl bg-mc-red px-4 py-2.5 text-sm font-bold text-white transition-transform active:scale-95 disabled:opacity-40"
+        >
+          {busy ? '…' : 'Salva'}
+        </button>
+      </form>
+      {message && !message.ok && (
+        <p role="status" className="mt-2 rounded-xl bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 dark:bg-red-950/40 dark:text-red-300">
+          {message.text}
+        </p>
       )}
     </div>
   );

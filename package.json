@@ -1,6 +1,6 @@
 {
   "name": "mcdonaldz-tracker",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "fetch-data": "tsx scripts/fetch-mcdonalds.ts",
     "osm-check": "tsx scripts/osm-check.ts",
-    "test:data": "tsx scripts/test-merge.ts && tsx scripts/test-catalog.ts && tsx scripts/test-catalog-update.ts && tsx scripts/test-install.ts && tsx scripts/test-directions.ts && tsx scripts/test-food.ts && tsx scripts/test-passport.ts && tsx scripts/test-migration.ts && tsx scripts/test-gps.ts && tsx scripts/test-osm.ts && tsx scripts/test-sync.ts && tsx scripts/test-account.ts && tsx scripts/test-friends.ts"
+    "test:data": "tsx scripts/test-merge.ts && tsx scripts/test-catalog.ts && tsx scripts/test-catalog-update.ts && tsx scripts/test-install.ts && tsx scripts/test-directions.ts && tsx scripts/test-food.ts && tsx scripts/test-passport.ts && tsx scripts/test-migration.ts && tsx scripts/test-gps.ts && tsx scripts/test-osm.ts && tsx scripts/test-sync.ts && tsx scripts/test-account.ts && tsx scripts/test-friends.ts && tsx scripts/test-changelog.ts && tsx scripts/test-checkins.ts"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.2",

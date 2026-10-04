@@ -40,6 +40,8 @@ export interface Visit {
   verifiedAt?: number;
   rating?: VisitRating;
   notes?: string;
+  /** Later returns confirmed by the GPS, when you opened the app there (ms): each one is a visit more (see utils/checkins) */
+  checkins?: number[];
 }
 
 export interface User {

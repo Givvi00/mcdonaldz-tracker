@@ -7,6 +7,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { useMcdonaldStore } from '@/store/mcdonaldStore';
 import { StatusFilter, matchesStatus, type StatusValue } from '@/components/StatusFilter';
 import { countedMcdonalds, isNewlyAdded } from '@/utils/catalog';
+import { visitCount } from '@/utils/checkins';
 import { markerBackground, markerSymbol, popupHtml, verifiedSealMarkup } from '@/utils/mapMarkers';
 import { VisitDateSheet } from '@/components/VisitDateSheet';
 import { openDirections } from '@/utils/navigation';
@@ -143,7 +144,7 @@ export function MapView() {
       });
 
       const marker = L.marker([mc.lat, mc.lon], { icon, mcVisited: visited, mcNew: fresh, zIndexOffset: fresh ? 500 : 0 } as L.MarkerOptions);
-      marker.bindPopup(popupHtml(mc, visited, visit?.visitedAt, visit?.verified, canOfferVerify(visit, mc, userPosition)));
+      marker.bindPopup(popupHtml(mc, visited, visit?.visitedAt, visit?.verified, canOfferVerify(visit, mc, userPosition), visit ? visitCount(visit) : 1));
 
       marker.on('popupopen', () => {
         const btn = document.getElementById(`toggle-${mc.id}`);

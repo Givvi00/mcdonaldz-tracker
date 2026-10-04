@@ -224,6 +224,9 @@ function FriendSheet({ friend, me, mcdonalds, onClose }: { friend: Friend; me: b
               <p className="text-[0.7rem] text-white/80">{friend.stamps.length === 1 ? 'timbro' : 'timbri'}</p>
             </div>
           </div>
+          {friend.visits_total > friend.visited && (
+            <p className="mt-3 text-sm text-white/90">🔁 {friend.visits_total} visite in tutto, ritorni compresi</p>
+          )}
           {friend.last_visit && (
             <p className="mt-3 text-sm text-white/90">
               🍟 Ultimo Mc: <span className="font-semibold">{friend.last_visit.name.replace("McDonald's ", '')}</span> ({friend.last_visit.city}),{' '}

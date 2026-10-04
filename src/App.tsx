@@ -21,6 +21,8 @@ import { FoodRain } from '@/components/FoodRain';
 import { AutoRatingPrompt } from '@/components/AutoRatingPrompt';
 import { VerifyToast } from '@/components/VerifyToast';
 import { FriendToast } from '@/components/FriendToast';
+import { WhatsNew } from '@/components/WhatsNew';
+import { CheckinToast } from '@/components/CheckinToast';
 import { UnmarkConfirm } from '@/components/UnmarkConfirm';
 import { Onboarding } from '@/components/Onboarding';
 import { CelebrationLab } from '@/components/CelebrationLab';
@@ -34,7 +36,7 @@ import './App.css';
 function App() {
   // Opened from the link in a "vuole entrare" email: the answer comes before anything else
   const [review, setReview] = useState(reviewLink);
-  const { selectedTab, setSelectedTab, openStats, unseen, friendNews, initApp, initAccount, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile, onboarding } =
+  const { selectedTab, setSelectedTab, openStats, unseen, friendNews, initApp, initAccount, getVisitedCount, setUserPosition, setLocationStatus, user, openProfile, onboarding, autoCheckin, visits } =
     useMcdonaldStore();
   useTheme();
   // On a first launch the browser asks for the position only after the guide has said what it is for
@@ -64,6 +66,11 @@ function App() {
     setUserPosition(coords);
   }, [geoStatus, coords, setLocationStatus, setUserPosition]);
 
+  // Back at a restaurant you already visited: counted by itself (at most once every 4 hours, see utils/checkins)
+  useEffect(() => {
+    if (coords && user) void autoCheckin();
+  }, [coords, user, visits.length, onboarding, autoCheckin]);
+
   const NAV_ITEMS = [
     { tab: 'home' as const, icon: '🏠', label: 'Home' },
     { tab: 'map' as const, icon: '🗺️', label: 'Mappa' },
@@ -92,6 +99,8 @@ function App() {
       <AutoRatingPrompt />
       <VerifyToast />
       <FriendToast />
+      <WhatsNew />
+      <CheckinToast />
       <UnmarkConfirm />
       <Onboarding />
       {import.meta.env.DEV && <CelebrationLab />}

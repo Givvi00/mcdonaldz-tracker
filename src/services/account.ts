@@ -16,7 +16,8 @@ export function getClient(): Promise<SupabaseClient> {
   clientPromise ??= import('@supabase/supabase-js')
     .then(({ createClient }) =>
       createClient(SUPABASE_URL, SUPABASE_KEY, {
-        auth: { storageKey: SESSION_KEY, persistSession: true, autoRefreshToken: true, detectSessionInUrl: false },
+        // pkce: "Accedi con Google" comes back with a one-time code in the address, exchanged by finishGoogle()
+        auth: { storageKey: SESSION_KEY, persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, flowType: 'pkce' },
       }),
     )
     .catch(error => {
@@ -94,6 +95,83 @@ export async function confirmCode(email: string, code: string): Promise<Account>
   return { id: data.user.id, email: data.user.email ?? email };
 }
 
+/** With a password set from the Profile (see setPassword): the alternative to the code */
+export async function signInWithPassword(email: string, password: string): Promise<Account> {
+  const client = await getClient();
+  const { data, error } = await client.auth.signInWithPassword({ email: email.trim(), password });
+  if (error || !data.user) {
+    const text = `${error?.code ?? ''} ${error?.message ?? ''}`.toLowerCase();
+    if (text.includes('invalid') && text.includes('credentials')) {
+      throw new Error('Email o password sbagliate. Se non hai ancora una password, entra con il codice.');
+    }
+    throw explain(error ?? {});
+  }
+  return { id: data.user.id, email: data.user.email ?? email };
+}
+
+/** Sets or changes the password of the account you are signed in to (at least 8 characters) */
+export async function setPassword(password: string): Promise<void> {
+  const client = await getClient();
+  const { error } = await client.auth.updateUser({ password });
+  if (error) {
+    if (/weak|short|characters/i.test(error.message)) throw new Error('Password troppo debole: usane una più lunga, con lettere e numeri.');
+    if (/same|different/i.test(error.message)) throw new Error('È già la tua password.');
+    throw explain(error);
+  }
+}
+
+/** Whether "Accedi con Google" is switched on in Supabase (public settings): the button shows only then */
+export async function googleEnabled(): Promise<boolean> {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/auth/v1/settings`, { headers: { apikey: SUPABASE_KEY } });
+    const settings = (await response.json()) as { external?: { google?: boolean } };
+    return settings.external?.google === true;
+  } catch {
+    return false;
+  }
+}
+
+/** The page we come back to after Google: the app itself */
+const appUrl = () => `${window.location.origin}${import.meta.env.BASE_URL}`;
+
+/** Leaves for Google's account chooser; the app reopens afterwards and finishGoogle() completes the sign-in */
+export async function signInWithGoogle(): Promise<void> {
+  const client = await getClient();
+  const { error } = await client.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: appUrl(), queryParams: { prompt: 'select_account' } },
+  });
+  if (error) throw explain(error);
+}
+
+/** Opened again by Google: the code to finish signing in, or why it did not work. Read once, when the app loads */
+export const GOOGLE_RETURN: { code?: string; error?: string } | null = (() => {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  const hash = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+  const code = params.get('code') ?? undefined;
+  const error = params.get('error_description') ?? hash.get('error_description') ?? params.get('error') ?? hash.get('error') ?? undefined;
+  if (!code && !error) return null;
+  // Out of the address bar, so a reload does not try again
+  window.history.replaceState(null, '', window.location.pathname);
+  return { code, error };
+})();
+
+export async function finishGoogle(): Promise<Account> {
+  if (!GOOGLE_RETURN) throw new Error('Accesso con Google non riuscito, riprova.');
+  if (GOOGLE_RETURN.error || !GOOGLE_RETURN.code) {
+    // The Google account has no account here (sign-ups are closed: invite only)
+    if (/signup|not allowed|access_denied/i.test(GOOGLE_RETURN.error ?? '')) {
+      throw new NotInvitedError();
+    }
+    throw new Error('Accesso con Google non riuscito, riprova.');
+  }
+  const client = await getClient();
+  const { data, error } = await client.auth.exchangeCodeForSession(GOOGLE_RETURN.code);
+  if (error || !data.user) throw new Error('Accesso con Google non riuscito, riprova.');
+  return { id: data.user.id, email: data.user.email ?? '' };
+}
+
 /** Calls one of the server functions in supabase/functions (public: they check everything themselves) */
 async function callFunction<T>(name: string, body: unknown): Promise<T> {
   let response: Response;
@@ -164,7 +242,7 @@ function check<T>(result: { data: T; error: { message: string } | null }): T {
 export function supabaseRemote(client: SupabaseClient, accountId: string): Remote {
   return {
     async listVisits() {
-      return check(await client.from('visits').select('mcdonald_id, visited_at, date_edited, verified, verified_at, rating')) as RemoteVisit[];
+      return check(await client.from('visits').select('mcdonald_id, visited_at, date_edited, verified, verified_at, rating, checkins')) as RemoteVisit[];
     },
     async upsertVisits(rows) {
       check(await client.from('visits').upsert(rows.map(r => ({ ...r, user_id: accountId })), { onConflict: 'user_id,mcdonald_id' }));

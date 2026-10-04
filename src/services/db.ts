@@ -1,6 +1,7 @@
 import { openDB, DBSchema, IDBPDatabase, IDBPTransaction, StoreNames } from 'idb';
 import type { Visit, User, Achievement, VisitRating } from '@shared/types';
 import { NAME_ENTRY, changing } from './syncOutbox';
+import { canCheckIn, withCheckin } from '@/utils/checkins';
 
 interface AppDB extends DBSchema {
   users: {
@@ -286,6 +287,14 @@ export async function setVisitVerified(mcdonaldId: string, verifiedAt: number): 
   const visit = await database.getFromIndex('visits', 'by-mcdonaldId', mcdonaldId);
   if (!visit || visit.verified) return;
   await changing(mcdonaldId, () => database.put('visits', { ...visit, verified: true, verifiedAt }));
+}
+
+/** You came back and the GPS confirmed it: one visit more (see utils/checkins) */
+export async function addCheckin(mcdonaldId: string, at: number): Promise<void> {
+  const database = await initDB();
+  const visit = await database.getFromIndex('visits', 'by-mcdonaldId', mcdonaldId);
+  if (!visit || !canCheckIn(visit, at)) return;
+  await changing(mcdonaldId, () => database.put('visits', withCheckin(visit, at)));
 }
 
 /** Sets (or replaces) your vote for a visited restaurant */

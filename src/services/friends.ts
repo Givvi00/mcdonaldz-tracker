@@ -5,6 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Achievement, McDonald, Visit } from '@shared/types';
 import { regionRecordType, regionSummaries, regionTier, type RegionSummary, type RegionTier } from './regions';
 import { levelInfo } from '@/utils/foodTheme';
+import { visitCount } from '@/utils/checkins';
 
 /** One region in the summary, short keys: it travels for every region of every friend */
 export interface PublicRegion {
@@ -18,6 +19,8 @@ export interface PublicRegion {
 
 export interface PublicStats {
   visited: number;
+  /** Every visit, returns included (utils/checkins) */
+  visits_total: number;
   verified: number;
   level: number;
   regions: Record<string, PublicRegion>;
@@ -46,6 +49,7 @@ export function buildPublicStats(mcdonalds: McDonald[], visits: Visit[], achieve
   const visited = new Set(known.map(v => v.mcdonaldId)).size;
   return {
     visited,
+    visits_total: known.reduce((sum, v) => sum + visitCount(v), 0),
     verified: known.filter(v => v.verified).length,
     level: levelInfo(visited).number,
     regions,
@@ -106,6 +110,7 @@ export async function loadFriends(client: SupabaseClient): Promise<Friend[]> {
     userId: row.user_id,
     name: row.name,
     visited: row.visited,
+    visits_total: row.visits_total ?? row.visited,
     verified: row.verified,
     level: row.level,
     regions: row.regions ?? {},

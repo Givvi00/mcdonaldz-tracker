@@ -15,7 +15,9 @@ import {
   addMissingAchievements,
   setUserNameFromServer,
   wipeAllData,
+  addCheckin,
 } from '@/services/db';
+import { canCheckIn, visitCount } from '@/utils/checkins';
 import { onOutboxChange, readOutbox } from '@/services/syncOutbox';
 import { NameTakenError, syncOnce, type Local } from '@/services/sync';
 import {
@@ -157,6 +159,14 @@ interface AppStore {
    */
   verifyVisit: (mcdonaldId: string, options?: { quiet?: boolean }) => Promise<VerifyOutcome>;
   clearVerifyNotice: () => void;
+  /** "Sei tornato da …": a return counted by itself (see autoCheckin) */
+  checkinNotice: { id: number; mcdonaldId: string; count: number } | null;
+  clearCheckinNotice: () => void;
+  /**
+   * When you seem to be at a restaurant you already visited, and the last visit there was at least 4 hours ago, reads a
+   * precise position and, if it confirms you are there, counts a visit more. Called when the position changes
+   */
+  autoCheckin: () => Promise<void>;
   clearUnlocked: () => void;
   openAchievements: (types: string[]) => void;
   /** The Stats tab: straight to what is new, if anything is */
@@ -210,6 +220,13 @@ interface AppStore {
 
 const initialCatalog = pickInitialCatalog();
 
+/** How close the app's rough position must be to try counting a return (the real check is the precise reading) */
+const CHECKIN_NEAR_KM = 0.5;
+/** A failed reading for a restaurant is tried again only after this long */
+const CHECKIN_RETRY_MS = 10 * 60 * 1000;
+let checkinRunning = false;
+const checkinTried = new Map<string, number>();
+
 // The leaderboard as you last saw it, and who you were already told you passed (kept on this phone)
 const SEEN_KEY = 'mcdz-friends-seen';
 const TOLD_KEY = 'mcdz-friends-told';
@@ -258,6 +275,7 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   newlyUnlocked: [],
   focusedAchievements: [],
   unseen: readUnseen(),
+  checkinNotice: null,
   friendsBoard: null,
   friendNews: [],
   friendToast: null,
@@ -538,7 +556,9 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
     const stillVisited = get().visits.some(v => v.mcdonaldId === mcdonaldId);
 
     if (outcome.result === 'ok' && stillVisited) {
-      await setVisitVerified(mcdonaldId, Date.now());
+      // Verified at least 4 hours after marking it: you went back, so it is also a visit more
+      if (canCheckIn(visit, Date.now())) await addCheckin(mcdonaldId, Date.now());
+      else await setVisitVerified(mcdonaldId, Date.now());
       const updatedVisits = await getVisits();
       set({ visits: updatedVisits });
       const unlocked = await checkAndUnlockAchievements(user.id, get().mcdonalds, updatedVisits);
@@ -557,6 +577,49 @@ export const useMcdonaldStore = create<AppStore>((set, get) => ({
   },
 
   clearVerifyNotice: () => set({ verifyNotice: null }),
+
+  clearCheckinNotice: () => set({ checkinNotice: null }),
+
+  autoCheckin: async () => {
+    const { user, mcdonalds, visits, userPosition, onboarding, verifying } = get();
+    if (checkinRunning || !user || !userPosition || onboarding !== 'done') return;
+    const now = Date.now();
+    const byId = new Map(mcdonalds.map(mc => [mc.id, mc]));
+    const candidate = visits
+      .filter(v => canCheckIn(v, now) && !verifying.includes(v.mcdonaldId) && now - (checkinTried.get(v.mcdonaldId) ?? 0) > CHECKIN_RETRY_MS)
+      .map(v => ({ v, mc: byId.get(v.mcdonaldId) }))
+      .filter((c): c is { v: Visit; mc: McDonald } => !!c.mc && c.mc.opened)
+      .map(c => ({ ...c, km: distanceKm(userPosition.lat, userPosition.lon, c.mc.lat, c.mc.lon) }))
+      .filter(c => c.km <= CHECKIN_NEAR_KM)
+      .sort((a, b) => a.km - b.km)[0];
+    if (!candidate) return;
+
+    checkinRunning = true;
+    checkinTried.set(candidate.mc.id, now);
+    try {
+      // The app's own position is rough: only a fresh, precise reading counts (the same rule as "Verifica ora")
+      const outcome = judgeFix(await freshFix(candidate.mc), candidate.mc);
+      if (outcome.result !== 'ok') return;
+      const wasVerified = candidate.v.verified;
+      await addCheckin(candidate.mc.id, Date.now());
+      const updatedVisits = await getVisits();
+      set({ visits: updatedVisits });
+      const visit = updatedVisits.find(v => v.mcdonaldId === candidate.mc.id);
+      if (!visit || visitCount(visit) === visitCount(candidate.v)) return;
+      set({ checkinNotice: { id: Date.now(), mcdonaldId: candidate.mc.id, count: visitCount(visit) } });
+      // It also verified a visit marked by hand: stamps and diamond regions may follow
+      if (!wasVerified) {
+        const unlocked = await checkAndUnlockAchievements(user.id, get().mcdonalds, updatedVisits);
+        const diamond = await syncDiamondRegions(user.id, get().mcdonalds, updatedVisits, candidate.mc.region);
+        const events: Celebration[] = [];
+        if (diamond) events.push({ id: Date.now(), kind: 'region', region: diamond.region, total: diamond.verifiable ?? diamond.total, diamond: true });
+        if (unlocked.length > 0) events.push({ id: Date.now() + 1, kind: 'stamp', stamps: unlocked });
+        if (events.length > 0) get().enqueueCelebrations(events);
+      }
+    } finally {
+      checkinRunning = false;
+    }
+  },
 
   checkFriends: async () => {
     const state = get().account;

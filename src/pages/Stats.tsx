@@ -15,6 +15,7 @@ import { SectionTitle } from '@/components/SectionTitle';
 import type { Achievement } from '@shared/types';
 import { levelInfo } from '@/utils/foodTheme';
 import { shareCard } from '@/services/shareCard';
+import { visitCount } from '@/utils/checkins';
 
 export function Stats() {
   const { user, visits, getVisitedCount, getCountedTotal, getRegionStats, mcdonalds, focusedAchievements, clearFocusedAchievement } =
@@ -53,6 +54,8 @@ export function Stats() {
   const lastVisit = latest && lastMc ? { city: lastMc.city, visitedAt: latest.visitedAt } : null;
   const percentage = totalMcdonalds > 0 ? Math.round((visitedCount / totalMcdonalds) * 100) : 0;
   const verifiedCount = visits.filter(v => v.verified).length;
+  // Every time you went, returns included (utils/checkins)
+  const allVisits = visits.reduce((sum, v) => sum + visitCount(v), 0);
   const verifiedShare = visitedCount > 0 ? Math.round((verifiedCount / visitedCount) * 100) : 0;
   // Verified visits per region, for the receipt
   const regionOf = new Map(mcdonalds.map(m => [m.id, m.region]));
@@ -126,6 +129,9 @@ export function Stats() {
             <p className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-white/15 py-0.5 pl-0.5 pr-2.5 text-xs font-semibold">
               <VerifiedBadge size={20} /> {verifiedCount} {verifiedCount === 1 ? 'verificata' : 'verificate'} · {verifiedShare}% delle visite
             </p>
+          )}
+          {allVisits > visitedCount && (
+            <p className="mt-1.5 text-xs font-semibold opacity-90">🔁 {allVisits} visite in tutto, ritorni compresi</p>
           )}
           <p className="text-2xl font-display font-bold mt-3">{percentage}%</p>
           <FoodProgressBar percentage={percentage} />
